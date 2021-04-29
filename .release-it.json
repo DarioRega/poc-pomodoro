@@ -3,10 +3,13 @@
     "before:init": ["npm run lint"],
     "after:conventional-changelog:beforeRelease": "npm run build"
   },
+  "npm": {
+    "publish": false
+  },
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": "eslint",
-      "infile": "CHANGELOG.mdx"
+      "infile": "./stories/documentation/CHANGELOG.stories.mdx"
     }
   }
 }
