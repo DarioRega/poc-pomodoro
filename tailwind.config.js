@@ -25,6 +25,7 @@ module.exports = {
       colors: {
         success: '#61B45B',
         error: '#BF2C44',
+        'light-celeste': '#edf2fb',
         celeste: '#D4DFF6',
         'light-indigo': '#638FEF',
         'dark-indigo': '#4f46e5',
