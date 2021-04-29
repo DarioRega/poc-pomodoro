@@ -3,12 +3,6 @@ import ColorPalette from './Components/ColorPalette'
 export default {
   title: 'Documentation/Colors',
   component: ColorPalette,
-  argTypes: {
-    backgroundColor: { control: 'color' },
-    size: {
-      control: { type: 'select', options: ['small', 'medium', 'large'] },
-    },
-  },
 }
 
 export const All = () => ({
