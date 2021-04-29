@@ -6,6 +6,21 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
+      body: ['Open Sans', 'Helvetica', 'Arial', 'sans-serif'],
+    },
+    fontSize: {
+      xs: '.75rem', // 12px
+      sm: '.875rem', // 14px
+      base: '1.0625rem', // 16px
+      lead: '1.313rem', // 21px
+      md: '1.4375rem', // 23px
+      lg: '1.875rem', // 30px
+      xl: '2.3125rem', // 37px
+      '2xl': '2.875rem', // 46px
+      '3xl': '3.375rem', // 54px
+    },
     extend: {
       colors: {
         success: '#61B45B',

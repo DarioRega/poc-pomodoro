@@ -1,0 +1,51 @@
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  display: block;
+  @apply font-heading;
+  line-height: 1.2;
+}
+
+h1,
+.h1 {
+  @apply text-3xl mb-5;
+}
+
+h2,
+.h2 {
+  @apply text-2xl mb-3;
+}
+
+h3,
+.h3 {
+  @apply text-xl mb-2;
+}
+
+h4,
+.h4 {
+  @apply text-lg mb-2;
+}
+
+h5,
+.h5 {
+  @apply text-md mb-2;
+}
+
+h6,
+.h6 {
+  @apply text-base mb-2;
+}
+
+p {
+  @apply font-body text-base ;
+}
+
