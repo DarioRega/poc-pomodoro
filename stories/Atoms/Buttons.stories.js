@@ -1,17 +1,26 @@
-import ButtonPrimary from '../../components/ButtonPrimary'
+import BrandButton from '../../components/Atoms/BrandButton'
 
 export default {
   title: 'Atoms/Buttons',
-  component: ButtonPrimary,
+  component: BrandButton,
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { ButtonPrimary },
-  template: '<button-primary v-bind="$props" />',
+  components: { BrandButton },
+  argTypes: {
+    type: {
+      control: { type: 'select', options: ['primary', 'secondary', 'naked'] },
+    },
+    isDisabled: {
+      control: { type: 'select', options: [true, false] },
+    },
+  },
+  template: '<brand-button v-bind="$props" />',
 })
 
 export const Primary = Template.bind({})
 Primary.args = {
   label: 'Continue',
+  type: 'primary',
 }
