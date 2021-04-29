@@ -1,5 +1,15 @@
 image: node:12
 
+stages:
+  - lint
+  - deploy
+
+lint:
+  stage: lint
+  script:
+    - npm ci
+    - npm run lint
+
 pages:
   stage: deploy
   script:

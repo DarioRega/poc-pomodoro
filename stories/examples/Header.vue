@@ -8,13 +8,11 @@
           viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g
-            fill="none"
-            fill-rule="evenodd"
-          >
-            <path d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010
+          <g fill="none" fill-rule="evenodd">
+            <path
+              d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010
               22V10A10 10 0 0110 0z"
-                  fill="#FFF"
+              fill="#FFF"
             />
             <path
               d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7
@@ -55,31 +53,31 @@
 </template>
 
 <script>
-import "./header.css";
-import MyButton from "./Button.vue";
+  import './header.css'
+  import MyButton from './Button.vue'
 
-export default {
-  name: "MyHeader",
+  export default {
+    name: 'MyHeader',
 
-  components: { MyButton },
+    components: { MyButton },
 
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  },
-
-  methods: {
-    onLogin() {
-      this.$emit("onLogin");
+    props: {
+      user: {
+        type: Object,
+        required: true,
+      },
     },
-    onLogout() {
-      this.$emit("onLogout");
+
+    methods: {
+      onLogin() {
+        this.$emit('onLogin')
+      },
+      onLogout() {
+        this.$emit('onLogout')
+      },
+      onCreateAccount() {
+        this.$emit('onCreateAccount')
+      },
     },
-    onCreateAccount() {
-      this.$emit("onCreateAccount");
-    }
   }
-};
 </script>

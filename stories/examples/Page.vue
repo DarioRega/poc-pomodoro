@@ -22,21 +22,17 @@
       </p>
       <p>
         Render pages with mock data. This makes it easy to build and review page
-        states without
-        needing to navigate to them in your app. Here are some handy patterns
-        for managing page data
-        in Storybook:
+        states without needing to navigate to them in your app. Here are some
+        handy patterns for managing page data in Storybook:
       </p>
       <ul>
         <li>
           Use a higher-level connected component. Storybook helps you compose
-          such data from the
-          "args" of child component stories
+          such data from the "args" of child component stories
         </li>
         <li>
           Assemble data in the page component from your services. You can mock
-          these services out
-          using Storybook.
+          these services out using Storybook.
         </li>
       </ul>
       <p>
@@ -63,10 +59,7 @@
           viewBox="0 0 12 12"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g
-            fill="none"
-            fill-rule="evenodd"
-          >
+          <g fill="none" fill-rule="evenodd">
             <path
               id="a"
               d="M1.5 5.2h4.8c.3 0 .5.2.5.4v5.1c-.1.2-.3.3-.4.3H1.4a.5.5 0
@@ -84,31 +77,31 @@
 </template>
 
 <script>
-import "./page.css";
-import MyHeader from "./Header.vue";
+  import './page.css'
+  import MyHeader from './Header.vue'
 
-export default {
-  name: "MyPage",
+  export default {
+    name: 'MyPage',
 
-  components: { MyHeader },
+    components: { MyHeader },
 
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  },
-
-  methods: {
-    onLogin() {
-      this.$emit("onLogin");
+    props: {
+      user: {
+        type: Object,
+        required: true,
+      },
     },
-    onLogout() {
-      this.$emit("onLogout");
+
+    methods: {
+      onLogin() {
+        this.$emit('onLogin')
+      },
+      onLogout() {
+        this.$emit('onLogout')
+      },
+      onCreateAccount() {
+        this.$emit('onCreateAccount')
+      },
     },
-    onCreateAccount() {
-      this.$emit("onCreateAccount");
-    }
   }
-};
 </script>

@@ -1,0 +1,21 @@
+{
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 2020
+  },
+  "extends": [
+    "plugin:vue/recommended",
+    "eslint:recommended",
+    "rawbot",
+    "plugin:prettier/recommended",
+    "plugin:vue/recommended"
+  ],
+  "rules": {
+    "vue/max-attributes-per-line": 0,
+    "vue/html-self-closing": 0,
+    "vue/no-v-html": 0
+  }
+}
