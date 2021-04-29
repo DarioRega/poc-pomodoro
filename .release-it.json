@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "before:init": ["npm run lint"],
+    "after:release": "npm run deploy",
+    "after:conventional-changelog:beforeRelease": "npm run build"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "eslint",
+      "infile": "CHANGELOG.md"
+    }
+  }
+}

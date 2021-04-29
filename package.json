@@ -1,26 +1,48 @@
 {
-  "name": "styleguide",
-  "version": "0.1.0",
+  "name": "@pomodoro/styleguide",
   "private": true,
+  "version": "0.1.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "release": "release-it",
+    "build": "vue-cli-service storybook:build -c config",
+    "serve": "vue-cli-service storybook:serve -p 6006 -c config"
   },
+  "main": "./dist/library.ssr.js",
+  "module": "./dist/library.esm.js",
+  "browser": "./dist/library.js",
+  "unpkg": "./dist/library.js",
   "dependencies": {
     "core-js": "^2.6.5",
+    "release-it": "^14.6.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "@babel/core": "^7.13.16",
+    "@release-it/conventional-changelog": "^2.0.1",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/vue": "^6.2.9",
+    "@tailwindcss/postcss7-compat": "^2.1.2",
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-plugin-eslint": "^3.1.1",
     "@vue/cli-service": "^3.1.1",
     "@vue/eslint-config-prettier": "^5.0.0",
+    "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.2.2",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.0.0",
+    "postcss": "^7.0.35",
     "prettier": "^1.18.2",
+    "sass": "^1.32.11",
+    "sass-loader": "^10",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
+    "vue-cli-plugin-storybook": "~2.0.0",
+    "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.10"
   }
 }
