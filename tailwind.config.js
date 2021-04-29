@@ -4,7 +4,7 @@ module.exports = {
     './components/**/*.{js,jsx,ts,tsx,vue}',
     './stories/**/*.{js,jsx,ts,tsx,vue}',
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     fontFamily: {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
