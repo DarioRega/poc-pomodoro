@@ -53,31 +53,31 @@
 </template>
 
 <script>
-  import './header.css'
-  import MyButton from './Button.vue'
+import MyButton from './Button.vue'
 
-  export default {
-    name: 'MyHeader',
+export default {
+  name: 'MyHeader',
 
-    components: { MyButton },
+  components: { MyButton },
 
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
+  props: {
+    user: {
+      type: Object,
+      required: true,
     },
+  },
 
-    methods: {
-      onLogin() {
-        this.$emit('onLogin')
-      },
-      onLogout() {
-        this.$emit('onLogout')
-      },
-      onCreateAccount() {
-        this.$emit('onCreateAccount')
-      },
+  methods: {
+    onLogin() {
+      this.$emit('onLogin')
     },
-  }
+    onLogout() {
+      this.$emit('onLogout')
+    },
+    onCreateAccount() {
+      this.$emit('onCreateAccount')
+    },
+  },
+}
 </script>
+<style src="./header.css" scoped></style>

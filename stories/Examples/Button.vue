@@ -11,8 +11,6 @@
 </template>
 
 <script>
-  import './button.css'
-
   export default {
     name: 'Button',
 
@@ -61,3 +59,4 @@
     },
   }
 </script>
+<style src="./button.css" scoped></style>

@@ -77,31 +77,30 @@
 </template>
 
 <script>
-  import './page.css'
-  import MyHeader from './Header.vue'
+import MyHeader from './Header.vue'
+export default {
+  name: 'MyPage',
 
-  export default {
-    name: 'MyPage',
+  components: { MyHeader },
 
-    components: { MyHeader },
-
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
+  props: {
+    user: {
+      type: Object,
+      required: true,
     },
+  },
 
-    methods: {
-      onLogin() {
-        this.$emit('onLogin')
-      },
-      onLogout() {
-        this.$emit('onLogout')
-      },
-      onCreateAccount() {
-        this.$emit('onCreateAccount')
-      },
+  methods: {
+    onLogin() {
+      this.$emit('onLogin')
     },
-  }
+    onLogout() {
+      this.$emit('onLogout')
+    },
+    onCreateAccount() {
+      this.$emit('onCreateAccount')
+    },
+  },
+}
 </script>
+<style src="./page.css" scoped></style>
