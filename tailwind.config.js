@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     fontFamily: {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
-      body: ['Open Sans', 'Helvetica', 'Arial', 'sans-serif'],
+      body: ['Nunito', 'Helvetica', 'Arial', 'sans-serif'],
     },
     fontSize: {
       xs: '.75rem', // 12px
@@ -25,12 +25,14 @@ module.exports = {
       colors: {
         success: '#61B45B',
         error: '#BF2C44',
-        celeste: '#D4DFF6',
+        celeste: '#EDF2FB',
         'light-indigo': '#638FEF',
         'dark-indigo': '#4f46e5',
         'dark-blue': '#182532',
         'darker-blue': '#131E28',
+        'light-gray': '#E7E8EA',
         'dark-gray': '#747C84',
+        'dark-gray-20': 'rgba(116,124,132,0.2)',
         'darker-gray': '#333B44',
         'lighter-white': '#F9F9F9',
         'light-white': '#F4F5F7',
