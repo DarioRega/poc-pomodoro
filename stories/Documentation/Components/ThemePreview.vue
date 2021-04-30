@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div class="dark:bg-dark-blue dark:text-gray-100 p-10 rounded-md">
     <h4 class="text-dark-indigo dark:text-light-indigo">
-      I should be <strong>dark indigo in light theme</strong> and
-      <strong>light indigo in dark theme</strong>
+      Lorem ipsum dolor <strong>sit amet</strong>, consectetur adipiscing elit.
     </h4>
     <hr />
     <p>
-      The circle should be light-white in light theme and dark-blue in dark
-      theme
+      Sed tincidunt erat urna, sit amet rutrum neque congue ac. Maecenas
+      tristique ligula feugiat leo varius faucibus. Aliquam mollis ligula sit
+      amet quam pretium pellentesque. Aenean eget ligula at justo accumsan
+      pretium. Cras et massa porttitor magna varius fringilla vitae eget velit.
+      Nam vitae massa vel mi mattis imperdiet. Morbi dictum hendrerit suscipit.
+      Mauris hendrerit augue at consectetur hendrerit.
     </p>
-    <div
-      class="rounded-full mt-4 w-16 h-16 bg-light-white dark:bg-dark-blue border-2 border-black"
-    ></div>
   </div>
 </template>
 
