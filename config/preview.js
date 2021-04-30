@@ -8,11 +8,4 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  html: {
-    prettier: {
-      tabWidth: 2,
-      useTabs: true,
-      htmlWhitespaceSensitivity: 'strict',
-    },
-  },
 }
