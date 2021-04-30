@@ -36,7 +36,7 @@
             <notification-action
               v-if="actionRequired"
               @onConfirm="$emit('onConfirm')"
-              @onCancel="$emit('onCancel')"
+              @onCancel="$emit('onClose')"
             >
               {{ actionText }}
             </notification-action>
@@ -47,7 +47,7 @@
           v-if="allowClose"
           class="absolute right-0 bottom-0 top-0 flex items-center mr-6"
         >
-          <button class="btn-close" @click="$emit('onCancel')">
+          <button class="btn-close" @click="$emit('onClose')">
             <span class="sr-only">Close</span>
             x
           </button>
@@ -77,7 +77,7 @@ export default {
     },
     shouldShow: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     allowClose: {
       type: Boolean,
@@ -103,6 +103,18 @@ export default {
         'text-error': this.type === 'error',
         'text-dark-indigo dark:text-light-indigo': this.type === 'info',
       }
+    },
+  },
+  mounted() {
+    if (!this.actionRequired) {
+      this.autoCloseNotification()
+    }
+  },
+  methods: {
+    autoCloseNotification() {
+      setTimeout(() => {
+        this.$emit('onClose')
+      }, this.lifeTime * 1000)
     },
   },
 }
