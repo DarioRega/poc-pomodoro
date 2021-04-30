@@ -16,30 +16,30 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { BrandButton },
-  template: '<brand-button v-bind="$props" />',
+  template: '<brand-button v-bind="$props">{{ slotcontent }}</brand-button>',
 })
 
 export const Primary = Template.bind({})
 Primary.args = {
-  label: 'Continue',
+  slotcontent: 'Continue',
   type: 'primary',
 }
 
 export const Secondary = Template.bind({})
 Secondary.args = {
-  label: 'Continue',
+  slotcontent: 'Continue',
   type: 'secondary',
 }
 
 export const Naked = Template.bind({})
 Naked.args = {
-  label: 'Continue',
+  slotcontent: 'Continue',
   type: 'naked',
 }
 
 export const Disabled = Template.bind({})
 Disabled.args = {
-  label: 'Continue',
+  slotcontent: 'Continue',
   type: 'primary',
   isDisabled: true,
 }

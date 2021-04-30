@@ -1,12 +1,11 @@
 <template>
   <button
-    :aria-label="label"
     class="btn"
     :class="[`btn__${type}`, `${isDisabled ? 'btn--disabled' : ''}`]"
     :disabled="isDisabled"
     @click="$emit('click')"
   >
-    {{ label }}
+    <slot />
   </button>
 </template>
 
@@ -14,10 +13,6 @@
 export default {
   name: 'Button',
   props: {
-    label: {
-      type: String,
-      required: true,
-    },
     type: {
       type: String,
       default: 'primary',
