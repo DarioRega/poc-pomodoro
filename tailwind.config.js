@@ -4,7 +4,7 @@ module.exports = {
     './components/**/*.{js,jsx,ts,tsx,vue}',
     './stories/**/*.{js,jsx,ts,tsx,vue}',
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     fontFamily: {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
@@ -25,12 +25,15 @@ module.exports = {
       colors: {
         success: '#61B45B',
         error: '#BF2C44',
+        'light-celeste': '#edf2fb',
         celeste: '#D4DFF6',
         'light-indigo': '#638FEF',
         'dark-indigo': '#4f46e5',
         'dark-blue': '#182532',
         'darker-blue': '#131E28',
+        'light-gray': '#E7E8EA',
         'dark-gray': '#747C84',
+        'rgba-dark-gray': 'rgba(116,124,132,0.2)',
         'darker-gray': '#333B44',
         'lighter-white': '#F9F9F9',
         'light-white': '#F4F5F7',
