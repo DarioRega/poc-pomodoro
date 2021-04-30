@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     fontFamily: {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
-      body: ['Open Sans', 'Helvetica', 'Arial', 'sans-serif'],
+      body: ['Nunito', 'Helvetica', 'Arial', 'sans-serif'],
     },
     fontSize: {
       xs: '.75rem', // 12px
