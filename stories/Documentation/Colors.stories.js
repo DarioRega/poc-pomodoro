@@ -9,6 +9,7 @@ export const All = () => ({
   data() {
     return {
       colors: [
+
         'bg-success',
         'bg-error',
         'bg-celeste',
@@ -22,6 +23,7 @@ export const All = () => ({
         'bg-light-white',
         'bg-dark-black',
         'bg-darker-black',
+        'bg-dark-gray-20',
       ],
     }
   },
