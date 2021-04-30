@@ -35,25 +35,29 @@ export default {
   }
 
   &__primary {
-    @apply text-celeste bg-dark-indigo dark:bg-light-indigo ring-offset-light-white dark:ring-offset-dark-blue ring-dark-indigo dark:ring-light-indigo;
+    @apply text-celeste bg-dark-indigo ring-offset-light-white ring-dark-indigo;
+    @apply dark:bg-light-indigo dark:ring-offset-dark-blue dark:ring-light-indigo;
   }
 
   &__secondary {
-    @apply text-dark-gray dark:text-celeste dark:bg-darker-gray border border-rgba-dark-gray dark:border-transparent rounded-md ring-offset-light-white dark:ring-offset-dark-blue ring-dark-indigo dark:ring-darker-gray;
+    @apply text-dark-gray  border border-dark-gray-20 rounded-md ring-offset-light-white ring-dark-indigo;
+    @apply dark:text-celeste dark:bg-darker-gray dark:border-transparent dark:ring-offset-dark-blue dark:ring-darker-gray;
     &:hover {
-      @apply bg-rgba-dark-gray dark:bg-darker-gray dark:opacity-80;
+      @apply bg-dark-gray-20;
+      @apply dark:bg-darker-gray dark:opacity-80;
     }
   }
 
   &__naked {
     @apply bg-transparent text-dark-gray border-0 shadow-none;
     &:hover {
-      @apply bg-rgba-dark-gray;
+      @apply bg-dark-gray-20;
     }
   }
 
   &--disabled {
-    @apply bg-light-gray text-dark-gray dark:text-dark-gray dark:bg-darker-gray border-0 opacity-80 cursor-not-allowed;
+    @apply bg-light-gray text-dark-gray border-0 opacity-80 cursor-not-allowed;
+    @apply dark:text-dark-gray dark:bg-darker-gray;
     &:hover {
       @apply opacity-80;
     }
