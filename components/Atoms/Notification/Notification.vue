@@ -2,17 +2,26 @@
   <notification-container>
     <div
       v-if="shouldShow"
-      class="max-w-sm w-full bg-light-white dark:bg-dark-blue shadow-lg rounded-lg pointer-events-auto ring-1 ring-lighter-white dark:ring-darker-blue ring-opacity-5"
+      class="max-w-md w-full bg-light-white dark:bg-dark-blue shadow-lg rounded-lg pointer-events-auto ring-1 ring-lighter-white dark:ring-darker-blue ring-opacity-5"
     >
-      <div class="p-4">
-        <div class="flex" :class="description ? 'items-start' : 'items-center'">
-          <div class="flex-shrink-0">
-            ICON HERE
+      <div class="p-4 relative flex items-start">
+        <div
+          class="flex w-full"
+          :class="[
+            description ? 'items-start' : 'items-center',
+            allowClose && 'pr-6',
+          ]"
+        >
+          <div
+            class="flex-shrink-0 flex-none w-14 mx-auto text-center"
+            :class="textType"
+          >
+            {{ type }}
           </div>
 
           <div class="ml-5 w-0 flex-1">
             <h6
-              class="text-dark-blue dark:text-light-celeste tracking-wide"
+              class="text-dark-blue dark:text-celeste tracking-wide"
               :class="!description && 'mb-0'"
             >
               {{ title }}
@@ -34,11 +43,11 @@
           </div>
         </div>
 
-        <div v-if="allowClose" class="ml-4 flex-shrink-0 flex">
-          <button
-            class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            @click="$emit('onClose')"
-          >
+        <div
+          v-if="allowClose"
+          class="absolute right-0 bottom-0 top-0 flex items-center mr-6"
+        >
+          <button class="btn-close" @click="$emit('onCancel')">
             <span class="sr-only">Close</span>
             x
           </button>
@@ -49,9 +58,10 @@
 </template>
 <script>
 import NotificationContainer from './NotificationContainer'
+import NotificationAction from './NotificationAction'
 export default {
   name: 'Notification',
-  components: { NotificationContainer },
+  components: { NotificationContainer, NotificationAction },
   props: {
     title: {
       type: String,
@@ -63,7 +73,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'info',
+      required: true,
     },
     shouldShow: {
       type: Boolean,
@@ -79,7 +89,7 @@ export default {
     },
     actionText: {
       type: String,
-      default: 'Ok',
+      default: 'Confirm',
     },
     lifeTime: {
       type: Number,
@@ -87,18 +97,24 @@ export default {
     },
   },
   computed: {
-    defaultTitle() {
-      switch (this.type) {
-        case 'success':
-          return 'All good!'
-        case 'error':
-          return 'Oops, something went wrong'
-        case 'info':
-          return 'Just to know!'
-        default:
-          return 'Just to know!'
+    textType() {
+      return {
+        'text-success': this.type === 'success',
+        'text-error': this.type === 'error',
+        'text-dark-indigo dark:text-light-indigo': this.type === 'info',
       }
     },
   },
 }
 </script>
+<style lang="scss" scoped>
+.btn-close {
+  @apply text-dark-blue dark:text-celeste rounded-md inline-flex text-current;
+  &:hover {
+    @apply text-darker-blue dark:text-dark-gray;
+  }
+  &:focus {
+    @apply outline-none;
+  }
+}
+</style>

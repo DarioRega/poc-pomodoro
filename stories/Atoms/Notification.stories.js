@@ -60,8 +60,28 @@ WithDescription.args = {
 export const WithCloseOption = Template.bind({})
 WithCloseOption.args = {
   shouldShow: true,
-  title: 'Continue',
-  type: 'info',
+  title: 'All good!',
+  type: 'success',
+  description: 'You will be redirect in a second.',
   allowClose: true,
   lifeTime: 12,
+}
+
+export const WithActionDefault = Template.bind({})
+WithActionDefault.args = {
+  shouldShow: true,
+  type: 'info',
+  actionRequired: true,
+  title: 'Confirmation!',
+  description: 'Are you sure to delete this task ?',
+}
+
+export const WithActionCustomText = Template.bind({})
+WithActionCustomText.args = {
+  shouldShow: true,
+  type: 'info',
+  actionRequired: true,
+  title: 'Confirmation!',
+  description: 'Are you sure to delete this task ?',
+  actionText: 'Yes i do',
 }
