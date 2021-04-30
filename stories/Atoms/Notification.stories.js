@@ -17,41 +17,45 @@ export default {
 }
 
 const Template = (args, { argTypes }) => ({
-  props: Object.keys(argTypes),
   components: { Notification },
-  template: '<notification v-bind="$props" />',
+  props: Object.keys(argTypes),
+  data() {
+    return {
+      show: true,
+    }
+  },
+  methods: {
+    handleClose() {
+      this.show = false
+      setTimeout(() => {
+        this.show = true
+      }, 1000)
+    },
+  },
+  template:
+    '<notification v-bind="$props" :should-show="show" @onClose="handleClose" />',
 })
-
-export const Default = Template.bind({})
-Default.args = {
-  title: 'Default notification',
-  shouldShow: true,
-}
 
 export const Info = Template.bind({})
 Info.args = {
-  shouldShow: true,
   title: 'Just to know',
   type: 'info',
 }
 
 export const Success = Template.bind({})
 Success.args = {
-  shouldShow: true,
   title: 'All good!',
   type: 'success',
 }
 
 export const Error = Template.bind({})
 Error.args = {
-  shouldShow: true,
   title: 'Oops, something went wrong',
   type: 'error',
 }
 
 export const WithDescription = Template.bind({})
 WithDescription.args = {
-  shouldShow: true,
   title: 'All good!',
   description: 'You will be redirect in a second.',
   type: 'success',
@@ -59,7 +63,6 @@ WithDescription.args = {
 
 export const WithCloseOption = Template.bind({})
 WithCloseOption.args = {
-  shouldShow: true,
   title: 'All good!',
   type: 'success',
   description: 'You will be redirect in a second.',
@@ -69,7 +72,6 @@ WithCloseOption.args = {
 
 export const WithActionDefault = Template.bind({})
 WithActionDefault.args = {
-  shouldShow: true,
   type: 'info',
   actionRequired: true,
   title: 'Confirmation!',
@@ -78,7 +80,6 @@ WithActionDefault.args = {
 
 export const WithActionCustomText = Template.bind({})
 WithActionCustomText.args = {
-  shouldShow: true,
   type: 'info',
   actionRequired: true,
   title: 'Confirmation!',
