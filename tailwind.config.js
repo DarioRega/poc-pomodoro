@@ -32,7 +32,7 @@ module.exports = {
         'darker-blue': '#131E28',
         'light-gray': '#E7E8EA',
         'dark-gray': '#747C84',
-        'rgba-dark-gray': 'rgba(116,124,132,0.2)',
+        'dark-gray-20': 'rgba(116,124,132,0.2)',
         'darker-gray': '#333B44',
         'lighter-white': '#F9F9F9',
         'light-white': '#F4F5F7',
