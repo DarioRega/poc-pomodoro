@@ -4,7 +4,7 @@
       <div class="shadow rounded-lg m-2">
         <div :class="color" class="p-10 rounded-t"></div>
         <div class="bg-gray-200 text-center p-4">
-          <pre>{{ color }}</pre>
+          <pre>{{ color.slice('3') }}</pre>
         </div>
       </div>
     </div>
