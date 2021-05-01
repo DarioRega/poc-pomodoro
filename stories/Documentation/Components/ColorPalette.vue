@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-wrap lg:max-w-3xl mx-auto">
-    <div v-for="color in colors" :key="color" class="mx-auto lg:w-1/3">
-      <div class="shadow rounded-lg m-2">
-        <div :class="color" class="p-10 rounded-t"></div>
-        <div class="bg-gray-200 text-center p-4">
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
+    <div v-for="color in colors" :key="color">
+      <div class="shadow rounded">
+        <div :class="color" class="p-16 rounded-t"></div>
+        <div class="bg-gray-200 rounded-b text-center py-4">
           <pre>{{ color.slice('3') }}</pre>
         </div>
       </div>
