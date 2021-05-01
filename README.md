@@ -3,6 +3,7 @@
 ## Project setup
 
 ### Install
+
 ```
 git clone git@gitlab.com:pomodoro-ch/styleguide.git
 cd ./styleguide
@@ -10,21 +11,25 @@ npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
 ## Commit guideline
+
 Commit message summaries must follow this basic format:
 
 ```
@@ -36,15 +41,15 @@ Tag: Message (fixes #1234)
 
 The `Tag` is one of the following:
 
-* `Fix` - for a bug fix.
-* `Update` - for a backwards-compatible enhancement.
-* `Breaking` - for a backwards-incompatible enhancement.
-* `Docs` - changes to documentation only.
-* `Build` - changes to build process only.
-* `New` - implemented a new feature.
-* `Upgrade` - for a dependency upgrade.
+- `Fix` - for a bug fix.
+- `Update` - for a backwards-compatible enhancement.
+- `Breaking` - for a backwards-incompatible enhancement.
+- `Docs` - changes to documentation only.
+- `Build` - changes to build process only.
+- `New` - implemented a new feature.
+- `Upgrade` - for a dependency upgrade.
 
-The message summary should be a one-sentence description of the change. The issue number should be mentioned at the end. * The commit message should say "(fixes #1234)" at the end of the description if it closes out an existing issue (replace 1234 with the issue number). If the commit doesn't completely fix the issue, then use `(refs #1234)` instead of `(fixes #1234)`.
+The message summary should be a one-sentence description of the change. The issue number should be mentioned at the end. \* The commit message should say "(fixes #1234)" at the end of the description if it closes out an existing issue (replace 1234 with the issue number). If the commit doesn't completely fix the issue, then use `(refs #1234)` instead of `(fixes #1234)`.
 
 Here are some good commit message summary examples:
 
