@@ -23,7 +23,12 @@ export default {
   },
   computed: {
     componentFile() {
-      return () => import(`./Icons/Icon${this.iconName}.vue`)
+      return () => import(`./Icons/Icon${this.capitalize(this.iconName)}.vue`)
+    },
+  },
+  methods: {
+    capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
     },
   },
 }
