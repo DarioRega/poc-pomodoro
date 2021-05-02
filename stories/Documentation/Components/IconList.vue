@@ -1,9 +1,9 @@
 <template>
   <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-5">
-    <div v-for="icon in icons" :key="icon" class="">
+    <div v-for="icon in icons" :key="icon">
       <div class="shadow rounded text-center">
         <div class="py-4">
-          <icon :icon-name="icon" class="w-12 h-12" />
+          <icon :icon-name="icon" class="w-12 h-12 " />
         </div>
         <div class="bg-gray-200 rounded-b py-4">
           <pre>{{ icon }}</pre>

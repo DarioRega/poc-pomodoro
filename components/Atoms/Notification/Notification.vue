@@ -13,13 +13,13 @@
           ]"
         >
           <div
-            class="flex-shrink-0 flex-none w-14 mx-auto text-center"
+            class="flex-shrink-0 inline-flex mr-5 mx-auto text-center"
             :class="textType"
           >
-            {{ type }}
+            <icon :icon-name="type" class="w-10 h-10" />
           </div>
 
-          <div class="ml-5 w-0 flex-1">
+          <div class="flex-1">
             <h6
               class="text-dark-blue dark:text-celeste tracking-wide"
               :class="!description && 'mb-0'"
@@ -49,7 +49,9 @@
         >
           <button class="btn-close" @click="$emit('onClose')">
             <span class="sr-only">Close</span>
-            x
+            <icon icon-name="close" class="w-4 h-4">
+            </icon>
+            </icon>
           </button>
         </div>
       </div>
@@ -59,9 +61,10 @@
 <script>
 import NotificationContainer from './NotificationContainer'
 import NotificationAction from './NotificationAction'
+import Icon from '../Icon'
 export default {
   name: 'Notification',
-  components: { NotificationContainer, NotificationAction },
+  components: { NotificationContainer, NotificationAction, Icon },
   props: {
     title: {
       type: String,
@@ -123,7 +126,7 @@ export default {
 .btn-close {
   @apply text-dark-blue dark:text-celeste rounded-md inline-flex text-current;
   &:hover {
-    @apply text-darker-blue dark:text-dark-gray;
+    @apply text-dark-gray dark:text-dark-gray;
   }
   &:focus {
     @apply outline-none;
