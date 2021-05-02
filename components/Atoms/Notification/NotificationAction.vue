@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 flex">
+  <div class="mt-6 flex">
     <brand-button type="primary" @click="$emit('onConfirm')">
       <slot />
     </brand-button>
