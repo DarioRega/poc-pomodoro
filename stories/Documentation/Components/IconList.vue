@@ -3,7 +3,7 @@
     <div v-for="icon in icons" :key="icon">
       <div class="shadow rounded text-center">
         <div class="py-4">
-          <icon :icon-name="icon" class="w-12 h-12 " />
+          <icon :icon-name="icon" class="w-12 h-12" />
         </div>
         <div class="bg-gray-200 rounded-b py-4">
           <pre>{{ icon }}</pre>

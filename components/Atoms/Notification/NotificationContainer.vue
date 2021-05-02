@@ -23,5 +23,3 @@ export default {
   name: 'NotificationContainer',
 }
 </script>
-
-<style scoped></style>

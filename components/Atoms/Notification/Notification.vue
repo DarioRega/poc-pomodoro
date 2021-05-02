@@ -28,7 +28,7 @@
             </h6>
             <p
               v-show="description"
-              class="mt-1 text-sm text-dark-gray dark:text-dark-gray"
+              class="mt-1 text-sm text-dark-gray"
             >
               {{ description }}
             </p>
@@ -126,7 +126,7 @@ export default {
 .btn-close {
   @apply text-dark-blue dark:text-celeste rounded-md inline-flex text-current;
   &:hover {
-    @apply text-dark-gray dark:text-dark-gray;
+    @apply text-dark-gray;
   }
   &:focus {
     @apply outline-none;
