@@ -1,7 +1,8 @@
 import Notification from '../../components/Atoms/Notification/Notification'
+import NotificationPopUps from '../../components/Atoms/Notification/NotificationPopUps'
 
 export default {
-  title: 'Atoms/Notification/Alerts',
+  title: 'Atoms/Notification/PopUps',
   component: Notification,
   argTypes: {
     type: {
@@ -14,10 +15,13 @@ export default {
       control: { type: 'number', defaultValue: 6 },
     },
   },
+  parameters: {
+    docs: { page: null },
+  },
 }
 
 const Template = (args, { argTypes }) => ({
-  components: { Notification },
+  components: { Notification, NotificationPopUps },
   props: Object.keys(argTypes),
   data() {
     return {
@@ -32,8 +36,14 @@ const Template = (args, { argTypes }) => ({
       }, 1000)
     },
   },
-  template:
-    '<notification v-bind="$props" :should-show="show" @onClose="handleClose" />',
+  template: `
+    <notification-pop-ups>
+      <notification 
+        v-bind="$props" 
+        :should-show="show" 
+        @onClose="handleClose" />
+    </notification-pop-ups>
+  `,
 })
 
 export const Info = Template.bind({})
