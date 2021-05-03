@@ -7,9 +7,3 @@
     />
   </g>
 </template>
-
-<script>
-export default {
-  name: 'IconInfo',
-}
-</script>
