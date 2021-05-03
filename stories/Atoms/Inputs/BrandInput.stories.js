@@ -1,5 +1,5 @@
-import BrandInput from '../../../components/Atoms/BrandInput'
 import Icon from '../../../components/Atoms/Icon'
+import BrandInput from '../../../components/Atoms/BrandInput'
 export default {
   title: 'Atoms/Input',
   component: BrandInput,
@@ -37,25 +37,25 @@ const Template = (args, { argTypes }) => ({
   </div>`,
 })
 
-export const BrandInputDefault = Template.bind({})
+export const Default = Template.bind({})
 
-export const BrandInputLarge = Template.bind({})
-BrandInputLarge.args = {
+export const Large = Template.bind({})
+Large.args = {
   size: 'large',
 }
 
-export const BrandInputWithIcon = Template.bind({})
-BrandInputWithIcon.args = {
+export const WithIcon = Template.bind({})
+WithIcon.args = {
   icon: `$`,
 }
 
-export const BrandInputWithLabel = Template.bind({})
-BrandInputWithLabel.args = {
+export const WithLabel = Template.bind({})
+WithLabel.args = {
   label: 'Accounts',
 }
 
-export const InputHasError = Template.bind({})
-InputHasError.args = {
+export const HasError = Template.bind({})
+HasError.args = {
   errors: `
     <p>
       Field can't be empty
@@ -63,8 +63,8 @@ InputHasError.args = {
 `,
 }
 
-export const InputHasErrorWithLabel = Template.bind({})
-InputHasErrorWithLabel.args = {
+export const HasErrorWithLabel = Template.bind({})
+HasErrorWithLabel.args = {
   label: 'Accounts',
   errors: `
     <p>
@@ -73,8 +73,8 @@ InputHasErrorWithLabel.args = {
 `,
 }
 
-export const InputHasErrorWithIcon = Template.bind({})
-InputHasErrorWithLabel.args = {
+export const HasErrorWithIcon = Template.bind({})
+HasErrorWithIcon.args = {
   label: 'Accounts',
   icon: `$`,
   errors: `
@@ -82,14 +82,4 @@ InputHasErrorWithLabel.args = {
       Field can't be empty
     </p>
 `,
-}
-
-export const InputNumber = Template.bind({})
-InputNumber.args = {
-  type: 'number',
-}
-export const InputNumberAllowFractions = Template.bind({})
-InputNumberAllowFractions.args = {
-  type: 'number',
-  allowFractions: true,
 }
