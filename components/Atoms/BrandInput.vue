@@ -2,7 +2,7 @@
   <div class="brand-input">
     <label
       :for="name"
-      class="label block text-sm font-medium tracking-wide text-dark-gray"
+      class="base-label block text-sm font-medium tracking-wide text-dark-gray"
       :class="[
         isHovered && 'hovered',
         isFocused && 'focused',
@@ -105,46 +105,8 @@ export default {
 <style lang="scss">
 .brand-input {
   .base-input {
-    @apply border border-dark-gray rounded-md block w-full bg-transparent text-dark-blue transition-colors duration-300;
-    @apply dark:text-celeste;
-
-    &:hover {
-      @apply border-dark-blue;
-      @apply dark:border-celeste;
-    }
-
-    &:focus {
-      @apply outline-none ring-dark-indigo border-dark-indigo;
-      @apply dark:ring-light-indigo dark:border-light-indigo;
-    }
-
-    &__default {
-      @apply py-1.5 px-3;
-    }
-    &__large {
-      @apply py-2 px-5;
-    }
     &--with-icon {
       @apply pr-10;
-    }
-    &.has-errors {
-      @apply text-error border-error;
-    }
-  }
-
-  label,
-  .input-icon {
-    @apply transition-colors duration-300;
-    &.hovered {
-      @apply text-dark-blue;
-      @apply dark:text-celeste;
-    }
-    &.focused {
-      @apply text-dark-indigo;
-      @apply dark:text-light-indigo;
-    }
-    &.has-errors {
-      @apply text-error;
     }
   }
 }
