@@ -29,10 +29,7 @@
             >
               {{ title }}
             </h6>
-            <p
-              v-show="description"
-              class="mt-1 text-sm text-dark-gray"
-            >
+            <p v-show="description" class="mt-1 text-sm text-dark-gray">
               {{ description }}
             </p>
 
@@ -52,9 +49,7 @@
         >
           <button class="btn-close" @click="$emit('onClose')">
             <span class="sr-only">Close</span>
-            <icon icon-name="close" class="w-4 h-4">
-            </icon>
-            </icon>
+            <icon icon-name="close" class="w-4 h-4" />
           </button>
         </div>
       </div>
