@@ -1,5 +1,5 @@
 .base-input {
-  @apply border border-dark-gray rounded-md block w-full bg-transparent text-dark-blue transition-colors duration-300;
+  @apply block w-full bg-transparent rounded-md border transition-colors duration-300 border-dark-gray text-dark-blue;
   @apply dark:text-celeste;
   &:hover {
     @apply border-dark-blue;

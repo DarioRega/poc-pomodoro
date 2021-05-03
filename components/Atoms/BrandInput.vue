@@ -4,7 +4,7 @@
       <slot name="label" />
     </template>
     <template v-slot:input>
-      <div class="mt-1 relative rounded-md shadow-sm">
+      <div class="relative mt-1 rounded-md shadow-sm">
         <input
           type="text"
           class="base-input"
@@ -21,10 +21,10 @@
         />
         <div
           v-if="hasIcon"
-          class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-auto"
+          class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-auto"
         >
           <span
-            class="input-icon h-5 w-5 text-dark-gray flex items-center focus:outline-none"
+            class="flex items-center w-5 h-5 input-icon text-dark-gray focus:outline-none"
             :class="[
               isHovered && 'hovered',
               isFocused && 'focused',

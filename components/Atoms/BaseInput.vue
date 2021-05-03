@@ -1,7 +1,7 @@
 <template>
   <div>
     <label
-      class="base-label block text-sm font-medium tracking-wide text-dark-gray"
+      class="block text-sm font-medium tracking-wide base-label text-dark-gray"
       :class="[
         isHovered && 'hovered',
         isFocused && 'focused',
