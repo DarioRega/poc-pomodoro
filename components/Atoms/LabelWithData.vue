@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h6 class="text-dark-blue dark:text-celeste mb-3">
+    <h6 class="mb-3 text-dark-blue dark:text-celeste">
       <slot name="label" />
     </h6>
-    <div class="text-dark-gray font-semibold">
+    <div class="font-semibold text-dark-gray">
       <slot name="data" />
     </div>
   </div>
