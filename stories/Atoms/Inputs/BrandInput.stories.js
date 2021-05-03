@@ -29,12 +29,12 @@ const Template = (args, { argTypes }) => ({
   },
   template: `
     <div class="max-w-xs">
-      <brand-input v-bind="$props" name="test">
+      <brand-input v-bind="$props">
         <template v-if="hasLabel" v-slot:label>${args.label}</template>
         <template v-if="hasIcon" v-slot:icon>${args.icon}</template>
         <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
       </brand-input>
-  </div>`,
+    </div>`,
 })
 
 export const Default = Template.bind({})
