@@ -2,9 +2,12 @@
   <notification-container>
     <div
       v-if="shouldShow"
-      class="max-w-md w-full bg-light-white dark:bg-dark-blue shadow-lg rounded-lg pointer-events-auto ring-1 ring-lighter-white dark:ring-darker-blue ring-opacity-5"
+      class="w-full max-w-md 
+      rounded-lg ring-1 ring-opacity-5 shadow-lg 
+      pointer-events-auto bg-light-white 
+      dark:bg-dark-blue ring-lighter-white dark:ring-darker-blue"
     >
-      <div class="p-4 relative flex items-start">
+      <div class="flex relative items-start p-4">
         <div
           class="flex w-full"
           :class="[
@@ -13,7 +16,7 @@
           ]"
         >
           <div
-            class="flex-shrink-0 inline-flex mr-5 mx-auto text-center"
+            class="inline-flex flex-shrink-0 mx-auto mr-5 text-center"
             :class="textType"
           >
             <icon :icon-name="type" class="w-10 h-10" />
@@ -21,7 +24,7 @@
 
           <div class="flex-1">
             <h6
-              class="text-dark-blue dark:text-celeste tracking-wide"
+              class="tracking-wide text-dark-blue dark:text-celeste"
               :class="!description && 'mb-0'"
             >
               {{ title }}
@@ -45,7 +48,7 @@
 
         <div
           v-if="allowClose"
-          class="absolute right-0 bottom-0 top-0 flex items-center mr-6"
+          class="flex absolute top-0 right-0 bottom-0 items-center mr-6"
         >
           <button class="btn-close" @click="$emit('onClose')">
             <span class="sr-only">Close</span>
@@ -124,7 +127,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .btn-close {
-  @apply text-dark-blue dark:text-celeste rounded-md inline-flex text-current;
+  @apply inline-flex text-current rounded-md text-dark-blue dark:text-celeste;
   &:hover {
     @apply text-dark-gray;
   }
