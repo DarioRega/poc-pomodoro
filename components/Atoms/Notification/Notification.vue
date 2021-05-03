@@ -3,7 +3,7 @@
     v-if="shouldShow"
     class="w-full
       rounded-lg ring-1 ring-opacity-5 shadow-lg
-      pointer-events-auto bg-light-white 
+      pointer-events-auto bg-light-white
       dark:bg-dark-blue ring-lighter-white dark:ring-darker-blue"
   >
     <div class="flex relative items-start p-4">
