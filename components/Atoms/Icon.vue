@@ -1,7 +1,7 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
+    :viewBox="viewBox"
     :aria-labelledby="iconName"
     role="presentation"
     class="fill-current"
@@ -19,6 +19,10 @@ export default {
     iconName: {
       type: String,
       required: true,
+    },
+    viewBox: {
+      type: String,
+      default: '0 0 24 24',
     },
   },
   computed: {

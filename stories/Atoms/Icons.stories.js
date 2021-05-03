@@ -7,6 +7,9 @@ export default {
     iconName: {
       control: { type: 'text' },
     },
+    viewBox: {
+      control: { type: 'text' },
+    },
   },
 }
 
@@ -19,4 +22,10 @@ const Template = (args, { argTypes }) => ({
 export const Close = Template.bind({})
 Close.args = {
   iconName: 'Close',
+}
+
+export const WithCustomViewBox = Template.bind({})
+WithCustomViewBox.args = {
+  iconName: 'Eye',
+  viewBox: '0 0 512 512',
 }
