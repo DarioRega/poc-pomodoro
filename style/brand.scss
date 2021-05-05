@@ -1,0 +1,43 @@
+.base-input {
+  @apply block w-full bg-transparent rounded-md border transition-colors duration-300 border-dark-gray text-dark-blue;
+  @apply dark:text-celeste;
+  &:hover {
+    @apply border-dark-blue;
+    @apply dark:border-celeste;
+  }
+
+  &:focus {
+    @apply outline-none ring-dark-indigo border-dark-indigo;
+    @apply dark:ring-light-indigo dark:border-light-indigo;
+  }
+
+  &__default {
+    @apply py-1.5 px-3;
+  }
+  &__large {
+    @apply py-2 px-5;
+  }
+
+  &.has-errors {
+    @apply text-error border-error;
+  }
+}
+
+.input-errors > * {
+  @apply text-sm italic font-semibold;
+}
+
+.base-label, .input-icon {
+  @apply transition-colors duration-300;
+  &.hovered {
+    @apply text-dark-blue;
+    @apply dark:text-celeste;
+  }
+  &.focused {
+    @apply text-dark-indigo;
+    @apply dark:text-light-indigo;
+  }
+  &.has-errors {
+    @apply text-error;
+  }
+}
