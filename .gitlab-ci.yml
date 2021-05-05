@@ -20,4 +20,4 @@ pages:
       - public
     expire_in: 7 day
   only:
-    - tags
+    - master
