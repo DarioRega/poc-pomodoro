@@ -11,6 +11,6 @@
 
 <script>
 export default {
-  name: 'IconEye',
+  viewBox: '0 0 512 512',
 }
 </script>
