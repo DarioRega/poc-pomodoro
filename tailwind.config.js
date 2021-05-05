@@ -10,6 +10,14 @@ module.exports = {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
       body: ['Nunito', 'Helvetica', 'Arial', 'sans-serif'],
     },
+    screens: {
+      sm: '576px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1366px',
+      '2xl': '1440px',
+      '3xl': '1920px',
+    },
     fontSize: {
       xs: '.75rem', // 12px
       sm: '.875rem', // 14px
