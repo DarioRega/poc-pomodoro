@@ -23,6 +23,10 @@
   }
 }
 
+.input-errors > * {
+  @apply text-sm italic font-semibold;
+}
+
 .base-label, .input-icon {
   @apply transition-colors duration-300;
   &.hovered {

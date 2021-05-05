@@ -13,7 +13,7 @@
     <slot name="input" />
     <div
       v-if="hasErrors"
-      class="text-right text-sm mt-1 mr-0.5 text-error italic"
+      class="text-right input-errors mt-1 mr-0.5 text-error italic"
     >
       <slot name="errors" />
     </div>
