@@ -26,12 +26,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .btn {
-  @apply inline-flex items-center text-sm tracking-wider px-4 py-2 border border-transparent font-medium rounded shadow-sm;
+  @apply inline-flex items-center py-2 px-4 text-sm font-medium tracking-wider rounded border border-transparent shadow-sm;
   &:hover {
     @apply opacity-90;
   }
   &:focus {
-    @apply opacity-100 outline-none ring-2 ring-offset-2;
+    @apply ring-2 ring-offset-2 opacity-100 outline-none;
   }
 
   &__primary {
@@ -40,7 +40,7 @@ export default {
   }
 
   &__secondary {
-    @apply text-dark-gray  border border-dark-gray-20 rounded-md ring-offset-light-white ring-dark-indigo;
+    @apply rounded-md border text-dark-gray border-dark-gray-20 ring-offset-light-white ring-dark-indigo;
     @apply dark:text-celeste dark:bg-darker-gray dark:border-transparent dark:ring-offset-dark-blue dark:ring-darker-gray;
     &:hover {
       @apply bg-dark-gray-20;
@@ -49,14 +49,14 @@ export default {
   }
 
   &__naked {
-    @apply bg-transparent text-dark-gray border-0 shadow-none;
+    @apply bg-transparent border-0 shadow-none text-dark-gray;
     &:hover {
       @apply bg-dark-gray-20;
     }
   }
 
   &--disabled {
-    @apply bg-light-gray text-dark-gray border-0 opacity-80 cursor-not-allowed;
+    @apply border-0 opacity-80 cursor-not-allowed bg-light-gray text-dark-gray;
     @apply dark:text-dark-gray dark:bg-darker-gray;
     &:hover {
       @apply opacity-80;

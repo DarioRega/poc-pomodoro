@@ -20,15 +20,21 @@ export default {
       type: String,
       required: true,
     },
-    viewBox: {
-      type: String,
-      default: '0 0 24 24',
-    },
+  },
+  data() {
+    return {
+      viewBox: '0 0 24 24',
+    }
   },
   computed: {
     componentFile() {
       return () => import(`./Icons/Icon${this.capitalize(this.iconName)}.vue`)
     },
+  },
+  mounted() {
+    this.componentFile().then(c => {
+      this.viewBox = c.default.viewBox || '0 0 24 24'
+    })
   },
   methods: {
     capitalize(str) {
