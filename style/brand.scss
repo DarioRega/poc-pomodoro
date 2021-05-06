@@ -1,14 +1,17 @@
 .base-input {
   @apply block w-full bg-transparent rounded-md border transition-colors duration-300 border-dark-gray text-dark-blue;
   @apply dark:text-celeste;
-  &:hover {
+
+  &:hover:not(.has-errors) {
     @apply border-dark-blue;
     @apply dark:border-celeste;
   }
-
   &:focus {
-    @apply outline-none ring-dark-indigo border-dark-indigo;
-    @apply dark:ring-light-indigo dark:border-light-indigo;
+    @apply outline-none;
+  }
+  &:focus:not(.has-errors) {
+    @apply text-dark-indigo ring-dark-indigo border-dark-indigo;
+    @apply dark:text-light-indigo dark:ring-light-indigo dark:border-light-indigo;
   }
 
   &__default {
@@ -19,7 +22,10 @@
   }
 
   &.has-errors {
-    @apply text-error border-error;
+    @apply text-error border-error #{!important};
+     > .select-toggle{
+      @apply text-error #{!important};
+    }
   }
 }
 
@@ -29,11 +35,11 @@
 
 .base-label, .input-icon {
   @apply transition-colors duration-300;
-  &.hovered {
+  &.hovered:not(.has-errors) {
     @apply text-dark-blue;
     @apply dark:text-celeste;
   }
-  &.focused {
+  &.focused:not(.has-errors) {
     @apply text-dark-indigo;
     @apply dark:text-light-indigo;
   }
