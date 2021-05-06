@@ -6,7 +6,7 @@
     role="presentation"
     class="fill-current"
   >
-    <title :id="iconName" lang="en">{{ iconName }} icon</title>
+    <title :id="iconName" lang="en">{{ capitalize(iconName) }}</title>
     <g>
       <component :is="componentFile"></component>
     </g>
