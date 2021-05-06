@@ -1,4 +1,4 @@
-# Pomodoro [Styleguide](https://pomodoro-ch.gitlab.io/styleguide/)
+# Pomodoro [Styleguide](https://styleguide.pomodoro.seelo.ch)
 
 ## Project setup
 
