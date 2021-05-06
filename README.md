@@ -5,7 +5,7 @@
 ### Install
 
 ```
-git clone git@gitlab.com:pomodoro-ch/styleguide.git
+git clone git@gitlab.com:seelo/pomodoro/styleguide.git
 cd ./styleguide
 npm install
 ```
