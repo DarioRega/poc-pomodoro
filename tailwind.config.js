@@ -3,6 +3,12 @@ module.exports = {
   purge: [
     './components/**/*.{js,jsx,ts,tsx,vue}',
     './stories/**/*.{js,jsx,ts,tsx,vue}',
+    './styleguide/components/**/*.{js,jsx,ts,tsx,vue}',
+    './components/**/*.{vue,js}',
+    './layouts/**/*.vue',
+    './pages/**/*.vue',
+    './plugins/**/*.{js,ts}',
+    './nuxt.config.{js,ts}',
   ],
   darkMode: 'class',
   theme: {
