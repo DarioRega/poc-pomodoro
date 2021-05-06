@@ -31,7 +31,7 @@ WithCustomHtml.args = {
     <div class="flex items-center justify-start text-current">
       <div class="inline-flex mr-4">
         <div class="rounded-full w-14 h-14 flex items-center justify-center bg-dark-indigo dark:bg-light-indigo bg-opacity-25 dark:bg-opacity-25">
-            <icon icon-name="userRound" view-box="0 0 20 21" class="w-8 h-8 text-dark-indigo dark:text-light-indigo">
+            <icon icon-name="userRound" class="w-8 h-8 text-dark-indigo dark:text-light-indigo">
         </div>
       </div>
       <div>
