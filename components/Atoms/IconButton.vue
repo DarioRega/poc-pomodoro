@@ -1,9 +1,9 @@
 <template>
   <button
-    class="btn-icon inline-flex items-center p-2 rounded-md
+    class="btn-icon inline-flex items-center rounded-md
     transition-colors duration-100
-    hover:bg-opacity-90 dark:hover:bg-opacity-90 focus:outline-none"
-    :class="classes"
+    focus:outline-none"
+    :class="[applyClasses, withBackground && 'p-2']"
     @click="$emit('click')"
   >
     <icon
@@ -27,11 +27,26 @@ export default {
     },
     classes: {
       type: String,
-      default: 'text-celeste bg-dark-indigo dark:bg-light-indigo',
+      default: '',
     },
     size: {
       type: String,
-      default: 'medium',
+      default: 'large',
+    },
+    withBackground: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    applyClasses() {
+      if (this.classes) {
+        return this.classes
+      }
+      if (this.withBackground && !this.classes) {
+        return 'text-celeste bg-dark-indigo dark:bg-light-indigo hover:bg-opacity-90 dark:hover:bg-opacity-90'
+      }
+      return 'text-dark-gray hover:text-dark-blue dark:hover:text-celeste focus:text-dark-indigo dark:focus:text-light-indigo '
     },
   },
 }
@@ -47,6 +62,9 @@ export default {
       @apply w-4 h-4;
     }
     &--large {
+      @apply w-5 h-5;
+    }
+    &--xlarge {
       @apply w-6 h-6;
     }
   }

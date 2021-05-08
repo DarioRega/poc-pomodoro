@@ -11,7 +11,13 @@ export default {
       control: { type: 'text' },
     },
     size: {
-      control: { type: 'select', options: ['small', 'medium', 'large'] },
+      control: {
+        type: 'select',
+        options: ['small', 'medium', 'large', 'xlarge'],
+      },
+    },
+    withBackground: {
+      control: { type: 'select', options: [true, false] },
     },
   },
 }
@@ -22,30 +28,61 @@ const Template = (args, { argTypes }) => ({
   template: '<icon-button v-bind="$props" />',
 })
 
-export const DefaultMedium = Template.bind({})
-DefaultMedium.args = {
-  iconName: 'checkMark',
+export const DefaultLarge = Template.bind({})
+DefaultLarge.args = {
+  iconName: 'eye',
 }
-
-export const Large = Template.bind({})
-Large.args = {
-  iconName: 'arrowRight',
-  size: 'large',
-}
-
-export const Small = Template.bind({})
-Small.args = {
-  iconName: 'arrowRight',
+export const WithoutBackgroundSmall = Template.bind({})
+WithoutBackgroundSmall.args = {
+  iconName: 'eye',
   size: 'small',
 }
-
-export const CustomColorSuccess = Template.bind({})
-CustomColorSuccess.args = {
-  iconName: 'checkMark',
-  classes: 'text-celeste bg-success',
+export const WithoutBackgroundMedium = Template.bind({})
+WithoutBackgroundMedium.args = {
+  iconName: 'eye',
+  size: 'medium',
 }
-export const CustomColorError = Template.bind({})
-CustomColorError.args = {
-  iconName: 'close',
-  classes: 'text-celeste bg-error',
+export const WithoutBackgroundXLarge = Template.bind({})
+WithoutBackgroundXLarge.args = {
+  iconName: 'eye',
+  size: 'xlarge',
+}
+
+export const WithBackgroundSmall = Template.bind({})
+WithBackgroundSmall.args = {
+  iconName: 'arrowRight',
+  size: 'small',
+  classes: 'text-celeste bg-dark-indigo dark:bg-light-indigo',
+  withBackground: true,
+}
+
+export const WithBackgroundMedium = Template.bind({})
+WithBackgroundMedium.args = {
+  iconName: 'checkMark',
+  size: 'medium',
+  withBackground: true,
+  classes: 'text-celeste bg-success hover:bg-opacity-90',
+}
+
+export const WithBackgroundLarge = Template.bind({})
+WithBackgroundLarge.args = {
+  iconName: 'checkMark',
+  size: 'large',
+  classes: 'text-celeste bg-success',
+  withBackground: true,
+}
+
+export const WithBackgroundXLarge = Template.bind({})
+WithBackgroundXLarge.args = {
+  iconName: 'checkMark',
+  size: 'xlarge',
+  classes: 'text-celeste bg-success',
+  withBackground: true,
+}
+
+export const WithBackgroundDefaultClasses = Template.bind({})
+WithBackgroundDefaultClasses.args = {
+  iconName: 'arrowRight',
+  size: 'medium',
+  withBackground: true,
 }
