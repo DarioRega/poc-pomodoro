@@ -46,12 +46,18 @@ export default {
       @apply bg-dark-gray-20;
       @apply dark:bg-darker-gray dark:opacity-80;
     }
+    &:focus {
+      @apply ring-dark-gray;
+    }
   }
 
   &__naked {
     @apply bg-transparent border-0 shadow-none text-dark-gray;
     &:hover {
       @apply bg-dark-gray-20;
+    }
+    &:focus {
+      @apply ring-dark-gray ring-dark-gray-20;
     }
   }
 
