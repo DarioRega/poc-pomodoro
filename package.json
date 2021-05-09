@@ -13,12 +13,13 @@
   "browser": "./dist/library.js",
   "unpkg": "./dist/library.js",
   "dependencies": {
+    "@storybook/theming": "^6.2.9",
     "core-js": "^2.6.5",
     "dateformat": "^4.5.1",
     "release-it": "^14.6.1",
     "vue": "^2.6.10",
-    "vue-slider-component": "^3.2.11",
-    "vue-flatpickr-component": "^8.1.6"
+    "vue-flatpickr-component": "^8.1.6",
+    "vue-slider-component": "^3.2.11"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
@@ -26,6 +27,7 @@
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.9",
+    "@storybook/addons": "^6.2.9",
     "@storybook/vue": "^6.2.9",
     "@tailwindcss/postcss7-compat": "^2.1.2",
     "@vue/cli-plugin-babel": "^3.1.1",
