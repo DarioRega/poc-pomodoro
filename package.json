@@ -17,6 +17,7 @@
     "dateformat": "^4.5.1",
     "release-it": "^14.6.1",
     "vue": "^2.6.10",
+    "vue-slider-component": "^3.2.11",
     "vue-flatpickr-component": "^8.1.6"
   },
   "devDependencies": {
