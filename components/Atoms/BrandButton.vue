@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Button',
+  name: 'BrandButton',
   props: {
     type: {
       type: String,
