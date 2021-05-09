@@ -98,12 +98,11 @@
 </template>
 
 <script>
-import Icon from './Icon'
-import BaseInput from './BaseInput'
+import Icon from '../Icon'
 
 export default {
   name: 'BrandSelect',
-  components: { BaseInput, Icon },
+  components: { Icon },
   props: {
     options: {
       type: Array,

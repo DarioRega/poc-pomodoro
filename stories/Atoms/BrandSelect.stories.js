@@ -1,4 +1,4 @@
-import BrandSelect from '../../components/Atoms/BrandSelect'
+import BrandSelect from '../../components/Atoms/Inputs/BrandSelect'
 
 export default {
   title: 'Atoms/Select',

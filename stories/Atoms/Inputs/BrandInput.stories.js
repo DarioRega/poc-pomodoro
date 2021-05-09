@@ -1,28 +1,24 @@
-import Icon from '../../../components/Atoms/Icon'
-import BrandInput from '../../../components/Atoms/BrandInput'
+import BrandInput from '../../../components/Atoms/Inputs/BrandInput'
 export default {
-  title: 'Atoms/Input',
+  title: 'Atoms/Inputs/Input',
   component: BrandInput,
   argTypes: {
     size: {
       control: { type: 'select', options: ['default', 'large'] },
     },
     type: {
-      control: { type: 'select', options: ['text', 'number'] },
+      control: { type: 'select', options: ['primary', 'task'] },
+    },
+    value: {
+      control: { type: 'text' },
     },
   },
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { BrandInput, Icon },
+  components: { BrandInput },
   computed: {
-    hasLabel() {
-      return args.label
-    },
-    hasIcon() {
-      return args.icon
-    },
     hasErrors() {
       return args.errors
     },
@@ -30,32 +26,41 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div class="max-w-xs">
       <brand-input v-bind="$props">
-        <template v-if="hasLabel" v-slot:label>${args.label}</template>
-        <template v-if="hasIcon" v-slot:icon>${args.icon}</template>
         <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
       </brand-input>
     </div>`,
 })
 
 export const Default = Template.bind({})
+Default.args = {
+  name: 'myName',
+  value: 'Create deployment plan',
+}
 
 export const Large = Template.bind({})
 Large.args = {
+  value: 'Create deployment plan',
   size: 'large',
+  name: 'myName',
 }
 
-export const WithIcon = Template.bind({})
-WithIcon.args = {
-  icon: `$`,
+export const TypeTask = Template.bind({})
+TypeTask.args = {
+  type: 'task',
+  name: 'task-name',
+  value: 'Create deployment plan',
 }
 
 export const WithLabel = Template.bind({})
 WithLabel.args = {
-  label: 'Accounts',
+  value: 'Josef',
+  label: 'Name',
+  name: 'name',
 }
 
 export const HasError = Template.bind({})
 HasError.args = {
+  name: 'myName',
   errors: `
     <p>
       Field can't be empty
@@ -65,7 +70,8 @@ HasError.args = {
 
 export const HasErrorWithLabel = Template.bind({})
 HasErrorWithLabel.args = {
-  label: 'Accounts',
+  name: 'account',
+  label: 'Account',
   errors: `
     <p>
       Field can't be empty
@@ -73,10 +79,10 @@ HasErrorWithLabel.args = {
 `,
 }
 
-export const HasErrorWithIcon = Template.bind({})
-HasErrorWithIcon.args = {
-  label: 'Accounts',
-  icon: `$`,
+export const HasErrorTypeTask = Template.bind({})
+HasErrorTypeTask.args = {
+  name: 'myName',
+  type: 'task',
   errors: `
     <p>
       Field can't be empty

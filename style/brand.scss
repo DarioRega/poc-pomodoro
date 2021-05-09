@@ -1,49 +1,84 @@
-.base-input {
-  @apply block w-full bg-transparent rounded-md border transition-colors duration-300 border-dark-gray text-dark-blue;
-  @apply dark:text-celeste;
+.brand-input {
+  &__input, &__textarea {
+    @apply block w-full bg-transparent rounded-md border-2 shadow-sm border-dark-gray text-dark-blue;
+    @apply dark:text-celeste;
 
-  &:hover:not(.has-errors) {
-    @apply border-dark-blue;
-    @apply dark:border-celeste;
-  }
-  &:focus {
-    @apply outline-none;
-  }
-  &:focus:not(.has-errors) {
-    @apply text-dark-indigo ring-dark-indigo border-dark-indigo;
-    @apply dark:text-light-indigo dark:ring-light-indigo dark:border-light-indigo;
-  }
+    &--primary:hover {
+      @apply border-dark-blue;
+      @apply dark:border-celeste;
 
-  &__default {
-    @apply py-1.5 px-3;
-  }
-  &__large {
-    @apply py-2 px-5;
-  }
+      & ~ label {
+        @apply text-dark-blue;
+        @apply dark:text-celeste;
+      }
+    }
 
-  &.has-errors {
-    @apply text-error border-error #{!important};
-     > .select-toggle{
-      @apply text-error #{!important};
+    &:focus {
+      @apply outline-none;
+    }
+    &:focus {
+      @apply text-dark-indigo border-dark-indigo;
+      @apply dark:text-light-indigo dark:border-light-indigo;
+
+      & ~ label {
+        @apply text-dark-indigo;
+        @apply dark:text-light-indigo;
+      }
+    }
+
+    &--task {
+      @apply border-transparent border-dashed shadow-none;
+      &:hover {
+        @apply border-dark-gray;
+      }
+      &:focus {
+        @apply border-solid border-dark-indigo;
+        @apply dark:border-light-indigo;
+      }
     }
   }
-}
 
-.input-errors > * {
-  @apply text-sm italic font-semibold;
-}
+  &__input {
 
-.base-label, .input-icon {
-  @apply transition-colors duration-300;
-  &.hovered:not(.has-errors) {
-    @apply text-dark-blue;
-    @apply dark:text-celeste;
+    &--size-default {
+      @apply py-1.5 px-3;
+    }
+
+    &--size-large {
+      @apply py-2 px-5;
+    }
   }
-  &.focused:not(.has-errors) {
-    @apply text-dark-indigo;
-    @apply dark:text-light-indigo;
+
+  &__textarea {
+    @apply py-2 px-3;
   }
-  &.has-errors {
-    @apply text-error;
+
+  &__label {
+    @apply  block mb-1.5 text-sm tracking-wider font-bold text-dark-gray;
+  }
+
+  &__input, &__textarea, &__label, &__errors {
+    @apply transition-colors duration-300;
+  }
+
+  &--has-errors {
+    .brand-input {
+      &__label, &__input, &__textarea {
+        @apply text-error border-error #{!important};
+        &:hover {
+          @apply text-error border-error;
+        }
+        &:focus {
+          @apply text-error border-error;
+        }
+      }
+
+      &__errors {
+        @apply italic text-error border-error;
+        & > * {
+          @apply text-sm;
+        }
+      }
+    }
   }
 }
