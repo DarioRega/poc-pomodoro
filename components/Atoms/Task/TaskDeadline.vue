@@ -56,8 +56,8 @@
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 
-import Icon from './Icon'
-import BrandButton from './BrandButton'
+import Icon from '../Icon'
+import BrandButton from '../BrandButton'
 
 const calendarLocales = {
   fr: require('flatpickr/dist/l10n/fr.js').default.fr,

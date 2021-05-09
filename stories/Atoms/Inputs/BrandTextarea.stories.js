@@ -1,4 +1,4 @@
-import BrandTextarea from '../../components/Atoms/Inputs/BrandTextarea'
+import BrandTextarea from '../../../components/Atoms/Inputs/BrandTextarea'
 
 export default {
   title: 'Atoms/Inputs/Textarea',

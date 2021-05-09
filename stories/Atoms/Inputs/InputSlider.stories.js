@@ -1,4 +1,4 @@
-import InputSlider from '../../components/Atoms/InputSlider'
+import InputSlider from '../../../components/Atoms/Inputs/InputSlider'
 
 export default {
   title: 'Atoms/Inputs/Slider',

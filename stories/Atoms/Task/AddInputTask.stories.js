@@ -1,7 +1,7 @@
-import AddTaskInput from '../../components/Atoms/AddTaskInput'
+import AddTaskInput from '../../../components/Atoms/Task/AddTaskInput'
 
 export default {
-  title: 'Atoms/Input/AddTask',
+  title: 'Atoms/Task/AddInput',
   component: AddTaskInput,
   argTypes: {
     placeholder: {

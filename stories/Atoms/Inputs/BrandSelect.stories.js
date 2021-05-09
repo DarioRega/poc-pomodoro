@@ -1,10 +1,10 @@
-import BrandSelect from '../../components/Atoms/Inputs/BrandSelect'
+import BrandSelect from '../../../components/Atoms/Inputs/BrandSelect'
 
 export default {
   title: 'Atoms/Select',
   component: BrandSelect,
   argTypes: {
-    defaultValue: {
+    value: {
       control: {
         type: 'select',
         options: [
@@ -15,8 +15,10 @@ export default {
       },
     },
     size: {
-      type: 'select',
-      options: ['default', 'large'],
+      control: { type: 'select', options: ['default', 'large'] },
+    },
+    type: {
+      control: { type: 'select', options: ['primary', 'task'] },
     },
   },
 }
@@ -44,7 +46,6 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div class="max-w-xs">
       <brand-select v-bind="$props" :options="list">
-        <template v-if="hasLabel" v-slot:label>${args.label}</template>
         <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
       </brand-select>
     </div>
@@ -53,36 +54,41 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-  defaultValue: { id: 3, name: 'Dark' },
+  name: 'myName',
+  value: { id: 3, name: 'Dark' },
 }
 
 export const Large = Template.bind({})
 Large.args = {
-  defaultValue: { id: 3, name: 'Dark' },
+  name: 'myName',
   size: 'large',
+  value: { id: 3, name: 'Dark' },
 }
 
 export const WithLabel = Template.bind({})
 WithLabel.args = {
-  defaultValue: { id: 1, name: 'Light' },
+  name: 'Theme',
   label: 'Theme',
+  value: { id: 1, name: 'Light' },
 }
 
-export const HasError = Template.bind({})
-HasError.args = {
-  errors: `
-    <p>
-      Please select a value
-    </p>
-`,
-}
-
-export const HasErrorWithLabel = Template.bind({})
-HasErrorWithLabel.args = {
-  label: 'Theme',
-  errors: `
-    <p>
-      Please select a value
-    </p>
-`,
-}
+// export const HasError = Template.bind({})
+// HasError.args = {
+//   name: 'myName',
+//   errors: `
+//     <p>
+//       Field can't be empty
+//     </p>
+// `,
+// }
+//
+// export const HasErrorWithLabel = Template.bind({})
+// HasErrorWithLabel.args = {
+//   name: 'theme',
+//   label: 'Theme',
+//   errors: `
+//     <p>
+//       Field can't be empty
+//     </p>
+// `,
+// }

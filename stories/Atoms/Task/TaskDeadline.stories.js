@@ -1,8 +1,8 @@
-import TaskDeadline from '../../components/Atoms/TaskDeadline'
 import dateFormat from 'dateformat'
+import TaskDeadline from '../../../components/Atoms/Task/TaskDeadline'
 
 export default {
-  title: 'Atoms/TaskDeadline',
+  title: 'Atoms/Task/Deadline',
   component: TaskDeadline,
   argTypes: {
     value: {
