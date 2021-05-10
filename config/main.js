@@ -8,5 +8,6 @@ module.exports = {
     '@storybook/addon-essentials',
     '@whitespace/storybook-addon-html',
     'storybook-tailwind-dark-mode',
+    '@storybook/addon-a11y',
   ],
 }

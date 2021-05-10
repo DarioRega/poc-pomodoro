@@ -10,15 +10,22 @@ export default {
         options: [
           { id: 1, name: 'Light' },
           { id: 2, name: 'Dusk' },
-          { id: 3, name: 'Dark' },
+          { id: 4, name: 'Yellow' },
+          { id: 5, name: 'Pink' },
+          { id: 6, name: 'Red' },
         ],
       },
     },
     size: {
-      control: { type: 'select', options: ['default', 'large'] },
+      type: 'select',
+      options: ['default', 'large'],
     },
     type: {
-      control: { type: 'select', options: ['primary', 'task'] },
+      type: 'select',
+      options: ['primary', 'large'],
+    },
+    label: {
+      type: 'text',
     },
   },
 }
@@ -31,23 +38,22 @@ const Template = (args, { argTypes }) => ({
       list: [
         { id: 1, name: 'Light' },
         { id: 2, name: 'Dusk' },
-        { id: 3, name: 'Dark' },
+        { id: 4, name: 'Yellow' },
+        { id: 5, name: 'Pink' },
+        { id: 6, name: 'Red' },
       ],
     }
   },
   computed: {
-    hasLabel() {
-      return args.label
-    },
     hasErrors() {
       return args.errors
     },
   },
   template: `
     <div class="max-w-xs">
-      <brand-select v-bind="$props" :options="list">
-        <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
-      </brand-select>
+    <brand-select v-bind="$props" name="test" :options="list">
+      <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
+    </brand-select>
     </div>
   `,
 })
@@ -67,28 +73,27 @@ Large.args = {
 
 export const WithLabel = Template.bind({})
 WithLabel.args = {
-  name: 'Theme',
   label: 'Theme',
   value: { id: 1, name: 'Light' },
 }
 
-// export const HasError = Template.bind({})
-// HasError.args = {
-//   name: 'myName',
-//   errors: `
-//     <p>
-//       Field can't be empty
-//     </p>
-// `,
-// }
-//
-// export const HasErrorWithLabel = Template.bind({})
-// HasErrorWithLabel.args = {
-//   name: 'theme',
-//   label: 'Theme',
-//   errors: `
-//     <p>
-//       Field can't be empty
-//     </p>
-// `,
-// }
+export const HasError = Template.bind({})
+HasError.args = {
+  name: 'myName',
+  errors: `
+    <p>
+      Please select a value
+    </p>
+`,
+}
+
+export const HasErrorWithLabel = Template.bind({})
+HasErrorWithLabel.args = {
+  name: 'myName',
+  label: 'Theme',
+  errors: `
+    <p>
+      Please select a value
+    </p>
+`,
+}

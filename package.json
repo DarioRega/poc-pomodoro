@@ -13,6 +13,7 @@
   "browser": "./dist/library.js",
   "unpkg": "./dist/library.js",
   "dependencies": {
+    "@storybook/addon-a11y": "^6.2.9",
     "@storybook/theming": "^6.2.9",
     "core-js": "^2.6.5",
     "dateformat": "^4.5.1",
