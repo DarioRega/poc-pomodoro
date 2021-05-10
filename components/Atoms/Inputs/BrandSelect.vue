@@ -1,25 +1,29 @@
 <template>
-  <base-input :is-hovered="isHovered" :is-focused="isFocused">
-    <template v-slot:label>
-      <slot name="label" />
-    </template>
-    <template v-slot:input>
-      <div class="relative mt-1 shadow-sm brand-select">
+  <div
+    class="brand-input"
+    :class="[
+      `brand-input__select-container--size-${size}`,
+      hasErrors && 'brand-input--has-errors',
+    ]"
+  >
+    <div class="flex flex-col-reverse">
+      <div class="relative">
         <button
+          ref="triggerDropdown"
           type="button"
-          class="relative pr-10 w-full text-left shadow-sm cursor-pointer base-input"
-          :class="[`base-input__${size}`, hasErrors && 'has-errors']"
+          class="relative pr-10 w-full text-left cursor-pointer brand-input__select focus:outline-none"
           aria-haspopup="listbox"
-          aria-expanded="true"
+          :aria-expanded="isOpen"
+          :class="[
+            `brand-input__select--size-${size}`,
+            `brand-input__select--${type}`,
+          ]"
           aria-labelledby="listbox-label"
-          @mouseenter="isHovered = true"
-          @mouseleave="isHovered = false"
-          @focusin="isFocused = true"
-          @focusout="isFocused = false"
-          @click="isOpen = !isOpen"
+          @click="toggleVisibility"
+          @keydown="toggleVisibility"
         >
           <span class="block text-current truncate">
-            {{ currentSelected.name || 'Please select' }}
+            {{ localValue.name || 'Please select' }}
           </span>
           <span
             class="flex absolute inset-y-0 right-0 items-center transition-colors duration-300 pointer-events-none select-toggle text-dark-gray"
@@ -46,84 +50,97 @@
             class="overflow-auto absolute z-10 mt-2 w-full max-h-60 rounded-md shadow-lg list-options focus:outline-none"
             tabindex="-1"
             role="listbox"
+            :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
-            aria-activedescendant="listbox-option-3"
           >
             <li
               v-for="(item, index) in options"
-              id="listbox-option-0"
+              :id="`listbox-option-${item.id}`"
+              :ref="`listbox-option-${item.id}`"
               :key="item.id"
+              tabindex="0"
               class="relative py-2 pr-9 pl-3 cursor-default select-none single-option text-dark-gray"
               :class="[
-                highlightedItemId == item.id && 'highlighted',
+                isHighlighted(item.id) && 'highlighted',
                 index % 2 === 0
                   ? 'bg-light-white dark:bg-darker-blue'
                   : 'bg-lighter-white dark:bg-dark-blue',
                 index < 1 && 'rounded-t-md',
-                index === options.length - 1 && 'rounded-b-md',
+                index < options.length - 1 && 'rounded-b-md',
               ]"
               role="option"
+              @focusin="currentFocusedElementId = item.id"
+              @keydown="handleListKeyDown($event, item)"
               @mouseenter="highlightedItemId = item.id"
               @mouseleave="highlightedItemId = ''"
               @click="selectOption(item)"
             >
-              <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-              <span
-                class="block font-normal truncate"
-                :class="
-                  currentSelected.id === item.id
-                    ? 'font-semibold'
-                    : 'font-normal'
-                "
-              >
-                {{ item.name }}
-              </span>
-              <span
-                v-if="currentSelected.id === item.id"
-                class="flex absolute inset-y-0 right-0 items-center pr-4 transition-colors duration-100 checkmark"
-                :class="highlightedItemId === item.id && 'highlighted'"
-              >
-                <!-- Heroicon name: solid/check -->
-                <icon icon-name="increaseDecrease" class="w-5 h-5" />
-              </span>
+              <select-dropdown-option
+                :is-highlighted="isHighlighted(item.id)"
+                :is-selected="localValue.id === item.id"
+                :name="item.name"
+              />
             </li>
           </ul>
         </transition>
       </div>
-    </template>
-    <template v-slot:errors>
+
+      <label v-if="label && type !== 'task'" class="brand-input__label">
+        {{ label }}
+      </label>
+    </div>
+    <div v-show="hasErrors" class="mt-1 text-right brand-input__errors">
       <slot name="errors" />
-    </template>
-  </base-input>
+    </div>
+  </div>
 </template>
 
 <script>
 import Icon from '../Icon'
+import SelectDropdownOption from './SelectDropdownOption'
+
+const SPACEBAR_KEY_CODE = [0, 32]
+const ENTER_KEY_CODE = 13
+const DOWN_ARROW_KEY_CODE = 40
+const UP_ARROW_KEY_CODE = 38
+const ESCAPE_KEY_CODE = 27
+// TODO whatinput=keyboard single-option focus = outline indigo
 
 export default {
   name: 'BrandSelect',
-  components: { Icon },
+  components: { SelectDropdownOption, Icon },
   props: {
     options: {
       type: Array,
       default: () => [],
     },
-    defaultValue: {
+    value: {
       type: Object,
       default: () => ({}),
+    },
+    type: {
+      type: String,
+      default: 'primary',
     },
     size: {
       type: String,
       default: 'default',
     },
+    label: {
+      type: String,
+      default: '',
+    },
+    name: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
       highlightedItemId: '',
-      isHovered: false,
-      isFocused: false,
+      currentFocusedElementId: 0,
       isOpen: false,
-      currentSelected: {
+      localValue: {
         id: null,
       },
     }
@@ -134,19 +151,61 @@ export default {
     },
   },
   mounted() {
+    this.localValue = this.value
     window.document.addEventListener('click', this.handleWindowClick)
-    if (this.defaultValue.id) {
-      this.currentSelected = this.defaultValue
-    }
   },
   beforeDestroy() {
     window.document.removeEventListener('click', this.handleWindowClick)
   },
   methods: {
+    isHighlighted(itemId) {
+      return this.highlightedItemId === itemId
+    },
+    toggleVisibility(evt) {
+      const openDropDown =
+        SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
+        evt.keyCode === ENTER_KEY_CODE
+
+      if (evt.keyCode === ESCAPE_KEY_CODE) {
+        this.isOpen = false
+      }
+
+      if (evt.type === 'click' || openDropDown) {
+        this.isOpen = true
+      }
+      if (evt.keyCode === DOWN_ARROW_KEY_CODE) {
+        this.findNextElementToFocusAndFocus(DOWN_ARROW_KEY_CODE)
+      }
+
+      if (evt.keyCode === UP_ARROW_KEY_CODE) {
+        this.findNextElementToFocusAndFocus(UP_ARROW_KEY_CODE)
+      }
+    },
     selectOption(item) {
+      this.localValue = item
       this.isOpen = false
-      this.currentSelected = item
       this.$emit('change', item)
+    },
+    handleListKeyDown(evt, item) {
+      let spaceBarCodeKey
+      if (SPACEBAR_KEY_CODE.includes(evt.keyCode)) {
+        spaceBarCodeKey = SPACEBAR_KEY_CODE.find(x => x === evt.keyCode)
+      }
+
+      switch (evt.keyCode) {
+        case ENTER_KEY_CODE:
+          return this.selectOption(item)
+        case spaceBarCodeKey:
+          return this.selectOption(item)
+        case DOWN_ARROW_KEY_CODE:
+          return this.findNextElementToFocusAndFocus(DOWN_ARROW_KEY_CODE)
+        case UP_ARROW_KEY_CODE:
+          return this.findNextElementToFocusAndFocus(UP_ARROW_KEY_CODE)
+        case ESCAPE_KEY_CODE:
+          return (this.isOpen = false)
+        default:
+          return (this.isOpen = false)
+      }
     },
     handleWindowClick(evt) {
       // TODO check on nuxt env if this works or should add !evt.target.offsetParent.className.includes('brand-select')
@@ -154,31 +213,54 @@ export default {
         this.isOpen = false
       }
     },
+    findNextElementToFocusAndFocus(keyCode) {
+      if (!this.currentFocusedElementId) {
+        return this.focusElement(this.options[0].id)
+      }
+
+      const currentActiveElementIndex = this.options.findIndex(
+        x => x.id === this.currentFocusedElementId,
+      )
+      const isNextItemLastItem =
+        currentActiveElementIndex >= this.options.length - 1
+
+      // handle DOWN ARROW KEY CODE
+      if (keyCode === DOWN_ARROW_KEY_CODE) {
+        if (isNextItemLastItem) {
+          const firstItem = this.options[0]
+          return this.focusElement(firstItem.id)
+        }
+
+        const nextItem = this.options[currentActiveElementIndex + 1]
+        return this.focusElement(nextItem.id)
+      }
+
+      // handle UP ARROW KEY CODE
+      if (keyCode === UP_ARROW_KEY_CODE) {
+        const isFirstItem = currentActiveElementIndex === 0
+        if (isFirstItem) {
+          const lastItem = this.options[this.options.length - 1]
+          return this.focusElement(lastItem.id)
+        } else {
+          const previousItem = this.options[currentActiveElementIndex - 1]
+          return this.focusElement(previousItem.id)
+        }
+      }
+    },
+    focusElement(id) {
+      const ref = `listbox-option-${id}`
+      this.currentFocusedElementId = id
+      this.$refs[ref][0].focus()
+    },
   },
 }
 </script>
 
-<style lang="scss" scoped>
-.base-input {
-  &:hover {
-    > .select-toggle {
-      @apply text-dark-blue;
-      @apply dark:text-celeste;
-    }
-  }
-  &:focus {
-    @apply text-dark-indigo;
-    @apply dark:text-light-indigo;
-
-    & > .select-toggle {
-      @apply text-dark-indigo;
-      @apply dark:text-light-indigo;
-    }
-  }
-}
+<style lang="scss">
 .list-options {
   @apply bg-transparent border transition-colors duration-100 border-dark-gray;
 }
+
 .single-option {
   @apply text-dark-gray;
 
@@ -186,15 +268,21 @@ export default {
     @apply text-dark-blue;
     @apply dark:text-celeste;
   }
+
+  &:focus {
+    @apply outline-none text-dark-indigo;
+    @apply dark:text-light-indigo;
+
+    .checkmark,
+    .option-name {
+      @apply text-dark-indigo;
+      @apply dark:text-light-indigo;
+    }
+  }
 }
 
 .checkmark {
-  @apply text-dark-indigo;
-  @apply dark:text-light-indigo;
-
-  &.highlighted {
-    @apply text-dark-blue;
-    @apply dark:text-celeste;
-  }
+  @apply text-dark-blue;
+  @apply dark:text-celeste;
 }
 </style>
