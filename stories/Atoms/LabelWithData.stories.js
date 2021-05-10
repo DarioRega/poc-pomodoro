@@ -12,7 +12,6 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div class="max-w-sm">
       <label-with-data v-bind="$props">
-        <template v-slot:label>${args.label}</template>
         <template v-slot:data>${args.data}</template>
       </label-with-data>
     </div>`,

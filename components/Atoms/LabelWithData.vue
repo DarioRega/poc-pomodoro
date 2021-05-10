@@ -1,7 +1,7 @@
 <template>
   <div>
     <h6 class="mb-3 text-dark-blue dark:text-celeste">
-      <slot name="label" />
+      {{ label }}
     </h6>
     <div class="font-semibold text-dark-gray">
       <slot name="data" />
@@ -12,5 +12,11 @@
 <script>
 export default {
   name: 'LabelWithData',
+  props: {
+    label: {
+      type: String,
+      required: true,
+    },
+  },
 }
 </script>
