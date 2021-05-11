@@ -15,10 +15,10 @@
       </h2>
     </div>
     <div v-if="!is24h && !isStacked" class="flex-col items-center ml-3">
-      <p class="am-pm" :class="isMorning && 'active'">
+      <p class="am-pm" :class="isAM && 'active'">
         AM
       </p>
-      <p class="am-pm" :class="!isMorning && 'active'">
+      <p class="am-pm" :class="!isAM && 'active'">
         PM
       </p>
     </div>
@@ -90,7 +90,7 @@ export default {
       }
       return ''
     },
-    isMorning() {
+    isAM() {
       if (this.currentTime) {
         if (this.currentTime.includes('AM')) {
           return true
