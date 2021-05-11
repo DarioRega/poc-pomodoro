@@ -19,7 +19,15 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { CurrentTime },
-  template: '<current-time v-bind="$props"/>',
+  computed: {
+    shouldStack() {
+      return args.isStacked
+    },
+  },
+  template: `
+    <div :class="shouldStack && 'w-16'">
+      <current-time v-bind="$props"/>
+    </div>`,
 })
 
 export const AmPmDefault = Template.bind({})
@@ -35,3 +43,14 @@ AmPmDefaultEurope.args = {
 
 export const NotAmPm = Template.bind({})
 NotAmPm.args = {}
+
+export const StackedAmPm = Template.bind({})
+StackedAmPm.args = {
+  isStacked: true,
+  is24h: false,
+}
+
+export const StackedNotAmPm = Template.bind({})
+StackedNotAmPm.args = {
+  isStacked: true,
+}
