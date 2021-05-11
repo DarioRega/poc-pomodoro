@@ -5,7 +5,7 @@
       isSelected && !isComplete
         ? 'text-dark-blue dark:text-celeste'
         : 'text-dark-gray',
-      isSelected && 'text-success',
+      isComplete && 'text-success',
     ]"
     @click="$emit('click')"
   >
