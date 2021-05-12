@@ -40,7 +40,9 @@ const Template = (args, { argTypes }) => ({
       timer: '',
       getLabels: {
         resume: 'Resume',
+        pause: 'Pause',
         stop: 'Stop',
+        start: 'Start',
         startSession: 'Start session',
       },
     }
@@ -80,9 +82,9 @@ const Template = (args, { argTypes }) => ({
 `,
 })
 
-export const UnstackedSessionPomodoroPending = Template.bind({})
-UnstackedSessionPomodoroPending.args = {
-  status: POMODORO_STATUS.POMODORO.pending,
+export const UnstackedSessionPending = Template.bind({})
+UnstackedSessionPending.args = {
+  status: POMODORO_STATUS.SESSION.pending,
 }
 
 export const UnstackedSessionPomodoroRunning = Template.bind({})
@@ -100,5 +102,4 @@ UnstackedSessionSmallBreakPending.args = {
 export const UnstackedSessionPaused = Template.bind({})
 UnstackedSessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
-  startSessionText: 'Start session',
 }

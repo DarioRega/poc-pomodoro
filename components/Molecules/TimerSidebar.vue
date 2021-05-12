@@ -1,11 +1,10 @@
 <template>
-  <div class="timer-sidebar inline-flex flex-col justify-center items-center">
-    <!--    current session info-->
+  <div class="inline-flex flex-col justify-center items-center timer-sidebar">
     <button
-      class="timer-sidebar__clock w-32 h-32 rounded-full uppercase text-base font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo dark:focus:ring-light-indigo"
-      @click="handleClick"
+      class="w-36 h-36 text-base font-bold uppercase rounded-full timer-sidebar__clock focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo dark:focus:ring-light-indigo"
+      @click="$emit('onTimerClick')"
     >
-      <span v-if="isPomodoroPending">{{ labels.startSession }}</span>
+      <span v-if="isSessionPending">{{ labels.startSession }}</span>
       <div
         v-else
         class="flex justify-center items-center timer-sidebar__clock--visible"
@@ -21,29 +20,37 @@
           {{ currentTimer | getOnlyMinutes }}
         </h2>
       </div>
+      <p
+        v-show="shouldShowStartText"
+        class="-mb-5 font-semibold tracking-wide uppercase font-timer"
+      >
+        {{ labels.start }}
+      </p>
     </button>
-    <div class="mt-4 timer-siderbar__expander">
+    <div class="mt-6 timer-sidebar__expander">
       <!--      expander-->
     </div>
-    <div class="timer-sidebar__controls">
-      <div v-show="isRunning" class="">
-        <!--        <button>-->
-        <!--          <icon icon-name=""-->
-        <!--                </button-->
-        <!--          >-->
-        <!--          </icon>-->
-        <!--        </button>-->
+    <div class="timer-sidebar__controls" :class="isStacked && 'stacked'">
+      <div v-show="isRunning" class="timer-sidebar__controls--running">
+        <button class="timer-sidebar__controls__buttons" @click="handlePause">
+          <icon icon-name="pause" />
+          <span>{{ labels.pause }}</span>
+        </button>
       </div>
-      <div
-        v-if="isPaused"
-        :class="isStacked && 'stacked'"
-        class="mt-4 timer-sidebar__controls--paused"
-      >
-        <button :class="!isStacked && 'mr-2'" @click="handleResume">
+      <div v-show="isPaused" class="timer-sidebar__controls--paused">
+        <button
+          class="timer-sidebar__controls__buttons"
+          :class="!isStacked && 'mr-2'"
+          @click="handleResume"
+        >
           <icon icon-name="play" />
           <span>{{ labels.resume }}</span>
         </button>
-        <button :class="!isStacked && 'ml-2'" @click="handleStop">
+        <button
+          class="timer-sidebar__controls__buttons"
+          :class="!isStacked && 'ml-2'"
+          @click="handleStop"
+        >
           <icon icon-name="stop" />
           <span>{{ labels.stop }}</span>
         </button>
@@ -61,7 +68,6 @@ export default {
   components: { Icon },
   filters: {
     getOnlyHours(value) {
-      console.log('full vaue', value)
       if (value) {
         return value.split(':')[0]
       }
@@ -77,7 +83,7 @@ export default {
   props: {
     status: {
       type: String,
-      default: POMODORO_STATUS.POMODORO.pending,
+      default: POMODORO_STATUS.SESSION.pending,
     },
     labels: {
       type: Object,
@@ -93,25 +99,34 @@ export default {
     },
   },
   computed: {
-    isPomodoroPending() {
-      return this.status.includes(POMODORO_STATUS.POMODORO.pending)
+    isSessionPending() {
+      return this.status.includes(POMODORO_STATUS.SESSION.pending)
+    },
+    shouldShowStartText() {
+      return (
+        (this.status.includes('PENDING') || this.status.includes('PAUSED')) &&
+        !this.isSessionPending
+      )
     },
     isPaused() {
-      return this.status.includes('PAUSED') && !this.isPomodoroPending
+      return this.status.includes('PAUSED') && !this.isSessionPending
     },
     isRunning() {
-      return this.status.includes('STARTED') && !this.isPomodoroPending
+      return this.status.includes('STARTED') && !this.isSessionPending
     },
   },
+  mounted() {
+    console.log('STATUS', this.status)
+  },
   methods: {
-    handleClick() {
-      console.log('click')
+    handlePause() {
+      this.$emit('onPause')
     },
     handleResume() {
-      console.log('click RESUME')
+      this.$emit('onResume')
     },
     handleStop() {
-      console.log('click STOP')
+      this.$emit('onStop')
     },
   },
 }
@@ -120,7 +135,7 @@ export default {
 <style scoped lang="scss">
 .timer-sidebar {
   &__clock {
-    @apply bg-dark-indigo text-celeste font-semibold font-timer;
+    @apply font-semibold bg-dark-indigo text-celeste font-timer;
     @apply dark:bg-light-indigo;
 
     &--visible {
@@ -130,40 +145,51 @@ export default {
     }
   }
   &__controls {
+    @apply mt-2;
     & > div {
       @apply flex justify-center items-center;
     }
+    &.stacked {
+      & > div {
+        @apply flex-col;
+      }
+      &__buttons {
+        span {
+          @apply hidden;
+        }
+      }
+    }
 
+    &__buttons {
+      @apply flex items-start h-5;
+      svg {
+        @apply w-5 h-5;
+      }
+      span {
+        @apply ml-2 text-base font-semibold tracking-wide font-timer;
+      }
+      &:focus {
+        @apply outline-none;
+        span {
+          @apply block text-dark-indigo;
+          @apply dark:text-light-indigo;
+        }
+      }
+    }
+
+    &--running {
+      button {
+        @apply text-error;
+      }
+    }
     &--paused {
       @apply flex-row;
       button {
-        @apply items-center flex h-5;
         &:nth-child(1) {
           @apply text-success;
         }
         &:nth-child(2) {
           @apply text-error;
-        }
-        &:focus {
-          @apply outline-none;
-          span {
-            @apply text-dark-indigo;
-            @apply dark:text-light-indigo;
-          }
-        }
-      }
-
-      svg {
-        @apply w-5 h-5;
-      }
-      span {
-        @apply ml-2 font-timer font-semibold h-full;
-      }
-
-      &.stacked {
-        @apply flex-col;
-        span {
-          @apply hidden;
         }
       }
     }
