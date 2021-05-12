@@ -15,6 +15,7 @@ module.exports = {
     fontFamily: {
       heading: ['Poppins', 'Helvetica', 'Arial', 'sans-serif'],
       body: ['Nunito', 'Helvetica', 'Arial', 'sans-serif'],
+      timer: ['Montserrat', 'sans-serif'],
     },
     screens: {
       sm: '576px',

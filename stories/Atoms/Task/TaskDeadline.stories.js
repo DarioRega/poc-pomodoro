@@ -1,4 +1,3 @@
-import dateFormat from 'dateformat'
 import TaskDeadline from '../../../components/Atoms/Task/TaskDeadline'
 
 export default {
@@ -27,7 +26,6 @@ const Template = (args, { argTypes }) => ({
       console.log(dateTime)
       // NOTE format is yyyy-mm-dd, keep it in mind when formatting the value on main component afterward
       console.log(dateString)
-      this.value = dateFormat(dateString, 'dd.mm.yyyy')
     },
   },
   template: `
