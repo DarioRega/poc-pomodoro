@@ -80,7 +80,7 @@ const Template = (args, { argTypes }) => ({
     },
   },
   template: `
-    <div :class="shouldStack && 'w-24'">
+    <div :class="shouldStack && 'w-24 mx-auto bg-lighter-white dark:bg-dark-blue'">
       <timer-sidebar v-bind="$props" :current-timer="timer" :labels="getLabels"/>
     </div>
 `,
@@ -111,4 +111,22 @@ UnstackedSessionSmallBreakPending.args = {
 export const UnstackedSessionPaused = Template.bind({})
 UnstackedSessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
+}
+
+export const StackedSessionPending = Template.bind({})
+StackedSessionPending.args = {
+  status: POMODORO_STATUS.SESSION.pending,
+  isStacked: true,
+}
+
+export const StackedSessionPomodoroPending = Template.bind({})
+StackedSessionPomodoroPending.args = {
+  status: POMODORO_STATUS.POMODORO.pending,
+  isStacked: true,
+}
+
+export const StackedSessionPaused = Template.bind({})
+StackedSessionPaused.args = {
+  status: POMODORO_STATUS.POMODORO.paused,
+  isStacked: true,
 }
