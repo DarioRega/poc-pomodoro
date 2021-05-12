@@ -99,25 +99,3 @@
   }
 }
 
-.label-with-icon--clickable {
-  @apply p-2.5 rounded-md text-dark-gray;
-
-  &:hover {
-    @apply bg-opacity-10 text-dark-blue bg-dark-gray;
-    @apply dark:text-celeste dark:bg-opacity-40;
-  }
-
-  &:focus, &.selected {
-    @apply bg-opacity-40 outline-none bg-dark-indigo text-dark-indigo;
-    @apply dark:focus:bg-light-indigo dark:text-light-indigo;
-    @apply dark:bg-opacity-20 #{!important};
-
-    .label-with-icon__slot {
-      @apply text-celeste;
-    }
-  }
-  .label-with-icon__slot{
-    @apply font-bold tracking-wide font-body;
-  }
-
-}
