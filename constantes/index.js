@@ -6,7 +6,7 @@ export const TASK_STATUS = {
   ARCHIVED: 'ACRHIVED',
 }
 
-const statusType = action => ({
+const statusTypes = action => ({
   pending: `${action}_PENDING`,
   started: `${action}_STARTED`,
   paused: `${action}_PAUSED`,
@@ -14,8 +14,8 @@ const statusType = action => ({
 })
 
 export const POMODORO_STATUS = {
-  SESSION: statusType(`SESSION`),
-  POMODORO: statusType(`POMODORO`),
-  SMALL_BREAK: statusType(`SMALL_BREAK`),
-  BIG_BREAK: statusType(`BIG_BREAK`),
+  SESSION: statusTypes(`SESSION`),
+  POMODORO: statusTypes(`POMODORO`),
+  SMALL_BREAK: statusTypes(`SMALL_BREAK`),
+  BIG_BREAK: statusTypes(`BIG_BREAK`),
 }
