@@ -44,6 +44,7 @@ const Template = (args, { argTypes }) => ({
         stop: 'Stop',
         start: 'Start',
         startSession: 'Start session',
+        restartCurrentSession: 'Restart session',
       },
     }
   },
@@ -63,6 +64,9 @@ const Template = (args, { argTypes }) => ({
     }
     if (args.status === POMODORO_STATUS.POMODORO.paused) {
       this.timer = '12:43'
+    }
+    if (args.status === POMODORO_STATUS.POMODORO.pending) {
+      this.timer = '25:00'
     }
   },
   destroyed() {
@@ -85,6 +89,11 @@ const Template = (args, { argTypes }) => ({
 export const UnstackedSessionPending = Template.bind({})
 UnstackedSessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
+}
+
+export const UnstackedSessionPomodoroPending = Template.bind({})
+UnstackedSessionPomodoroPending.args = {
+  status: POMODORO_STATUS.POMODORO.pending,
 }
 
 export const UnstackedSessionPomodoroRunning = Template.bind({})

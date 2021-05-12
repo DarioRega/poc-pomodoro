@@ -4,7 +4,9 @@
       class="w-36 h-36 text-base font-bold uppercase rounded-full timer-sidebar__clock focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo dark:focus:ring-light-indigo"
       @click="$emit('onTimerClick')"
     >
-      <span v-if="isSessionPending">{{ labels.startSession }}</span>
+      <p v-if="isSessionPending" class="font-semibold text-lead">
+        {{ labels.startSession }}
+      </p>
       <div
         v-else
         class="flex justify-center items-center timer-sidebar__clock--visible"
@@ -22,7 +24,7 @@
       </div>
       <p
         v-show="shouldShowStartText"
-        class="-mb-5 font-semibold tracking-wide uppercase font-timer"
+        class="mt-1 -mb-5 font-bold tracking-wide uppercase"
       >
         {{ labels.start }}
       </p>
@@ -53,6 +55,15 @@
         >
           <icon icon-name="stop" />
           <span>{{ labels.stop }}</span>
+        </button>
+      </div>
+      <div
+        v-show="isStatusPendingAndSessionAlreadyStarted"
+        class="timer-sidebar__controls--session-started-status-pending"
+      >
+        <button class="timer-sidebar__controls__buttons" @click="handleStop">
+          <icon icon-name="stop" />
+          <span>{{ labels.restartCurrentSession }}</span>
         </button>
       </div>
     </div>
@@ -87,7 +98,14 @@ export default {
     },
     labels: {
       type: Object,
-      required: true,
+      default: () => ({
+        resume: 'Resume',
+        pause: 'Pause',
+        stop: 'Stop',
+        start: 'Start',
+        startSession: 'Start session',
+        restartCurrentSession: 'Restart session',
+      }),
     },
     isStacked: {
       type: Boolean,
@@ -107,6 +125,9 @@ export default {
         (this.status.includes('PENDING') || this.status.includes('PAUSED')) &&
         !this.isSessionPending
       )
+    },
+    isStatusPendingAndSessionAlreadyStarted() {
+      return this.status.includes('PENDING') && !this.isSessionPending
     },
     isPaused() {
       return this.status.includes('PAUSED') && !this.isSessionPending
@@ -135,7 +156,7 @@ export default {
 <style scoped lang="scss">
 .timer-sidebar {
   &__clock {
-    @apply font-semibold bg-dark-indigo text-celeste font-timer;
+    @apply bg-dark-indigo text-celeste font-timer;
     @apply dark:bg-light-indigo;
 
     &--visible {
@@ -191,6 +212,11 @@ export default {
         &:nth-child(2) {
           @apply text-error;
         }
+      }
+    }
+    &--session-started-status-pending {
+      button {
+        @apply text-error;
       }
     }
   }
