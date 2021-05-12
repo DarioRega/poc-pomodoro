@@ -2,5 +2,6 @@
 @tailwind components;
 @import './typography/fonts';
 @import './typography/headings';
-@import './brand';
+@import './brand/inputs';
+@import './brand/global';
 @tailwind utilities;
