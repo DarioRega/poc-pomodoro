@@ -34,7 +34,7 @@ export default {
   name: 'CurrentTime',
   filters: {
     removeAmPm(value) {
-      if (value.includes('AM')) {
+      if (value.includes('AM') || value.includes('PM')) {
         return value.split(' ')[0]
       }
       return value
@@ -48,7 +48,7 @@ export default {
     getOnlyMinutes(value) {
       if (value) {
         const minutes = value.split(':')[1]
-        if (minutes.includes('AM')) {
+        if (minutes.includes('AM') || minutes.includes('PM')) {
           return minutes.split(' ')[0]
         }
         return minutes
