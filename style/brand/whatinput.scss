@@ -1,0 +1,11 @@
+[data-whatinput=keyboard] {
+
+  // TimerSidebar.vue
+  .timer-sidebar__controls__buttons:focus {
+    @extend .brand-focus-ring--indigo
+  }
+  .timer-sidebar__expander__button:focus {
+    @extend .brand-focus-ring--indigo
+  }
+}
+

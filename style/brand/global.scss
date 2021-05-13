@@ -19,3 +19,8 @@
     @apply font-bold tracking-wide font-body;
   }
 }
+
+.brand-focus-ring--indigo {
+  @apply ring-2 ring-offset-2 ring-dark-indigo ring-offset-light-white;
+  @apply dark:ring-light-indigo dark:ring-offset-dark-blue;
+}

@@ -254,11 +254,13 @@ export default {
       &:hover {
         @apply opacity-60;
       }
-      &:focus {
-        @apply ring-2 ring-offset-2 ring-dark-indigo ring-offset-light-white;
-        //@apply dark:ring-light-indigo;
-        @apply dark:ring-light-indigo dark:ring-offset-dark-blue;
-      }
+      // TODO check the focus on this component if they are taken care with whatinput.scss
+
+      //&:focus {
+      //  @apply ring-2 ring-offset-2 ring-dark-indigo ring-offset-light-white;
+      //  //@apply dark:ring-light-indigo;
+      //  @apply dark:ring-light-indigo dark:ring-offset-dark-blue;
+      //}
     }
   }
 
