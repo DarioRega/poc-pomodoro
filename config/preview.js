@@ -1,5 +1,7 @@
 import '../style/index.scss'
 
+import 'what-input'
+
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
