@@ -11,6 +11,14 @@
       <button class="focus:outline-none timer-sidebar__expander__button h-auto">
         <icon icon-name="expandScreen" class="w-5 h-5" />
       </button>
+      <!-- TODO trigger tooltip here on mouse hover -->
+      <button
+        class="focus:outline-none timer-sidebar__expander__button h-auto"
+        @mouseenter="isInformationTooltipVisible = true"
+        @onmouseleave="isInformationTooltipVisible = false"
+      >
+        <icon icon-name="informationRound" class="w-5 h-5" />
+      </button>
     </div>
 
     <button
@@ -144,6 +152,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  data() {
+    return {
+      isInformationTooltipVisible: false,
+    }
   },
   computed: {
     isSessionPending() {
@@ -285,6 +298,12 @@ export default {
               @apply text-opacity-60;
             }
           }
+        }
+      }
+      &__expander--stacked {
+        @apply flex flex-col;
+        button:nth-child(1) {
+          @apply mb-3;
         }
       }
     }
