@@ -14,7 +14,7 @@
     </div>
 
     <button
-      class="font-bold uppercase rounded-full timer-sidebar__clock focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo dark:focus:ring-light-indigo"
+      class="font-bold uppercase rounded-full timer-sidebar__clock"
       @click="$emit('onTimerClick')"
     >
       <div v-if="isSessionPending" class="font-semibold">
@@ -215,13 +215,6 @@ export default {
       &:hover {
         @apply text-opacity-60;
       }
-      &:focus {
-        @apply outline-none;
-        span {
-          @apply block text-dark-indigo;
-          @apply dark:text-light-indigo;
-        }
-      }
     }
 
     &--running {
@@ -254,13 +247,6 @@ export default {
       &:hover {
         @apply opacity-60;
       }
-      // TODO check the focus on this component if they are taken care with whatinput.scss
-
-      //&:focus {
-      //  @apply ring-2 ring-offset-2 ring-dark-indigo ring-offset-light-white;
-      //  //@apply dark:ring-light-indigo;
-      //  @apply dark:ring-light-indigo dark:ring-offset-dark-blue;
-      //}
     }
   }
 

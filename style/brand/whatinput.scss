@@ -1,11 +1,34 @@
 [data-whatinput=keyboard] {
+  :focus {
+    @apply outline-none #{!important};
+  }
 
   // TimerSidebar.vue
+  .timer-sidebar__clock:focus {
+    @extend .brand-focus-ring--indigo;
+    @apply rounded-full;
+  }
   .timer-sidebar__controls__buttons:focus {
-    @extend .brand-focus-ring--indigo
+    @extend .brand-focus-ring--indigo;
   }
   .timer-sidebar__expander__button:focus {
-    @extend .brand-focus-ring--indigo
+    @extend .brand-focus-ring--indigo;
+  }
+}
+
+
+[data-whatinput=keyboard] .dark {
+
+  // TimerSidebar.vue
+  .timer-sidebar__clock:focus {
+    @extend .brand-dark-focus-ring--indigo;
+    @apply rounded-full;
+  }
+  .timer-sidebar__controls__buttons:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+  .timer-sidebar__expander__button:focus {
+    @extend .brand-dark-focus-ring--indigo;
   }
 }
 
