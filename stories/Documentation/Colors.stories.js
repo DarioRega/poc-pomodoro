@@ -1,3 +1,4 @@
+import Tailwind from '../../tailwind.config'
 import ColorPalette from './Components/ColorPalette'
 
 export default {
@@ -8,22 +9,7 @@ export default {
 export const All = () => ({
   data() {
     return {
-      colors: [
-        'bg-success',
-        'bg-error',
-        'bg-celeste',
-        'bg-light-indigo',
-        'bg-dark-indigo',
-        'bg-dark-blue',
-        'bg-darker-blue',
-        'bg-dark-gray',
-        'bg-darker-gray',
-        'bg-lighter-white',
-        'bg-light-white',
-        'bg-dark-black',
-        'bg-darker-black',
-        'bg-dark-gray-20',
-      ],
+      colors: Tailwind.theme.extend.colors,
     }
   },
   components: { ColorPalette },
