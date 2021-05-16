@@ -3,15 +3,17 @@
     class="flex flex-col justify-center items-center"
     :class="isStacked ? 'timer-sidebar--stacked' : 'timer-sidebar'"
   >
+    <div v-show="!isStacked" class="max-w-full mb-3">
+      <slot name="currentSessionInformations" />
+    </div>
     <div
       v-show="isStacked"
       class="mb-3 timer-sidebar__expander timer-sidebar__expander--stacked"
     >
-      <!--      expander-->
       <button class="focus:outline-none timer-sidebar__expander__button h-auto">
         <icon icon-name="expandScreen" class="w-5 h-5" />
       </button>
-      <!-- TODO trigger tooltip here on mouse hover -->
+      <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
       <button
         class="focus:outline-none timer-sidebar__expander__button h-auto"
         @mouseenter="isInformationTooltipVisible = true"
@@ -57,9 +59,11 @@
     </button>
     <div
       v-show="!isStacked"
-      class="mt-6 timer-sidebar__expander timer-sidebar__expander--default"
+      class="mt-4 timer-sidebar__expander timer-sidebar__expander--default"
     >
-      <!--      expander-->
+      <button class="focus:outline-none timer-sidebar__expander__button h-auto">
+        <icon icon-name="expandScreen" class="w-5 h-5" />
+      </button>
     </div>
     <div class="timer-sidebar__controls">
       <div v-show="isRunning" class="timer-sidebar__controls--running">
@@ -179,21 +183,27 @@ export default {
       return this.status.includes('STARTED') && !this.isSessionPending
     },
   },
-  mounted() {
-    console.log('STATUS', this.status)
-  },
   methods: {
     handlePause() {
       this.$emit('onPause')
     },
     handleResume() {
-      this.$emit('onResume')
+      if (
+        this.isStacked &&
+        this.status === POMODORO_STATUS.POMODORO.pending &&
+        this.status === POMODORO_STATUS.SMALL_BREAK.pending &&
+        this.status === POMODORO_STATUS.BIG_BREAK.pending
+      ) {
+        this.handleStart()
+      } else {
+        this.$emit('onResume')
+      }
     },
     handleStop() {
       this.$emit('onStop')
     },
     handleStart() {
-      //
+      this.$emit('onStart')
     },
   },
 }

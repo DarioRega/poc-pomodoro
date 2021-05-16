@@ -80,8 +80,13 @@ const Template = (args, { argTypes }) => ({
     },
   },
   template: `
-    <div :class="shouldStack && 'w-24 mx-auto bg-lighter-white dark:bg-dark-blue'">
-      <timer-sidebar v-bind="$props" :current-timer="timer" :labels="getLabels"/>
+    <div :class="shouldStack ? 'w-24 mx-auto bg-lighter-white dark:bg-dark-blue' : 'w-72'">
+      <timer-sidebar v-bind="$props" :current-timer="timer" :labels="getLabels">
+        <template v-if="${'currentSessionInformations' in
+          args}" #currentSessionInformations>${
+    args.currentSessionInformations
+  }</template>
+      </timer-sidebar>
     </div>
 `,
 })
@@ -89,44 +94,118 @@ const Template = (args, { argTypes }) => ({
 export const UnstackedSessionPending = Template.bind({})
 UnstackedSessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
 }
 
 export const UnstackedSessionPomodoroPending = Template.bind({})
 UnstackedSessionPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
 }
 
 export const UnstackedSessionPomodoroRunning = Template.bind({})
 UnstackedSessionPomodoroRunning.args = {
   status: POMODORO_STATUS.POMODORO.started,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
   currentStatusEndTime: moment().add(28, 'minutes'),
 }
 
 export const UnstackedSessionSmallBreakPending = Template.bind({})
 UnstackedSessionSmallBreakPending.args = {
   status: POMODORO_STATUS.SMALL_BREAK.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
   currentStatusEndTime: moment().add(12, 'minutes'),
 }
 
 export const UnstackedSessionPaused = Template.bind({})
 UnstackedSessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
 }
 
 export const StackedSessionPending = Template.bind({})
 StackedSessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
   isStacked: true,
 }
 
 export const StackedSessionPomodoroPending = Template.bind({})
 StackedSessionPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
   isStacked: true,
+}
+
+export const StackedSessionPomodoroRunning = Template.bind({})
+StackedSessionPomodoroRunning.args = {
+  status: POMODORO_STATUS.POMODORO.started,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
+  isStacked: true,
+  currentStatusEndTime: moment().add(28, 'minutes'),
+}
+
+export const StackedSessionSmallBreakPending = Template.bind({})
+StackedSessionSmallBreakPending.args = {
+  status: POMODORO_STATUS.SMALL_BREAK.pending,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
+  isStacked: true,
+  currentStatusEndTime: moment().add(12, 'minutes'),
 }
 
 export const StackedSessionPaused = Template.bind({})
 StackedSessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
+  currentSessionInformations: `
+  <div class="text-center max-w-full flex flex-col flex-wrap">
+  <p>Current session will end at 15:04 PM</p>
+  <p>Component showing on many pomodoro done and left</p>
+  </div>
+  `,
   isStacked: true,
 }
