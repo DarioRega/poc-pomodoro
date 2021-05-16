@@ -35,7 +35,7 @@
     }
 
     &--paused {
-      @apply flex-row;
+      @apply flex flex-row;
       button {
         &:nth-child(1) {
           @apply text-success;

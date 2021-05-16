@@ -35,7 +35,6 @@
       "
       :is-stacked="isStacked"
       :labels="labels"
-      class="timer-sidebar__controls"
       @handleStart="handleStart"
       @handlePause="handlePause"
       @handleResume="handleResume"

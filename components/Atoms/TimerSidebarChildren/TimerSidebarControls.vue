@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="timer-sidebar__controls">
     <div v-show="isRunning" class="timer-sidebar__controls--running">
       <button
         class="timer-sidebar__controls__buttons"
