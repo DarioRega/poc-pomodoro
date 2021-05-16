@@ -6,132 +6,61 @@
     <div v-show="!isStacked" class="max-w-full mb-3">
       <slot name="currentSessionInformations" />
     </div>
-    <div
-      v-show="isStacked"
-      class="mb-3 timer-sidebar__expander timer-sidebar__expander--stacked"
-    >
-      <button class="focus:outline-none timer-sidebar__expander__button h-auto">
-        <icon icon-name="expandScreen" class="w-5 h-5" />
-      </button>
-      <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
-      <button
-        class="focus:outline-none timer-sidebar__expander__button h-auto"
-        @mouseenter="isInformationTooltipVisible = true"
-        @onmouseleave="isInformationTooltipVisible = false"
-      >
-        <icon icon-name="informationRound" class="w-5 h-5" />
-      </button>
-    </div>
 
-    <button
+    <timer-sidebar-expander-stacked
+      v-show="isStacked"
+      class="timer-sidebar__expander timer-sidebar__expander--stacked"
+      @click="handleScreenExpand"
+    />
+
+    <timer-sidebar-clock
       class="font-bold uppercase rounded-full timer-sidebar__clock"
+      :is-session-pending="isSessionPending"
+      :is-stacked="isStacked"
+      :should-show-start-text="shouldShowStartText"
+      :labels="labels"
+      :current-timer="currentTimer"
       @click="$emit('onTimerClick')"
-    >
-      <div v-if="isSessionPending" class="font-semibold">
-        <p v-show="isStacked" class="text-base">
-          {{ labels.start }}
-        </p>
-        <p v-show="!isStacked" class="text-lead">
-          {{ labels.startSession }}
-        </p>
-      </div>
-      <div
-        v-else
-        class="flex justify-center items-center timer-sidebar__clock--time-visible"
-        :class="isStacked ? 'flex-col' : 'flex-row'"
-      >
-        <h2>
-          {{ currentTimer | getOnlyHours }}
-        </h2>
-        <h2 v-if="!isStacked" class="mx-0.5">
-          :
-        </h2>
-        <h2>
-          {{ currentTimer | getOnlyMinutes }}
-        </h2>
-      </div>
-      <p
-        v-show="shouldShowStartText"
-        class="mt-1 -mb-5 font-bold tracking-wide uppercase"
-      >
-        {{ labels.start }}
-      </p>
-    </button>
-    <div
+    />
+    <timer-sidebar-expander-unstacked
       v-show="!isStacked"
-      class="mt-4 timer-sidebar__expander timer-sidebar__expander--default"
-    >
-      <button class="focus:outline-none timer-sidebar__expander__button h-auto">
-        <icon icon-name="expandScreen" class="w-5 h-5" />
-      </button>
-    </div>
-    <div class="timer-sidebar__controls">
-      <div v-show="isRunning" class="timer-sidebar__controls--running">
-        <button class="timer-sidebar__controls__buttons" @click="handlePause">
-          <icon icon-name="pause" />
-          <span>{{ labels.pause }}</span>
-        </button>
-      </div>
-      <div v-show="isPaused" class="timer-sidebar__controls--paused">
-        <button
-          class="timer-sidebar__controls__buttons"
-          :class="!isStacked && 'mr-2'"
-          @click="handleResume"
-        >
-          <icon icon-name="play" />
-          <span>{{ labels.resume }}</span>
-        </button>
-        <button
-          class="timer-sidebar__controls__buttons"
-          :class="!isStacked && 'ml-2'"
-          @click="handleStop"
-        >
-          <icon icon-name="stop" />
-          <span>{{ labels.stop }}</span>
-        </button>
-      </div>
-      <div
-        v-show="isStatusPendingAndSessionAlreadyStarted"
-        class="timer-sidebar__controls--session-started-status-pending"
-      >
-        <button
-          v-show="isStacked"
-          class="timer-sidebar__controls__buttons"
-          @click="handleStart"
-        >
-          <icon icon-name="play" />
-          <span>{{ labels.start }}</span>
-        </button>
-        <button class="timer-sidebar__controls__buttons" @click="handleStop">
-          <icon icon-name="stop" />
-          <span>{{ labels.restartCurrentSession }}</span>
-        </button>
-      </div>
-    </div>
+      class="timer-sidebar__expander timer-sidebar__expander--default"
+      @click="handleScreenExpand"
+    />
+
+    <timer-sidebar-controls
+      :is-running="isRunning"
+      :is-paused="isPaused"
+      :is-status-pending-and-session-already-started="
+        isStatusPendingAndSessionAlreadyStarted
+      "
+      :is-stacked="isStacked"
+      :labels="labels"
+      class="timer-sidebar__controls"
+      @handleStart="handleStart"
+      @handlePause="handlePause"
+      @handleResume="handleResume"
+      @handleStop="handleStop"
+    />
   </div>
 </template>
 
 <script>
-import { POMODORO_STATUS } from '../../constantes'
-import Icon from '../Atoms/Icon'
+import { POMODORO_STATUS } from '../../../constantes'
+import TimerSidebarControls from './TimerSidebarControls'
+import TimerSidebarClock from './TimerSidebarClock'
+import TimerSidebarExpanderStacked from './TimerSidebarExpanderStacked'
+import TimerSidebarExpanderUnstacked from './TimerSidebarExpanderUnstacked'
 
 export default {
   name: 'TimerSidebar',
-  components: { Icon },
-  filters: {
-    getOnlyHours(value) {
-      if (value) {
-        return value.split(':')[0]
-      }
-      return value
-    },
-    getOnlyMinutes(value) {
-      if (value) {
-        return value.split(':')[1]
-      }
-      return value
-    },
+  components: {
+    TimerSidebarExpanderUnstacked,
+    TimerSidebarExpanderStacked,
+    TimerSidebarClock,
+    TimerSidebarControls,
   },
+
   props: {
     status: {
       type: String,
@@ -157,11 +86,7 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      isInformationTooltipVisible: false,
-    }
-  },
+
   computed: {
     isSessionPending() {
       return this.status.includes(POMODORO_STATUS.SESSION.pending)
@@ -204,6 +129,9 @@ export default {
     },
     handleStart() {
       this.$emit('onStart')
+    },
+    handleScreenExpand() {
+      //
     },
   },
 }
