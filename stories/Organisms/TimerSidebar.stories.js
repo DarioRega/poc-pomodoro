@@ -96,8 +96,8 @@ SessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
 }
@@ -107,8 +107,8 @@ SessionPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
 }
@@ -118,8 +118,8 @@ SessionPomodoroRunning.args = {
   status: POMODORO_STATUS.POMODORO.started,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
   currentStatusEndTime: moment().add(28, 'minutes'),
@@ -130,8 +130,8 @@ SessionSmallBreakPending.args = {
   status: POMODORO_STATUS.SMALL_BREAK.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
   currentStatusEndTime: moment().add(12, 'minutes'),
@@ -142,8 +142,8 @@ SessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
 }
@@ -153,8 +153,8 @@ StackedSessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
   isStacked: true,
@@ -165,8 +165,8 @@ StackedSessionPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
-  <p>Current session will end at 15:04 PM</p>
-  <p>Component showing on many pomodoro done and left</p>
+    <p>Current session will end at 15:04 PM</p>
+    <p>Component showing on many pomodoro done and left</p>
   </div>
   `,
   isStacked: true,
