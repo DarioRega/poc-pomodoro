@@ -3,7 +3,7 @@ import TimerSidebar from '../../components/Organisms/TimerSidebar'
 import { POMODORO_STATUS } from '../../constantes'
 
 export default {
-  title: 'Molecules/TimerSidebar',
+  title: 'Organisms/TimerSidebar',
   component: TimerSidebar,
   argTypes: {
     status: {
@@ -91,8 +91,8 @@ const Template = (args, { argTypes }) => ({
 `,
 })
 
-export const UnstackedSessionPending = Template.bind({})
-UnstackedSessionPending.args = {
+export const SessionPending = Template.bind({})
+SessionPending.args = {
   status: POMODORO_STATUS.SESSION.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
@@ -102,8 +102,8 @@ UnstackedSessionPending.args = {
   `,
 }
 
-export const UnstackedSessionPomodoroPending = Template.bind({})
-UnstackedSessionPomodoroPending.args = {
+export const SessionPomodoroPending = Template.bind({})
+SessionPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
@@ -113,8 +113,8 @@ UnstackedSessionPomodoroPending.args = {
   `,
 }
 
-export const UnstackedSessionPomodoroRunning = Template.bind({})
-UnstackedSessionPomodoroRunning.args = {
+export const SessionPomodoroRunning = Template.bind({})
+SessionPomodoroRunning.args = {
   status: POMODORO_STATUS.POMODORO.started,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
@@ -125,8 +125,8 @@ UnstackedSessionPomodoroRunning.args = {
   currentStatusEndTime: moment().add(28, 'minutes'),
 }
 
-export const UnstackedSessionSmallBreakPending = Template.bind({})
-UnstackedSessionSmallBreakPending.args = {
+export const SessionSmallBreakPending = Template.bind({})
+SessionSmallBreakPending.args = {
   status: POMODORO_STATUS.SMALL_BREAK.pending,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
@@ -137,8 +137,8 @@ UnstackedSessionSmallBreakPending.args = {
   currentStatusEndTime: moment().add(12, 'minutes'),
 }
 
-export const UnstackedSessionPaused = Template.bind({})
-UnstackedSessionPaused.args = {
+export const SessionPaused = Template.bind({})
+SessionPaused.args = {
   status: POMODORO_STATUS.POMODORO.paused,
   currentSessionInformations: `
   <div class="text-center max-w-full flex flex-col flex-wrap">
