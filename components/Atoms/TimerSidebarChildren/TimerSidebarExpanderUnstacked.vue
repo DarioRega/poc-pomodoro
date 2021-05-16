@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4">
+  <div class="timer-sidebar__expander timer-sidebar__expander--default">
     <button
       class="focus:outline-none timer-sidebar__expander__button h-auto"
       @click="$emit('click')"
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Icon from '../../Atoms/Icon'
+import Icon from '../Icon'
 
 export default {
   name: 'TimerSidebarExpanderUnstacked',

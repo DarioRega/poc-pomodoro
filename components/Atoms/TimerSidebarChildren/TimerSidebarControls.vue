@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import Icon from '../../Atoms/Icon'
+import Icon from '../Icon'
 
 export default {
   name: 'TimerSidebarControls',

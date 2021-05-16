@@ -1,10 +1,13 @@
 <template>
-  <button class="timer-sidebar__clock" @click="$emit('click')">
-    <div v-if="isSessionPending" class="font-semibold">
-      <p v-show="isStacked" class="text-base">
+  <button
+    class="timer-sidebar__clock font-bold uppercase rounded-full"
+    @click="$emit('click')"
+  >
+    <div v-if="isSessionPending">
+      <p v-show="isStacked" class="text-base font-semibold">
         {{ labels.start }}
       </p>
-      <p v-show="!isStacked" class="text-lead">
+      <p v-show="!isStacked" class="text-lead font-semibold">
         {{ labels.startSession }}
       </p>
     </div>

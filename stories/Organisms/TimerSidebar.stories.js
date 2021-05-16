@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import TimerSidebar from '../../components/Molecules/TimerSidebar/TimerSidebar'
+import TimerSidebar from '../../components/Organisms/TimerSidebar'
 import { POMODORO_STATUS } from '../../constantes'
 
 export default {

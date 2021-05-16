@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3">
+  <div class="timer-sidebar__expander timer-sidebar__expander--stacked">
     <button
       class="focus:outline-none timer-sidebar__expander__button h-auto"
       @click="$emit('click')"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Icon from '../../Atoms/Icon'
+import Icon from '../Icon'
 
 export default {
   name: 'TimerSidebarExpanderStacked',
