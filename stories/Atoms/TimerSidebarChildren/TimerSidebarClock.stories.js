@@ -4,10 +4,16 @@ export default {
   title: 'Atoms/TimerSidebarChildren/TimerSidebarClock',
   component: TimerSidebarClock,
   argTypes: {
-    type: {
-      control: { type: 'select', options: ['primary', 'secondary', 'naked'] },
+    currentTimer: {
+      control: { type: 'text' },
     },
-    isDisabled: {
+    isStacked: {
+      control: { type: 'select', options: [true, false] },
+    },
+    isSessionPending: {
+      control: { type: 'select', options: [true, false] },
+    },
+    shouldShowStartText: {
       control: { type: 'select', options: [true, false] },
     },
   },

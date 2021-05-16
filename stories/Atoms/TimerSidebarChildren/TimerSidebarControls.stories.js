@@ -4,10 +4,16 @@ export default {
   title: 'Atoms/TimerSidebarChildren/TimerSidebarControls',
   component: TimerSidebarControls,
   argTypes: {
-    type: {
-      control: { type: 'select', options: ['primary', 'secondary', 'naked'] },
+    isRunning: {
+      control: { type: 'select', options: [true, false] },
     },
-    isDisabled: {
+    isPaused: {
+      control: { type: 'select', options: [true, false] },
+    },
+    isStacked: {
+      control: { type: 'select', options: [true, false] },
+    },
+    isStatusPendingAndSessionAlreadyStarted: {
       control: { type: 'select', options: [true, false] },
     },
   },

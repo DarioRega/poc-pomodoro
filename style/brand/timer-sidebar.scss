@@ -1,6 +1,6 @@
 .timer-sidebar {
   &__clock {
-    @apply bg-dark-indigo text-celeste font-timer w-36 h-36 text-base;
+    @apply w-36 h-36 text-base bg-dark-indigo text-celeste font-timer;
     @apply dark:bg-light-indigo;
 
     &--time-visible {
@@ -91,7 +91,7 @@
         }
         &--session-started-status-pending {
           button:nth-child(1) {
-            @apply text-success mb-3;
+            @apply mb-3 text-success;
             &:hover {
               @apply text-opacity-60;
             }

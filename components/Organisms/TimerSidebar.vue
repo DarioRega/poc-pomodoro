@@ -3,7 +3,7 @@
     class="flex flex-col justify-center items-center"
     :class="isStacked ? 'timer-sidebar--stacked' : 'timer-sidebar'"
   >
-    <div v-show="!isStacked" class="max-w-full mb-3">
+    <div v-show="!isStacked" class="mb-3 max-w-full">
       <slot name="currentSessionInformations" />
     </div>
 
@@ -21,6 +21,7 @@
       :current-timer="currentTimer"
       @click="$emit('onTimerClick')"
     />
+
     <timer-sidebar-expander-unstacked
       v-show="!isStacked"
       class="mt-4"
@@ -64,6 +65,7 @@ export default {
       type: String,
       default: POMODORO_STATUS.SESSION.pending,
     },
+
     labels: {
       type: Object,
       default: () => ({
@@ -75,10 +77,12 @@ export default {
         restartCurrentSession: 'Restart session',
       }),
     },
+
     isStacked: {
       type: Boolean,
       default: false,
     },
+
     currentTimer: {
       type: String,
       default: '',
@@ -129,7 +133,7 @@ export default {
       this.$emit('onStart')
     },
     handleScreenExpand() {
-      //
+      this.$emit('onScreenExpand')
     },
   },
 }
