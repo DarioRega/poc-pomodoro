@@ -1,19 +1,28 @@
 image: node:12
 
+.base:
+  before_script:
+    - yarn install --frozen-lockfile
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+
 stages:
   - lint
   - deploy
 
 lint:
+  extends: .base
   stage: lint
   script:
-    - yarn install --frozen-lockfile
     - yarn lint
 
 pages:
+  extends: .base
   stage: deploy
   script:
-    - yarn install --frozen-lockfile
     - yarn storybook:build
   artifacts:
     paths:
@@ -21,3 +30,7 @@ pages:
     expire_in: 7 day
   only:
     - tags
+  needs:
+    - lint
+  cache:
+    policy: pull
