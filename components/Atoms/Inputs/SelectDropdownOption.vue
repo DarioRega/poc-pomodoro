@@ -8,7 +8,17 @@
     </span>
     <span
       v-if="isSelected"
-      class="flex absolute inset-y-0 right-0 items-center pr-4 transition-colors duration-100 checkmark"
+      class="
+        flex
+        absolute
+        inset-y-0
+        right-0
+        items-center
+        pr-4
+        transition-colors
+        duration-100
+        checkmark
+      "
       :class="isHighlighted && 'highlighted'"
     >
       <icon icon-name="checkMarkMedium" class="w-5 h-5" />

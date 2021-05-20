@@ -6,6 +6,10 @@
     @apply dark:text-celeste dark:bg-opacity-40;
   }
 
+  .label-with-icon__slot {
+    @apply font-bold tracking-wide font-body;
+  }
+
   &:focus, &.selected {
     @apply bg-opacity-40 outline-none bg-dark-indigo text-dark-indigo;
     @apply dark:focus:bg-light-indigo dark:text-light-indigo;
@@ -14,8 +18,5 @@
     .label-with-icon__slot {
       @apply text-celeste;
     }
-  }
-  .label-with-icon__slot{
-    @apply font-bold tracking-wide font-body;
   }
 }

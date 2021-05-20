@@ -1,6 +1,14 @@
 <template>
   <div
-    class="inline-flex relative flex-col justify-center items-center self-center task-deadline"
+    class="
+      inline-flex
+      relative
+      flex-col
+      justify-center
+      items-center
+      self-center
+      task-deadline
+    "
   >
     <p
       v-if="value"

@@ -24,7 +24,6 @@ const Template = (args, { argTypes }) => ({
   components: { InputSlider },
   methods: {
     handleChange(value) {
-      console.log('New value slider input => ', value)
       this.value = value
     },
   },

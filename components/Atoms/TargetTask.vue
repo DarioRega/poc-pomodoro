@@ -1,6 +1,14 @@
 <template>
   <button
-    class="transition-colors duration-200 focus:outline-none hover:text-dark-blue dark:hover:text-celeste focus:text-dark-indigo dark:focus:text-light-indigo"
+    class="
+      transition-colors
+      duration-200
+      focus:outline-none
+      hover:text-dark-blue
+      dark:hover:text-celeste
+      focus:text-dark-indigo
+      dark:focus:text-light-indigo
+    "
     :class="[
       isSelected && !isComplete
         ? 'text-dark-blue dark:text-celeste'
