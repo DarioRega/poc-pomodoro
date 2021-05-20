@@ -1,7 +1,16 @@
 <template>
   <div class="inline-flex flex-col max-w-full">
     <div
-      class="relative pb-1 border-b transition-colors duration-300 add-task-container border-dark-gray text-dark-gray"
+      class="
+        relative
+        pb-1
+        border-b
+        transition-colors
+        duration-300
+        add-task-container
+        border-dark-gray
+        text-dark-gray
+      "
       :class="[value.length > 0 && 'active', errorText && 'has-error']"
     >
       <input
@@ -9,7 +18,15 @@
         type="text"
         :name="name"
         :placeholder="placeholder"
-        class="pr-8 max-w-full text-base text-current bg-transparent transition-colors duration-300 focus:outline-none"
+        class="
+          pr-8
+          max-w-full
+          text-base text-current
+          bg-transparent
+          transition-colors
+          duration-300
+          focus:outline-none
+        "
         :class="[errorText && 'has-error', value.length > 0 && 'active']"
         @keydown="handleKeyDown"
         @click="$emit('click')"

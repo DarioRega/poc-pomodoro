@@ -32,7 +32,7 @@ export default {
     },
   },
   mounted() {
-    this.componentFile().then(c => {
+    this.componentFile().then((c) => {
       this.viewBox = c.default.viewBox || '0 0 24 24'
     })
   },

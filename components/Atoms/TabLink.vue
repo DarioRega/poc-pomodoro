@@ -1,6 +1,14 @@
 <template>
   <button
-    class="py-2 px-3 font-semibold rounded-md tab-link text-dark-gray focus:outline-none"
+    class="
+      py-2
+      px-3
+      font-semibold
+      rounded-md
+      tab-link
+      text-dark-gray
+      focus:outline-none
+    "
     :class="[`tab-link__${type}`, isActive && 'active']"
     @click="$emit('click')"
   >
