@@ -13,8 +13,8 @@ lint:
 pages:
   stage: deploy
   script:
-    - npm ci
-    - npm run build
+    - yarn install --frozen-lockfile
+    - yarn storybook:build
   artifacts:
     paths:
       - public
