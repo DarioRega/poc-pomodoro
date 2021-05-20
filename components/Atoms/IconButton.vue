@@ -1,8 +1,14 @@
 <template>
   <button
-    class="btn-icon inline-flex items-center rounded-md
-    transition-colors duration-100
-    focus:outline-none"
+    class="
+      btn-icon
+      inline-flex
+      items-center
+      rounded-md
+      transition-colors
+      duration-100
+      focus:outline-none
+    "
     :class="[applyClasses, withBackground && 'p-2']"
     @click="$emit('click')"
   >

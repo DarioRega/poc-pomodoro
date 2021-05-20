@@ -1,6 +1,20 @@
 <template>
   <div
-    class="w-full max-w-[9rem] text-celeste py-2 px-5 text-center uppercase rounded-full font-bold font-body tracking-wider text-sm hover:bg-opacity-80 dark:hover:bg-opacity-80"
+    class="
+      w-full
+      max-w-[9rem]
+      text-celeste
+      py-2
+      px-5
+      text-center
+      uppercase
+      rounded-full
+      font-bold font-body
+      tracking-wider
+      text-sm
+      hover:bg-opacity-80
+      dark:hover:bg-opacity-80
+    "
     :class="classes"
   >
     {{ statusText }}

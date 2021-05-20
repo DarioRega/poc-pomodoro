@@ -1,26 +1,25 @@
 <template>
   <div class="inline-flex flex-wrap justify-center items-center max-w-full">
     <div
-      class="inline-flex justify-center items-center heading-current-time__container"
+      class="
+        inline-flex
+        justify-center
+        items-center
+        heading-current-time__container
+      "
       :class="isStacked ? 'flex-col' : 'flex-row'"
     >
       <h2>
         {{ currentTime | getOnlyHours }}
       </h2>
-      <h2 v-if="!isStacked">
-        :
-      </h2>
+      <h2 v-if="!isStacked">:</h2>
       <h2>
         {{ currentTime | getOnlyMinutes }}
       </h2>
     </div>
     <div v-if="!is24h && !isStacked" class="flex-col items-center ml-3">
-      <p class="am-pm" :class="isAM && 'active'">
-        AM
-      </p>
-      <p class="am-pm" :class="!isAM && 'active'">
-        PM
-      </p>
+      <p class="am-pm" :class="isAM && 'active'">AM</p>
+      <p class="am-pm" :class="!isAM && 'active'">PM</p>
     </div>
     <p v-if="!is24h && isStacked" class="am-pm active">
       {{ currentTime | getOnlyAmPm }}
@@ -30,6 +29,7 @@
 
 <script>
 import moment from 'moment-timezone'
+
 export default {
   name: 'CurrentTime',
   filters: {
@@ -65,6 +65,7 @@ export default {
   props: {
     timeZoneChoosen: {
       type: String,
+      default: '',
     },
     is24h: {
       type: Boolean,
@@ -84,9 +85,7 @@ export default {
     currentTime() {
       if (this.timeZone) {
         const format = this.is24h ? 'HH:mm' : 'hh:mm A'
-        return moment()
-          .tz(this.timeZone)
-          .format(format)
+        return moment().tz(this.timeZone).format(format)
       }
       return ''
     },
@@ -101,8 +100,7 @@ export default {
   },
   mounted() {
     if (!this.timeZoneChoosen) {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-      this.timeZone = timezone
+      this.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     } else {
       this.timeZone = this.timeZoneChoosen
     }

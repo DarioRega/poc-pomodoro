@@ -15,7 +15,16 @@
       aria-modal="true"
     >
       <div
-        class="flex justify-center items-center px-4 min-h-screen text-center sm:block md:p-0"
+        class="
+          flex
+          justify-center
+          items-center
+          px-4
+          min-h-screen
+          text-center
+          sm:block
+          md:p-0
+        "
       >
         <transition
           enter-active-class="duration-300 ease-out"
@@ -27,7 +36,14 @@
         >
           <div
             v-show="isOpen"
-            class="fixed inset-0 bg-opacity-20 transition-opacity bg-darker-blue dark:bg-opacity-40"
+            class="
+              fixed
+              inset-0
+              bg-opacity-20
+              transition-opacity
+              bg-darker-blue
+              dark:bg-opacity-40
+            "
             aria-hidden="true"
           ></div>
         </transition>

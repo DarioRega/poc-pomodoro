@@ -23,9 +23,9 @@ const Template = (args, { argTypes }) => ({
   },
   methods: {
     handleChange(dateTime, dateString) {
-      console.log(dateTime)
+      console.log(dateTime) // eslint-disable-line no-console
       // NOTE format is yyyy-mm-dd, keep it in mind when formatting the value on main component afterward
-      console.log(dateString)
+      console.log(dateString) // eslint-disable-line no-console
     },
   },
   template: `
