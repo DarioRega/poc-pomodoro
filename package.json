@@ -9,10 +9,11 @@
     "storybook": "nuxt storybook",
     "release": "release-it",
     "generate": "nuxt generate",
-    "lint:js:fix": "yarn lint:js --fix",
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
-    "lint:style:fix": "yanr lint:style --fix",
     "lint": "yarn lint:js && yarn lint:style",
+    "lint:js:fix": "yarn lint:js --fix",
+    "lint:style:fix": "yanr lint:style --fix",
     "lint:fix": "yarn lint:js:fix && yarn lint:style:fix",
     "storybook:build": "nuxt storybook build -o public -s static"
   },
