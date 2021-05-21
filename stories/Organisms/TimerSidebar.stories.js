@@ -82,8 +82,9 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div :class="shouldStack ? 'w-24 mx-auto bg-lighter-white dark:bg-dark-blue' : 'w-72'">
       <timer-sidebar v-bind="$props" :current-timer="timer" :labels="getLabels">
-        <template v-if="${'currentSessionInformations' in
-          args}" #currentSessionInformations>${
+        <template v-if="${
+          'currentSessionInformations' in args
+        }" #currentSessionInformations>${
     args.currentSessionInformations
   }</template>
       </timer-sidebar>

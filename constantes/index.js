@@ -3,10 +3,10 @@ export const TASK_STATUS = {
   COMPLETED: 'COMPLETED',
   IN_PROGRESS: 'IN_PROGRESS',
   TODO: 'TODO',
-  ARCHIVED: 'ACRHIVED',
+  ARCHIVED: 'ARCHIVED',
 }
 
-const statusTypes = action => ({
+const statusTypes = (action) => ({
   pending: `${action}_PENDING`,
   started: `${action}_STARTED`,
   paused: `${action}_PAUSED`,
