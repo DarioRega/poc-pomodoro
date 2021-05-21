@@ -137,12 +137,14 @@
 <script>
 import Icon from '../Icon'
 import SelectDropdownOption from './SelectDropdownOption'
+import {
+  DOWN_ARROW_KEY_CODE,
+  ENTER_KEY_CODE,
+  ESCAPE_KEY_CODE,
+  SPACEBAR_KEY_CODE,
+  UP_ARROW_KEY_CODE,
+} from '~/constantes'
 
-const SPACEBAR_KEY_CODE = [0, 32]
-const ENTER_KEY_CODE = 13
-const DOWN_ARROW_KEY_CODE = 40
-const UP_ARROW_KEY_CODE = 38
-const ESCAPE_KEY_CODE = 27
 // TODO whatinput=keyboard single-option focus = outline indigo
 
 export default {
