@@ -13,15 +13,18 @@
     </div>
     <div
       v-else
-      class="flex justify-center items-center timer-sidebar__clock--time-visible"
+      class="
+        flex
+        justify-center
+        items-center
+        timer-sidebar__clock--time-visible
+      "
       :class="isStacked ? 'flex-col' : 'flex-row'"
     >
       <h2>
         {{ currentTimer | getOnlyHours }}
       </h2>
-      <h2 v-if="!isStacked" class="mx-0.5">
-        :
-      </h2>
+      <h2 v-if="!isStacked" class="mx-0.5">:</h2>
       <h2>
         {{ currentTimer | getOnlyMinutes }}
       </h2>
@@ -76,5 +79,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>

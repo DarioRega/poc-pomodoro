@@ -1,4 +1,4 @@
-[data-whatinput=keyboard] {
+[data-whatinput='keyboard'] {
   :focus {
     @apply outline-none #{!important};
   }
@@ -17,7 +17,7 @@
 }
 
 
-[data-whatinput=keyboard] .dark {
+[data-whatinput='keyboard'] .dark {
 
   // TimerSidebar.vue
   .timer-sidebar__clock:focus {
