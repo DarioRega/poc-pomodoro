@@ -6,7 +6,16 @@
           ? 'opacity-0 ease-out duration-100'
           : 'opacity-100 ease-in duration-200'
       "
-      class="absolute inset-0 flex items-center justify-center w-full h-full transition-opacity"
+      class="
+        absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        w-full
+        h-full
+        transition-opacity
+      "
       aria-hidden="true"
     >
       <icon
@@ -20,7 +29,16 @@
           ? 'opacity-100 ease-in duration-200'
           : 'opacity-0 ease-out duration-100'
       "
-      class="absolute inset-0 flex items-center justify-center w-full h-full transition-opacity"
+      class="
+        absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        w-full
+        h-full
+        transition-opacity
+      "
       aria-hidden="true"
     >
       <icon

@@ -26,8 +26,8 @@ export default {
           require
             .context('../../../components/Atoms/Icons/', false)
             .keys()
-            .map(file => file.replace('./Icon', '').replace('.vue', '')),
-        ),
+            .map((file) => file.replace('./Icon', '').replace('.vue', ''))
+        )
       ),
     }
   },

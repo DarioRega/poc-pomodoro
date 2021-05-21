@@ -11,7 +11,15 @@
         <button
           ref="triggerDropdown"
           type="button"
-          class="relative pr-10 w-full text-left cursor-pointer brand-input__select focus:outline-none"
+          class="
+            relative
+            pr-10
+            w-full
+            text-left
+            cursor-pointer
+            brand-input__select
+            focus:outline-none
+          "
           aria-haspopup="listbox"
           :aria-expanded="isOpen"
           :class="[
@@ -26,7 +34,18 @@
             {{ localValue.name || 'Please select' }}
           </span>
           <span
-            class="flex absolute inset-y-0 right-0 items-center transition-colors duration-300 pointer-events-none select-toggle text-dark-gray"
+            class="
+              flex
+              absolute
+              inset-y-0
+              right-0
+              items-center
+              transition-colors
+              duration-300
+              pointer-events-none
+              select-toggle
+              text-dark-gray
+            "
             :class="size === 'default' ? 'pr-3' : 'pr-5'"
           >
             <icon
@@ -47,7 +66,18 @@
         >
           <ul
             v-show="isOpen"
-            class="overflow-auto absolute z-10 mt-2 w-full max-h-60 rounded-md shadow-lg list-options focus:outline-none"
+            class="
+              overflow-auto
+              absolute
+              z-10
+              mt-2
+              w-full
+              max-h-60
+              rounded-md
+              shadow-lg
+              list-options
+              focus:outline-none
+            "
             tabindex="-1"
             role="listbox"
             :aria-expanded="isOpen"
@@ -59,7 +89,16 @@
               :ref="`listbox-option-${item.id}`"
               :key="item.id"
               tabindex="0"
-              class="relative py-2 pr-9 pl-3 cursor-default select-none single-option text-dark-gray"
+              class="
+                relative
+                py-2
+                pr-9
+                pl-3
+                cursor-default
+                select-none
+                single-option
+                text-dark-gray
+              "
               :class="[
                 isHighlighted(item.id) && 'highlighted',
                 index % 2 === 0
@@ -189,7 +228,7 @@ export default {
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey
       if (SPACEBAR_KEY_CODE.includes(evt.keyCode)) {
-        spaceBarCodeKey = SPACEBAR_KEY_CODE.find(x => x === evt.keyCode)
+        spaceBarCodeKey = SPACEBAR_KEY_CODE.find((x) => x === evt.keyCode)
       }
 
       switch (evt.keyCode) {
@@ -219,7 +258,7 @@ export default {
       }
 
       const currentActiveElementIndex = this.options.findIndex(
-        x => x.id === this.currentFocusedElementId,
+        (x) => x.id === this.currentFocusedElementId
       )
       const isNextItemLastItem =
         currentActiveElementIndex >= this.options.length - 1

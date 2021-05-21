@@ -1,8 +1,19 @@
 <template>
   <div
     aria-live="assertive"
-    class="flex fixed inset-0
-    items-end py-6 px-4 pointer-events-none sm:p-6 sm:items-start max-w-md ml-auto"
+    class="
+      flex
+      fixed
+      inset-0
+      items-end
+      py-6
+      px-4
+      pointer-events-none
+      sm:p-6
+      sm:items-start
+      max-w-md
+      ml-auto
+    "
   >
     <div class="flex flex-col items-center space-y-4 w-full sm:items-end">
       <transition

@@ -2,7 +2,22 @@
   <div>
     <button
       type="button"
-      class="inline-flex relative flex-shrink-0 w-10 h-5 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo dark:focus:ring-light-indigo"
+      class="
+        inline-flex
+        relative
+        flex-shrink-0
+        w-10
+        h-5
+        rounded-full
+        border-2 border-transparent
+        transition-colors
+        duration-200
+        ease-in-out
+        cursor-pointer
+        focus:outline-none
+        focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo
+        dark:focus:ring-light-indigo
+      "
       :class="toggled ? 'bg-dark-indigo dark:bg-light-indigo' : 'bg-dark-gray'"
       role="switch"
       :aria-checked="toggled"
@@ -12,7 +27,20 @@
       <span
         aria-hidden="true"
         :class="toggled ? 'translate-x-5' : 'translate-x-0'"
-        class="inline-block w-4 h-4 bg-white rounded-full ring-0 shadow transition duration-200 ease-in-out transform pointer-events-none"
+        class="
+          inline-block
+          w-4
+          h-4
+          bg-white
+          rounded-full
+          ring-0
+          shadow
+          transition
+          duration-200
+          ease-in-out
+          transform
+          pointer-events-none
+        "
       >
         <toggle-icon v-if="withIcon" :toggled="toggled" />
       </span>

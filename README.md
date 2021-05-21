@@ -1,13 +1,20 @@
-# Pomodoro [Styleguide](https://styleguide.pomodoro.seelo.ch)
+# frontend
 
-## Project setup
+## Build Setup
 
-### Install
+```bash
+# install dependencies
+$ yarn install
 
+# serve with hot reload at localhost:3000
+$ yarn dev
+
+# build for production and launch server
+$ yarn build
+$ yarn start
+
+# generate static project
+$ yarn generate
 ```
-git clone git@gitlab.com:seelo/pomodoro/styleguide.git
-cd ./styleguide
-npm install
-```
 
-## Extended doc: [Pomodoro styleguide doc](https://doc.pomodoro.seelo.ch/styleguide)
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

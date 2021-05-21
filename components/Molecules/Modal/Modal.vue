@@ -2,10 +2,34 @@
   <modal-container :is-open="isOpen">
     <div
       :class="`modal modal--${size}`"
-      class="inline-block overflow-hidden text-left align-bottom bg-white rounded-lg shadow-xl transition-all transform sm:my-8 sm:align-middle"
+      class="
+        inline-block
+        overflow-hidden
+        text-left
+        align-bottom
+        bg-white
+        rounded-lg
+        shadow-xl
+        transition-all
+        transform
+        sm:my-8
+        sm:align-middle
+      "
     >
       <div
-        class="px-4 pt-4 pb-4 modal__content sm:px-6 md:px-8 xl:px-10 md:pt-5 sm:pb-6 md:pb-8 xl:pb-12"
+        class="
+          px-4
+          pt-4
+          pb-4
+          modal__content
+          sm:px-6
+          md:px-8
+          xl:px-10
+          md:pt-5
+          sm:pb-6
+          md:pb-8
+          xl:pb-12
+        "
       >
         <div class="relative flex-col mt-2 sm:flex sm:items-start">
           <div class="mb-6">
@@ -14,20 +38,38 @@
           <!-- allow user to close with icon if footer is not given -->
           <div v-if="!hasFooter" class="absolute top-0 right-0">
             <button
-              class="text-dark-blue dark:text-celeste hover:text-dark-gray dark:hover:text-dark-gray focus:outline-none focus:text-dark-indigo dark:focus:text-light-indigo"
+              class="
+                text-dark-blue
+                dark:text-celeste
+                hover:text-dark-gray
+                dark:hover:text-dark-gray
+                focus:outline-none
+                focus:text-dark-indigo
+                dark:focus:text-light-indigo
+              "
               @click="$emit('close')"
             >
               <icon icon-name="close" class="w-5 h-5" />
             </button>
           </div>
-          <div class="min-h-[5rem]  flex items-center">
+          <div class="min-h-[5rem] flex items-center">
             <slot name="body" />
           </div>
         </div>
       </div>
       <div
         v-if="hasFooter"
-        class="px-4 pt-3 pb-2 modal__footer sm:pt-4 sm:pb-4 sm:px-6 md:px-8 xl:px-10"
+        class="
+          px-4
+          pt-3
+          pb-2
+          modal__footer
+          sm:pt-4
+          sm:pb-4
+          sm:px-6
+          md:px-8
+          xl:px-10
+        "
       >
         <slot name="footer" />
       </div>
@@ -35,8 +77,8 @@
   </modal-container>
 </template>
 <script>
-import ModalContainer from './ModalContainer'
 import Icon from '../../Atoms/Icon'
+import ModalContainer from './ModalContainer'
 export default {
   name: 'Modal',
   components: { ModalContainer, Icon },
