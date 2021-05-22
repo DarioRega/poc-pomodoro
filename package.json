@@ -13,7 +13,7 @@
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
     "lint": "yarn lint:js && yarn lint:style",
     "lint:js:fix": "yarn lint:js --fix",
-    "lint:style:fix": "yanr lint:style --fix",
+    "lint:style:fix": "yarn lint:style --fix",
     "lint:fix": "yarn lint:js:fix && yarn lint:style:fix",
     "storybook:build": "nuxt storybook build -o public -s static"
   },
