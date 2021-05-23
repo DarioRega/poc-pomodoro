@@ -21,6 +21,18 @@
   }
 }
 
+.brand-focus-ring--indigo {
+  @apply rounded-sm ring-2 ring-offset-2 ring-dark-indigo ring-offset-light-white;
+}
+
+.brand-dark-focus-ring--indigo {
+  @apply rounded-sm ring-2 ring-offset-2 ring-light-indigo ring-offset-dark-blue;
+}
+
+button:focus {
+  @apply outline-none;
+}
+
 .sidebar-subtitle {
   @apply text-dark-blue font-semibold;
   @apply dark:text-celeste;
