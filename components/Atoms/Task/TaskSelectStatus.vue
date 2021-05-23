@@ -1,81 +1,40 @@
 <template>
-  <div
-    class="brand-input"
-    :class="[
-      `brand-input__select-container--size-${size}`,
-      hasErrors && 'brand-input--has-errors',
-    ]"
-  >
+  <div>
     <div class="flex flex-col-reverse">
       <div class="relative">
-        <button
-          ref="triggerDropdown"
-          type="button"
-          class="
-            relative
-            pr-10
-            w-full
-            text-left
-            cursor-pointer
-            brand-input__select
-            focus:outline-none
-          "
-          aria-haspopup="listbox"
-          :aria-expanded="isOpen"
-          :class="[
-            `brand-input__select--size-${size}`,
-            `brand-input__select--${type}`,
-          ]"
-          aria-labelledby="listbox-label"
-          @click="toggleVisibility"
-          @keydown="toggleVisibility"
-        >
-          <span class="block text-current truncate">
-            {{ localValue.name || 'Please select' }}
-          </span>
-          <span
-            class="
-              flex
-              absolute
-              inset-y-0
-              right-0
-              items-center
-              transition-colors
-              duration-300
-              pointer-events-none
-              select-toggle
-              text-dark-gray
-            "
-            :class="size === 'default' ? 'pr-3' : 'pr-5'"
-          >
-            <icon
-              icon-name="select"
-              class="w-5 h-5 text-current"
-              aria-hidden="true"
-            ></icon>
-          </span>
-        </button>
+        <div class="text-center flex justify-center w-full relative">
+          <!--              TODO handle whatinput focus-->
+          <task-current-status
+            ref="triggerDropdown"
+            type="button"
+            class="w-full cursor-pointer focus:outline-none"
+            aria-haspopup="listbox"
+            :aria-expanded="isOpen"
+            aria-labelledby="listbox-label"
+            :current-status="localValue.status"
+            :status-text="localValue.name"
+            @click="toggleVisibility($event, true)"
+            @keydown="toggleVisibility"
+          />
+        </div>
 
         <transition
-          enter-active-class=""
-          enter-class=""
-          enter-to-class=""
-          leave-active-class="transition duration-100 ease-in"
+          enter-active-class="transition duration-200 ease-in"
+          enter-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="transition duration-200 ease-in"
           leave-class="opacity-100"
           leave-to-class="opacity-0"
         >
           <ul
-            v-show="isOpen"
+            v-if="isOpen"
             class="
               overflow-auto
               absolute
               z-10
               mt-2
               w-full
-              max-h-60
-              rounded-md
-              shadow-lg
-              list-options
+              text-center
               focus:outline-none
             "
             tabindex="-1"
@@ -83,27 +42,23 @@
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
           >
+            <!--              TODO handle whatinput focus-->
             <li
-              v-for="(item, index) in options"
+              v-for="(item, index) in filteredOptions"
               :id="`listbox-option-${item.id}`"
               :ref="`listbox-option-${item.id}`"
               :key="item.id"
               tabindex="0"
               class="
                 relative
+                inline-flex
+                justify-center
                 py-2
-                pr-9
-                pl-3
-                cursor-default
-                select-none
-                single-option
-                text-dark-gray
+                cursor-pointer
+                focus:outline-none
               "
               :class="[
                 isHighlighted(item.id) && 'highlighted',
-                index % 2 === 0
-                  ? 'bg-light-white dark:bg-darker-blue'
-                  : 'bg-lighter-white dark:bg-dark-blue',
                 index < 1 && 'rounded-t-md',
                 index < options.length - 1 && 'rounded-b-md',
               ]"
@@ -114,29 +69,22 @@
               @mouseleave="highlightedItemId = ''"
               @click="selectOption(item)"
             >
-              <select-dropdown-option
-                :is-highlighted="isHighlighted(item.id)"
-                :is-selected="localValue.id === item.id"
-                :name="item.name"
+              <task-current-status
+                class="mx-auto"
+                :should-focus="currentFocusedElementId === item.id"
+                :current-status="item.status"
+                :status-text="item.name"
               />
             </li>
           </ul>
         </transition>
       </div>
-
-      <label v-if="label && type !== 'task'" class="brand-input__label">
-        {{ label }}
-      </label>
-    </div>
-    <div v-show="hasErrors" class="mt-1 text-right brand-input__errors">
-      <slot name="errors" />
     </div>
   </div>
 </template>
 
 <script>
-import Icon from '../Icon'
-import SelectDropdownOption from './SelectDropdownOption'
+import TaskCurrentStatus from '~/components/Atoms/Task/TaskCurrentStatus'
 import {
   DOWN_ARROW_KEY_CODE,
   ENTER_KEY_CODE,
@@ -145,11 +93,9 @@ import {
   UP_ARROW_KEY_CODE,
 } from '~/constantes'
 
-// TODO whatinput=keyboard single-option focus = outline indigo
-
 export default {
-  name: 'BrandSelect',
-  components: { SelectDropdownOption, Icon },
+  name: 'TaskSelectStatus',
+  components: { TaskCurrentStatus },
   props: {
     options: {
       type: Array,
@@ -158,14 +104,6 @@ export default {
     value: {
       type: Object,
       default: () => ({}),
-    },
-    type: {
-      type: String,
-      default: 'primary',
-    },
-    size: {
-      type: String,
-      default: 'default',
     },
     label: {
       type: String,
@@ -187,12 +125,14 @@ export default {
     }
   },
   computed: {
-    hasErrors() {
-      return !!this.$slots.errors
+    filteredOptions() {
+      return this.options.filter((x) => x.id !== this.localValue.id)
     },
   },
-  mounted() {
+  beforeMount() {
     this.localValue = this.value
+  },
+  mounted() {
     window.document.addEventListener('click', this.handleWindowClick)
   },
   beforeDestroy() {
@@ -202,7 +142,17 @@ export default {
     isHighlighted(itemId) {
       return this.highlightedItemId === itemId
     },
-    toggleVisibility(evt) {
+    toggleVisibility(evt, isMouseClick = false) {
+      if (
+        this.isOpen &&
+        (isMouseClick ||
+          evt.keyCode === ENTER_KEY_CODE ||
+          SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
+          evt.keyCode === ESCAPE_KEY_CODE)
+      ) {
+        return (this.isOpen = false)
+      }
+
       const openDropDown =
         SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
         evt.keyCode === ENTER_KEY_CODE
@@ -289,19 +239,13 @@ export default {
       }
     },
     focusElement(id) {
-      const ref = `listbox-option-${id}`
       this.currentFocusedElementId = id
-      this.$refs[ref][0].focus()
     },
   },
 }
 </script>
 
 <style lang="scss">
-.list-options {
-  @apply bg-transparent border transition-colors duration-100 border-dark-gray;
-}
-
 .single-option {
   @apply text-dark-gray;
 
@@ -313,17 +257,6 @@ export default {
   &:focus {
     @apply outline-none text-dark-indigo;
     @apply dark:text-light-indigo;
-
-    .checkmark,
-    .option-name {
-      @apply text-dark-indigo;
-      @apply dark:text-light-indigo;
-    }
   }
-}
-
-.checkmark {
-  @apply text-dark-blue;
-  @apply dark:text-celeste;
 }
 </style>
