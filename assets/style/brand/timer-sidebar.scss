@@ -2,29 +2,36 @@
   &__clock {
     @apply w-36 h-36 text-base bg-dark-indigo text-celeste font-timer;
     @apply dark:bg-light-indigo;
+    @apply transition-colors duration-200;
 
     &--time-visible {
       h2 {
         @apply mb-0 tracking-wide;
       }
     }
+
+    &:hover {
+      @apply bg-opacity-90;
+    }
   }
+
   &__controls {
     @apply mt-3;
+
     & > div {
       @apply flex justify-center items-center;
     }
 
     &__buttons {
       @apply flex items-start h-5;
+      @apply transition-colors duration-200;
       svg {
         @apply w-5 h-5;
       }
+
       span {
         @apply ml-2 text-base font-semibold tracking-wide font-timer;
-      }
-      &:hover {
-        @apply text-opacity-60;
+
       }
     }
 
@@ -40,23 +47,28 @@
         &:nth-child(1) {
           @apply text-success;
         }
+
         &:nth-child(2) {
           @apply text-error;
         }
       }
     }
+
     &--session-started-status-pending {
       button {
         @apply text-error;
       }
     }
   }
+
   &__expander {
     &__button {
       @apply text-dark-indigo;
       @apply dark:text-light-indigo;
+      @apply transition-colors duration-200;
+
       &:hover {
-        @apply opacity-60;
+        @apply text-opacity-80;
       }
     }
   }
@@ -76,28 +88,33 @@
         & > div {
           @apply flex-col;
         }
+
         &__buttons {
           &:hover {
-            @apply text-opacity-60;
+            @apply text-opacity-80;
           }
+
           span {
             @apply hidden;
           }
         }
+
         &--paused {
           button:nth-child(1) {
             @apply mb-3;
           }
         }
+
         &--session-started-status-pending {
           button:nth-child(1) {
             @apply mb-3 text-success;
             &:hover {
-              @apply text-opacity-60;
+              @apply text-opacity-80;
             }
           }
         }
       }
+
       &__expander--stacked {
         @apply flex flex-col;
         button:nth-child(1) {
