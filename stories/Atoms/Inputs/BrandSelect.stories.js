@@ -62,6 +62,7 @@ export const Default = Template.bind({})
 Default.args = {
   name: 'myName',
   value: { id: 3, name: 'Dark' },
+  placeholder: 'Please select',
 }
 
 export const Large = Template.bind({})
@@ -69,31 +70,27 @@ Large.args = {
   name: 'myName',
   size: 'large',
   value: { id: 3, name: 'Dark' },
+  placeholder: 'Please select',
 }
 
 export const WithLabel = Template.bind({})
 WithLabel.args = {
   label: 'Theme',
   value: { id: 1, name: 'Light' },
+  placeholder: 'Please select',
 }
 
 export const HasError = Template.bind({})
 HasError.args = {
   name: 'myName',
-  errors: `
-    <p>
-      Please select a value
-    </p>
-`,
+  errorText: 'A value is required',
+  placeholder: 'Please select',
 }
 
 export const HasErrorWithLabel = Template.bind({})
 HasErrorWithLabel.args = {
   name: 'myName',
   label: 'Theme',
-  errors: `
-    <p>
-      Please select a value
-    </p>
-`,
+  errorText: 'A value is required',
+  placeholder: 'Please select',
 }

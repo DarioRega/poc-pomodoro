@@ -1,6 +1,6 @@
 <template>
   <div
-    class="brand-input"
+    class="brand-input relative"
     :class="[
       `brand-input__select-container--size-${size}`,
       hasErrors && 'brand-input--has-errors',
@@ -31,7 +31,7 @@
           @keydown="toggleVisibility"
         >
           <span class="block text-current truncate">
-            {{ localValue.name || 'Please select' }}
+            {{ localValue.name || placeholder }}
           </span>
           <span
             class="
@@ -128,8 +128,11 @@
         {{ label }}
       </label>
     </div>
-    <div v-show="hasErrors" class="mt-1 text-right brand-input__errors">
-      <slot name="errors" />
+    <div
+      v-show="hasErrors"
+      class="mt-1 absolute text-right brand-input__errors w-full"
+    >
+      <p>{{ errorText }}</p>
     </div>
   </div>
 </template>
@@ -175,6 +178,14 @@ export default {
       type: String,
       required: true,
     },
+    errorText: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -188,7 +199,7 @@ export default {
   },
   computed: {
     hasErrors() {
-      return !!this.$slots.errors
+      return this.errorText.length > 0
     },
   },
   mounted() {
