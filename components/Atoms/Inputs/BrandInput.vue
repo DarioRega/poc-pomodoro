@@ -1,12 +1,16 @@
 <template>
-  <div class="brand-input" :class="hasErrors && 'brand-input--has-errors'">
+  <div
+    class="brand-input relative"
+    :class="hasErrors && 'brand-input--has-errors'"
+  >
     <div class="flex flex-col-reverse">
       <input
         v-model.lazy="localValue"
-        type="text"
+        :type="inputType"
         :aria-label="name"
         :name="name"
         class="brand-input__input"
+        :placeholder="placeholder"
         :class="[
           `brand-input__input--size-${size}`,
           `brand-input__input--${type}`,
@@ -17,8 +21,11 @@
         {{ label }}
       </label>
     </div>
-    <div v-show="hasErrors" class="mt-1 text-right brand-input__errors">
-      <slot name="errors" />
+    <div
+      v-show="hasErrors"
+      class="mt-1 absolute text-right brand-input__errors w-full"
+    >
+      <p>{{ errorText }}</p>
     </div>
   </div>
 </template>
@@ -44,9 +51,21 @@ export default {
       type: String,
       default: '',
     },
+    inputType: {
+      type: String,
+      default: 'text',
+    },
     name: {
       type: String,
       required: true,
+    },
+    errorText: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -56,15 +75,15 @@ export default {
   },
   computed: {
     hasErrors() {
-      return !!this.$slots.errors
+      return this.errorText.length > 0
     },
   },
   mounted() {
     this.localValue = this.value
   },
   methods: {
-    onChange(value) {
-      this.$emit('change', value)
+    onChange(evt) {
+      this.$emit('change', evt.target.value)
     },
   },
 }

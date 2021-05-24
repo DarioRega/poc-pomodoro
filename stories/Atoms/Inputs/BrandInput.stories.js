@@ -18,16 +18,9 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { BrandInput },
-  computed: {
-    hasErrors() {
-      return args.errors
-    },
-  },
   template: `
     <div class="max-w-xs">
-      <brand-input v-bind="$props">
-        <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
-      </brand-input>
+      <brand-input v-bind="$props" />
     </div>`,
 })
 
@@ -61,31 +54,19 @@ WithLabel.args = {
 export const HasError = Template.bind({})
 HasError.args = {
   name: 'myName',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }
 
 export const HasErrorWithLabel = Template.bind({})
 HasErrorWithLabel.args = {
   name: 'account',
   label: 'Account',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }
 
 export const HasErrorTypeTask = Template.bind({})
 HasErrorTypeTask.args = {
   name: 'myName',
   type: 'task',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }
