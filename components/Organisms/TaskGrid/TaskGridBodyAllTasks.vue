@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="header flex overflow-hidden">
+    <div class="header flex">
       <div class="header__col flex-1">
         <task-target
           :is-selected="isSelected"
@@ -15,7 +15,14 @@
           @change="handleTaskNameChange"
         />
       </div>
-      <div class="w-36 header__col header__col--center">task status</div>
+      <div class="w-36 header__col header__col--center">
+        <task-select-status
+          :name="labels.taskStatusName"
+          :value="task.status"
+          :status-text="task.status"
+          :options="TASK_STATES"
+        />
+      </div>
 
       <div class="w-24 flex-none header__col header__col--center">
         task deadline
@@ -33,11 +40,12 @@
 <script>
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
+import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { TASK_STATUS } from '@/constantes'
 
 export default {
   name: 'TaskGridBodyAllTasks',
-  components: { TaskTarget, BrandInput },
+  components: { TaskTarget, BrandInput, TaskSelectStatus },
   props: {
     isSelected: {
       type: Boolean,
@@ -57,8 +65,15 @@ export default {
     },
   },
   computed: {
+    // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
     TASK_STATUS() {
       return TASK_STATUS
+    },
+    // TODO Should come from the backend with an api call, should come as props here
+    TASK_STATES() {
+      return Object.keys(TASK_STATUS).map((x, i) => {
+        return { id: i, value: TASK_STATUS[x], name: TASK_STATUS[x] }
+      })
     },
   },
   methods: {
@@ -71,7 +86,7 @@ export default {
 <style lang="scss" scoped>
 .header {
   &__col {
-    @apply overflow-hidden flex items-center;
+    @apply flex items-center;
     &--center {
       @apply mx-auto text-center justify-center;
     }

@@ -21,6 +21,7 @@ const Template = (args, { argTypes }) => ({
     getLabels() {
       return {
         taskName: 'Task name',
+        taskStatusName: 'Task status',
       }
     },
   },
@@ -30,7 +31,11 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({})
 Default.args = {
   task: {
-    status: TASK_STATUS.TODO,
+    status: {
+      id: 0,
+      value: TASK_STATUS.TODO,
+      name: TASK_STATUS.TODO,
+    },
     name: 'Complete Wireframes',
   },
 }
@@ -39,7 +44,11 @@ export const Selected = Template.bind({})
 Selected.args = {
   isSelected: true,
   task: {
-    status: TASK_STATUS.TODO,
+    status: {
+      id: 0,
+      value: TASK_STATUS.TODO,
+      name: TASK_STATUS.TODO,
+    },
     name: 'Complete Wireframes',
   },
 }
@@ -47,7 +56,11 @@ Selected.args = {
 export const CompleteTask = Template.bind({})
 CompleteTask.args = {
   task: {
-    status: TASK_STATUS.COMPLETED,
+    status: {
+      id: 3,
+      value: TASK_STATUS.COMPLETED,
+      name: TASK_STATUS.COMPLETED,
+    },
     name: 'Complete Wireframes',
   },
 }
@@ -56,7 +69,11 @@ export const SelectedCompleteTask = Template.bind({})
 SelectedCompleteTask.args = {
   isSelected: true,
   task: {
-    status: TASK_STATUS.COMPLETED,
+    status: {
+      id: 3,
+      value: TASK_STATUS.COMPLETED,
+      name: TASK_STATUS.COMPLETED,
+    },
     name: 'Complete Wireframes',
   },
 }
