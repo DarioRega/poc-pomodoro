@@ -1,5 +1,5 @@
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
-import { TASK_STATUS } from '@/constantes'
+import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 
 export default {
   title: 'Organisms/TaskGrid/Body',
@@ -33,8 +33,8 @@ Default.args = {
   task: {
     status: {
       id: 0,
-      value: TASK_STATUS.TODO,
-      name: TASK_STATUS.TODO,
+      value: TASK_STATUS_VALUES.TODO,
+      name: FAKER_TASK_STATUS_NAMES.TODO,
     },
     name: 'Complete Wireframes',
   },
@@ -46,8 +46,8 @@ Selected.args = {
   task: {
     status: {
       id: 0,
-      value: TASK_STATUS.TODO,
-      name: TASK_STATUS.TODO,
+      value: TASK_STATUS_VALUES.TODO,
+      name: FAKER_TASK_STATUS_NAMES.TODO,
     },
     name: 'Complete Wireframes',
   },
@@ -58,8 +58,8 @@ CompleteTask.args = {
   task: {
     status: {
       id: 3,
-      value: TASK_STATUS.COMPLETED,
-      name: TASK_STATUS.COMPLETED,
+      value: TASK_STATUS_VALUES.COMPLETED,
+      name: TASK_STATUS_VALUES.COMPLETED,
     },
     name: 'Complete Wireframes',
   },
@@ -71,8 +71,8 @@ SelectedCompleteTask.args = {
   task: {
     status: {
       id: 3,
-      value: TASK_STATUS.COMPLETED,
-      name: TASK_STATUS.COMPLETED,
+      value: TASK_STATUS_VALUES.COMPLETED,
+      name: TASK_STATUS_VALUES.COMPLETED,
     },
     name: 'Complete Wireframes',
   },

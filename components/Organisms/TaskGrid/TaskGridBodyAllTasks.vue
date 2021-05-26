@@ -4,7 +4,7 @@
       <div class="header__col flex-1">
         <task-target
           :is-selected="isSelected"
-          :is-complete="task.status === TASK_STATUS.COMPLETED"
+          :is-complete="task.status === TASK_STATUS_VALUES.COMPLETED"
         />
         <brand-input
           :value="task.name"
@@ -41,7 +41,7 @@
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
-import { TASK_STATUS } from '@/constantes'
+import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 
 export default {
   name: 'TaskGridBodyAllTasks',
@@ -66,13 +66,17 @@ export default {
   },
   computed: {
     // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
-    TASK_STATUS() {
-      return TASK_STATUS
+    TASK_STATUS_VALUES() {
+      return TASK_STATUS_VALUES
     },
     // TODO Should come from the backend with an api call, should come as props here
     TASK_STATES() {
-      return Object.keys(TASK_STATUS).map((x, i) => {
-        return { id: i, value: TASK_STATUS[x], name: TASK_STATUS[x] }
+      return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
+        return {
+          id: i,
+          value: TASK_STATUS_VALUES[x],
+          name: FAKER_TASK_STATUS_NAMES[x],
+        }
       })
     },
   },
