@@ -11,7 +11,7 @@
             aria-haspopup="listbox"
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
-            :current-status="localValue.status"
+            :current-status="localValue.value"
             :status-text="localValue.name"
             @click="toggleVisibility($event, true)"
             @keydown="toggleVisibility"
@@ -72,7 +72,7 @@
               <task-current-status
                 class="mx-auto"
                 :should-focus="currentFocusedElementId === item.id"
-                :current-status="item.status"
+                :current-status="item.value"
                 :status-text="item.name"
               />
             </li>

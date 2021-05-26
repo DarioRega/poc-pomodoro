@@ -1,5 +1,5 @@
 import TaskCurrentStatus from '../../../components/Atoms/Task/TaskCurrentStatus'
-import { TASK_STATUS } from '../../../constantes'
+import { TASK_STATUS_VALUES } from '../../../constantes'
 
 export default {
   title: 'Atoms/Task/Status',
@@ -10,9 +10,9 @@ export default {
         type: 'select',
         options: [
           TASK_STATUS.COMPLETED,
-          TASK_STATUS.IN_PROGRESS,
-          TASK_STATUS.TODO,
-          TASK_STATUS.ARCHIVED,
+          TASK_STATUS_VALUES.IN_PROGRESS,
+          TASK_STATUS_VALUES.TODO,
+          TASK_STATUS_VALUES.ARCHIVED,
         ],
       },
     },
@@ -27,23 +27,23 @@ const Template = (args, { argTypes }) => ({
 
 export const Completed = Template.bind({})
 Completed.args = {
-  currentStatus: TASK_STATUS.COMPLETED,
+  currentStatus: TASK_STATUS_VALUES.COMPLETED,
   statusText: 'COMPLETED',
 }
 
 export const DefaultTodo = Template.bind({})
 DefaultTodo.args = {
-  currentStatus: TASK_STATUS.TODO,
+  currentStatus: TASK_STATUS_VALUES.TODO,
   statusText: 'TODO',
 }
 
 export const InProgress = Template.bind({})
 InProgress.args = {
-  currentStatus: TASK_STATUS.IN_PROGRESS,
+  currentStatus: TASK_STATUS_VALUES.IN_PROGRESS,
   statusText: 'IN PROGRESS',
 }
 export const Archived = Template.bind({})
 Archived.args = {
-  currentStatus: TASK_STATUS.ARCHIVED,
+  currentStatus: TASK_STATUS_VALUES.ARCHIVED,
   statusText: 'ARCHIVED',
 }

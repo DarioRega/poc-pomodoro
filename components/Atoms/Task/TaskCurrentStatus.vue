@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { TASK_STATUS } from '../../../constantes'
+import { TASK_STATUS_VALUES } from '../../../constantes'
 
 export default {
   name: 'TaskCurrentStatus',
@@ -47,11 +47,11 @@ export default {
   computed: {
     classes() {
       return {
-        'bg-success': this.currentStatus === TASK_STATUS.COMPLETED,
-        'bg-darker-gray': this.currentStatus === TASK_STATUS.ARCHIVED,
+        'bg-success': this.currentStatus === TASK_STATUS_VALUES.COMPLETED,
+        'bg-darker-gray': this.currentStatus === TASK_STATUS_VALUES.ARCHIVED,
         'bg-dark-indigo dark:bg-light-indigo':
-          this.currentStatus === TASK_STATUS.IN_PROGRESS ||
-          this.currentStatus === TASK_STATUS.TODO,
+          this.currentStatus === TASK_STATUS_VALUES.IN_PROGRESS ||
+          this.currentStatus === TASK_STATUS_VALUES.TODO,
       }
     },
   },

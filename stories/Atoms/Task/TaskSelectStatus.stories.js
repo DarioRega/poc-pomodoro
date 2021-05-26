@@ -1,5 +1,5 @@
 import TaskSelectStatus from '../../../components/Atoms/Task/TaskSelectStatus'
-import { TASK_STATUS } from '~/constantes'
+import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '~/constantes'
 import TaskCurrentStatus from '~/components/Atoms/Task/TaskCurrentStatus'
 
 export default {
@@ -10,10 +10,26 @@ export default {
       control: {
         type: 'select',
         options: [
-          { id: 1, name: 'todo', status: TASK_STATUS.TODO },
-          { id: 2, name: 'in progress', status: TASK_STATUS.IN_PROGRESS },
-          { id: 4, name: 'completed', status: TASK_STATUS.COMPLETED },
-          { id: 5, name: 'archived', status: TASK_STATUS.ARCHIVED },
+          {
+            id: 1,
+            name: FAKER_TASK_STATUS_NAMES.TODO,
+            value: TASK_STATUS_VALUES.TODO,
+          },
+          {
+            id: 2,
+            name: FAKER_TASK_STATUS_NAMES.IN_PROGRESS,
+            value: TASK_STATUS_VALUES.IN_PROGRESS,
+          },
+          {
+            id: 4,
+            name: FAKER_TASK_STATUS_NAMES.COMPLETED,
+            value: TASK_STATUS_VALUES.COMPLETED,
+          },
+          {
+            id: 5,
+            name: FAKER_TASK_STATUS_NAMES.ARCHIVED,
+            value: TASK_STATUS_VALUES.ARCHIVED,
+          },
         ],
       },
     },
@@ -26,10 +42,10 @@ const Template = (args, { argTypes }) => ({
   data() {
     return {
       list: [
-        { id: 1, name: 'todo', status: TASK_STATUS.TODO },
-        { id: 2, name: 'in progress', status: TASK_STATUS.IN_PROGRESS },
-        { id: 4, name: 'completed', status: TASK_STATUS.COMPLETED },
-        { id: 5, name: 'archived', status: TASK_STATUS.ARCHIVED },
+        { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
+        { id: 2, name: 'in progress', value: TASK_STATUS_VALUES.IN_PROGRESS },
+        { id: 4, name: 'completed', value: TASK_STATUS_VALUES.COMPLETED },
+        { id: 5, name: 'archived', value: TASK_STATUS_VALUES.ARCHIVED },
       ],
     }
   },
@@ -44,5 +60,5 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({})
 Default.args = {
   name: 'myName',
-  value: { id: 1, name: 'todo', status: TASK_STATUS.TODO },
+  value: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
 }
