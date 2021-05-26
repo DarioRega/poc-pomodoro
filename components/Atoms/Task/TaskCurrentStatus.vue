@@ -5,16 +5,15 @@
     class="
       w-full
       rounded-full
-      max-w-[9rem]
-      min-w-[9rem]
+      max-w-[8rem]
+      min-w-[8rem]
       text-celeste
-      py-2
-      px-5
+      py-1
       text-center
       uppercase
       font-bold font-body
       tracking-wider
-      text-sm
+      text-xs
       hover:bg-opacity-80
       dark:hover:bg-opacity-80
     "
