@@ -22,6 +22,7 @@ const Template = (args, { argTypes }) => ({
       return {
         taskName: 'Task name',
         taskStatusName: 'Task status',
+        closeCalendar: 'Close',
       }
     },
   },
@@ -32,11 +33,12 @@ export const Default = Template.bind({})
 Default.args = {
   task: {
     status: {
-      id: 0,
+      id: 3,
       value: TASK_STATUS_VALUES.TODO,
       name: FAKER_TASK_STATUS_NAMES.TODO,
     },
     name: 'Complete Wireframes',
+    deadline: '19.06.2021',
   },
 }
 
@@ -45,7 +47,7 @@ Selected.args = {
   isSelected: true,
   task: {
     status: {
-      id: 0,
+      id: 3,
       value: TASK_STATUS_VALUES.TODO,
       name: FAKER_TASK_STATUS_NAMES.TODO,
     },
@@ -53,26 +55,26 @@ Selected.args = {
   },
 }
 
-export const CompleteTask = Template.bind({})
-CompleteTask.args = {
+export const TaskDone = Template.bind({})
+TaskDone.args = {
   task: {
     status: {
-      id: 3,
-      value: TASK_STATUS_VALUES.COMPLETED,
-      name: TASK_STATUS_VALUES.COMPLETED,
+      id: 1,
+      value: TASK_STATUS_VALUES.DONE,
+      name: TASK_STATUS_VALUES.DONE,
     },
     name: 'Complete Wireframes',
   },
 }
 
-export const SelectedCompleteTask = Template.bind({})
-SelectedCompleteTask.args = {
+export const SelectedDoneTask = Template.bind({})
+SelectedDoneTask.args = {
   isSelected: true,
   task: {
     status: {
-      id: 3,
-      value: TASK_STATUS_VALUES.COMPLETED,
-      name: TASK_STATUS_VALUES.COMPLETED,
+      id: 1,
+      value: TASK_STATUS_VALUES.DONE,
+      name: TASK_STATUS_VALUES.DONE,
     },
     name: 'Complete Wireframes',
   },

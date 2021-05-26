@@ -4,7 +4,8 @@
       <div class="header__col flex-1">
         <task-target
           :is-selected="isSelected"
-          :is-complete="task.status === TASK_STATUS_VALUES.COMPLETED"
+          :is-complete="task.status === TASK_STATUS_VALUES.DONE"
+          @click="handleClickTaskTarget"
         />
         <brand-input
           :value="task.name"
@@ -12,7 +13,7 @@
           :is-selected="isSelected"
           type="task"
           class="w-full px-3"
-          @change="handleTaskNameChange"
+          @change="handleChangeTaskName"
         />
       </div>
       <div class="w-36 header__col header__col--center">
@@ -25,7 +26,11 @@
       </div>
 
       <div class="w-24 flex-none header__col header__col--center">
-        task deadline
+        <task-deadline
+          :close-button-text="labels.closeCalendar"
+          :value="task.deadline"
+          @change="handleChangeDeadline"
+        />
       </div>
 
       <div class="w-1/6 header__col pl-6">task-description</div>
@@ -42,10 +47,11 @@ import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
+import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
 
 export default {
   name: 'TaskGridBodyAllTasks',
-  components: { TaskTarget, BrandInput, TaskSelectStatus },
+  components: { TaskTarget, BrandInput, TaskSelectStatus, TaskDeadline },
   props: {
     isSelected: {
       type: Boolean,
@@ -71,19 +77,26 @@ export default {
     },
     // TODO Should come from the backend with an api call, should come as props here
     TASK_STATES() {
-      return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
+      const prout = Object.keys(TASK_STATUS_VALUES).map((x, i) => {
         return {
-          id: i,
+          id: i + 1,
           value: TASK_STATUS_VALUES[x],
           name: FAKER_TASK_STATUS_NAMES[x],
         }
       })
+      console.log('GRIDBODY STEAATES', prout)
+      return prout
     },
   },
   methods: {
-    handleTaskNameChange(value) {
+    handleClickTaskTarget() {},
+    handleChangeTaskName(value) {
       //
     },
+    handleChangeDeadline(dateTime, dateString) {
+      //
+    },
+    //
   },
 }
 </script>
