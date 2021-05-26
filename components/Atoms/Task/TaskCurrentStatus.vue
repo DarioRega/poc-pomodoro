@@ -47,7 +47,7 @@ export default {
   computed: {
     classes() {
       return {
-        'bg-success': this.currentStatus === TASK_STATUS_VALUES.COMPLETED,
+        'bg-success': this.currentStatus === TASK_STATUS_VALUES.DONE,
         'bg-darker-gray': this.currentStatus === TASK_STATUS_VALUES.ARCHIVED,
         'bg-dark-indigo dark:bg-light-indigo':
           this.currentStatus === TASK_STATUS_VALUES.IN_PROGRESS ||

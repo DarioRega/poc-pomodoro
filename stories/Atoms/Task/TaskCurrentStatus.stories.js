@@ -9,7 +9,7 @@ export default {
       control: {
         type: 'select',
         options: [
-          TASK_STATUS.COMPLETED,
+          TASK_STATUS_VALUES.DONE,
           TASK_STATUS_VALUES.IN_PROGRESS,
           TASK_STATUS_VALUES.TODO,
           TASK_STATUS_VALUES.ARCHIVED,
@@ -25,10 +25,10 @@ const Template = (args, { argTypes }) => ({
   template: `<task-current-status v-bind="$props" />`,
 })
 
-export const Completed = Template.bind({})
-Completed.args = {
-  currentStatus: TASK_STATUS_VALUES.COMPLETED,
-  statusText: 'COMPLETED',
+export const Done = Template.bind({})
+Done.args = {
+  currentStatus: TASK_STATUS_VALUES.DONE,
+  statusText: 'DONE',
 }
 
 export const DefaultTodo = Template.bind({})
