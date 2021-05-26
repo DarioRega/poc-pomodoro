@@ -22,8 +22,8 @@ export default {
           },
           {
             id: 4,
-            name: FAKER_TASK_STATUS_NAMES.COMPLETED,
-            value: TASK_STATUS_VALUES.COMPLETED,
+            name: FAKER_TASK_STATUS_NAMES.DONE,
+            value: TASK_STATUS_VALUES.DONE,
           },
           {
             id: 5,
@@ -44,7 +44,7 @@ const Template = (args, { argTypes }) => ({
       list: [
         { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
         { id: 2, name: 'in progress', value: TASK_STATUS_VALUES.IN_PROGRESS },
-        { id: 4, name: 'completed', value: TASK_STATUS_VALUES.COMPLETED },
+        { id: 4, name: 'done', value: TASK_STATUS_VALUES.DONE },
         { id: 5, name: 'archived', value: TASK_STATUS_VALUES.ARCHIVED },
       ],
     }

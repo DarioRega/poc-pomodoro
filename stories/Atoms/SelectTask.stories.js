@@ -26,7 +26,7 @@ Selected.args = {
   isSelected: true,
 }
 
-export const Completed = Template.bind({})
-Completed.args = {
+export const Done = Template.bind({})
+Done.args = {
   isComplete: true,
 }
