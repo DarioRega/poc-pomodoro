@@ -1,8 +1,8 @@
-import TargetTask from '../../components/Atoms/TargetTask'
+import TaskTarget from '../../components/Atoms/Task/TaskTarget'
 
 export default {
-  title: 'Atoms/Task/TargetTask',
-  component: TargetTask,
+  title: 'Atoms/Task/TaskTarget',
+  component: TaskTarget,
   argTypes: {
     isSelected: {
       control: { type: 'select', options: [true, false] },
@@ -15,8 +15,8 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { TargetTask },
-  template: '<target-task v-bind="$props" />',
+  components: { TaskTarget },
+  template: '<task-target v-bind="$props" />',
 })
 
 export const DefaultUnselected = Template.bind({})

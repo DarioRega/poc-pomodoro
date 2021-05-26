@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import Icon from './Icon'
+import Icon from '../Icon'
 export default {
-  name: 'TargetTask',
+  name: 'TaskTarget',
   components: { Icon },
   props: {
     isSelected: {
