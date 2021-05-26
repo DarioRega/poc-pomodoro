@@ -14,6 +14,7 @@
         :class="[
           `brand-input__input--size-${size}`,
           `brand-input__input--${type}`,
+          isSelected && 'selected',
         ]"
         @change="onChange"
       />
@@ -66,6 +67,10 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

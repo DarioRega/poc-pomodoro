@@ -26,7 +26,8 @@
 
     // task type only
     &--task {
-      @apply border-transparent border-dashed shadow-none;
+      @apply py-0.5 px-1 #{!important};
+      @apply text-dark-gray border-transparent border-dashed shadow-none;
       &:hover {
         @apply border-dark-gray;
       }
@@ -34,6 +35,11 @@
       &:focus {
         @apply border-solid border-dark-indigo;
         @apply dark:border-light-indigo;
+      }
+
+      &.selected {
+        @apply text-dark-blue;
+        @apply dark:text-celeste;
       }
     }
   }
