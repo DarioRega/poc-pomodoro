@@ -1,6 +1,8 @@
 <template>
   <button
     class="
+      flex
+      items-center
       transition-colors
       duration-200
       focus:outline-none
@@ -25,9 +27,9 @@
 </template>
 
 <script>
-import Icon from './Icon'
+import Icon from '../Icon'
 export default {
-  name: 'TargetTask',
+  name: 'TaskTarget',
   components: { Icon },
   props: {
     isSelected: {
