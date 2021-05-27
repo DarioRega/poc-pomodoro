@@ -21,12 +21,21 @@
         {{ label }}
       </label>
     </div>
-    <div
-      v-show="hasErrors"
-      class="mt-1 absolute text-right brand-input__errors w-full"
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-class="-translate-y-4 opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transform transition duration-200 ease-in"
+      leave-class="translate-y-0 opacity-100"
+      leave-to-class="-translate-y-4 opacity-0"
     >
-      <p>{{ errorText }}</p>
-    </div>
+      <div
+        v-show="hasErrors"
+        class="mt-1 absolute text-right brand-input__errors w-full"
+      >
+        <p>{{ errorText }}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
