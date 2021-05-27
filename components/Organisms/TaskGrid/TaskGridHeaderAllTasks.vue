@@ -4,6 +4,7 @@
       class="header flex overflow-hidden"
       :class="isStacked && 'header--stacked'"
     >
+      <!--      TODO CHANGE ICONS WHEN BRANCHES ARE MERGED -->
       <div class="header__col task-name">
         <button class="inline-flex items-center justify-center">
           <icon v-if="isToggled" icon-name="info" class="w-4" />
@@ -53,11 +54,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
+  @apply pb-1 border-b-2 border-dark-blue;
+  @apply dark:border-celeste;
   .task-name {
     @apply flex-1;
   }
   &__col {
     @apply overflow-hidden flex items-center;
+    @apply text-dark-blue;
+    @apply dark:text-celeste;
+
+    & svg:hover {
+      @apply opacity-80;
+      @apply dark:opacity-80;
+    }
+
     &--center {
       @apply mx-auto text-center;
     }
