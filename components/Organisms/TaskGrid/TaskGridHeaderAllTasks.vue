@@ -11,20 +11,19 @@
           <h6 class="ml-4">{{ labels.all }}</h6>
         </button>
       </div>
-      <div class="w-36 header__col header__col--center">
+      <div class="w-40 header__col header__col--center">
         <h6>{{ labels.status }}</h6>
       </div>
 
-      <div class="w-24 flex-none header__col header__col--center">
+      <div class="w-28 flex-none header__col header__col--center">
         <h6>{{ labels.deadline }}</h6>
       </div>
 
-      <div class="w-1/6 header__col pl-6">
-        <h6>{{ labels.description }}</h6>
-      </div>
-
-      <div class="w-1/4 header__col justify-end">
-        <div class="flex items-center justify-end">actions</div>
+      <div class="w-4/12 header__col pl-6">
+        <div class="flex justify-between items-center w-full">
+          <h6>{{ labels.description }}</h6>
+          <div class="flex items-center justify-end">actions</div>
+        </div>
       </div>
     </div>
   </section>
@@ -60,7 +59,7 @@ export default {
   &__col {
     @apply overflow-hidden flex items-center;
     &--center {
-      @apply mx-auto text-center;
+      @apply mx-auto text-center justify-center;
     }
     & h6 {
       @apply mb-0;

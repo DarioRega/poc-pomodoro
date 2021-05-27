@@ -1,6 +1,9 @@
 <template>
   <section>
-    <div class="header flex" :class="isStacked && 'header--stacked'">
+    <div
+      class="header flex items-center"
+      :class="isStacked && 'header--stacked'"
+    >
       <div class="header__col task-name">
         <task-target
           :is-selected="isSelected"
@@ -25,7 +28,7 @@
         />
       </div>
 
-      <div class="w-28 flex-none header__col header__col--center">
+      <div class="w-28 flex-none header__col header__col--center relative">
         <task-deadline
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"
@@ -33,16 +36,18 @@
         />
       </div>
 
-      <div class="w-4/12 header__col pl-6 relative">
-        <BrandTextarea
-          v-show="isFirstRow"
-          :value="getCurrentDescription"
-          :name="labels.taskDescription"
-          :is-selected="isSelected"
-          type="task"
-          class="w-full absolute top-0 left-0"
-          @change="handleChangeTaskDescription"
-        />
+      <div class="w-4/12 header__col pl-4">
+        <div class="w-full relative">
+          <BrandTextarea
+            v-show="isFirstRow"
+            :value="getCurrentDescription"
+            :name="labels.taskDescription"
+            :is-selected="isSelected"
+            type="task"
+            class="w-full absolute top-[-1rem] left-0"
+            @change="handleChangeTaskDescription"
+          />
+        </div>
       </div>
     </div>
   </section>
@@ -144,7 +149,7 @@ export default {
     @apply flex-1;
   }
   &__col {
-    @apply flex items-center;
+    @apply flex items-center h-full;
     &--center {
       @apply mx-auto text-center justify-center;
     }
