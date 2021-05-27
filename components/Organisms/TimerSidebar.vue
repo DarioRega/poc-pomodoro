@@ -3,13 +3,18 @@
     class="flex flex-col justify-center items-center"
     :class="isStacked ? 'timer-sidebar--stacked' : 'timer-sidebar'"
   >
-    <div v-show="!isStacked" class="mb-3 max-w-full">
+    <div
+      v-show="!isStacked && shouldShowSessionInformation"
+      class="mb-3 max-w-full px-4"
+    >
       <slot name="currentSessionInformations" />
     </div>
 
     <timer-sidebar-expander-stacked
       v-show="isStacked"
       class="mb-3"
+      :should-show-session-information="shouldShowSessionInformation"
+      :has-informations="hasInformations"
       @click="handleScreenExpand"
     />
 
@@ -93,12 +98,18 @@ export default {
     isSessionPending() {
       return this.status.includes(POMODORO_STATUS.SESSION.pending)
     },
+    hasInformations() {
+      return !!this.$slots.currentSessionInformations
+    },
     shouldShowStartText() {
       return (
         (this.status.includes('PENDING') || this.status.includes('PAUSED')) &&
         !this.isSessionPending &&
         !this.isStacked
       )
+    },
+    shouldShowSessionInformation() {
+      return !this.status.includes('PENDING') && !this.isSessionPending
     },
     isStatusPendingAndSessionAlreadyStarted() {
       return this.status.includes('PENDING') && !this.isSessionPending

@@ -1,29 +1,67 @@
 <template>
-  <div class="inline-flex flex-wrap justify-center items-center max-w-full">
-    <div
-      class="
-        inline-flex
-        justify-center
-        items-center
-        heading-current-time__container
-      "
-      :class="isStacked ? 'flex-col' : 'flex-row'"
+  <div
+    class="
+      inline-flex
+      flex-wrap
+      justify-center
+      items-start
+      max-w-full
+      min-w-[5rem]
+    "
+  >
+    <transition
+      enter-active-class="transform transition-all duration-500 delay-500"
+      enter-class="-translate-x-80"
+      enter-to-class="translate-x-0"
+      leave-active-class="transform transition ease-in duration-200 delay-0"
+      leave-class="translate-x-0"
+      leave-to-class="-translate-x-80"
     >
-      <h2>
-        {{ currentTime | getOnlyHours }}
-      </h2>
-      <h2 v-if="!isStacked">:</h2>
-      <h2>
-        {{ currentTime | getOnlyMinutes }}
-      </h2>
-    </div>
-    <div v-if="!is24h && !isStacked" class="flex-col items-center ml-3">
-      <p class="am-pm" :class="isAM && 'active'">AM</p>
-      <p class="am-pm" :class="!isAM && 'active'">PM</p>
-    </div>
-    <p v-if="!is24h && isStacked" class="am-pm active">
-      {{ currentTime | getOnlyAmPm }}
-    </p>
+      <div
+        v-show="!isStacked"
+        class="
+          inline-flex
+          justify-center
+          items-center
+          heading-current-time__container
+          flex-row
+        "
+      >
+        <h2>
+          {{ currentTime | getOnlyHours }}
+        </h2>
+        <h2>:</h2>
+
+        <h2>
+          {{ currentTime | getOnlyMinutes }}
+        </h2>
+        <div v-show="!is24h && !isStacked" class="flex-col items-center ml-3">
+          <p class="am-pm" :class="isAM && 'active'">AM</p>
+          <p class="am-pm" :class="!isAM && 'active'">PM</p>
+        </div>
+      </div>
+    </transition>
+
+    <transition
+      enter-active-class="transform transition-all duration-500 delay-500"
+      enter-class="-translate-x-80"
+      enter-to-class="translate-x-0"
+      leave-active-class="transform transition ease-in duration-200 delay-0"
+      leave-class="translate-x-0"
+      leave-to-class="-translate-x-80"
+    >
+      <div v-show="isStacked" class="heading-current-time__container">
+        <h2>
+          {{ currentTime | getOnlyHours }}
+        </h2>
+        <h2>
+          {{ currentTime | getOnlyMinutes }}
+        </h2>
+        <p v-show="!is24h && isStacked" class="am-pm active">
+          {{ currentTime | getOnlyAmPm }}
+        </p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -107,7 +145,7 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .heading-current-time__container {
   h2 {
     @apply mb-0 text-xl font-semibold leading-none font-timer text-dark-blue;
@@ -123,8 +161,10 @@ export default {
   }
 }
 .am-pm {
-  @apply text-xs font-bold transition-colors duration-200 font-timer text-dark-gray;
-
+  @apply text-xs font-bold font-timer text-dark-gray;
+  &:not(.active) {
+    @apply transition-colors duration-200;
+  }
   @screen md {
     @apply text-sm;
   }
