@@ -12,7 +12,7 @@
     >
       <task-grid-body-all-tasks
         v-for="(task, index) in tasks"
-        :key="uniqueKey()"
+        :key="task.id"
         :task="task"
         :is-selected="currentTaskSelected.id === task.id"
         :current-task-selected="currentTaskSelected"
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
@@ -101,9 +100,6 @@ export default {
     this.verifyGridOverflow()
   },
   methods: {
-    uniqueKey() {
-      return uuidv4()
-    },
     verifyGridOverflow() {
       this.isOverflowing =
         this.$refs.containerTasks.offsetHeight <
