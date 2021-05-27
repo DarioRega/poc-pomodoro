@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="header flex">
-      <div class="header__col flex-1">
+    <div class="header flex" :class="isStacked && 'header--stacked'">
+      <div class="header__col task-name">
         <task-target
           :is-selected="isSelected"
           :is-complete="task.status === TASK_STATUS_VALUES.DONE"
@@ -16,7 +16,7 @@
           @change="handleChangeTaskName"
         />
       </div>
-      <div class="w-36 header__col header__col--center">
+      <div class="w-40 header__col header__col--center">
         <task-select-status
           :name="labels.taskStatusName"
           :value="task.status"
@@ -140,6 +140,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
+  .task-name {
+    @apply flex-1;
+  }
   &__col {
     @apply flex items-center;
     &--center {
@@ -147,6 +150,11 @@ export default {
     }
     & h6 {
       @apply mb-0;
+    }
+  }
+  &--stacked {
+    .task-name {
+      @apply w-1/4 flex-none;
     }
   }
 }
