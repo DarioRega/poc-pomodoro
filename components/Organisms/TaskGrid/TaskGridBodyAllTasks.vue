@@ -1,11 +1,14 @@
 <template>
   <section>
-    <div class="header flex" :class="isStacked && 'header--stacked'">
+    <div
+      class="header flex items-center"
+      :class="isStacked && 'header--stacked'"
+    >
       <div class="header__col task-name">
         <task-target
           :is-selected="isSelected"
-          :is-complete="task.status === TASK_STATUS_VALUES.DONE"
-          @click="handleClickTaskTarget"
+          :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
+          @click="$emit('onTargetClick', task.id)"
         />
         <brand-input
           :value="task.name"
@@ -13,36 +16,31 @@
           :is-selected="isSelected"
           type="task"
           class="w-full px-3"
-          @change="handleChangeTaskName"
+          @change="$emit('onTaskNameChange', $event, task.id)"
         />
       </div>
       <div class="w-40 header__col header__col--center">
         <task-select-status
           :name="labels.taskStatusName"
           :value="task.status"
-          :status-text="task.status"
           :options="TASK_STATES"
+          @change="$emit('onTaskStatusChange', $event, task.id)"
         />
       </div>
 
-      <div class="w-28 flex-none header__col header__col--center">
+      <div class="w-28 flex-none header__col header__col--center relative">
         <task-deadline
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"
-          @change="handleChangeDeadline"
+          :is-selected="isSelected"
+          @change="$emit('onDeadlineChange', $event, task.id)"
         />
       </div>
 
-      <div class="w-4/12 header__col pl-6 relative">
-        <BrandTextarea
-          v-show="isFirstRow"
-          :value="getCurrentDescription"
-          :name="labels.taskDescription"
-          :is-selected="isSelected"
-          type="task"
-          class="w-full absolute top-0 left-0"
-          @change="handleChangeTaskDescription"
-        />
+      <div class="w-4/12 header__col">
+        <div class="w-full px-4 relative">
+          <slot />
+        </div>
       </div>
     </div>
   </section>
@@ -54,7 +52,6 @@ import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
-import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 
 export default {
   name: 'TaskGridBodyAllTasks',
@@ -63,7 +60,6 @@ export default {
     BrandInput,
     TaskSelectStatus,
     TaskDeadline,
-    BrandTextarea,
   },
   props: {
     isSelected: {
@@ -85,14 +81,6 @@ export default {
     currentTaskSelected: {
       type: Object,
       default: () => ({}),
-    },
-    /*
-      Only display the description of the first row,
-      change description depending the currentTaskSelected
-     */
-    isFirstRow: {
-      type: Boolean,
-      default: false,
     },
     /*
       If the sidebar is stacked or normal width
@@ -117,24 +105,6 @@ export default {
         }
       })
     },
-    getCurrentDescription() {
-      return this.currentTaskSelected.description || ''
-    },
-  },
-  methods: {
-    handleClickTaskTarget() {
-      // TODO handle
-    },
-    handleChangeTaskName(value) {
-      // TODO handle
-    },
-    handleChangeTaskDescription(value) {
-      // TODO handle
-      // add in handler these params  => (this.currentTaskSelected.id, value)
-    },
-    handleChangeDeadline(dateTime, dateString) {
-      // TODO handle
-    },
   },
 }
 </script>
@@ -144,7 +114,7 @@ export default {
     @apply flex-1;
   }
   &__col {
-    @apply flex items-center;
+    @apply flex items-center h-full;
     &--center {
       @apply mx-auto text-center justify-center;
     }

@@ -2,13 +2,14 @@
   <div
     class="
       inline-flex
-      relative
       flex-col
       justify-center
       items-center
       self-center
+      h-full
       task-deadline
     "
+    :class="[value && 'relative', isSelected && 'selected']"
   >
     <p
       v-if="value"
@@ -17,15 +18,35 @@
       {{ value }}
     </p>
     <button
-      v-show="!showActions"
+      v-if="!value"
+      tabindex="0"
+      class="task-deadline__icon inline-flex focus:outline-none"
+      @click="isOpen = true"
+    >
+      <icon icon-name="addCalendar" />
+    </button>
+
+    <button
+      v-show="!showActions && value"
       class="task-deadline__toggler absolute top-[1.2rem] inline-flex"
       @click="showActions = !showActions"
     >
       <icon icon-name="threeDots" class="w-4" />
     </button>
-    <div class="task-deadline__actions absolute top-[1.7rem] inline-flex">
+    <div
+      v-if="showActions"
+      class="
+        task-deadline__actions
+        absolute
+        top-[1.7rem]
+        z-20
+        bg-light-white
+        dark:bg-dark-blue
+        py-2
+        px-1
+      "
+    >
       <button
-        v-if="value && showActions"
         tabindex="0"
         class="task-deadline__icon mr-2 focus:outline-none"
         @click="isOpen = true"
@@ -33,15 +54,6 @@
         <icon icon-name="editCalendar" />
       </button>
       <button
-        v-if="!value"
-        tabindex="0"
-        class="task-deadline__icon ml-2 focus:outline-none"
-        @click="isOpen = true"
-      >
-        <icon icon-name="addCalendar" />
-      </button>
-      <button
-        v-else-if="value && showActions"
         tabindex="0"
         class="task-deadline__icon ml-2 focus:outline-none"
         @click="handleRemoveValue"
@@ -102,6 +114,10 @@ export default {
       type: String,
       required: true,
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -132,7 +148,7 @@ export default {
       this.isOpen = false
     },
     onChange(dateTime, dateString) {
-      this.$emit('change', dateTime, dateString)
+      this.$emit('change', { dateTime, dateString, locale: this.locale })
       this.handleCloseActionsCalendar()
     },
     setCalendarInstance() {
@@ -153,21 +169,6 @@ export default {
 </script>
 
 <style lang="scss">
-.task--selected {
-  .task-deadline {
-    &__value,
-    &__icon,
-    &__toggler {
-      @apply text-dark-blue  #{!important};
-      @apply dark:text-celeste #{!important};
-      &:focus {
-        @apply text-dark-indigo #{!important};
-        @apply dark:text-light-indigo #{!important};
-      }
-    }
-  }
-}
-
 .task-deadline {
   &__icon,
   &__toggler {
@@ -181,7 +182,22 @@ export default {
       @apply dark:text-light-indigo;
     }
     &:not(.task-deadline__toggler) > svg {
-      @apply w-6 h-6;
+      @apply w-5 h-5;
+    }
+  }
+}
+
+.task-deadline.selected {
+  .task-deadline {
+    &__value,
+    &__icon,
+    &__toggler {
+      @apply text-dark-blue  #{!important};
+      @apply dark:text-celeste #{!important};
+      &:focus {
+        @apply text-dark-indigo #{!important};
+        @apply dark:text-light-indigo #{!important};
+      }
     }
   }
 }

@@ -31,6 +31,8 @@
             class="
               overflow-auto
               absolute
+              bg-light-white
+              dark:bg-dark-blue
               z-10
               mt-2
               w-full
@@ -175,7 +177,7 @@ export default {
     selectOption(item) {
       this.localValue = item
       this.isOpen = false
-      this.$emit('change', item)
+      this.$emit('change', item.id)
     },
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey
