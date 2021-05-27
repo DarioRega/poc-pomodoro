@@ -14,9 +14,6 @@ export default {
     isStacked: {
       control: { type: 'radio', options: [true, false] },
     },
-    isFirstRow: {
-      control: { type: 'radio', options: [true, false] },
-    },
     currentTaskSelected: {
       control: { type: 'object' },
     },
@@ -41,7 +38,6 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-  isFirstRow: true,
   currentTaskSelected: {
     id: 4,
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
@@ -60,7 +56,6 @@ Default.args = {
 export const StackedLayout = Template.bind({})
 StackedLayout.args = {
   isStacked: true,
-  isFirstRow: true,
   currentTaskSelected: {
     id: 4,
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
@@ -79,7 +74,6 @@ StackedLayout.args = {
 export const Selected = Template.bind({})
 Selected.args = {
   isSelected: true,
-  isFirstRow: true,
   currentTaskSelected: {
     id: 3,
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
@@ -96,7 +90,6 @@ Selected.args = {
 
 export const TaskDone = Template.bind({})
 TaskDone.args = {
-  isFirstRow: true,
   currentTaskSelected: {
     id: 2,
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
@@ -114,7 +107,6 @@ TaskDone.args = {
 export const SelectedDoneTask = Template.bind({})
 SelectedDoneTask.args = {
   isSelected: true,
-  isFirstRow: true,
   currentTaskSelected: {
     id: 1,
     description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,

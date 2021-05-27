@@ -7,7 +7,7 @@
       <div class="header__col task-name">
         <task-target
           :is-selected="isSelected"
-          :is-complete="task.status === TASK_STATUS_VALUES.DONE"
+          :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
           @click="$emit('onTargetClick', task.id)"
         />
         <brand-input
@@ -23,7 +23,6 @@
         <task-select-status
           :name="labels.taskStatusName"
           :value="task.status"
-          :status-text="task.status"
           :options="TASK_STATES"
           @change="$emit('onTaskStatusChange', $event, task.id)"
         />
@@ -38,17 +37,9 @@
         />
       </div>
 
-      <div class="w-4/12 header__col pl-4">
-        <div class="w-full relative">
-          <BrandTextarea
-            v-show="isFirstRow"
-            :value="getCurrentDescription"
-            :name="labels.taskDescription"
-            :is-selected="isSelected"
-            type="task"
-            class="w-full absolute top-[-1rem] left-0"
-            @change="$emit('onTaskDescriptionChange', $event)"
-          />
+      <div class="w-4/12 header__col">
+        <div class="w-full px-4 relative">
+          <slot name="currentDescription" />
         </div>
       </div>
     </div>
@@ -61,7 +52,6 @@ import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
-import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 
 export default {
   name: 'TaskGridBodyAllTasks',
@@ -70,7 +60,6 @@ export default {
     BrandInput,
     TaskSelectStatus,
     TaskDeadline,
-    BrandTextarea,
   },
   props: {
     isSelected: {
@@ -94,14 +83,6 @@ export default {
       default: () => ({}),
     },
     /*
-      Only display the description of the first row,
-      change description depending the currentTaskSelected
-     */
-    isFirstRow: {
-      type: Boolean,
-      default: false,
-    },
-    /*
       If the sidebar is stacked or normal width
     */
     isStacked: {
@@ -123,24 +104,6 @@ export default {
           name: FAKER_TASK_STATUS_NAMES[x],
         }
       })
-    },
-    getCurrentDescription() {
-      return this.currentTaskSelected.description || ''
-    },
-  },
-  methods: {
-    handleClickTaskTarget() {
-      // TODO handle
-    },
-    handleChangeTaskName(value) {
-      // TODO handle
-    },
-    handleChangeTaskDescription(value) {
-      // TODO handle
-      // add in handler these params  => (this.currentTaskSelected.id, value)
-    },
-    handleChangeDeadline(dateTime, dateString) {
-      // TODO handle
     },
   },
 }
