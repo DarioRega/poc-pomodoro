@@ -148,7 +148,7 @@ export default {
       this.isOpen = false
     },
     onChange(dateTime, dateString) {
-      this.$emit('change', dateTime, dateString)
+      this.$emit('change', { dateTime, dateString, locale: this.locale })
       this.handleCloseActionsCalendar()
     },
     setCalendarInstance() {
