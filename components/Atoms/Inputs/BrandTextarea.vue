@@ -40,10 +40,6 @@ export default {
       type: String,
       required: true,
     },
-    isSelected: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -54,13 +50,16 @@ export default {
     hasErrors() {
       return !!this.$slots.errors
     },
+    isSelected() {
+      return this.type === 'task'
+    },
   },
   mounted() {
     this.localValue = this.value
   },
   methods: {
-    onChange(value) {
-      this.$emit('change', value)
+    onChange(evt) {
+      this.$emit('change', evt.target.value)
     },
   },
 }
