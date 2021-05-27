@@ -16,6 +16,11 @@
       :is-stacked="isStacked"
       :labels="labels.body"
       class="mb-3"
+      @onTargetClick="handleClickTaskTarget"
+      @onTaskNameChange="handleChangeTaskName"
+      @onTaskStatusChange="handleChangeTaskStatus"
+      @onTaskDescriptionChange="handleChangeTaskDescription"
+      @onDeadlineChange="handleChangeDeadline"
     />
   </section>
 </template>
@@ -58,17 +63,20 @@ export default {
     }
   },
   methods: {
-    handleClickTaskTarget() {
+    handleClickTaskTarget(taskId) {
       // TODO handle
     },
-    handleChangeTaskName(value) {
+    handleChangeTaskName(value, taskId) {
+      // TODO handle
+    },
+    handleChangeTaskStatus(statusId, taskId) {
       // TODO handle
     },
     handleChangeTaskDescription(value) {
       // TODO handle
-      // add in handler these params  => (this.currentTaskSelected.id, value)
+      // /!\ add in handler these params  => (this.currentTaskSelected.id, value)
     },
-    handleChangeDeadline(dateTime, dateString) {
+    handleChangeDeadline({ dateTime, dateString, locale }, taskId) {
       // TODO handle
     },
   },

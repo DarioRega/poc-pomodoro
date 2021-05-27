@@ -8,7 +8,7 @@
         <task-target
           :is-selected="isSelected"
           :is-complete="task.status === TASK_STATUS_VALUES.DONE"
-          @click="handleClickTaskTarget"
+          @click="$emit('onTargetClick', task.id)"
         />
         <brand-input
           :value="task.name"
@@ -16,7 +16,7 @@
           :is-selected="isSelected"
           type="task"
           class="w-full px-3"
-          @change="handleChangeTaskName"
+          @change="$emit('onTaskNameChange', $event, task.id)"
         />
       </div>
       <div class="w-40 header__col header__col--center">
@@ -25,6 +25,7 @@
           :value="task.status"
           :status-text="task.status"
           :options="TASK_STATES"
+          @change="$emit('onTaskStatusChange', $event, task.id)"
         />
       </div>
 
@@ -32,7 +33,8 @@
         <task-deadline
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"
-          @change="handleChangeDeadline"
+          :is-selected="isSelected"
+          @change="$emit('onDeadlineChange', $event, task.id)"
         />
       </div>
 
@@ -45,7 +47,7 @@
             :is-selected="isSelected"
             type="task"
             class="w-full absolute top-[-1rem] left-0"
-            @change="handleChangeTaskDescription"
+            @change="$emit('onTaskDescriptionChange', $event)"
           />
         </div>
       </div>
