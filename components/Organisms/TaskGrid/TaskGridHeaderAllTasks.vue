@@ -5,9 +5,12 @@
       :class="isStacked && 'header--stacked'"
     >
       <div class="header__col task-name">
-        <button class="inline-flex items-center justify-center">
-          <icon v-if="isToggled" icon-name="info" class="w-4" />
-          <icon v-else icon-name="close" class="w-4" />
+        <button
+          class="inline-flex items-center justify-center"
+          @click="$emit('onToggle')"
+        >
+          <icon v-show="isToggled" icon-name="nakedArrowDown" class="w-4" />
+          <icon v-show="!isToggled" icon-name="nakedArrowUp" class="w-4" />
           <h6 class="ml-4">{{ labels.all }}</h6>
         </button>
       </div>

@@ -29,7 +29,12 @@ const Template = (args, { argTypes }) => ({
       }
     },
   },
-  template: `<task-grid-header-all-tasks :labels='getLabels' />`,
+  template: `<task-grid-header-all-tasks v-bind='$props' :labels='getLabels' />`,
 })
 
 export const Default = Template.bind({})
+
+export const Toggled = Template.bind({})
+Toggled.args = {
+  isToggled: true,
+}

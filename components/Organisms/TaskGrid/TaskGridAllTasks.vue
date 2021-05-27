@@ -5,44 +5,55 @@
       :is-toggled="isToggled"
       :is-stacked="isStacked"
       class="mb-4"
+      @onToggle="isToggled = !isToggled"
     />
-    <div
-      ref="containerTasks"
-      class="max-h-[24rem] min-h-[24rem] overflow-y-auto"
+    <transition
+      enter-active-class="transition duration-200 ease-in"
+      enter-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-class="opacity-100"
+      leave-to-class="opacity-0"
     >
-      <task-grid-body-all-tasks
-        v-for="(task, index) in tasks"
-        :key="task.id"
-        :task="task"
-        :is-selected="currentTaskSelected.id === task.id"
-        :current-task-selected="currentTaskSelected"
-        :is-first-row="index === 0"
-        :is-stacked="isStacked"
-        :labels="labels.body"
-        class="mb-3"
-        @onTargetClick="handleClickTaskTarget"
-        @onTaskNameChange="handleChangeTaskName"
-        @onTaskStatusChange="handleChangeTaskStatus"
-        @onTaskDescriptionChange="handleChangeTaskDescription"
-        @onDeadlineChange="handleChangeDeadline"
+      <div
+        v-show="isToggled"
+        ref="containerTasks"
+        class="max-h-[24rem] min-h-[24rem] overflow-y-auto"
       >
-        <div
-          class="fixed w-4/12 -mt-4 right-0 px-4"
-          :class="isOverflowing ? 'mr-4' : 'mr-0'"
+        <task-grid-body-all-tasks
+          v-for="(task, index) in tasks"
+          :key="task.id"
+          :task="task"
+          :is-selected="currentTaskSelected.id === task.id"
+          :current-task-selected="currentTaskSelected"
+          :is-first-row="index === 0"
+          :is-stacked="isStacked"
+          :labels="labels.body"
+          class="mb-3"
+          @onTargetClick="handleClickTaskTarget"
+          @onTaskNameChange="handleChangeTaskName"
+          @onTaskStatusChange="handleChangeTaskStatus"
+          @onTaskDescriptionChange="handleChangeTaskDescription"
+          @onDeadlineChange="handleChangeDeadline"
         >
-          <BrandTextarea
-            v-show="index === 0"
-            :value="currentTaskSelected.description"
-            :name="labels.body.taskDescription"
-            :is-selected="isSelected"
-            type="task"
-            class="w-full block top-0 left-0 right-0"
-            :class="isOverflowing ? 'pr-3' : 'pr-0'"
-            @change="handleChangeTaskDescription"
-          />
-        </div>
-      </task-grid-body-all-tasks>
-    </div>
+          <div
+            class="fixed w-4/12 -mt-4 right-0 px-4"
+            :class="isOverflowing ? 'mr-4' : 'mr-0'"
+          >
+            <BrandTextarea
+              v-show="index === 0"
+              :value="currentTaskSelected.description"
+              :name="labels.body.taskDescription"
+              :is-selected="isSelected"
+              type="task"
+              class="w-full block top-0 left-0 right-0"
+              :class="isOverflowing ? 'pr-3' : 'pr-0'"
+              @change="handleChangeTaskDescription"
+            />
+          </div>
+        </task-grid-body-all-tasks>
+      </div>
+    </transition>
   </section>
 </template>
 
