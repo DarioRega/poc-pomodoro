@@ -1,12 +1,22 @@
 <template>
   <div
     class="flex items-center mb-0 transition-colors duration-200"
-    :class="classes"
+    :class="[classes, isReverse ? 'flex-row-reverse' : 'flex-row']"
     :tabindex="clickable && '0'"
     @keydown="handleKeyDown"
     @click="handleClick"
   >
-    <icon icon-name="pin" class="mr-3 w-4 h-4" />
+    <!--    TODO ADD WHAT INPUT FOCUS-->
+    <a
+      role="button"
+      class="focus:outline-none z-40"
+      :class="isReverse ? 'ml-3' : 'mr-3'"
+      tabindex="0"
+      @keydown="handleKeyDownIcon"
+      @click="handleClickIcon"
+    >
+      <icon :icon-name="iconName" class="w-4 h-4" />
+    </a>
     <slot name="label" />
   </div>
 </template>
@@ -26,6 +36,10 @@ export default {
       type: String,
       default: '',
     },
+    isReverse: {
+      type: Boolean,
+      default: false,
+    },
     classes: {
       type: String,
       default: 'text-dark-gray hover:text-dark-blue dark:hover:text-celeste',
@@ -37,13 +51,23 @@ export default {
   },
   methods: {
     handleKeyDown(evt) {
-      if (evt.keyCode === 13) {
+      if (evt.keyCode === 13 && this.clickable) {
         this.$emit('click')
       }
     },
     handleClick() {
       if (this.clickable) {
         this.$emit('click')
+      }
+    },
+    handleKeyDownIcon(evt) {
+      if (evt.keyCode === 13 && this.clickable) {
+        this.$emit('iconClick')
+      }
+    },
+    handleClickIcon() {
+      if (this.clickable) {
+        this.$emit('iconClick')
       }
     },
   },

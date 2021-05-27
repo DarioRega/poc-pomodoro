@@ -23,14 +23,24 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { LabelWithIcon, Icon },
+  methods: {
+    handleClick() {
+      alert('click')
+    },
+    handleIconClick() {
+      alert('iconClick')
+    },
+  },
   computed: {
     shouldApplySelectedClass() {
       return args.isSelected
     },
   },
   template: `
-    <div class="max-w-sm">
-    <label-with-icon v-bind="$props" :class="shouldApplySelectedClass && 'selected'">
+    <div class="max-w-xs">
+    <label-with-icon v-bind="$props" :class="[shouldApplySelectedClass && 'selected',
+      ${args.isReverse} ? 'justify-between' : ''
+    ]" @click="handleClick" @iconClick="handleIconClick">
       <template v-slot:label>${args.label}</template>
     </label-with-icon>
     </div>`,
@@ -51,15 +61,24 @@ WithCustomClasses.args = {
 
 export const Clickable = Template.bind({})
 Clickable.args = {
-  label: `<a role="button" class="label-with-icon__slot">Deployment API</a>`,
+  label: `<p class="label-with-icon__slot">Deployment API</p>`,
   iconName: 'pin',
   clickable: true,
   classes: 'label-with-icon--clickable',
 }
 
+export const ClickableReverse = Template.bind({})
+ClickableReverse.args = {
+  label: `<p role="button" class="label-with-icon__slot">Deployment API</p>`,
+  iconName: 'eye',
+  clickable: true,
+  isReverse: true,
+  classes: 'sidebar-subtitle sidebar-subtitle--with-toggle',
+}
+
 export const ClickableSelected = Template.bind({})
 ClickableSelected.args = {
-  label: `<a role="button" class="label-with-icon__slot">Deployment API</a>`,
+  label: `<p role="button" class="label-with-icon__slot">Deployment API</p>`,
   iconName: 'pin',
   isSelected: true,
   clickable: true,
