@@ -4,7 +4,7 @@
       :labels="labels.header"
       :is-toggled="isToggled"
       :is-stacked="isStacked"
-      class="mb-3 pb-2 border-b-2 border-dark-blue dark:border-celeste"
+      class="mb-3"
     />
     <task-grid-body-all-tasks
       v-for="(task, index) in tasks"
@@ -84,7 +84,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .header {
-  .task-name {
+  & .task-name {
     @apply flex-1;
   }
   &__col {

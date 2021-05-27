@@ -7,6 +7,12 @@ export default {
     labels: {
       control: { type: 'object' },
     },
+    isToggled: {
+      control: { type: 'radio', options: [true, false] },
+    },
+    isStacked: {
+      control: { type: 'radio', options: [true, false] },
+    },
   },
 }
 
