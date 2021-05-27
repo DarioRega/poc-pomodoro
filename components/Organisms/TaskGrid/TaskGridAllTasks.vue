@@ -6,10 +6,13 @@
       :is-stacked="isStacked"
       class="mb-4"
     />
-    <div ref="test" class="max-h-[24rem] overflow-y-auto">
+    <div
+      ref="containerTasks"
+      class="max-h-[24rem] min-h-[24rem] overflow-y-auto"
+    >
       <task-grid-body-all-tasks
         v-for="(task, index) in tasks"
-        :key="task.id"
+        :key="uniqueKey()"
         :task="task"
         :is-selected="currentTaskSelected.id === task.id"
         :current-task-selected="currentTaskSelected"
@@ -30,7 +33,7 @@
           <BrandTextarea
             v-show="index === 0"
             :value="currentTaskSelected.description"
-            :name="labels.taskDescription"
+            :name="labels.body.taskDescription"
             :is-selected="isSelected"
             type="task"
             class="w-full block top-0 left-0 right-0"
@@ -44,6 +47,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
@@ -87,18 +91,23 @@ export default {
       isOverflowing: false,
     }
   },
+
   watch: {
     tasksArrayLength() {
-      this.checkGridOverflow()
+      this.verifyGridOverflow()
     },
   },
   mounted() {
-    this.checkGridOverflow()
+    this.verifyGridOverflow()
   },
   methods: {
-    checkGridOverflow() {
+    uniqueKey() {
+      return uuidv4()
+    },
+    verifyGridOverflow() {
       this.isOverflowing =
-        this.$refs.test.offsetHeight < this.$refs.test.scrollHeight
+        this.$refs.containerTasks.offsetHeight <
+        this.$refs.containerTasks.scrollHeight
     },
     handleClickTaskTarget(taskId) {
       // TODO handle

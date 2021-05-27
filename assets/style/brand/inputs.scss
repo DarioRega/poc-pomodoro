@@ -28,6 +28,7 @@
     &--task {
       @apply py-0.5 px-1 #{!important};
       @apply text-dark-gray border-transparent border-dashed shadow-none;
+      @apply dark:text-dark-gray;
       &:hover {
         @apply border-dark-gray;
       }
