@@ -9,7 +9,7 @@
       h-full
       task-deadline
     "
-    :class="value && 'relative'"
+    :class="[value && 'relative', isSelected && 'selected']"
   >
     <p
       v-if="value"
@@ -114,6 +114,10 @@ export default {
       type: String,
       required: true,
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -165,21 +169,6 @@ export default {
 </script>
 
 <style lang="scss">
-.task--selected {
-  .task-deadline {
-    &__value,
-    &__icon,
-    &__toggler {
-      @apply text-dark-blue  #{!important};
-      @apply dark:text-celeste #{!important};
-      &:focus {
-        @apply text-dark-indigo #{!important};
-        @apply dark:text-light-indigo #{!important};
-      }
-    }
-  }
-}
-
 .task-deadline {
   &__icon,
   &__toggler {
@@ -194,6 +183,21 @@ export default {
     }
     &:not(.task-deadline__toggler) > svg {
       @apply w-5 h-5;
+    }
+  }
+}
+
+.task-deadline.selected {
+  .task-deadline {
+    &__value,
+    &__icon,
+    &__toggler {
+      @apply text-dark-blue  #{!important};
+      @apply dark:text-celeste #{!important};
+      &:focus {
+        @apply text-dark-indigo #{!important};
+        @apply dark:text-light-indigo #{!important};
+      }
     }
   }
 }
