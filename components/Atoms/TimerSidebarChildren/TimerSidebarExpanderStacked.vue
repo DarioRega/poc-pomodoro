@@ -8,6 +8,7 @@
     </button>
     <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
     <button
+      v-show="shouldShowSessionInformation && hasInformations"
       class="focus:outline-none timer-sidebar__expander__button h-auto"
       @mouseenter="isInformationTooltipVisible = true"
       @onmouseleave="isInformationTooltipVisible = false"
@@ -23,6 +24,16 @@ import Icon from '../Icon'
 export default {
   name: 'TimerSidebarExpanderStacked',
   components: { Icon },
+  props: {
+    shouldShowSessionInformation: {
+      type: Boolean,
+      default: false,
+    },
+    hasInformations: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       isInformationTooltipVisible: false,

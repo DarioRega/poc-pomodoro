@@ -32,3 +32,18 @@
 button:focus {
   @apply outline-none;
 }
+
+.sidebar-subtitle {
+  @apply text-dark-blue font-semibold;
+  @apply dark:text-celeste;
+  &:focus {
+    @apply outline-none;
+  }
+  //TODO add what input focus on svg
+  &--with-toggle {
+    a, svg, button {
+      @apply text-dark-indigo;
+      @apply dark:text-light-indigo;
+    }
+  }
+}
