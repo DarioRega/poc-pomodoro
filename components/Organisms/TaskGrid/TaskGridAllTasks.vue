@@ -6,7 +6,7 @@
       :is-stacked="isStacked"
       class="mb-4"
     />
-    <div class="max-h-[24rem] overflow-y-auto">
+    <div ref="test" class="max-h-[24rem] overflow-y-auto">
       <task-grid-body-all-tasks
         v-for="(task, index) in tasks"
         :key="task.id"
@@ -23,14 +23,18 @@
         @onTaskDescriptionChange="handleChangeTaskDescription"
         @onDeadlineChange="handleChangeDeadline"
       >
-        <div class="fixed w-4/12 -mt-4 right-0 px-4 mr-4">
+        <div
+          class="fixed w-4/12 -mt-4 right-0 px-4"
+          :class="isOverflowing ? 'mr-4' : 'mr-0'"
+        >
           <BrandTextarea
             v-show="index === 0"
             :value="currentTaskSelected.description"
             :name="labels.taskDescription"
             :is-selected="isSelected"
             type="task"
-            class="w-full block top-0 left-0 right-0 pr-3"
+            class="w-full block top-0 left-0 right-0"
+            :class="isOverflowing ? 'pr-3' : 'pr-0'"
             @change="handleChangeTaskDescription"
           />
         </div>
@@ -72,13 +76,30 @@ export default {
       type: Boolean,
       default: false,
     },
+    tasksArrayLength: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       isToggled: false,
+      isOverflowing: false,
     }
   },
+  watch: {
+    tasksArrayLength() {
+      this.checkGridOverflow()
+    },
+  },
+  mounted() {
+    this.checkGridOverflow()
+  },
   methods: {
+    checkGridOverflow() {
+      this.isOverflowing =
+        this.$refs.test.offsetHeight < this.$refs.test.scrollHeight
+    },
     handleClickTaskTarget(taskId) {
       // TODO handle
     },

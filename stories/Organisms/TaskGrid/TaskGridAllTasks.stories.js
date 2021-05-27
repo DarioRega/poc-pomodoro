@@ -34,8 +34,11 @@ const Template = (args, { argTypes }) => ({
         },
       }
     },
+    getTaskArrayLength() {
+      return args.tasks.length
+    },
   },
-  template: `<task-grid-all-tasks v-bind='$props' :labels='getLabels' />`,
+  template: `<task-grid-all-tasks v-bind='$props' :labels='getLabels' :tasks-array-length='getTaskArrayLength' />`,
 })
 
 export const Default = Template.bind({})
