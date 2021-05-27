@@ -99,3 +99,21 @@
   }
 }
 
+// AUTOFILL STYLE
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active
+{
+  -webkit-box-shadow: 0 0 0 30px #F9F9F9 inset !important;
+  -webkit-text-fill-color: #182532 !important;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active
+{
+  -webkit-box-shadow: 0 0 0 30px #182532 inset !important;
+  -webkit-text-fill-color: #EDF2FB !important;
+}
