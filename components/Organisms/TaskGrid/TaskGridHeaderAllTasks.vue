@@ -1,7 +1,10 @@
 <template>
   <section>
-    <div class="header flex overflow-hidden">
-      <div class="header__col flex-1">
+    <div
+      class="header flex overflow-hidden"
+      :class="isStacked && 'header--stacked'"
+    >
+      <div class="header__col task-name">
         <button class="inline-flex items-center justify-center">
           <icon v-if="isToggled" icon-name="info" class="w-4" />
           <icon v-else icon-name="close" class="w-4" />
@@ -42,11 +45,18 @@ export default {
       type: Object,
       required: true,
     },
+    isStacked: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
 .header {
+  .task-name {
+    @apply flex-1;
+  }
   &__col {
     @apply overflow-hidden flex items-center;
     &--center {
@@ -54,6 +64,11 @@ export default {
     }
     & h6 {
       @apply mb-0;
+    }
+  }
+  &--stacked {
+    .task-name {
+      @apply w-1/4 flex-none;
     }
   }
 }
