@@ -25,7 +25,7 @@
         />
       </div>
 
-      <div class="w-24 flex-none header__col header__col--center">
+      <div class="w-28 flex-none header__col header__col--center">
         <task-deadline
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"
@@ -33,10 +33,16 @@
         />
       </div>
 
-      <div class="w-1/6 header__col pl-6">task-description</div>
-
-      <div class="w-1/4 header__col justify-end">
-        <div class="flex items-center justify-end">actions</div>
+      <div class="w-4/12 header__col pl-6 relative">
+        <BrandTextarea
+          v-show="isFirstRow"
+          :value="getCurrentDescription"
+          :name="labels.taskDescription"
+          :is-selected="isSelected"
+          type="task"
+          class="w-full absolute top-0 left-0"
+          @change="handleChangeTaskDescription"
+        />
       </div>
     </div>
   </section>
@@ -48,16 +54,19 @@ import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
+import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 
 export default {
   name: 'TaskGridBodyAllTasks',
-  components: { TaskTarget, BrandInput, TaskSelectStatus, TaskDeadline },
+  components: {
+    TaskTarget,
+    BrandInput,
+    TaskSelectStatus,
+    TaskDeadline,
+    BrandTextarea,
+  },
   props: {
     isSelected: {
-      type: Boolean,
-      default: false,
-    },
-    isToggled: {
       type: Boolean,
       default: false,
     },
@@ -69,6 +78,29 @@ export default {
       type: Object,
       required: true,
     },
+    /*
+      Used to get the store current task selected description and id,
+      if we need to emit an edit
+    */
+    currentTaskSelected: {
+      type: Object,
+      default: () => ({}),
+    },
+    /*
+      Only display the description of the first row,
+      change description depending the currentTaskSelected
+     */
+    isFirstRow: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the sidebar is stacked or normal width
+    */
+    isStacked: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
@@ -77,26 +109,32 @@ export default {
     },
     // TODO Should come from the backend with an api call, should come as props here
     TASK_STATES() {
-      const prout = Object.keys(TASK_STATUS_VALUES).map((x, i) => {
+      return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
         return {
           id: i + 1,
           value: TASK_STATUS_VALUES[x],
           name: FAKER_TASK_STATUS_NAMES[x],
         }
       })
-      console.log('GRIDBODY STEAATES', prout)
-      return prout
+    },
+    getCurrentDescription() {
+      return this.currentTaskSelected.description || ''
     },
   },
   methods: {
-    handleClickTaskTarget() {},
+    handleClickTaskTarget() {
+      // TODO handle
+    },
     handleChangeTaskName(value) {
-      //
+      // TODO handle
+    },
+    handleChangeTaskDescription(value) {
+      // TODO handle
+      // add in handler these params  => (this.currentTaskSelected.id, value)
     },
     handleChangeDeadline(dateTime, dateString) {
-      //
+      // TODO handle
     },
-    //
   },
 }
 </script>

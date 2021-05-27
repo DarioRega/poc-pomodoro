@@ -57,6 +57,10 @@
   // text-area only
   &__textarea {
     @apply py-2 px-3;
+
+    &--task {
+      @apply px-2  #{!important};
+    }
   }
 
   // select only

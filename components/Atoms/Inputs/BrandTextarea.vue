@@ -7,7 +7,7 @@
         :aria-label="name"
         :rows="type === 'task' ? 13 : 4"
         class="resize-none brand-input__textarea"
-        :class="[`brand-input__input--${type}`]"
+        :class="[`brand-input__textarea--${type}`, isSelected && 'selected']"
         @change="onChange"
       ></textarea>
       <label v-if="label && type !== 'task'" class="brand-input__label">
@@ -39,6 +39,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
