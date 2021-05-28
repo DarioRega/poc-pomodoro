@@ -17,7 +17,7 @@ export default {
   css: ['~/assets/style/index.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/what-input.js'],
+  plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

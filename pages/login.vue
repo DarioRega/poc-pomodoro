@@ -162,8 +162,8 @@ export default {
         register: 'Sign up instead',
         cantLogin: "Can't log in ?",
         placeholders: {
-          email: 'Email',
-          password: 'Password',
+          email: 'Enter email',
+          password: 'Enter password',
         },
       }
       this.setCurrentStepLabels()

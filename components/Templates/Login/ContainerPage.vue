@@ -11,15 +11,20 @@
       dark:bg-dark-blue
     "
   >
-    <transition-opacity>
-      <div v-show="isLoading">
-        <screen-loader>
-          <h5 class="font-body tracking-wider text-dark-blue dark:text-celeste">
-            {{ loadingLabel }}
-          </h5>
-        </screen-loader>
-      </div>
-    </transition-opacity>
+    <div v-if="hasLoader">
+      <transition-opacity>
+        <div v-show="isLoading">
+          <screen-loader>
+            <h5
+              v-show="loadingLabel"
+              class="font-body tracking-wider text-dark-blue dark:text-celeste"
+            >
+              {{ loadingLabel }}
+            </h5>
+          </screen-loader>
+        </div>
+      </transition-opacity>
+    </div>
     <h1
       class="
         text-dark-indigo
@@ -44,13 +49,17 @@ export default {
   name: 'ContainerPage',
   components: { ScreenLoader },
   props: {
+    hasLoader: {
+      type: Boolean,
+      default: false,
+    },
     isLoading: {
       type: Boolean,
       default: false,
     },
     loadingLabel: {
       type: String,
-      required: true,
+      default: '',
     },
   },
 }
