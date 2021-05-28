@@ -13,16 +13,15 @@
       dark:bg-darker-blue
     "
   >
-    <h3 class="mb-12 text-dark-blue dark:text-celeste">
+    <h4 class="mb-8 text-dark-blue dark:text-celeste">
       {{ greeting }}
-    </h3>
+    </h4>
     <p
       v-if="additionalInfo"
-      class="mb-2 font-bold text-dark-blue dark:text-celeste"
+      class="mb-1 text-left font-bold text-dark-blue dark:text-celeste"
     >
       {{ additionalInfo }}
     </p>
-
     <slot />
   </div>
 </template>

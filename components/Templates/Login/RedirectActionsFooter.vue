@@ -8,7 +8,7 @@
     >
       {{ primaryLabel }}</nuxt-link
     >
-    <p v-show="secondaryLabel" class="text-dark-gray">-</p>
+    <p v-show="secondaryLabel" class="text-dark-gray mx-2">-</p>
     <nuxt-link
       v-show="secondaryLabel"
       :to="secondaryActionRedirect"
