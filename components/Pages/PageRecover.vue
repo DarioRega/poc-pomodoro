@@ -44,7 +44,7 @@ import ContainerRecoveryPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
-  name: 'Recover',
+  name: 'PageRecover',
   components: {
     BrandInput,
     ContainerRecoveryRow,
@@ -118,14 +118,6 @@ export default {
         placeholders: {
           email: 'Enter email',
         },
-      }
-      this.setCurrentStepLabels()
-    },
-    setCurrentStepLabels() {
-      this.currentStep = {
-        ...this.currentStep,
-        stepLabel: this.labels.email,
-        stepLostLabel: this.labels.lostEmail,
       }
     },
   },

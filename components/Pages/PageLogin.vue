@@ -58,7 +58,7 @@ import ContainerLoginPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
-  name: 'Login',
+  name: 'PageLogin',
   components: {
     BrandInput,
     ContainerLoginRow,

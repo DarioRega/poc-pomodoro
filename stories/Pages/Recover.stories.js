@@ -3,11 +3,7 @@ import PageRecover from '@/components/Pages/PageRecover'
 export default {
   title: 'Pages/Recovery',
   component: PageRecover,
-  argTypes: {
-    isDisabled: {
-      control: { type: 'select', options: [true, false] },
-    },
-  },
+  argTypes: {},
 }
 
 const Template = (args, { argTypes }) => ({
