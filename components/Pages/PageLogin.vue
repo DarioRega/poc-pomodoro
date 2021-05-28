@@ -118,7 +118,7 @@ export default {
     },
     handleNextStep() {
       if (this.login.email) {
-        if (this.$regexValidate('email', this.recoveryEmail)) {
+        if (this.$regexValidate('email', this.login.email)) {
           if (this.emailErrorText) {
             this.emailErrorText = ''
           }

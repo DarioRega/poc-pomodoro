@@ -118,7 +118,7 @@ export default {
     },
     handleNextStep() {
       if (this.login.email) {
-        if (this.validateEmail()) {
+        if (this.$regexValidate('email', this.login.email)) {
           if (this.emailErrorText) {
             this.emailErrorText = ''
           }
@@ -133,11 +133,6 @@ export default {
       } else {
         this.emailErrorText = this.labels.emptyField
       }
-    },
-
-    validateEmail() {
-      // TODO plugin regex nuxt
-      return true
     },
     handleIconClick() {
       if (this.currentStep.name === 'email') {
