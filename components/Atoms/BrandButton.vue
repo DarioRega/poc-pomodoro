@@ -4,8 +4,6 @@
     :class="[
       `btn__${type}`,
       isLoading && `btn__${type}--loading`,
-      hasSuccess && `btn__${type}--success`,
-      isSuccess && `btn__${type}--success`,
       `${isDisabled ? 'btn--disabled' : ''}`,
       `btn--${size}`,
     ]"
@@ -35,34 +33,6 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
-    },
-    isSuccess: {
-      type: Boolean,
-      default: false,
-    },
-    handleEndSuccess: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      hasSuccess: false,
-    }
-  },
-  watch: {
-    isSuccess(newValue, oldValue) {
-      this.hasSuccess = newValue
-      if (this.handleEndSuccess) {
-        this.removeSuccessState()
-      }
-    },
-  },
-  methods: {
-    removeSuccessState() {
-      setTimeout(() => {
-        this.hasSuccess = false
-      }, 4000)
     },
   },
 }
