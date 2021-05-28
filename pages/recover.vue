@@ -81,7 +81,6 @@ export default {
   methods: {
     handleRecover() {
       this.isLoading = true
-      // call axios
       // TODO remove this after axios implementation
       setTimeout(() => {
         this.isLoading = false
