@@ -3,11 +3,7 @@ import PageLogin from '@/components/Pages/PageLogin'
 export default {
   title: 'Pages/Login',
   component: PageLogin,
-  argTypes: {
-    isDisabled: {
-      control: { type: 'select', options: [true, false] },
-    },
-  },
+  argTypes: {},
 }
 
 const Template = (args, { argTypes }) => ({

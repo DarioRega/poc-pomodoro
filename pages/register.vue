@@ -217,14 +217,6 @@ export default {
           confirmPassword: 'Confirm password',
         },
       }
-      this.setCurrentStepLabels()
-    },
-    setCurrentStepLabels() {
-      this.currentStep = {
-        ...this.currentStep,
-        stepLabel: this.labels.email,
-        stepLostLabel: this.labels.lostEmail,
-      }
     },
   },
 }

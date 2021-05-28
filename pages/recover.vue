@@ -44,7 +44,7 @@ import ContainerRecoveryPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
-  name: 'Recovery',
+  name: 'Recover',
   components: {
     BrandInput,
     ContainerRecoveryRow,
@@ -81,6 +81,7 @@ export default {
   methods: {
     handleRecover() {
       this.isLoading = true
+      // call axios
       // TODO remove this after axios implementation
       setTimeout(() => {
         this.isLoading = false
@@ -117,14 +118,6 @@ export default {
         placeholders: {
           email: 'Enter email',
         },
-      }
-      this.setCurrentStepLabels()
-    },
-    setCurrentStepLabels() {
-      this.currentStep = {
-        ...this.currentStep,
-        stepLabel: this.labels.email,
-        stepLostLabel: this.labels.lostEmail,
       }
     },
   },

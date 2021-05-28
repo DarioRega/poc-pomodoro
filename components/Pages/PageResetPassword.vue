@@ -1,101 +1,89 @@
 <template>
-  <container-register-page :has-loader="false">
+  <container-reset-password-page :has-loader="false">
     <transition-opacity>
-      <container-register-card
+      <container-reset-password-card
         :greeting="labels.greeting"
         :additional-info="labels.additionalInfo"
       >
-        <container-register-row class="mb-4 mt-2">
-          <brand-input
-            name="fullName"
-            :placeholder="labels.placeholders.fullName"
-            :value="register.fullName"
-            :error-text="formErrors.fullName"
-            class="w-full"
-            @change="register.fullName = $event"
-          />
-        </container-register-row>
-        <container-register-row class="mb-4">
+        <container-reset-password-row class="mb-4">
           <brand-input
             name="email"
             :placeholder="labels.placeholders.email"
-            :value="register.email"
+            :value="login.email"
             :error-text="formErrors.email"
             class="w-full"
-            @change="register.email = $event"
+            @change="login.email = $event"
           />
-        </container-register-row>
-        <container-register-row class="mb-4">
+        </container-reset-password-row>
+        <container-reset-password-row class="mb-4">
           <brand-input
             name="password"
             :placeholder="labels.placeholders.password"
-            :value="register.password"
+            :value="login.password"
             :error-text="formErrors.password"
             input-type="password"
             class="w-full"
-            @change="register.password = $event"
+            @change="login.password = $event"
           />
-        </container-register-row>
-        <container-register-row class="mb-4">
+        </container-reset-password-row>
+        <container-reset-password-row class="mb-4">
           <brand-input
             name="confirmPassword"
             :placeholder="labels.placeholders.confirmPassword"
-            :value="register.confirmPassword"
+            :value="login.confirmPassword"
             :error-text="formErrors.confirmPassword"
             input-type="password"
             class="w-full"
-            @change="register.confirmPassword = $event"
+            @change="login.confirmPassword = $event"
           />
-        </container-register-row>
+        </container-reset-password-row>
         <brand-button
           class="w-full justify-center mt-2"
           :is-loading="isLoading"
           @click="handleSubmit"
         >
-          {{ labels.register }}
+          {{ labels.continue }}
         </brand-button>
         <redirect-actions-footer
           class="text-dark-indigo dark:text-light-indigo"
           primary-action-redirect="/login"
           :primary-label="labels.alreadyHaveAnAccount"
         />
-      </container-register-card>
+      </container-reset-password-card>
     </transition-opacity>
-  </container-register-page>
+  </container-reset-password-page>
 </template>
 
 <script>
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
-import ContainerRegisterRow from '@/components/Templates/Login/ContainerRow'
+import ContainerResetPasswordRow from '@/components/Templates/Login/ContainerRow'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsFooter'
-import ContainerRegisterCard from '@/components/Templates/Login/ContainerCard'
-import ContainerRegisterPage from '@/components/Templates/Login/ContainerPage'
+import ContainerResetPasswordCard from '@/components/Templates/Login/ContainerCard'
+import ContainerResetPasswordPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
-  name: 'PageRegister',
+  name: 'PageResetPassword',
   components: {
     BrandInput,
-    ContainerRegisterRow,
-    ContainerRegisterCard,
+    ContainerResetPasswordRow,
+    ContainerResetPasswordCard,
     BrandButton,
     RedirectActionsFooter,
     TransitionOpacity,
-    ContainerRegisterPage,
+    ContainerResetPasswordPage,
   },
   data() {
     return {
       isLoading: false,
       labels: {},
-      register: {
-        fullName: '',
+      login: {
         email: '',
         password: '',
         confirmPassword: '',
       },
       formErrors: {
-        fullName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -103,21 +91,25 @@ export default {
     }
   },
   watch: {
-    'register.confirmPassword'(newValue, oldValue) {
+    'login.confirmPassword'(newValue, oldValue) {
       this.validateConfirmPassword(newValue)
     },
-    'register.password'(newValue, oldValue) {
+    'login.password'(newValue, oldValue) {
       this.validatePassword(newValue)
     },
-    'register.email'(newValue, oldValue) {
+    'login.email'(newValue, oldValue) {
       this.validateEmail(newValue)
     },
-    'register.fullName'(newValue, oldValue) {
+    'login.fullName'(newValue, oldValue) {
       this.validateFullName(newValue)
     },
   },
   beforeMount() {
     this.setLabels()
+    const email = this.$route.query.email
+    if (email) {
+      this.login.email = email
+    }
   },
   methods: {
     validateEmptyFields(property, value) {
@@ -157,8 +149,8 @@ export default {
       if (!this.validateEmptyFields('confirmPassword', value)) {
         return false
       }
-      if (this.register.password) {
-        if (this.register.password !== value) {
+      if (this.login.password) {
+        if (this.login.password !== value) {
           this.formErrors.confirmPassword = this.labels.confirmPasswordError
           return false
         } else if (this.formErrors.confirmPassword) {
@@ -167,23 +159,10 @@ export default {
       }
       return true
     },
-    validateFullName(value) {
-      if (!this.validateEmptyFields('fullName', value)) {
-        return false
-      }
-      if (value.length < 4) {
-        this.formErrors.fullName = this.labels.fullNameError
-        return false
-      }
-      if (this.formErrors.fullName) {
-        this.formErrors.fullName = ''
-      }
-      return true
-    },
+
     handleSubmit() {
-      const { fullName, email, password, confirmPassword } = this.register
+      const { email, password, confirmPassword } = this.login
       const validations = [
-        this.validateFullName(fullName),
         this.validateEmail(email),
         this.validatePassword(password),
         this.validateConfirmPassword(confirmPassword),
@@ -200,21 +179,19 @@ export default {
     // TODO pick theses labels from json files
     setLabels() {
       this.labels = {
-        greeting: 'Welcome',
-        additionalInfo: 'Fill these steps to create an account',
+        greeting: 'Reset my password',
+        additionalInfo: "Fill these fields and you're good to go",
         emailError: 'Invalid email',
         passwordError: 'Password too short',
-        fullNameError: "Full name can't be that short",
         confirmPasswordError: "Passwords don't match",
         emptyField: "Field can't be empty",
         loading: 'Loading your environment',
-        register: 'Sign up',
+        continue: 'Continue',
         alreadyHaveAnAccount: 'Already have an account ? Log in',
         placeholders: {
-          fullName: 'Enter full name',
           email: 'Enter email',
-          password: 'Create password',
-          confirmPassword: 'Confirm password',
+          password: 'Set new password',
+          confirmPassword: 'Confirm new password',
         },
       }
     },
