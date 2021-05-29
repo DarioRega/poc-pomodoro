@@ -2,20 +2,22 @@
   <div>
     <ul class="flex flex-row justify-end items-center">
       <li class="inline-flex h-full justify-center items-center">
-        <icon
-          tabindex="0"
-          icon-name="archiveBox"
+        <span
           class="task-grid-header-actions"
+          tabindex="0"
           @click="$emit('onArchiveBoxClick')"
-        />
+        >
+          <icon icon-name="archiveBox" />
+        </span>
       </li>
       <li class="inline-flex h-full justify-center items-center">
-        <icon
-          tabindex="0"
-          icon-name="trash"
+        <span
           class="task-grid-header-actions"
+          tabindex="0"
           @click="$emit('onTrashClick')"
-        />
+        >
+          <icon icon-name="trash" />
+        </span>
       </li>
       <li
         class="

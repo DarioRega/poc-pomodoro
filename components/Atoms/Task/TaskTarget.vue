@@ -21,6 +21,13 @@
     @dblclick="$emit('dblclick')"
   >
     <icon
+      v-if="isArchiveEnabled"
+      icon-name="archiveBox"
+      class="w-5 h-5 text-error"
+    />
+    <icon v-if="isDeleteEnabled" icon-name="trash" class="w-5 h-5 text-error" />
+    <icon
+      v-if="!isArchiveEnabled && !isDeleteEnabled"
       :icon-name="isComplete ? 'checkMarkRounded' : 'target'"
       class="w-5 h-5"
     />
@@ -38,6 +45,20 @@ export default {
       default: false,
     },
     isComplete: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the archive task mode on header
+    */
+    isArchiveEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the delete task mode on header
+    */
+    isDeleteEnabled: {
       type: Boolean,
       default: false,
     },

@@ -8,6 +8,8 @@
         <task-target
           :is-selected="isSelected"
           :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
+          :is-archive-enabled="isArchiveEnabled"
+          :is-delete-enabled="isDeleteEnabled"
           @click="$emit('onTargetClick', task.id)"
           @dblclick="$emit('onChangeRunningTask', task.id)"
         />
@@ -102,6 +104,20 @@ export default {
       If the is the current task running
     */
     isRunning: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the archive task mode on header
+    */
+    isArchiveEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the delete task mode on header
+    */
+    isDeleteEnabled: {
       type: Boolean,
       default: false,
     },

@@ -31,7 +31,8 @@
           :is-selected="currentTaskSelected.id === task.id"
           :is-running="currentTaskRunning.id === task.id"
           :current-task-selected="currentTaskSelected"
-          :is-first-row="index === 0"
+          :is-archive-enabled="isArchiveEnabled"
+          :is-delete-enabled="isDeleteEnabled"
           :is-stacked="isStacked"
           :labels="labels.body"
           class="mb-3"
@@ -110,8 +111,8 @@ export default {
     return {
       isToggled: false,
       isOverflowing: false,
-      enableDeleteTasks: false,
-      enableArchiveTasks: false,
+      isDeleteEnabled: false,
+      isArchiveEnabled: false,
       showCompletedTasks: false,
     }
   },
@@ -142,6 +143,8 @@ export default {
     },
     handleClickTaskTarget(taskId) {
       // TODO handle
+      // check if isArchiveEnabled or isDeleteEnabled to handle custom event
+      // if both of them are false, just fire the select task event
     },
     handleChangeRunningTask(taskId) {
       // TODO handle
@@ -165,10 +168,16 @@ export default {
       this.showCompletedTasks = !this.showCompletedTasks
     },
     handleEnableArchiveBox() {
-      // TODO handle
+      if (this.isDeleteEnabled) {
+        this.isDeleteEnabled = false
+      }
+      this.isArchiveEnabled = !this.isArchiveEnabled
     },
     handleEnableTrash() {
-      // TODO handle
+      if (this.isArchiveEnabled) {
+        this.isArchiveEnabled = false
+      }
+      this.isDeleteEnabled = !this.isDeleteEnabled
     },
   },
 }
