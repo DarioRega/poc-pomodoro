@@ -27,6 +27,10 @@ export default {
     label: {
       type: 'text',
     },
+    shouldShowSelected: {
+      type: 'radio',
+      options: [true, false],
+    },
   },
 }
 
@@ -70,6 +74,22 @@ Large.args = {
   name: 'myName',
   size: 'large',
   value: { id: 3, name: 'Dark' },
+  placeholder: 'Please select',
+}
+
+export const Small = Template.bind({})
+Small.args = {
+  name: 'myName',
+  size: 'small',
+  value: { id: 2, name: 'Dusk' },
+  placeholder: 'Please select',
+}
+
+export const WithoutCheckMark = Template.bind({})
+WithoutCheckMark.args = {
+  name: 'myName',
+  shouldShowSelected: false,
+  value: { id: 2, name: 'Dusk' },
   placeholder: 'Please select',
 }
 

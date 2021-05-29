@@ -48,7 +48,7 @@
             "
             :class="[
               size === 'default' ? 'pr-3' : 'pr-5',
-              size === 'small' && 'pr-0',
+              size === 'small' && 'pr-0.5',
             ]"
           >
             <icon
@@ -87,7 +87,7 @@
             aria-labelledby="listbox-label"
           >
             <li
-              v-for="(item, index) in options"
+              v-for="(item, index) in selectOptions"
               :id="`listbox-option-${item.id}`"
               :ref="`listbox-option-${item.id}`"
               :key="item.id"
@@ -204,6 +204,11 @@ export default {
   computed: {
     hasErrors() {
       return this.errorText.length > 0
+    },
+    selectOptions() {
+      return this.shouldShowSelected
+        ? this.options
+        : this.options.filter((x) => x.id !== this.localValue.id)
     },
   },
   mounted() {
