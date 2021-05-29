@@ -201,8 +201,7 @@ export default {
       }
     },
     handleWindowClick(evt) {
-      // TODO check on nuxt env if this works or should add !evt.target.offsetParent.className.includes('brand-select')
-      if (this.isOpen && !evt.target.offsetParent) {
+      if (!this.$el.contains(evt.target) && this.isOpen) {
         this.isOpen = false
       }
     },
