@@ -159,7 +159,7 @@ export default {
       this.calendar = calendar._flatpickr
     },
     handleWindowClick(evt) {
-      if (!this.$el.contains(evt.target) && this.showActions) {
+      if (!this.$el.contains(evt.target)) {
         this.showActions = false
         this.isOpen = false
       }
