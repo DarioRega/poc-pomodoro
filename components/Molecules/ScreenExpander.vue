@@ -21,10 +21,13 @@
     "
   >
     <div class="relative w-full h-full">
-      <!--   TODO WHAT INPUT STYLE TO APPLY ON BTN FOCUS INDIGO CLASSES-->
       <button
         class="
+          screen-expander-button
           text-dark-blue
+          flex
+          items-center
+          p-1
           dark:text-celeste
           absolute
           right-[2rem]

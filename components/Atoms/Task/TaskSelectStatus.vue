@@ -43,9 +43,8 @@
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
           >
-            <!--              TODO handle whatinput focus-->
             <li
-              v-for="(item, index) in filteredOptions"
+              v-for="item in filteredOptions"
               :id="`listbox-option-${item.id}`"
               :ref="`listbox-option-${item.id}`"
               :key="item.id"

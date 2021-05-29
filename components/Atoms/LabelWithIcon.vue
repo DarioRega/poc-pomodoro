@@ -6,10 +6,9 @@
     @keydown="handleKeyDown"
     @click="handleClick"
   >
-    <!--    TODO ADD WHAT INPUT FOCUS-->
     <a
       role="button"
-      class="focus:outline-none z-40"
+      class="label-with-icon focus:outline-none z-40"
       :class="isReverse ? 'ml-3' : 'mr-3'"
       tabindex="0"
       @keydown="handleKeyDownIcon"

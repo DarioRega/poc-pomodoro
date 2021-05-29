@@ -25,7 +25,6 @@ const Template = (args, { argTypes }) => ({
   },
   template: `
     <icon-grid-actions v-bind="$props"
-      class='w-64'
       @onSettingsClick='onSettingsClick'
       @onSoundClick='onSoundClick'
       @onHelpClick='onHelpClick'
