@@ -14,6 +14,11 @@
   .timer-sidebar__expander__button:focus {
     @extend .brand-focus-ring--indigo;
   }
+
+  // TaskGridHeaderActions.vue
+  .task-grid-header-actions:focus {
+    @extend .brand-focus-ring--indigo;
+  }
 }
 
 
@@ -28,6 +33,11 @@
     @extend .brand-dark-focus-ring--indigo;
   }
   .timer-sidebar__expander__button:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // TaskGridHeaderActions.vue
+  .task-grid-header-actions:focus {
     @extend .brand-dark-focus-ring--indigo;
   }
 }

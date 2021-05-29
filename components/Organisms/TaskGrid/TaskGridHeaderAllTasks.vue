@@ -25,7 +25,7 @@
       <div class="w-4/12 header__col pl-6">
         <div class="flex justify-between items-center w-full">
           <h6>{{ labels.description }}</h6>
-          <div class="flex items-center justify-end">actions</div>
+          <div class="flex items-center justify-end"></div>
         </div>
       </div>
     </div>
