@@ -269,7 +269,7 @@ export default {
       }
     },
     handleWindowClick(evt) {
-      // TODO check on nuxt env if this works or should add !evt.target.offsetParent.className.includes('brand-select')
+      // TODO replace same as this.$el in others dropdown
       if (this.isOpen && !evt.target.offsetParent) {
         this.isOpen = false
       }

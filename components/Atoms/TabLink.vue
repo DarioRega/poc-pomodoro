@@ -32,7 +32,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-// TODO ADD HOVER STYLE ON TABLINK WHEN FOCUSED WITH KEYBOARD WHATINPUT
 .tab-link {
   @apply transition-colors duration-300 ease-in-out;
   &__primary {

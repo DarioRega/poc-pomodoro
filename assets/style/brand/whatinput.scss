@@ -14,6 +14,37 @@
   .timer-sidebar__expander__button:focus {
     @extend .brand-focus-ring--indigo;
   }
+
+  // TaskGridHeaderActions.vue
+  .task-grid-header-actions:focus {
+    @extend .brand-focus-ring--indigo;
+  }
+
+
+  // TaskCurrentStatus.vue
+  .task-current-status:focus {
+    @apply rounded-full;
+    @extend .brand-focus-ring--indigo;
+  }
+
+  // LabelWithIcon.vue, two states
+  .label-with-icon--clickable a:focus, .sidebar-subtitle--with-toggle a:focus {
+    @extend .brand-focus-ring--indigo;
+  }
+
+  // IconGridActions.vue
+  .btn-grid-actions:focus {
+    @extend .brand-focus-ring--indigo;
+  }
+
+  // ScreenExpander.vue
+  .screen-expander-button:focus {
+    @extend .brand-focus-ring--indigo;
+  }
+  // TabLink.vue
+  .tab-link:focus {
+    @extend .brand-focus-ring--indigo;
+  }
 }
 
 
@@ -30,5 +61,36 @@
   .timer-sidebar__expander__button:focus {
     @extend .brand-dark-focus-ring--indigo;
   }
+
+  // TaskGridHeaderActions.vue
+  .task-grid-header-actions:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // TaskCurrentStatus.vue
+  .task-current-status:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // LabelWithIcon.vue, two states
+  .label-with-icon--clickable a:focus, .sidebar-subtitle--with-toggle a:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // IconGridActions.vue
+  .btn-grid-actions:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // ScreenExpander.vue
+  .screen-expander-button:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  // TabLink.vue
+  .tab-link:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
 }
 

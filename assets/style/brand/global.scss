@@ -39,7 +39,6 @@ button:focus {
   &:focus {
     @apply outline-none;
   }
-  //TODO add what input focus on svg
   &--with-toggle {
     a, svg, button {
       @apply text-dark-indigo;
