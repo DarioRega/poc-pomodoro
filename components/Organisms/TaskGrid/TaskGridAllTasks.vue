@@ -19,11 +19,7 @@
       leave-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div
-        v-show="isToggled"
-        ref="containerTasks"
-        class="max-h-[24rem] min-h-[24rem] overflow-y-auto"
-      >
+      <div v-show="isToggled" ref="containerTasks" class="min-h-[20rem]">
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -43,18 +39,14 @@
           @onTaskDescriptionChange="handleChangeTaskDescription"
           @onDeadlineChange="handleChangeDeadline"
         >
-          <div
-            class="fixed w-5/12 -mt-4 right-0 px-4"
-            :class="isOverflowing ? 'mr-4' : 'mr-0'"
-          >
+          <div class="fixed w-5/12 -mt-4 right-0 px-4 mr-0">
             <BrandTextarea
               v-show="index === 0"
               :value="currentTaskSelected.description"
               :name="labels.body.taskDescription"
               :is-selected="isSelected"
               type="task"
-              class="w-full block top-0 left-0 right-0"
-              :class="isOverflowing ? 'pr-3' : 'pr-0'"
+              class="w-full block top-0 left-0 right-0 pr-0"
               @change="handleChangeTaskDescription"
             />
           </div>
@@ -110,7 +102,6 @@ export default {
   data() {
     return {
       isToggled: false,
-      isOverflowing: false,
       isDeleteEnabled: false,
       isArchiveEnabled: false,
       showCompletedTasks: false,
@@ -121,25 +112,11 @@ export default {
       return this.showCompletedTasks ? this.tasks : this.tasksListNoComplete()
     },
   },
-
-  watch: {
-    tasksArrayLength() {
-      this.verifyGridOverflow()
-    },
-  },
-  mounted() {
-    this.verifyGridOverflow()
-  },
   methods: {
     tasksListNoComplete() {
       return this.tasks.filter(
         (task) => task.status.value !== TASK_STATUS_VALUES.DONE
       )
-    },
-    verifyGridOverflow() {
-      this.isOverflowing =
-        this.$refs.containerTasks.offsetHeight <
-        this.$refs.containerTasks.scrollHeight
     },
     handleClickTaskTarget(taskId) {
       // TODO handle
