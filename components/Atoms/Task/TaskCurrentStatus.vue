@@ -3,6 +3,7 @@
     ref="currentTaskStatus"
     tabindex="0"
     class="
+      task-current-status
       w-full
       rounded-full
       max-w-[8rem]
@@ -16,10 +17,13 @@
       text-xs
       hover:bg-opacity-80
       dark:hover:bg-opacity-80
+      focus:outline-none
     "
     :class="classes"
     @click="$emit('click', $event)"
     @keydown="$emit('keydown', $event)"
+    @mouseenter="$emit('mouseenter')"
+    @mouseleave="$emit('mouseleave')"
   >
     {{ statusText }}
   </div>

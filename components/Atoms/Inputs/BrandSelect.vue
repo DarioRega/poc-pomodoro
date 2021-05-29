@@ -149,7 +149,6 @@ import {
   UP_ARROW_KEY_CODE,
 } from '~/constantes'
 
-// TODO whatinput=keyboard single-option focus = outline indigo
 export default {
   name: 'BrandSelect',
   components: { SelectDropdownOption, Icon },
@@ -264,8 +263,6 @@ export default {
           return this.findNextElementToFocusAndFocus(UP_ARROW_KEY_CODE)
         case ESCAPE_KEY_CODE:
           return (this.isOpen = false)
-        default:
-          return (this.isOpen = false)
       }
     },
     handleWindowClick(evt) {
@@ -276,23 +273,23 @@ export default {
     },
     findNextElementToFocusAndFocus(keyCode) {
       if (!this.currentFocusedElementId) {
-        return this.focusElement(this.options[0].id)
+        return this.focusElement(this.selectOptions[0].id)
       }
 
-      const currentActiveElementIndex = this.options.findIndex(
+      const currentActiveElementIndex = this.selectOptions.findIndex(
         (x) => x.id === this.currentFocusedElementId
       )
       const isNextItemLastItem =
-        currentActiveElementIndex >= this.options.length - 1
+        currentActiveElementIndex >= this.selectOptions.length - 1
 
       // handle DOWN ARROW KEY CODE
       if (keyCode === DOWN_ARROW_KEY_CODE) {
         if (isNextItemLastItem) {
-          const firstItem = this.options[0]
+          const firstItem = this.selectOptions[0]
           return this.focusElement(firstItem.id)
         }
 
-        const nextItem = this.options[currentActiveElementIndex + 1]
+        const nextItem = this.selectOptions[currentActiveElementIndex + 1]
         return this.focusElement(nextItem.id)
       }
 
@@ -300,10 +297,10 @@ export default {
       if (keyCode === UP_ARROW_KEY_CODE) {
         const isFirstItem = currentActiveElementIndex === 0
         if (isFirstItem) {
-          const lastItem = this.options[this.options.length - 1]
+          const lastItem = this.selectOptions[this.selectOptions.length - 1]
           return this.focusElement(lastItem.id)
         } else {
-          const previousItem = this.options[currentActiveElementIndex - 1]
+          const previousItem = this.selectOptions[currentActiveElementIndex - 1]
           return this.focusElement(previousItem.id)
         }
       }
