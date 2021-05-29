@@ -34,6 +34,9 @@ const Template = (args, { argTypes }) => ({
           taskDescription: 'Task description',
           closeCalendar: 'Close',
         },
+        general: {
+          amountOfTasksToDisplay: 'Tasks to display',
+        },
       }
     },
     getTaskArrayLength() {

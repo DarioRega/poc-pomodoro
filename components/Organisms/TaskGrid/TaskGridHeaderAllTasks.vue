@@ -70,9 +70,20 @@ export default {
       default: false,
     },
   },
-  computed: {
-    clientWidth() {
-      return window.innerWidth
+  data() {
+    return {
+      clientWidth: 0,
+    }
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleClientWidth)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleClientWidth)
+  },
+  methods: {
+    handleClientWidth() {
+      this.clientWidth = window.innerWidth
     },
   },
 }

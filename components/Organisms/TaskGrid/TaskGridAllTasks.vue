@@ -1,5 +1,15 @@
 <template>
-  <section class="flex-1">
+  <section
+    class="
+      relative
+      flex-1
+      bg-light-white
+      dark:bg-dark-blue
+      py-4
+      px-6
+      rounded-md
+    "
+  >
     <task-grid-header-all-tasks
       :labels="labels.header"
       :is-toggled="isToggled"
@@ -19,7 +29,7 @@
       leave-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-show="isToggled" ref="containerTasks" class="min-h-[20rem]">
+      <div v-show="isToggled" class="min-h-[15rem]">
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -46,13 +56,20 @@
               :name="labels.body.taskDescription"
               :is-selected="isSelected"
               type="task"
-              class="w-full block top-0 left-0 right-0 pr-0"
+              class="w-full block top-0 left-0 right-0 pr-6"
               @change="handleChangeTaskDescription"
             />
           </div>
         </task-grid-body-all-tasks>
       </div>
     </transition>
+    <div v-show="isToggled">
+      <task-grid-pagination
+        class="pb-1 pt-6 justify-end"
+        :label="labels.general.amountOfTasksToDisplay"
+        @onPaginationChange="amountOfTasksToDisplays = $event"
+      />
+    </div>
   </section>
 </template>
 
@@ -61,12 +78,14 @@ import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAl
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
+import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 
 export default {
   name: 'TaskGridAllTasks',
   components: {
     TaskGridHeaderAllTasks,
     TaskGridBodyAllTasks,
+    TaskGridPagination,
     BrandTextarea,
   },
   props: {
@@ -105,11 +124,21 @@ export default {
       isDeleteEnabled: false,
       isArchiveEnabled: false,
       showCompletedTasks: false,
+      amountOfTasksToDisplays: 'all',
     }
   },
   computed: {
     tasksList() {
-      return this.showCompletedTasks ? this.tasks : this.tasksListNoComplete()
+      let tasksArray = this.tasks
+
+      if (!this.showCompletedTasks) {
+        tasksArray = this.tasksListNoComplete()
+      }
+      if (this.amountOfTasksToDisplays === 'all') {
+        return tasksArray
+      } else {
+        return this.taskListOnlyAmountToDisplay(tasksArray)
+      }
     },
   },
   methods: {
@@ -117,6 +146,9 @@ export default {
       return this.tasks.filter(
         (task) => task.status.value !== TASK_STATUS_VALUES.DONE
       )
+    },
+    taskListOnlyAmountToDisplay(list) {
+      return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
     handleClickTaskTarget(taskId) {
       // TODO handle
