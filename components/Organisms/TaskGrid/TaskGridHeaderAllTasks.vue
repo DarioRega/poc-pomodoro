@@ -1,7 +1,7 @@
 <template>
   <section>
     <div
-      class="header flex overflow-hidden"
+      class="header flex overflow-hidden min-h-[2.5rem]"
       :class="isStacked && 'header--stacked'"
     >
       <div class="header__col task-name">
@@ -22,10 +22,23 @@
         <h6>{{ labels.deadline }}</h6>
       </div>
 
-      <div class="w-4/12 header__col pl-6">
+      <div class="w-5/12 header__col pl-6">
         <div class="flex justify-between items-center w-full">
-          <h6>{{ labels.description }}</h6>
-          <div class="flex items-center justify-end"></div>
+          <h6 class="flex-none w-24 xl:w-36">{{ labels.description }}</h6>
+          <div class="flex-1 flex items-center justify-end">
+            <task-grid-header-actions
+              class="w-full ml-4"
+              :should-show-completed-task="shouldShowCompletedTask"
+              :label="
+                clientWidth < 1440
+                  ? labels.showCompletedTasksCut
+                  : labels.showCompletedTasks
+              "
+              @onArchiveBoxClick="$emit('onArchiveBoxClick')"
+              @onTrashClick="$emit('onTrashClick')"
+              @onToggleCompleteTasks="$emit('onToggleCompleteTasks')"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -34,12 +47,17 @@
 
 <script>
 import Icon from '@/components/Atoms/Icon'
+import TaskGridHeaderActions from '@/components/Atoms/Task/TaskGridHeaderActions'
 
 export default {
   name: 'TaskGridHeaderAllTasks',
-  components: { Icon },
+  components: { Icon, TaskGridHeaderActions },
   props: {
     isToggled: {
+      type: Boolean,
+      default: false,
+    },
+    shouldShowCompletedTask: {
       type: Boolean,
       default: false,
     },
@@ -50,6 +68,11 @@ export default {
     isStacked: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    clientWidth() {
+      return window.innerWidth
     },
   },
 }

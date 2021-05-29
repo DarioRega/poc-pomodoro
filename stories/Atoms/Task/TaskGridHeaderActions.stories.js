@@ -3,7 +3,15 @@ import TaskGridHeaderActions from '../../../components/Atoms/Task/TaskGridHeader
 export default {
   title: 'Atoms/Task/GridHeaderActions',
   component: TaskGridHeaderActions,
-  argTypes: {},
+  argTypes: {
+    isToggled: {
+      type: 'radio',
+      options: [true, false],
+    },
+    label: {
+      type: 'text',
+    },
+  },
 }
 
 const Template = (args, { argTypes }) => ({

@@ -1,23 +1,40 @@
 <template>
   <div>
-    <ul class="grid divide-x-[3px] grid-cols-5 divide-dark-gray items-center">
-      <li class="flex col-span-1 justify-center items-center">
+    <ul class="flex flex-row justify-end items-center">
+      <li class="inline-flex h-full justify-center items-center">
         <icon
           tabindex="0"
           icon-name="archiveBox"
           class="task-grid-header-actions"
+          @click="$emit('onArchiveBoxClick')"
         />
       </li>
-      <li class="flex col-span-1 h-full justify-center items-center">
+      <li class="inline-flex h-full justify-center items-center">
         <icon
           tabindex="0"
-          icon-name="archiveBox"
+          icon-name="trash"
           class="task-grid-header-actions"
+          @click="$emit('onTrashClick')"
         />
       </li>
-      <li class="flex col-span-3 justify-center items-center">
-        <toggle :toggled="isToggled" @click="$emit('onToggle')" />
-        <p class="ml-3 font-bold text-dark-gray">{{ label }}</p>
+      <li
+        class="
+          toggler
+          flex
+          w-full
+          max-w-[13rem]
+          justify-start
+          items-center
+          pl-2
+        "
+      >
+        <toggle
+          :toggled="shouldShowCompletedTask"
+          @toggle="$emit('onToggleCompleteTasks')"
+        />
+        <p class="text-sm ml-2 font-bold text-dark-gray">
+          {{ label }}
+        </p>
       </li>
     </ul>
   </div>
@@ -31,7 +48,7 @@ export default {
   name: 'TaskGridHeaderActions',
   components: { Icon, Toggle },
   props: {
-    isToggled: {
+    shouldShowCompletedTask: {
       type: Boolean,
       default: false,
     },
@@ -43,8 +60,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+li:not(.toggler) {
+  @apply border-r-[2.5px] border-dark-gray;
+}
+
 .task-grid-header-actions {
-  @apply text-dark-gray w-5 h-5 cursor-pointer transition-colors duration-200;
+  @apply text-dark-gray mx-2 w-5 h-5 cursor-pointer transition-colors duration-200;
   &:hover {
     @apply text-dark-blue;
     @apply dark:text-celeste;

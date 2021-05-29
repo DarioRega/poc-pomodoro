@@ -26,6 +26,8 @@ const Template = (args, { argTypes }) => ({
         status: 'Status',
         deadline: 'Deadline',
         description: 'Description',
+        showCompletedTasks: 'Show completed tasks',
+        showCompletedTasksCut: 'Show complete',
       }
     },
   },

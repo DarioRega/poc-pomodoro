@@ -4,8 +4,12 @@
       :labels="labels.header"
       :is-toggled="isToggled"
       :is-stacked="isStacked"
+      :should-show-completed-task="showCompletedTasks"
       class="mb-4"
       @onToggle="isToggled = !isToggled"
+      @onArchiveBoxClick="handleEnableArchiveBox"
+      @onTrashClick="handleEnableTrash"
+      @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition
       enter-active-class="transition duration-200 ease-in"
@@ -21,7 +25,7 @@
         class="max-h-[24rem] min-h-[24rem] overflow-y-auto"
       >
         <task-grid-body-all-tasks
-          v-for="(task, index) in tasks"
+          v-for="(task, index) in tasksList"
           :key="task.id"
           :task="task"
           :is-selected="currentTaskSelected.id === task.id"
@@ -39,7 +43,7 @@
           @onDeadlineChange="handleChangeDeadline"
         >
           <div
-            class="fixed w-4/12 -mt-4 right-0 px-4"
+            class="fixed w-5/12 -mt-4 right-0 px-4"
             :class="isOverflowing ? 'mr-4' : 'mr-0'"
           >
             <BrandTextarea
@@ -63,6 +67,7 @@
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
+import { TASK_STATUS_VALUES } from '@/constantes'
 
 export default {
   name: 'TaskGridAllTasks',
@@ -105,7 +110,15 @@ export default {
     return {
       isToggled: false,
       isOverflowing: false,
+      enableDeleteTasks: false,
+      enableArchiveTasks: false,
+      showCompletedTasks: false,
     }
+  },
+  computed: {
+    tasksList() {
+      return this.showCompletedTasks ? this.tasks : this.tasksListNoComplete()
+    },
   },
 
   watch: {
@@ -117,6 +130,11 @@ export default {
     this.verifyGridOverflow()
   },
   methods: {
+    tasksListNoComplete() {
+      return this.tasks.filter(
+        (task) => task.status.value !== TASK_STATUS_VALUES.DONE
+      )
+    },
     verifyGridOverflow() {
       this.isOverflowing =
         this.$refs.containerTasks.offsetHeight <
@@ -141,6 +159,15 @@ export default {
       // /!\ add in handler these params  => (this.currentTaskSelected.id, value)
     },
     handleChangeDeadline({ dateTime, dateString, locale }, taskId) {
+      // TODO handle
+    },
+    handleToggleShowCompleteTasks() {
+      this.showCompletedTasks = !this.showCompletedTasks
+    },
+    handleEnableArchiveBox() {
+      // TODO handle
+    },
+    handleEnableTrash() {
       // TODO handle
     },
   },

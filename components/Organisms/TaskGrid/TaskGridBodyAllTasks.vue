@@ -44,7 +44,7 @@
         />
       </div>
 
-      <div class="w-4/12 header__col">
+      <div class="w-5/12 header__col">
         <div class="w-full px-4 relative">
           <slot />
         </div>

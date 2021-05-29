@@ -25,6 +25,8 @@ const Template = (args, { argTypes }) => ({
           status: 'Status',
           deadline: 'Deadline',
           description: 'Description',
+          showCompletedTasks: 'Show completed tasks',
+          showCompletedTasksCut: 'Show completed',
         },
         body: {
           taskName: 'Task name',
@@ -77,6 +79,16 @@ Default.args = {
         id: 3,
         value: TASK_STATUS_VALUES.TODO,
         name: FAKER_TASK_STATUS_NAMES.TODO,
+      },
+      name: 'Draw a car',
+      deadline: '',
+    },
+    {
+      id: 4,
+      status: {
+        id: 1,
+        value: TASK_STATUS_VALUES.DONE,
+        name: FAKER_TASK_STATUS_NAMES.DONE,
       },
       name: 'Draw a car',
       deadline: '',
