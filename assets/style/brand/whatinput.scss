@@ -20,12 +20,6 @@
     @extend .brand-focus-ring--indigo;
   }
 
-  // TaskGridHeaderActions.vue
-  .task-grid-header-actions:focus {
-    @extend .brand-focus-ring--indigo;
-  }
-
-
   // TaskCurrentStatus.vue
   .task-current-status:focus {
     @apply rounded-full;
@@ -97,10 +91,5 @@
     @extend .brand-dark-focus-ring--indigo;
   }
 
-
-  // TaskGridHeaderActions.vue
-  .task-grid-header-actions:focus {
-    @extend .brand-dark-focus-ring--indigo;
-  }
 }
 
