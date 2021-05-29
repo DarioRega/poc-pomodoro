@@ -9,13 +9,20 @@
           :is-selected="isSelected"
           :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
           @click="$emit('onTargetClick', task.id)"
+          @dblclick="$emit('onChangeRunningTask', task.id)"
+        />
+        <icon
+          v-show="isRunning"
+          icon-name="clock"
+          class="w-5 text-dark-indigo dark:text-light-indigo ml-2 mr-1"
         />
         <brand-input
           :value="task.name"
           :name="labels.taskName"
           :is-selected="isSelected"
           type="task"
-          class="w-full px-3"
+          class="w-full"
+          :class="isRunning ? 'pr-3' : 'px-3'"
           @change="$emit('onTaskNameChange', $event, task.id)"
         />
       </div>
@@ -52,11 +59,13 @@ import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
+import Icon from '@/components/Atoms/Icon'
 
 export default {
   name: 'TaskGridBodyAllTasks',
   components: {
     TaskTarget,
+    Icon,
     BrandInput,
     TaskSelectStatus,
     TaskDeadline,
@@ -86,6 +95,13 @@ export default {
       If the sidebar is stacked or normal width
     */
     isStacked: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the is the current task running
+    */
+    isRunning: {
       type: Boolean,
       default: false,
     },

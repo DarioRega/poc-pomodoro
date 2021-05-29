@@ -18,6 +18,7 @@
       isComplete && 'text-success',
     ]"
     @click="$emit('click')"
+    @dblclick="$emit('dblclick')"
   >
     <icon
       :icon-name="isComplete ? 'checkMarkRounded' : 'target'"

@@ -25,12 +25,14 @@
           :key="task.id"
           :task="task"
           :is-selected="currentTaskSelected.id === task.id"
+          :is-running="currentTaskRunning.id === task.id"
           :current-task-selected="currentTaskSelected"
           :is-first-row="index === 0"
           :is-stacked="isStacked"
           :labels="labels.body"
           class="mb-3"
           @onTargetClick="handleClickTaskTarget"
+          @onChangeRunningTask="handleChangeRunningTask"
           @onTaskNameChange="handleChangeTaskName"
           @onTaskStatusChange="handleChangeTaskStatus"
           @onTaskDescriptionChange="handleChangeTaskDescription"
@@ -82,6 +84,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    currentTaskRunning: {
+      type: Object,
+      default: () => ({}),
+    },
     tasks: {
       type: Array,
       required: true,
@@ -118,6 +124,11 @@ export default {
     },
     handleClickTaskTarget(taskId) {
       // TODO handle
+    },
+    handleChangeRunningTask(taskId) {
+      // TODO handle
+      // verify if pomodoro is running, if not show notification warning
+      // then if running, change the currentTaskRunning in state and send call api to notify
     },
     handleChangeTaskName(value, taskId) {
       // TODO handle
