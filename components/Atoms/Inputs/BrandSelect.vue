@@ -13,7 +13,6 @@
           type="button"
           class="
             relative
-            pr-10
             w-full
             text-left
             cursor-pointer
@@ -25,6 +24,7 @@
           :class="[
             `brand-input__select--size-${size}`,
             `brand-input__select--${type}`,
+            size === 'small' ? ' pr-6' : 'pr-10',
           ]"
           aria-labelledby="listbox-label"
           @click="toggleVisibility"
@@ -46,7 +46,10 @@
               select-toggle
               text-dark-gray
             "
-            :class="size === 'default' ? 'pr-3' : 'pr-5'"
+            :class="[
+              size === 'default' ? 'pr-3' : 'pr-5',
+              size === 'small' && 'pr-0',
+            ]"
           >
             <icon
               icon-name="select"
@@ -92,8 +95,6 @@
               class="
                 relative
                 py-2
-                pr-9
-                pl-3
                 cursor-default
                 select-none
                 single-option
@@ -104,8 +105,7 @@
                 index % 2 === 0
                   ? 'bg-light-white dark:bg-darker-blue'
                   : 'bg-lighter-white dark:bg-dark-blue',
-                index < 1 && 'rounded-t-md',
-                index < options.length - 1 && 'rounded-b-md',
+                size !== 'small' ? 'pr-9 pl-3' : 'pr-0 text-center',
               ]"
               role="option"
               @focusin="currentFocusedElementId = item.id"
@@ -117,6 +117,7 @@
               <select-dropdown-option
                 :is-highlighted="isHighlighted(item.id)"
                 :is-selected="localValue.id === item.id"
+                :should-show-selected="shouldShowSelected"
                 :name="item.name"
               />
             </li>
@@ -149,7 +150,6 @@ import {
 } from '~/constantes'
 
 // TODO whatinput=keyboard single-option focus = outline indigo
-
 export default {
   name: 'BrandSelect',
   components: { SelectDropdownOption, Icon },
@@ -184,7 +184,11 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      default: '',
+    },
+    shouldShowSelected: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

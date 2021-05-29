@@ -46,6 +46,10 @@
   }
 
   &__input, &__select {
+    &--size-small {
+      @apply px-3;
+    }
+
     &--size-default {
       @apply py-1.5 px-3;
     }

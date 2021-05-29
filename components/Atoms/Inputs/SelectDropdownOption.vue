@@ -7,7 +7,7 @@
       {{ name }}
     </span>
     <span
-      v-if="isSelected"
+      v-if="isSelected && shouldShowSelected"
       class="
         flex
         absolute
@@ -40,6 +40,10 @@ export default {
     isSelected: {
       type: Boolean,
       default: false,
+    },
+    shouldShowSelected: {
+      type: Boolean,
+      default: true,
     },
     name: {
       type: String,
