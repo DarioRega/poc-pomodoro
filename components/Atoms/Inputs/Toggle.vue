@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex items-center">
     <button
       type="button"
       class="
@@ -16,7 +16,7 @@
         cursor-pointer
         focus:outline-none
         focus:ring-2 focus:ring-offset-2 focus:ring-dark-indigo
-        dark:focus:ring-light-indigo
+        dark:focus:ring-light-indigo dark:focus:ring-offset-dark-blue
       "
       :class="toggled ? 'bg-dark-indigo dark:bg-light-indigo' : 'bg-dark-gray'"
       role="switch"
