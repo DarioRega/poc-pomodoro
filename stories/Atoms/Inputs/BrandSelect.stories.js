@@ -48,16 +48,9 @@ const Template = (args, { argTypes }) => ({
       ],
     }
   },
-  computed: {
-    hasErrors() {
-      return args.errors
-    },
-  },
   template: `
     <div class="max-w-xs">
-    <brand-select v-bind="$props" name="test" :options="list">
-      <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
-    </brand-select>
+    <brand-select v-bind="$props" name="test" :options="list" />
     </div>
   `,
 })
