@@ -1,15 +1,21 @@
 <template>
   <ul
-    class="grid divide-x-[3px] divide-dark-gray items-center"
-    :class="`grid-cols-${actions.length}`"
+    class="
+      w-48
+      flex flex-row
+      items-center
+      justify-center
+      divide-x-2 divide-dark-gray
+    "
   >
     <li
       v-for="action in actions"
       :key="action.name"
-      class="flex col-span-1 justify-center items-center"
+      class="flex justify-center items-center px-2"
     >
       <button
         class="
+          btn-grid-actions
           w-6
           h-6
           text-dark-blue
@@ -35,7 +41,6 @@
 
 <script>
 import Icon from '@/components/Atoms/Icon'
-// TODO add focus what input
 const ACTIONS = [
   {
     name: 'settings',
