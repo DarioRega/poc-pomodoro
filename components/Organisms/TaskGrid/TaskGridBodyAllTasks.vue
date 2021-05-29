@@ -14,7 +14,7 @@
         <icon
           v-show="isRunning"
           icon-name="clock"
-          class="w-5 text-dark-indigo dark:text-light-indigo ml-2 mr-1"
+          class="w-5 text-dark-indigo dark:text-light-indigo ml-2 mr-2"
         />
         <brand-input
           :value="task.name"
@@ -22,7 +22,7 @@
           :is-selected="isSelected"
           type="task"
           class="w-full"
-          :class="isRunning ? 'pr-3' : 'px-3'"
+          :class="[isRunning ? 'pr-3' : 'px-3']"
           @change="$emit('onTaskNameChange', $event, task.id)"
         />
       </div>
