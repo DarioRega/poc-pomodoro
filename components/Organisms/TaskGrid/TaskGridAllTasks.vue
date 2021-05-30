@@ -21,14 +21,7 @@
       @onTrashClick="handleEnableTrash"
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
-    <transition
-      enter-active-class="transition duration-200 ease-in"
-      enter-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition duration-200 ease-in"
-      leave-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
+    <transition-opacity duration-amount="200">
       <div v-show="isToggled" class="min-h-[15rem]">
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
@@ -64,14 +57,16 @@
           </div>
         </task-grid-body-all-tasks>
       </div>
-    </transition>
-    <div v-show="isToggled">
-      <task-grid-pagination
-        class="pb-1 pt-6 justify-end"
-        :label="labels.general.amountOfTasksToDisplay"
-        @onPaginationChange="amountOfTasksToDisplays = $event"
-      />
-    </div>
+    </transition-opacity>
+    <transition-opacity duration-amount="200">
+      <div v-show="isToggled">
+        <task-grid-pagination
+          class="pb-1 pt-6 justify-end"
+          :label="labels.general.amountOfTasksToDisplay"
+          @onPaginationChange="amountOfTasksToDisplays = $event"
+        />
+      </div>
+    </transition-opacity>
   </section>
 </template>
 
@@ -81,6 +76,7 @@ import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHead
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
+import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 
 export default {
   name: 'TaskGridAllTasks',
@@ -89,6 +85,7 @@ export default {
     TaskGridBodyAllTasks,
     TaskGridPagination,
     BrandTextarea,
+    TransitionOpacity,
   },
   props: {
     isSelected: {

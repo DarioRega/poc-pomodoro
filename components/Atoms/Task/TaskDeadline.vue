@@ -65,7 +65,7 @@
     <div class="absolute calendar-container">
       <div v-show="isOpen" :class="value ? '-mt-4' : '-mt-8'">
         <flat-pickr
-          id="task-deadline-calendar"
+          :id="`task-deadline-calendar-${uniqueKey}`"
           v-model="date"
           :config="config"
           @on-change="onChange"
@@ -91,6 +91,7 @@ import 'flatpickr/dist/flatpickr.css'
 import Icon from '../Icon'
 import BrandButton from '../BrandButton'
 
+// TODO Invalid locale warning message in browser
 const calendarLocales = {
   fr: require('flatpickr/dist/l10n/fr.js').default.fr,
   en: require('flatpickr/dist/l10n/default.js').default,
@@ -136,6 +137,11 @@ export default {
       },
     }
   },
+  computed: {
+    uniqueKey() {
+      return Math.floor(Math.random() * 99999)
+    },
+  },
   mounted() {
     this.setCalendarInstance()
     window.document.addEventListener('click', this.handleWindowClick)
@@ -157,7 +163,9 @@ export default {
       this.handleCloseActionsCalendar()
     },
     setCalendarInstance() {
-      const calendar = document.querySelector('#task-deadline-calendar')
+      const calendar = document.querySelector(
+        `#task-deadline-calendar-${this.uniqueKey}`
+      )
       if (this.locale !== 'en') {
         this.config.locale = calendarLocales[this.locale]
       }
