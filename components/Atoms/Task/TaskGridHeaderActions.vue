@@ -34,7 +34,14 @@
           :toggled="shouldShowCompletedTask"
           @toggle="$emit('onToggleCompleteTasks')"
         />
-        <p class="text-sm ml-2 font-bold text-dark-gray">
+        <p
+          class="text-sm ml-2 font-bold transition-colors duration-200"
+          :class="
+            shouldShowCompletedTask
+              ? 'text-dark-indigo dark:text-light-indigo'
+              : 'text-dark-gray'
+          "
+        >
           {{ label }}
         </p>
       </li>

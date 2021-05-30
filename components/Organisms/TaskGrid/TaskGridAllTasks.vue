@@ -55,6 +55,9 @@
               :value="currentTaskSelected.description"
               :name="labels.body.taskDescription"
               :is-selected="isSelected"
+              :is-complete="
+                currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
+              "
               type="task"
               class="w-full block top-0 left-0 right-0 pr-6"
               @change="handleChangeTaskDescription"
@@ -120,11 +123,11 @@ export default {
   },
   data() {
     return {
-      isToggled: false,
+      isToggled: true,
       isDeleteEnabled: false,
       isArchiveEnabled: false,
       showCompletedTasks: false,
-      amountOfTasksToDisplays: 'all',
+      amountOfTasksToDisplays: 0,
     }
   },
   computed: {
@@ -139,6 +142,9 @@ export default {
       } else {
         return this.taskListOnlyAmountToDisplay(tasksArray)
       }
+    },
+    TASK_STATUS_VALUES() {
+      return TASK_STATUS_VALUES
     },
   },
   methods: {

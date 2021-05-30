@@ -42,6 +42,10 @@
         @apply text-dark-blue;
         @apply dark:text-celeste;
       }
+
+      &.completed {
+        @apply text-success;
+      }
     }
   }
 
@@ -65,6 +69,10 @@
 
     &--task {
       @apply px-2  #{!important};
+
+      &.completed {
+        @apply text-success;
+      }
     }
   }
 

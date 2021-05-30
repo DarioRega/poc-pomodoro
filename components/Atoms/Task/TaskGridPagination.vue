@@ -3,7 +3,7 @@
     <p class="mr-3 text-dark-gray">{{ label }}</p>
     <brand-select
       :options="options"
-      :value="options[1]"
+      :value="options[0]"
       name="select numbers of tasks to display"
       size="small"
       :should-show-selected="false"
@@ -35,7 +35,7 @@ export default {
     }
   },
   beforeMount() {
-    this.$emit('onPaginationChange', this.options[1].id)
+    this.$emit('onPaginationChange', this.options[0].id)
   },
   methods: {
     handleChange(item) {

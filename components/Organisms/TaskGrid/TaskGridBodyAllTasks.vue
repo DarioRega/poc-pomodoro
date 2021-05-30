@@ -22,6 +22,7 @@
           :value="task.name"
           :name="labels.taskName"
           :is-selected="isSelected"
+          :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
           type="task"
           class="w-full"
           :class="[isRunning ? 'pr-3' : 'px-3']"
