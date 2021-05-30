@@ -21,13 +21,17 @@
     @dblclick="$emit('dblclick')"
   >
     <icon
-      v-if="isArchiveEnabled"
+      v-show="isArchiveEnabled"
       icon-name="archiveBox"
       class="w-5 h-5 text-error"
     />
-    <icon v-if="isDeleteEnabled" icon-name="trash" class="w-5 h-5 text-error" />
     <icon
-      v-if="!isArchiveEnabled && !isDeleteEnabled"
+      v-show="isDeleteEnabled"
+      icon-name="trash"
+      class="w-5 h-5 text-error"
+    />
+    <icon
+      v-show="!isArchiveEnabled && !isDeleteEnabled"
       :icon-name="isCompleted ? 'checkMarkRounded' : 'target'"
       class="w-5 h-5"
     />
