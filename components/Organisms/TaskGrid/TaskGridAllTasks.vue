@@ -48,7 +48,7 @@
               v-show="index === 0"
               :value="currentTaskSelected.description"
               :name="labels.body.taskDescription"
-              :is-selected="isSelected"
+              :is-selected="true"
               :is-completed="isCompletedDescription"
               type="task"
               class="w-full block top-0 left-0 right-0 pr-6"
@@ -88,10 +88,6 @@ export default {
     TransitionOpacity,
   },
   props: {
-    isSelected: {
-      type: Boolean,
-      default: false,
-    },
     labels: {
       type: Object,
       required: true,
@@ -111,10 +107,6 @@ export default {
     isStacked: {
       type: Boolean,
       default: false,
-    },
-    tasksArrayLength: {
-      type: Number,
-      required: true,
     },
   },
   data() {
