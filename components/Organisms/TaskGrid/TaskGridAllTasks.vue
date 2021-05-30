@@ -1,14 +1,6 @@
 <template>
   <section
-    class="
-      relative
-      flex-1
-      bg-light-white
-      dark:bg-dark-blue
-      py-4
-      px-6
-      rounded-md
-    "
+    class="relative bg-light-white dark:bg-dark-blue py-4 px-6 rounded-md"
   >
     <task-grid-header-all-tasks
       :labels="labels.header"
@@ -43,7 +35,7 @@
           @onTaskDescriptionChange="handleChangeTaskDescription"
           @onDeadlineChange="handleChangeDeadline"
         >
-          <div class="fixed w-5/12 -mt-4 right-0 px-4 mr-0">
+          <div class="absolute w-full -mt-4 right-0 pl-4 mr-0">
             <BrandTextarea
               v-show="index === 0"
               :value="currentTaskSelected.description"
@@ -51,7 +43,7 @@
               :is-selected="true"
               :is-completed="isCompletedDescription"
               type="task"
-              class="w-full block top-0 left-0 right-0 pr-6"
+              class="w-full"
               @change="handleChangeTaskDescription"
             />
           </div>

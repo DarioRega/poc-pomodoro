@@ -5,7 +5,7 @@
         v-model.lazy="localValue"
         :name="name"
         :aria-label="name"
-        :rows="type === 'task' ? 10 : 4"
+        :rows="type === 'task' ? 15 : 4"
         class="resize-none brand-input__textarea"
         :class="[
           `brand-input__textarea--${type}`,

@@ -1,13 +1,13 @@
 <template>
   <aside
     class="
-      flex
-      overflow-hidden
+      flex flex-none
       max-h-screen
       min-h-screen
       bg-lighter-white
       dark:bg-darker-blue
     "
+    :class="isStacked ? 'w-24' : 'w-52 xl:w-64 3xl:w-80'"
   >
     <div
       class="
@@ -20,7 +20,7 @@
         bg-light-white
         dark:bg-dark-blue
       "
-      :class="isStacked ? 'w-24' : 'w-80'"
+      :class="isStacked ? 'w-24' : 'w-52 xl:w-64 3xl:w-80'"
     >
       <button
         class="

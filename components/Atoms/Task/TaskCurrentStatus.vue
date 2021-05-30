@@ -7,7 +7,7 @@
       w-full
       rounded-full
       max-w-[8rem]
-      min-w-[8rem]
+      min-w-[6rem]
       text-celeste
       py-1
       text-center

@@ -25,11 +25,11 @@
           :is-completed="isCompleted"
           type="task"
           class="w-full"
-          :class="[isRunning ? 'pr-3' : 'px-3']"
+          :class="[isRunning ? 'pr-0' : 'pl-3']"
           @change="$emit('onTaskNameChange', $event, task.id)"
         />
       </div>
-      <div class="w-40 header__col header__col--center">
+      <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
         <task-select-status
           :name="labels.taskStatusName"
           :value="task.status"
@@ -38,7 +38,16 @@
         />
       </div>
 
-      <div class="w-28 flex-none header__col header__col--center relative">
+      <div
+        class="
+          w-24
+          3xl:w-32
+          px-2
+          flex-none
+          header__col header__col--center
+          relative
+        "
+      >
         <task-deadline
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"

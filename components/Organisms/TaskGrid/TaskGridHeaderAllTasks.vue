@@ -14,23 +14,23 @@
           <h6 class="ml-4">{{ labels.all }}</h6>
         </button>
       </div>
-      <div class="w-40 header__col header__col--center">
+      <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
         <h6>{{ labels.status }}</h6>
       </div>
 
-      <div class="w-28 flex-none header__col header__col--center">
+      <div class="w-24 3xl:w-32 px-2 flex-none header__col header__col--center">
         <h6>{{ labels.deadline }}</h6>
       </div>
 
       <div class="w-5/12 header__col pl-6">
-        <div class="flex justify-between items-center w-full">
-          <h6 class="flex-none w-24 xl:w-36">{{ labels.description }}</h6>
-          <div class="flex-1 flex items-center justify-end">
+        <div class="flex justify-between items-center w-full h-full">
+          <h6 class="flex-none w-24">{{ labels.description }}</h6>
+          <div class="flex-1 flex items-center justify-end h-full">
             <task-grid-header-actions
-              class="w-full ml-4"
+              class="w-full h-full ml-2 2xl:ml-4"
               :should-show-completed-task="shouldShowCompletedTask"
               :label="
-                clientWidth < 1440
+                clientWidth < 1400
                   ? labels.showCompletedTasksCut
                   : labels.showCompletedTasks
               "
