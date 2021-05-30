@@ -135,9 +135,9 @@ CompleteTask.args = {
     {
       id: 322,
       status: {
-        id: 3,
-        value: TASK_STATUS_VALUES.TODO,
-        name: FAKER_TASK_STATUS_NAMES.TODO,
+        id: 1,
+        value: TASK_STATUS_VALUES.DONE,
+        name: FAKER_TASK_STATUS_NAMES.DONE,
       },
       name: 'Fyl to Bangaloor',
       deadline: '19.06.2021',

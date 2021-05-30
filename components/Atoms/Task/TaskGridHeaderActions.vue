@@ -19,17 +19,7 @@
           <icon icon-name="trash" />
         </span>
       </li>
-      <li
-        class="
-          toggler
-          flex
-          w-full
-          max-w-[13rem]
-          justify-start
-          items-center
-          pl-2
-        "
-      >
+      <li class="toggler flex justify-start items-center pl-2">
         <toggle
           :toggled="shouldShowCompletedTask"
           @toggle="$emit('onToggleCompleteTasks')"

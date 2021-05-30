@@ -34,12 +34,13 @@
           v-for="(task, index) in tasksList"
           :key="task.id"
           :task="task"
+          :is-stacked="isStacked"
           :is-selected="currentTaskSelected.id === task.id"
+          :is-completed="task.status.value === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
-          :is-stacked="isStacked"
           :labels="labels.body"
           class="mb-3"
           @onTargetClick="handleClickTaskTarget"
@@ -55,9 +56,7 @@
               :value="currentTaskSelected.description"
               :name="labels.body.taskDescription"
               :is-selected="isSelected"
-              :is-complete="
-                currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
-              "
+              :is-completed="isCompletedDescription"
               type="task"
               class="w-full block top-0 left-0 right-0 pr-6"
               @change="handleChangeTaskDescription"
@@ -131,6 +130,9 @@ export default {
     }
   },
   computed: {
+    isCompletedDescription() {
+      return this.currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
+    },
     tasksList() {
       let tasksArray = this.tasks
 

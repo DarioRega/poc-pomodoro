@@ -15,7 +15,7 @@
           `brand-input__input--size-${size}`,
           `brand-input__input--${type}`,
           isSelected && 'selected',
-          isComplete && 'completed',
+          isCompleted && 'completed',
         ]"
         @change="onChange"
       />
@@ -82,7 +82,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isComplete: {
+    isCompleted: {
       type: Boolean,
       default: false,
     },

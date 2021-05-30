@@ -12,10 +12,10 @@
       dark:focus:text-light-indigo
     "
     :class="[
-      isSelected && !isComplete
+      isSelected && !isCompleted
         ? 'text-dark-blue dark:text-celeste'
         : 'text-dark-gray',
-      isComplete && 'text-success',
+      isCompleted && 'text-success',
     ]"
     @click="$emit('click')"
     @dblclick="$emit('dblclick')"
@@ -28,7 +28,7 @@
     <icon v-if="isDeleteEnabled" icon-name="trash" class="w-5 h-5 text-error" />
     <icon
       v-if="!isArchiveEnabled && !isDeleteEnabled"
-      :icon-name="isComplete ? 'checkMarkRounded' : 'target'"
+      :icon-name="isCompleted ? 'checkMarkRounded' : 'target'"
       class="w-5 h-5"
     />
   </button>
@@ -44,7 +44,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isComplete: {
+    isCompleted: {
       type: Boolean,
       default: false,
     },

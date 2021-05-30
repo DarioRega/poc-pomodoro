@@ -7,7 +7,7 @@
       <div class="header__col task-name">
         <task-target
           :is-selected="isSelected"
-          :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
+          :is-completed="isCompleted"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
           @click="$emit('onTargetClick', task.id)"
@@ -22,7 +22,7 @@
           :value="task.name"
           :name="labels.taskName"
           :is-selected="isSelected"
-          :is-complete="task.status.value === TASK_STATUS_VALUES.DONE"
+          :is-completed="isCompleted"
           type="task"
           class="w-full"
           :class="[isRunning ? 'pr-3' : 'px-3']"
@@ -43,6 +43,7 @@
           :close-button-text="labels.closeCalendar"
           :value="task.deadline"
           :is-selected="isSelected"
+          :is-completed="isCompleted"
           @change="$emit('onDeadlineChange', $event, task.id)"
         />
       </div>
@@ -74,10 +75,6 @@ export default {
     TaskDeadline,
   },
   props: {
-    isSelected: {
-      type: Boolean,
-      default: false,
-    },
     labels: {
       type: Object,
       required: true,
@@ -93,6 +90,14 @@ export default {
     currentTaskSelected: {
       type: Object,
       default: () => ({}),
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
     },
     /*
       If the sidebar is stacked or normal width

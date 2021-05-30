@@ -7,7 +7,7 @@ export default {
     isSelected: {
       control: { type: 'select', options: [true, false] },
     },
-    isComplete: {
+    isCompleted: {
       control: { type: 'select', options: [true, false] },
     },
   },
@@ -28,5 +28,5 @@ Selected.args = {
 
 export const Done = Template.bind({})
 Done.args = {
-  isComplete: true,
+  isCompleted: true,
 }

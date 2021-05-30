@@ -10,7 +10,7 @@
         :class="[
           `brand-input__textarea--${type}`,
           isSelected && 'selected',
-          isComplete && 'completed',
+          isCompleted && 'completed',
         ]"
         @change="onChange"
       ></textarea>
@@ -48,7 +48,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isComplete: {
+    isCompleted: {
       type: Boolean,
       default: false,
     },
@@ -61,9 +61,6 @@ export default {
   computed: {
     hasErrors() {
       return !!this.$slots.errors
-    },
-    isSelected() {
-      return this.type === 'task'
     },
   },
   mounted() {

@@ -9,12 +9,13 @@
       h-full
       task-deadline
     "
-    :class="[value && 'relative', isSelected && 'selected']"
+    :class="[
+      value && 'relative',
+      isSelected && 'selected',
+      isCompleted && 'completed',
+    ]"
   >
-    <p
-      v-if="value"
-      class="text-sm border-0 task-deadline__value text-dark-gray"
-    >
+    <p v-if="value" class="text-sm border-0 task-deadline__value">
       {{ value }}
     </p>
     <button
@@ -118,6 +119,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -170,6 +175,10 @@ export default {
 
 <style lang="scss">
 .task-deadline {
+  &__value {
+    @apply text-dark-gray;
+  }
+
   &__icon,
   &__toggler {
     @apply transition-colors text-dark-gray;
@@ -197,6 +206,19 @@ export default {
       &:focus {
         @apply text-dark-indigo #{!important};
         @apply dark:text-light-indigo #{!important};
+      }
+    }
+  }
+}
+
+.task-deadline.completed {
+  .task-deadline {
+    &__value,
+    &__icon,
+    &__toggler {
+      @apply text-success;
+      &:focus {
+        @apply text-success;
       }
     }
   }
