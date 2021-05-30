@@ -23,9 +23,7 @@ const Template = (args, { argTypes }) => ({
   },
   template: `
     <div class="max-w-lg">
-    <brand-textarea v-bind="$props">
-      <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
-    </brand-textarea>
+    <brand-textarea v-bind="$props" />
     </div>`,
 })
 
@@ -69,31 +67,19 @@ WithLabel.args = {
 export const HasError = Template.bind({})
 HasError.args = {
   name: 'myName',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }
 
 export const HasErrorWithLabel = Template.bind({})
 HasErrorWithLabel.args = {
   name: 'account',
   label: 'Account',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }
 
 export const HasErrorTypeTask = Template.bind({})
 HasErrorTypeTask.args = {
   name: 'myName',
   type: 'task',
-  errors: `
-    <p>
-      Field can't be empty
-    </p>
-`,
+  errorText: "Field can't be empty",
 }

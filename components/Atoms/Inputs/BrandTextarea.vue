@@ -18,15 +18,25 @@
         {{ label }}
       </label>
     </div>
-    <div v-show="hasErrors" class="mt-1 text-right brand-input__errors">
-      <slot name="errors" />
-    </div>
+    <transition-translate-y translate-y="-translate-y-4">
+      <div
+        v-show="hasErrors"
+        class="mt-1 absolute text-right brand-input__errors w-full"
+      >
+        <p>{{ errorText }}</p>
+      </div>
+    </transition-translate-y>
   </div>
 </template>
 
 <script>
+import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
+
 export default {
   name: 'BrandTextarea',
+  components: {
+    TransitionTranslateY,
+  },
   props: {
     value: {
       type: String,
@@ -44,6 +54,10 @@ export default {
       type: String,
       required: true,
     },
+    errorText: {
+      type: String,
+      default: '',
+    },
     isSelected: {
       type: Boolean,
       default: false,
@@ -60,7 +74,7 @@ export default {
   },
   computed: {
     hasErrors() {
-      return !!this.$slots.errors
+      return this.errorText.length > 0
     },
   },
   mounted() {
