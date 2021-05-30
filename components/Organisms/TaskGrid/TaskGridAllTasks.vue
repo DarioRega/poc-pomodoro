@@ -1,6 +1,14 @@
 <template>
   <section
-    class="relative bg-light-white dark:bg-dark-blue py-4 px-6 rounded-md"
+    class="
+      relative
+      bg-light-white
+      dark:bg-dark-blue
+      py-4
+      px-4
+      xl:px-6
+      rounded-md
+    "
   >
     <task-grid-header-all-tasks
       :labels="labels.header"

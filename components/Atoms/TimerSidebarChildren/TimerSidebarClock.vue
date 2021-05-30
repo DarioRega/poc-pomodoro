@@ -7,7 +7,10 @@
       <p v-show="isStacked" class="text-base font-semibold">
         {{ labels.start }}
       </p>
-      <p v-show="!isStacked" class="text-lead font-semibold">
+      <p
+        v-show="!isStacked"
+        class="text-base px-4 xl:px-0 xl:text-lead font-semibold"
+      >
         {{ labels.startSession }}
       </p>
     </div>

@@ -28,7 +28,8 @@
           absolute
           text-dark-blue
           dark:text-celeste
-          w-10
+          w-9
+          xl:w-10
           focus:outline-none
         "
         @click="$emit('onToggleStacked', !isStacked)"
@@ -90,7 +91,10 @@ export default {
 }
 
 .sidebar__stacked-toggler {
-  @apply top-[9rem] right-[-1.25rem];
+  @apply top-[7.2rem] right-[-1rem];
+  @screen xl {
+    @apply top-[9rem] right-[-1.25rem];
+  }
   &:hover {
     @apply text-opacity-70;
   }

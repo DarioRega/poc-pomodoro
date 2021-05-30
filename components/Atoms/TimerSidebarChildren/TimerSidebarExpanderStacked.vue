@@ -1,7 +1,12 @@
 <template>
   <div class="timer-sidebar__expander timer-sidebar__expander--stacked">
     <button
-      class="focus:outline-none timer-sidebar__expander__button h-auto"
+      class="
+        focus:outline-none
+        timer-sidebar__expander__button
+        h-auto
+        inline-flex
+      "
       @click="$emit('click')"
     >
       <icon icon-name="expandScreen" class="w-5 h-5" />
@@ -9,7 +14,12 @@
     <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
     <button
       v-show="shouldShowSessionInformation && hasInformations"
-      class="focus:outline-none timer-sidebar__expander__button h-auto"
+      class="
+        focus:outline-none
+        timer-sidebar__expander__button
+        h-auto
+        inline-flex
+      "
       @mouseenter="isInformationTooltipVisible = true"
       @onmouseleave="isInformationTooltipVisible = false"
     >

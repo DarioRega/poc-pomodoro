@@ -23,7 +23,7 @@
     <icon
       v-show="isArchiveEnabled"
       icon-name="archiveBox"
-      class="w-5 h-5 text-error"
+      class="w-5 h-5 text-darker-gray"
     />
     <icon
       v-show="isDeleteEnabled"
