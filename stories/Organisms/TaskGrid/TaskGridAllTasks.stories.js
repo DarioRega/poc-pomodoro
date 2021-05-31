@@ -29,12 +29,8 @@ const Template = (args, { argTypes }) => ({
       stacked: false,
     }
   },
-  updated() {
-    console.log('THIS STACKED', this.stacked)
-  },
   mounted() {
     this.stacked = args.isStacked
-    console.log('CLIENT INER', window.innerWidth)
   },
   computed: {
     status() {

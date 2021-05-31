@@ -49,7 +49,6 @@ button:focus {
 
 
 // APP SKELETTON LAYOUT
-
 .app-layout {
   @apply flex relative bg-pink-500 dark:bg-darker-blue w-full;
 
@@ -70,9 +69,7 @@ button:focus {
       width: calc(100vw - 24rem);
     }
   }
-
   &__main-content--stacked {
     width: calc(100vw - 10rem);
   }
-
 }
