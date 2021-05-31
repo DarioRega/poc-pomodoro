@@ -2,6 +2,7 @@
   <section
     class="
       relative
+      w-full
       bg-light-white
       dark:bg-dark-blue
       py-4

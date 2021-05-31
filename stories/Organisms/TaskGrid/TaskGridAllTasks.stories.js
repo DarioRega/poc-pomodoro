@@ -29,8 +29,12 @@ const Template = (args, { argTypes }) => ({
       stacked: false,
     }
   },
+  updated() {
+    console.log('THIS STACKED', this.stacked)
+  },
   mounted() {
     this.stacked = args.isStacked
+    console.log('CLIENT INER', window.innerWidth)
   },
   computed: {
     status() {
@@ -58,17 +62,25 @@ const Template = (args, { argTypes }) => ({
         general: {
           amountOfTasksToDisplay: 'Tasks to display',
         },
+        clock: {
+          resume: 'Resume',
+          pause: 'Pause',
+          stop: 'Stop',
+          start: 'Start',
+          startSession: 'Start session',
+          restartCurrentSession: 'Restart session',
+        },
       }
     },
   },
   template: `
-    <div class='flex'>
-    <sidebar v-if='hasSidebarExample' v-bind='$props' :is-stacked='stacked' @onToggleStacked='stacked = $event'>
+    <div class='app-layout'>
+    <sidebar class='app-layout__sidebar' v-if='hasSidebarExample' v-bind='$props' :is-stacked='stacked' @onToggleStacked='stacked = $event'>
       <template #currentTime>
         <current-time :is24h='false' :is-stacked='stacked' />
       </template>
       <template #timer>
-        <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.started' current-timer='23:00'>
+        <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.started' current-timer='23:00' :labels='getLabels.clock'>
           <template #currentSessionInformations>
             <div class='text-center'>
               <p>Current session will end at 14:30 PM</p>
@@ -77,9 +89,13 @@ const Template = (args, { argTypes }) => ({
         </timer-sidebar>
       </template>
     </sidebar>
-    <div class='w-full max-w-full' :class="hasSidebarExample ? 'p-6 xl:p-10 bg-lighter-white dark:bg-darker-blue' : ''">
-      <task-grid-all-tasks v-bind='$props' :labels='getLabels'/>
-    </div>
+    <section class='app-layout__main-content' :class="stacked && 'app-layout__main-content--stacked' ">
+      <div class='w-full'>
+        <task-grid-all-tasks v-bind='$props' :labels='getLabels'/>
+      <div class='bg-yellow-100 3xl:bg-blue-300 w-full h-24'>
+      </div>
+      </div>
+    </section>
     </div>
   `,
 })

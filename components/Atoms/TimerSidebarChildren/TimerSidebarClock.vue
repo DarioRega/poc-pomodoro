@@ -76,7 +76,7 @@ export default {
       required: true,
     },
     labels: {
-      type: String,
+      type: Object,
       required: true,
     },
   },

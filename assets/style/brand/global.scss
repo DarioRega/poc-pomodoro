@@ -46,3 +46,33 @@ button:focus {
     }
   }
 }
+
+
+// APP SKELETTON LAYOUT
+
+.app-layout {
+  @apply flex relative bg-pink-500 dark:bg-darker-blue w-full;
+
+  &__sidebar {
+   @apply flex flex-none max-h-screen min-h-screen bg-lighter-white dark:bg-darker-blue;
+    @apply transition-all duration-300 ease-linear delay-100;
+  }
+
+  &__main-content {
+    @apply flex justify-center mx-auto absolute right-[2rem];
+
+    width: calc(100vw - 17rem);
+    transition: width 500ms ease-in-out;
+    @screen xl {
+      width: calc(100vw - 20rem);
+    }
+    @screen 3xl {
+      width: calc(100vw - 24rem);
+    }
+  }
+
+  &__main-content--stacked {
+    width: calc(100vw - 10rem);
+  }
+
+}
