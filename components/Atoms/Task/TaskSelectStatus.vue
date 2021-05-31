@@ -163,7 +163,6 @@ export default {
       this.$emit('change', item.id)
     },
     handleListKeyDown(evt, item) {
-      console.log('---------------------------------------------')
       let spaceBarCodeKey
       if (SPACEBAR_KEY_CODE.includes(evt.keyCode)) {
         spaceBarCodeKey = SPACEBAR_KEY_CODE.find((x) => x === evt.keyCode)
@@ -222,7 +221,6 @@ export default {
       }
     },
     focusElement(id) {
-      console.log('ID TO FOCUS', id)
       this.currentFocusedElementId = id
     },
   },
