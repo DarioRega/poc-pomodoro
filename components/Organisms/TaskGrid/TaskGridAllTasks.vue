@@ -9,6 +9,7 @@
       px-4
       xl:px-6
       rounded-md
+      min-h-[30rem]
     "
   >
     <task-grid-header-all-tasks
@@ -62,7 +63,7 @@
     <transition-opacity duration-amount="200">
       <div v-show="isToggled">
         <task-grid-pagination
-          class="pb-1 pt-6 justify-end"
+          class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
           :label="labels.general.amountOfTasksToDisplay"
           @onPaginationChange="amountOfTasksToDisplays = $event"
         />
