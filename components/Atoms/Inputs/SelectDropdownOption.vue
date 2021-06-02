@@ -1,11 +1,11 @@
 <template>
   <div>
-    <span
-      class="block font-normal truncate option-name"
+    <p
+      class="block font-semibold truncate option-name mb-0"
       :class="isSelected && 'text-dark-blue dark:text-celeste'"
     >
       {{ name }}
-    </span>
+    </p>
     <span
       v-if="isSelected && shouldShowSelected"
       class="

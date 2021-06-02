@@ -136,3 +136,16 @@ export const SETTINGS_PANEL_LABELS = {
     unlimitedProjects: 'unlimited projects',
   },
 }
+
+export const PANEL_SELECT_RUNNING_TASK_LABELS = {
+  selectYourTask: 'Select your task',
+  usePreviousTask: 'Use the previous task',
+  iJustWantTheTimer: 'I just want the timer',
+  previousTask: 'or pick your previous task',
+  close: 'Close',
+  placeholderSelect: 'Pick a task',
+  noResultsFounds: 'No results founds for',
+  startASession: 'Start a session',
+  startSession: 'Start session',
+  project: 'project',
+}
