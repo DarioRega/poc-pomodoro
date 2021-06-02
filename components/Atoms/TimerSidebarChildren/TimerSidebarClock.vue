@@ -3,17 +3,19 @@
     class="timer-sidebar__clock font-bold uppercase rounded-full"
     @click="$emit('click')"
   >
+    <!--    SESSION PENDING -->
     <div v-if="isSessionPending">
-      <p v-show="isStacked" class="text-base font-semibold">
+      <p v-show="isStacked" class="text-base font-bold">
         {{ labels.start }}
       </p>
       <p
         v-show="!isStacked"
-        class="text-base px-4 xl:px-0 xl:text-lead font-semibold"
+        class="text-base px-4 xl:px-0 xl:text-lead font-bold"
       >
         {{ labels.startSession }}
       </p>
     </div>
+
     <div
       v-else
       class="
@@ -32,12 +34,6 @@
         {{ currentTimer | getOnlyMinutes }}
       </h2>
     </div>
-    <p
-      v-show="shouldShowStartText"
-      class="mt-1 -mb-5 font-bold tracking-wide uppercase"
-    >
-      {{ labels.start }}
-    </p>
   </button>
 </template>
 
@@ -64,10 +60,6 @@ export default {
       default: false,
     },
     isSessionPending: {
-      type: Boolean,
-      default: false,
-    },
-    shouldShowStartText: {
       type: Boolean,
       default: false,
     },

@@ -6,9 +6,21 @@
         :status="status"
         :labels="labels"
         :current-timer="currentTimer"
-      >
-        <slot name="currentSessionInformations" />
-      </timer-sidebar-unstacked>
+        :current-session-end-time="currentSessionEndTime"
+        :is-session-pending="isSessionPending"
+        :is-session-started-but-pending-process="
+          isSessionStartedButPendingProcess
+        "
+        :is-paused="isPaused"
+        :is-pending="isPending"
+        :is-running="isRunning"
+        @onStart="handleStart"
+        @onPause="handlePause"
+        @onResume="handleResume"
+        @onStop="handlePause"
+        @onTimerClick="handleTimerClick"
+        @onScreenExpand="handleScreenExpand"
+      />
     </transition-sidebar-content>
     <transition-sidebar-content>
       <timer-sidebar-stacked
@@ -16,9 +28,21 @@
         :status="status"
         :labels="labels"
         :current-timer="currentTimer"
-      >
-        <slot name="currentSessionInformations" />
-      </timer-sidebar-stacked>
+        :current-session-end-time="currentSessionEndTime"
+        :is-session-pending="isSessionPending"
+        :is-session-started-but-pending-process="
+          isSessionStartedButPendingProcess
+        "
+        :is-paused="isPaused"
+        :is-pending="isPending"
+        :is-running="isRunning"
+        @onStart="handleStart"
+        @onPause="handlePause"
+        @onResume="handleResume"
+        @onStop="handlePause"
+        @onTimerClick="handleTimerClick"
+        @onScreenExpand="handleScreenExpand"
+      />
     </transition-sidebar-content>
   </div>
 </template>
@@ -41,24 +65,61 @@ export default {
       type: Boolean,
       default: false,
     },
+    isRunning: {
+      type: Boolean,
+      default: false,
+    },
+    isPaused: {
+      type: Boolean,
+      default: false,
+    },
+    isPending: {
+      type: Boolean,
+      default: false,
+    },
+    isSessionPending: {
+      type: Boolean,
+      default: false,
+    },
+    isSessionStartedButPendingProcess: {
+      type: Boolean,
+      default: false,
+    },
     currentTimer: {
       type: String,
       default: '',
     },
+    currentSessionEndTime: {
+      type: String,
+      required: true,
+    },
     labels: {
       type: Object,
-      default: () => ({
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
-        start: 'Start',
-        startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
-      }),
+      required: true,
     },
     status: {
       type: String,
       default: POMODORO_STATUS.SESSION.pending,
+    },
+  },
+  methods: {
+    handlePause() {
+      // TODO handle
+    },
+    handleStart() {
+      // TODO handle
+    },
+    handleResume() {
+      // TODO handle
+    },
+    handleStop() {
+      // TODO handle
+    },
+    handleScreenExpand() {
+      // TODO handle
+    },
+    handleTimerClick() {
+      // TODO handle
     },
   },
 }

@@ -1,50 +1,51 @@
 <template>
   <div class="timer-sidebar__controls">
-    <div v-show="isRunning" class="timer-sidebar__controls--running">
+    <!--  IS RUNNING -->
+    <div v-show="isRunning" class="timer-sidebar__controls">
       <button
-        class="timer-sidebar__controls__buttons"
+        class="timer-sidebar__controls__buttons text-error"
         @click="$emit('handlePause')"
       >
         <icon icon-name="pause" />
-        <span>{{ labels.pause }}</span>
       </button>
     </div>
-    <div v-show="isPaused" class="timer-sidebar__controls--paused">
+
+    <!--    IS PAUSED -->
+    <div
+      v-show="isPaused"
+      class="timer-sidebar__controls"
+      :class="isStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
+    >
       <button
-        class="timer-sidebar__controls__buttons"
-        :class="!isStacked && 'mr-2'"
+        class="timer-sidebar__controls__buttons text-error"
+        @click="$emit('handleStop')"
+      >
+        <icon icon-name="stop" />
+      </button>
+      <button
+        class="timer-sidebar__controls__buttons text-success"
         @click="$emit('handleResume')"
       >
         <icon icon-name="play" />
-        <span>{{ labels.resume }}</span>
       </button>
+    </div>
+    <!--    PENDING BUT SESSION STARTED -->
+    <div
+      v-show="isSessionStartedButPendingProcess"
+      class="timer-sidebar__controls"
+      :class="isStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
+    >
       <button
-        class="timer-sidebar__controls__buttons"
-        :class="!isStacked && 'ml-2'"
+        class="timer-sidebar__controls__buttons text-error"
         @click="$emit('handleStop')"
       >
         <icon icon-name="stop" />
-        <span>{{ labels.stop }}</span>
       </button>
-    </div>
-    <div
-      v-show="isStatusPendingAndSessionAlreadyStarted"
-      class="timer-sidebar__controls--session-started-status-pending"
-    >
       <button
-        v-show="isStacked"
-        class="timer-sidebar__controls__buttons"
+        class="timer-sidebar__controls__buttons text-success"
         @click="$emit('handleStart')"
       >
         <icon icon-name="play" />
-        <span>{{ labels.start }}</span>
-      </button>
-      <button
-        class="timer-sidebar__controls__buttons"
-        @click="$emit('handleStop')"
-      >
-        <icon icon-name="stop" />
-        <span>{{ labels.restartCurrentSession }}</span>
       </button>
     </div>
   </div>
@@ -69,13 +70,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    isStatusPendingAndSessionAlreadyStarted: {
+    isSessionStartedButPendingProcess: {
       type: Boolean,
       default: false,
-    },
-    labels: {
-      type: Object,
-      required: true,
     },
   },
 }

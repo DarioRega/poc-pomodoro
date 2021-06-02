@@ -40,7 +40,14 @@
   .screen-expander-button:focus {
     @extend .brand-focus-ring--indigo;
   }
-  // TabLink.vue
+  .screen-expander__control:focus {
+    @apply rounded-full;
+    @extend .brand-focus-ring--indigo;
+  }
+
+
+
+    // TabLink.vue
   .tab-link:focus {
     @extend .brand-focus-ring--indigo;
   }
@@ -83,6 +90,9 @@
 
   // ScreenExpander.vue
   .screen-expander-button:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+  .screen-expander__control:focus {
     @extend .brand-dark-focus-ring--indigo;
   }
 

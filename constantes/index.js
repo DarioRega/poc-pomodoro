@@ -20,6 +20,13 @@ const statusTypes = (action) => ({
   done: `${action}_DONE`,
 })
 
+export const STEPS_STATUS = {
+  PENDING: 'PENDING',
+  STARTED: 'STARTED',
+  PAUSED: 'PAUSED',
+  DONE: 'DONE',
+}
+
 export const POMODORO_STATUS = {
   SESSION: statusTypes(`SESSION`),
   POMODORO: statusTypes(`POMODORO`),

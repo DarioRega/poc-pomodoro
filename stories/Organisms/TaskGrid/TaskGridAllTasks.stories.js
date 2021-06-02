@@ -65,6 +65,7 @@ const Template = (args, { argTypes }) => ({
           start: 'Start',
           startSession: 'Start session',
           restartCurrentSession: 'Restart session',
+          currentSessionInformation: 'Current session will end at',
         },
       }
     },
@@ -77,13 +78,7 @@ const Template = (args, { argTypes }) => ({
           <current-time :is24h='false' :is-stacked='stacked' />
         </template>
         <template #timer>
-          <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.started' current-timer='23:00' :labels='getLabels.clock'>
-            <template #currentSessionInformations>
-              <div class='text-center'>
-                <p>Current session will end at 14:30 PM</p>
-              </div>
-            </template>
-          </timer-sidebar>
+          <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.paused' :is-paused='true' current-session-end-time='15:35 AM' current-timer='23:00' :labels='getLabels.clock' />
         </template>
       </sidebar>
       <section class='app-layout__main-content' :class="stacked && 'app-layout__main-content--stacked' ">

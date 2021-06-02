@@ -24,12 +24,8 @@ const Template = (args, { argTypes }) => ({
   computed: {
     getLabels() {
       return {
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
         start: 'Start',
         startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
       }
     },
     shouldStack() {
@@ -41,7 +37,7 @@ const Template = (args, { argTypes }) => ({
     <div :class="shouldStack ? 'w-24' : 'w-72'">
         <div :class="shouldStack ? 'timer-sidebar--stacked' : 'timer-sidebar'">
           <timer-sidebar-clock v-bind="$props" :labels="getLabels" />
-        </div>  
+        </div>
     </div>`,
 })
 
