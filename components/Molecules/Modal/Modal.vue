@@ -7,7 +7,6 @@
         overflow-hidden
         text-left
         align-bottom
-        bg-white
         rounded-lg
         shadow-xl
         transition-all
@@ -28,13 +27,10 @@
           md:pt-5
           sm:pb-6
           md:pb-8
-          xl:pb-12
         "
       >
         <div class="relative flex-col mt-2 sm:flex sm:items-start">
-          <div class="mb-6">
-            <slot name="header" />
-          </div>
+          <slot name="header" />
           <!-- allow user to close with icon if footer is not given -->
           <div v-if="!hasFooter" class="absolute top-0 right-0">
             <button
@@ -52,7 +48,7 @@
               <icon icon-name="close" class="w-5 h-5" />
             </button>
           </div>
-          <div class="min-h-[5rem] flex items-center">
+          <div class="min-h-[5rem] flex items-center w-full">
             <slot name="body" />
           </div>
         </div>
@@ -101,7 +97,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .modal {
-  @apply w-full;
+  @apply w-full bg-light-white dark:bg-darker-blue;
   &--default {
     @screen sm {
       @apply max-w-lg;
@@ -135,11 +131,6 @@ export default {
     }
   }
 
-  &__content,
-  &__footer {
-    @apply bg-light-white;
-    @apply dark:bg-dark-blue;
-  }
   &__footer {
     @apply border-t-2 border-dark-gray-20;
     @apply dark:border-dark-gray;

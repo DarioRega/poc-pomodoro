@@ -28,9 +28,7 @@
       <span
         aria-hidden="true"
         :class="[
-          toggled
-            ? `translate-x-${size === 'small' ? '4' : '5'}`
-            : 'translate-x-0',
+          toggled ? `${translateX}` : 'translate-x-0',
           size === 'small' ? 'w-3 h-3' : 'w-4 h-4',
         ]"
         class="
@@ -70,6 +68,11 @@ export default {
     size: {
       type: String,
       default: 'default',
+    },
+  },
+  computed: {
+    translateX() {
+      return this.size === 'small' ? 'translate-x-4' : 'translate-x-5'
     },
   },
 }

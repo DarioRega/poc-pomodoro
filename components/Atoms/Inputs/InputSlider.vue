@@ -41,11 +41,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    interval: {
+      type: Number,
+      default: 5,
+    },
   },
   data() {
     return {
       localValue: 20,
-      interval: 5,
     }
   },
   computed: {
