@@ -457,6 +457,11 @@ WithPagination.args = {
 }
 
 export const WithSidebar = Template.bind({})
+
+WithSidebar.parameters = {
+  layout: 'fullscreen',
+}
+
 WithSidebar.args = {
   withSidebar: true,
   currentTaskSelected: {
