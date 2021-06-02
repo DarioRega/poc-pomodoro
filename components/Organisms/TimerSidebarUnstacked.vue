@@ -1,13 +1,14 @@
 <template>
   <div class="flex flex-col justify-center items-center timer-sidebar">
-    <div v-show="shouldShowSessionInformation" class="mb-3 max-w-full px-4">
-      <slot name="currentSessionInformations" />
+    <div v-show="!isSessionPending" class="text-center px-3">
+      <p class="text-sm text-dark-gray mb-6 font-bold">
+        {{ labels.currentSessionInformation }} {{ currentSessionEndTime }}
+      </p>
     </div>
 
     <timer-sidebar-clock
       :is-session-pending="isSessionPending"
       :is-stacked="false"
-      :should-show-start-text="shouldShowStartText"
       :labels="labels"
       :current-timer="currentTimer"
       @click="$emit('onTimerClick')"
@@ -15,21 +16,20 @@
 
     <timer-sidebar-expander-unstacked
       class="mt-4"
-      @click="handleScreenExpand"
+      @onScreenExpand="$emit('onScreenExpand')"
     />
 
     <timer-sidebar-controls
-      :is-running="isRunning"
       :is-paused="isPaused"
-      :is-status-pending-and-session-already-started="
-        isStatusPendingAndSessionAlreadyStarted
+      :is-running="isRunning"
+      :is-session-started-but-pending-process="
+        isSessionStartedButPendingProcess
       "
       :is-stacked="false"
-      :labels="labels"
-      @handleStart="handleStart"
-      @handlePause="handlePause"
-      @handleResume="handleResume"
-      @handleStop="handleStop"
+      @onStart="$emit('onStart')"
+      @onPause="$emit('onPause')"
+      @onResume="$emit('onResume')"
+      @onStop="$emit('onStop')"
     />
   </div>
 </template>
@@ -49,6 +49,35 @@ export default {
   },
 
   props: {
+    isSessionPending: {
+      type: Boolean,
+      default: false,
+    },
+    isPending: {
+      type: Boolean,
+      default: false,
+    },
+    isRunning: {
+      type: Boolean,
+      default: false,
+    },
+    isPaused: {
+      type: Boolean,
+      default: false,
+    },
+    isSessionStartedButPendingProcess: {
+      type: Boolean,
+      default: false,
+    },
+
+    currentSessionEndTime: {
+      type: String,
+      required: true,
+    },
+    currentTimer: {
+      type: String,
+      default: '',
+    },
     status: {
       type: String,
       default: POMODORO_STATUS.SESSION.pending,
@@ -56,70 +85,7 @@ export default {
 
     labels: {
       type: Object,
-      default: () => ({
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
-        start: 'Start',
-        startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
-      }),
-    },
-    currentTimer: {
-      type: String,
-      default: '',
-    },
-  },
-
-  computed: {
-    isSessionPending() {
-      return this.status.includes(POMODORO_STATUS.SESSION.pending)
-    },
-    hasInformations() {
-      return !!this.$slots.currentSessionInformations
-    },
-    shouldShowStartText() {
-      return (
-        (this.status.includes('PENDING') || this.status.includes('PAUSED')) &&
-        !this.isSessionPending
-      )
-    },
-    shouldShowSessionInformation() {
-      return !this.status.includes('PENDING') && !this.isSessionPending
-    },
-    isStatusPendingAndSessionAlreadyStarted() {
-      return this.status.includes('PENDING') && !this.isSessionPending
-    },
-    isPaused() {
-      return this.status.includes('PAUSED') && !this.isSessionPending
-    },
-    isRunning() {
-      return this.status.includes('STARTED') && !this.isSessionPending
-    },
-  },
-  methods: {
-    handlePause() {
-      this.$emit('onPause')
-    },
-    handleResume() {
-      if (
-        this.status === POMODORO_STATUS.POMODORO.pending &&
-        this.status === POMODORO_STATUS.SMALL_BREAK.pending &&
-        this.status === POMODORO_STATUS.BIG_BREAK.pending
-      ) {
-        this.handleStart()
-      } else {
-        this.$emit('onResume')
-      }
-    },
-    handleStop() {
-      this.$emit('onStop')
-    },
-    handleStart() {
-      this.$emit('onStart')
-    },
-    handleScreenExpand() {
-      this.$emit('onScreenExpand')
+      required: true,
     },
   },
 }

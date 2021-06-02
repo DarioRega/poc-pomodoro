@@ -20,63 +20,33 @@
   }
 
   &__controls {
-    @apply mt-3;
-
-    & > div {
-      @apply flex justify-center items-center;
-    }
+    @apply mt-2 flex justify-center items-center;
 
     &__buttons {
-      @apply flex items-start h-5;
+      @apply inline-flex items-center w-5 h-5;
       @apply transition-colors duration-200;
-      svg {
-        @apply w-5 h-5;
-      }
-
-      span {
-        @apply ml-2 text-base font-semibold tracking-wide font-timer;
-
-      }
-    }
-
-    &--running {
-      button {
-        @apply text-error;
-      }
-    }
-
-    &--paused {
-      @apply flex flex-row;
-      button {
-        &:nth-child(1) {
-          @apply text-success;
-        }
-
-        &:nth-child(2) {
-          @apply text-error;
-        }
-      }
-    }
-
-    &--session-started-status-pending {
-      button {
-        @apply text-error;
+      &:hover {
+        @apply opacity-80;
       }
     }
   }
 
   &__expander {
     &__button {
-      @apply text-dark-indigo;
+      @apply inline-flex text-dark-indigo;
       @apply dark:text-light-indigo;
       @apply transition-colors duration-200;
 
       &:hover {
         @apply text-opacity-80;
       }
+      &:focus {
+        @apply outline-none;
+      }
     }
   }
 
+  // STACKED
   &--stacked {
     .timer-sidebar {
       &__clock {
@@ -85,44 +55,6 @@
           h2 {
             @apply text-lead;
           }
-        }
-      }
-
-      &__controls {
-        & > div {
-          @apply flex-col;
-        }
-
-        &__buttons {
-          &:hover {
-            @apply text-opacity-80;
-          }
-
-          span {
-            @apply hidden;
-          }
-        }
-
-        &--paused {
-          button:nth-child(1) {
-            @apply mb-3;
-          }
-        }
-
-        &--session-started-status-pending {
-          button:nth-child(1) {
-            @apply mb-3 text-success;
-            &:hover {
-              @apply text-opacity-80;
-            }
-          }
-        }
-      }
-
-      &__expander--stacked {
-        @apply flex flex-col;
-        button:nth-child(1) {
-          @apply mb-3;
         }
       }
     }

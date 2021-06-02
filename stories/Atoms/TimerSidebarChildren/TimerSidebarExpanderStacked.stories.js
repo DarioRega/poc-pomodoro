@@ -10,12 +10,7 @@ const Template = (args, { argTypes }) => ({
   computed: {
     getLabels() {
       return {
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
-        start: 'Start',
-        startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
+        currentSessionInformation: 'Current session will end at',
       }
     },
   },
@@ -24,7 +19,7 @@ const Template = (args, { argTypes }) => ({
     <div class="w-24">
         <div class="timer-sidebar--stacked">
           <timer-sidebar-expander-stacked v-bind="$props" :labels="getLabels" />
-        </div>  
+        </div>
     </div>`,
 })
 

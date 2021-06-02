@@ -1,20 +1,40 @@
+import { POMODORO_STATUS } from '@/constantes'
 import TimerSidebarControls from '../../../components/Atoms/TimerSidebarChildren/TimerSidebarControls'
 
 export default {
   title: 'Atoms/TimerSidebarChildren/TimerSidebarControls',
   component: TimerSidebarControls,
   argTypes: {
+    status: {
+      control: {
+        type: 'select',
+        options: [
+          ...Object.values(POMODORO_STATUS.SESSION),
+          ...Object.values(POMODORO_STATUS.POMODORO),
+          ...Object.values(POMODORO_STATUS.SMALL_BREAK),
+          ...Object.values(POMODORO_STATUS.BIG_BREAK),
+        ],
+      },
+    },
     isRunning: {
       control: { type: 'select', options: [true, false] },
     },
     isPaused: {
       control: { type: 'select', options: [true, false] },
     },
+    isPending: {
+      control: { type: 'select', options: [true, false] },
+    },
     isStacked: {
       control: { type: 'select', options: [true, false] },
     },
-    isStatusPendingAndSessionAlreadyStarted: {
+    isSessionPending: {
       control: { type: 'select', options: [true, false] },
+    },
+    currentSessionEndTime: {
+      control: {
+        type: 'text',
+      },
     },
   },
 }
@@ -22,16 +42,6 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   computed: {
-    getLabels() {
-      return {
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
-        start: 'Start',
-        startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
-      }
-    },
     shouldStack() {
       return args.isStacked
     },
@@ -40,8 +50,8 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div :class="shouldStack ? 'w-24' : 'w-72'">
         <div :class="shouldStack ? 'timer-sidebar--stacked' : 'timer-sidebar'">
-          <timer-sidebar-controls v-bind="$props" :labels="getLabels" />
-        </div>  
+          <timer-sidebar-controls v-bind="$props"  />
+        </div>
     </div>`,
 })
 
@@ -55,9 +65,9 @@ Paused.args = {
   isPaused: true,
 }
 
-export const StatusPendingAndSessionAlreadyStarted = Template.bind({})
-StatusPendingAndSessionAlreadyStarted.args = {
-  isStatusPendingAndSessionAlreadyStarted: true,
+export const SessionStartedButPendingProcess = Template.bind({})
+SessionStartedButPendingProcess.args = {
+  isSessionStartedButPendingProcess: true,
 }
 
 export const StackedRunning = Template.bind({})
@@ -72,8 +82,8 @@ StackedPaused.args = {
   isPaused: true,
 }
 
-export const StackedStatusPendingAndSessionAlreadyStarted = Template.bind({})
-StackedStatusPendingAndSessionAlreadyStarted.args = {
+export const StackedSessionStartedButPendingProcess = Template.bind({})
+StackedSessionStartedButPendingProcess.args = {
   isStacked: true,
-  isStatusPendingAndSessionAlreadyStarted: true,
+  isSessionStartedButPendingProcess: true,
 }

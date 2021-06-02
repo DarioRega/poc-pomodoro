@@ -7,7 +7,7 @@
         h-auto
         inline-flex
       "
-      @click="$emit('click')"
+      @click="$emit('onScreenExpand')"
     >
       <icon icon-name="expandScreen" class="w-5 h-5" />
     </button>

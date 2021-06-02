@@ -36,16 +36,21 @@
     </transition-sidebar-content>
 
     <transition-sidebar-content>
-      <div v-show="isStacked" class="heading-current-time__container">
+      <div
+        v-show="isStacked"
+        class="heading-current-time__container text-center"
+      >
         <h2>
           {{ currentTime | getOnlyHours }}
         </h2>
         <h2>
           {{ currentTime | getOnlyMinutes }}
         </h2>
-        <p v-show="!is24h && isStacked" class="am-pm active">
-          {{ currentTime | getOnlyAmPm }}
-        </p>
+        <div v-show="!is24h && isStacked" class="text-center mt-1">
+          <p class="am-pm active">
+            {{ currentTime | getOnlyAmPm }}
+          </p>
+        </div>
       </div>
     </transition-sidebar-content>
   </div>
