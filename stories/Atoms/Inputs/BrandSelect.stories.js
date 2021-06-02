@@ -27,6 +27,10 @@ export default {
     label: {
       type: 'text',
     },
+    shouldShowSelected: {
+      type: 'radio',
+      options: [true, false],
+    },
   },
 }
 
@@ -44,16 +48,9 @@ const Template = (args, { argTypes }) => ({
       ],
     }
   },
-  computed: {
-    hasErrors() {
-      return args.errors
-    },
-  },
   template: `
     <div class="max-w-xs">
-    <brand-select v-bind="$props" name="test" :options="list">
-      <template v-if="hasErrors" v-slot:errors>${args.errors}</template>
-    </brand-select>
+    <brand-select v-bind="$props" name="test" :options="list" />
     </div>
   `,
 })
@@ -70,6 +67,22 @@ Large.args = {
   name: 'myName',
   size: 'large',
   value: { id: 3, name: 'Dark' },
+  placeholder: 'Please select',
+}
+
+export const Small = Template.bind({})
+Small.args = {
+  name: 'myName',
+  size: 'small',
+  value: { id: 2, name: 'Dusk' },
+  placeholder: 'Please select',
+}
+
+export const WithoutCheckMark = Template.bind({})
+WithoutCheckMark.args = {
+  name: 'myName',
+  shouldShowSelected: false,
+  value: { id: 2, name: 'Dusk' },
   placeholder: 'Please select',
 }
 

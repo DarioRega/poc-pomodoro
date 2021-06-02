@@ -21,12 +21,12 @@ export default {
             value: TASK_STATUS_VALUES.IN_PROGRESS,
           },
           {
-            id: 4,
+            id: 3,
             name: FAKER_TASK_STATUS_NAMES.DONE,
             value: TASK_STATUS_VALUES.DONE,
           },
           {
-            id: 5,
+            id: 4,
             name: FAKER_TASK_STATUS_NAMES.ARCHIVED,
             value: TASK_STATUS_VALUES.ARCHIVED,
           },

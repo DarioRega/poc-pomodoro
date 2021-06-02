@@ -3,7 +3,6 @@
     <div class="flex flex-col-reverse">
       <div class="relative">
         <div class="text-center flex justify-center w-full relative">
-          <!--              TODO handle whatinput focus-->
           <task-current-status
             ref="triggerDropdown"
             type="button"
@@ -31,6 +30,8 @@
             class="
               overflow-auto
               absolute
+              bg-light-white
+              dark:bg-dark-blue
               z-10
               mt-2
               w-full
@@ -47,7 +48,6 @@
               :id="`listbox-option-${item.id}`"
               :ref="`listbox-option-${item.id}`"
               :key="item.id"
-              tabindex="0"
               class="
                 relative
                 inline-flex
@@ -56,23 +56,19 @@
                 cursor-pointer
                 focus:outline-none
               "
-              :class="[
-                isHighlighted(item.id) && 'highlighted',
-                index < 1 && 'rounded-t-md',
-                index < options.length - 1 && 'rounded-b-md',
-              ]"
+              :class="[isHighlighted(item.id) && 'highlighted']"
               role="option"
-              @focusin="currentFocusedElementId = item.id"
-              @keydown="handleListKeyDown($event, item)"
-              @mouseenter="highlightedItemId = item.id"
-              @mouseleave="highlightedItemId = ''"
-              @click="selectOption(item)"
             >
               <task-current-status
                 class="mx-auto"
                 :should-focus="currentFocusedElementId === item.id"
                 :current-status="item.value"
                 :status-text="item.name"
+                @focusin="currentFocusedElementId = item.id"
+                @keydown="handleListKeyDown($event, item)"
+                @mouseenter="highlightedItemId = item.id"
+                @mouseleave="highlightedItemId = ''"
+                @click="selectOption(item)"
               />
             </li>
           </ul>
@@ -141,17 +137,7 @@ export default {
     isHighlighted(itemId) {
       return this.highlightedItemId === itemId
     },
-    toggleVisibility(evt, isMouseClick = false) {
-      if (
-        this.isOpen &&
-        (isMouseClick ||
-          evt.keyCode === ENTER_KEY_CODE ||
-          SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
-          evt.keyCode === ESCAPE_KEY_CODE)
-      ) {
-        return (this.isOpen = false)
-      }
-
+    toggleVisibility(evt) {
       const openDropDown =
         SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
         evt.keyCode === ENTER_KEY_CODE
@@ -174,7 +160,7 @@ export default {
     selectOption(item) {
       this.localValue = item
       this.isOpen = false
-      this.$emit('change', item)
+      this.$emit('change', item.id)
     },
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey
@@ -193,35 +179,31 @@ export default {
           return this.findNextElementToFocusAndFocus(UP_ARROW_KEY_CODE)
         case ESCAPE_KEY_CODE:
           return (this.isOpen = false)
-        default:
-          return (this.isOpen = false)
       }
     },
     handleWindowClick(evt) {
-      // TODO check on nuxt env if this works or should add !evt.target.offsetParent.className.includes('brand-select')
-      if (this.isOpen && !evt.target.offsetParent) {
+      if (!this.$el.contains(evt.target) && this.isOpen) {
         this.isOpen = false
       }
     },
     findNextElementToFocusAndFocus(keyCode) {
       if (!this.currentFocusedElementId) {
-        return this.focusElement(this.options[0].id)
+        return this.focusElement(this.filteredOptions[0].id)
       }
 
-      const currentActiveElementIndex = this.options.findIndex(
+      const currentActiveElementIndex = this.filteredOptions.findIndex(
         (x) => x.id === this.currentFocusedElementId
       )
       const isNextItemLastItem =
-        currentActiveElementIndex >= this.options.length - 1
-
+        currentActiveElementIndex >= this.filteredOptions.length - 1
       // handle DOWN ARROW KEY CODE
       if (keyCode === DOWN_ARROW_KEY_CODE) {
         if (isNextItemLastItem) {
-          const firstItem = this.options[0]
+          const firstItem = this.filteredOptions[0]
           return this.focusElement(firstItem.id)
         }
 
-        const nextItem = this.options[currentActiveElementIndex + 1]
+        const nextItem = this.filteredOptions[currentActiveElementIndex + 1]
         return this.focusElement(nextItem.id)
       }
 
@@ -229,10 +211,11 @@ export default {
       if (keyCode === UP_ARROW_KEY_CODE) {
         const isFirstItem = currentActiveElementIndex === 0
         if (isFirstItem) {
-          const lastItem = this.options[this.options.length - 1]
+          const lastItem = this.filteredOptions[this.filteredOptions.length - 1]
           return this.focusElement(lastItem.id)
         } else {
-          const previousItem = this.options[currentActiveElementIndex - 1]
+          const previousItem =
+            this.filteredOptions[currentActiveElementIndex - 1]
           return this.focusElement(previousItem.id)
         }
       }

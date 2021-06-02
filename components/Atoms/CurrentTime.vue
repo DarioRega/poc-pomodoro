@@ -9,14 +9,7 @@
       min-w-[5rem]
     "
   >
-    <transition
-      enter-active-class="transform transition-all duration-500 delay-500"
-      enter-class="-translate-x-80"
-      enter-to-class="translate-x-0"
-      leave-active-class="transform transition ease-in duration-200 delay-0"
-      leave-class="translate-x-0"
-      leave-to-class="-translate-x-80"
-    >
+    <transition-sidebar-content>
       <div
         v-show="!isStacked"
         class="
@@ -40,16 +33,9 @@
           <p class="am-pm" :class="!isAM && 'active'">PM</p>
         </div>
       </div>
-    </transition>
+    </transition-sidebar-content>
 
-    <transition
-      enter-active-class="transform transition-all duration-500 delay-500"
-      enter-class="-translate-x-80"
-      enter-to-class="translate-x-0"
-      leave-active-class="transform transition ease-in duration-200 delay-0"
-      leave-class="translate-x-0"
-      leave-to-class="-translate-x-80"
-    >
+    <transition-sidebar-content>
       <div v-show="isStacked" class="heading-current-time__container">
         <h2>
           {{ currentTime | getOnlyHours }}
@@ -61,15 +47,17 @@
           {{ currentTime | getOnlyAmPm }}
         </p>
       </div>
-    </transition>
+    </transition-sidebar-content>
   </div>
 </template>
 
 <script>
 import moment from 'moment-timezone'
+import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
 
 export default {
   name: 'CurrentTime',
+  components: { TransitionSidebarContent },
   filters: {
     removeAmPm(value) {
       if (value.includes('AM') || value.includes('PM')) {
@@ -151,10 +139,6 @@ export default {
     @apply mb-0 text-xl font-semibold leading-none font-timer text-dark-blue;
     @apply dark:text-celeste;
 
-    @screen md {
-      @apply text-2xl;
-    }
-
     @screen xl {
       @apply text-3xl font-bold tracking-wide;
     }
@@ -164,9 +148,6 @@ export default {
   @apply text-xs font-bold font-timer text-dark-gray;
   &:not(.active) {
     @apply transition-colors duration-200;
-  }
-  @screen md {
-    @apply text-sm;
   }
   @screen xl {
     @apply text-base;

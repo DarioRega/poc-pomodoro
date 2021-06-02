@@ -45,6 +45,9 @@ module.exports = {
         'dark-black': '#1C1D1F',
         'darker-black': '#131415',
       },
+      transitionProperty: {
+        width: 'width',
+      },
     },
   },
   variants: {
