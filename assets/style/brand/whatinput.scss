@@ -44,6 +44,14 @@
   .tab-link:focus {
     @extend .brand-focus-ring--indigo;
   }
+
+  //Settings panel
+  .view-history:focus {
+    @extend .brand-focus-ring--indigo;
+  }
+  .billing-history__body--column--actions button:focus {
+    @extend .brand-focus-ring--indigo;
+  }
 }
 
 
@@ -88,6 +96,14 @@
 
   // TabLink.vue
   .tab-link:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+
+  //Settings panel
+  .view-history:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+  .billing-history__body--column--actions button:focus {
     @extend .brand-dark-focus-ring--indigo;
   }
 

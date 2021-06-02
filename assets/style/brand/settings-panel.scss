@@ -1,0 +1,39 @@
+.settings-panel {
+    &__container {
+      @apply flex justify-between items-center;
+      &--account-tab {
+        @apply items-start;
+      }
+    }
+
+    &__container:not(:first-child) {
+      @apply mt-5;
+    }
+    &__container:not(:last-child) {
+      @apply border-b-2 border-dark-gray pb-3;
+    }
+
+    &__labels {
+      @apply flex-1 flex flex-col justify-start pr-4;
+      p {
+        @apply text-sm;
+      }
+      h6 {
+        @apply mb-1;
+      }
+    }
+    &__configurations {
+      @apply w-48 flex-none justify-end;
+      @screen xl {
+        @apply w-72;
+      }
+    }
+
+    &__actions {
+      @apply mt-10 text-right;
+    }
+
+     &__labels, &__sliderInput {
+      @apply text-dark-blue dark:text-celeste;
+    }
+  }

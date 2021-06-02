@@ -2,7 +2,6 @@
   <button
     class="
       py-2
-      px-3
       font-semibold
       rounded-md
       tab-link
@@ -35,6 +34,7 @@ export default {
 .tab-link {
   @apply transition-colors duration-300 ease-in-out;
   &__primary {
+    @apply px-3;
     &:hover:not(.active) {
       @apply bg-opacity-30 bg-dark-gray;
       @apply dark:bg-opacity-50;

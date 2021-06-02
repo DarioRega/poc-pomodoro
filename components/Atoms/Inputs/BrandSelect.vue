@@ -275,8 +275,7 @@ export default {
       }
     },
     handleWindowClick(evt) {
-      // TODO replace same as this.$el in others dropdown
-      if (this.isOpen && !evt.target.offsetParent) {
+      if (!this.$el.contains(evt.target) && this.isOpen) {
         this.isOpen = false
       }
     },
