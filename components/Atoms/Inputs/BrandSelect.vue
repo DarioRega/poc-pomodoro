@@ -13,7 +13,6 @@
           type="button"
           class="
             relative
-            pr-10
             w-full
             text-left
             cursor-pointer
@@ -25,6 +24,7 @@
           :class="[
             `brand-input__select--size-${size}`,
             `brand-input__select--${type}`,
+            size === 'small' ? ' pr-6' : 'pr-10',
           ]"
           aria-labelledby="listbox-label"
           @click="toggleVisibility"
@@ -46,7 +46,10 @@
               select-toggle
               text-dark-gray
             "
-            :class="size === 'default' ? 'pr-3' : 'pr-5'"
+            :class="[
+              size === 'default' ? 'pr-3' : 'pr-5',
+              size === 'small' && 'pr-0.5',
+            ]"
           >
             <icon
               icon-name="select"
@@ -84,7 +87,7 @@
             aria-labelledby="listbox-label"
           >
             <li
-              v-for="(item, index) in options"
+              v-for="(item, index) in selectOptions"
               :id="`listbox-option-${item.id}`"
               :ref="`listbox-option-${item.id}`"
               :key="item.id"
@@ -92,8 +95,6 @@
               class="
                 relative
                 py-2
-                pr-9
-                pl-3
                 cursor-default
                 select-none
                 single-option
@@ -104,8 +105,7 @@
                 index % 2 === 0
                   ? 'bg-light-white dark:bg-darker-blue'
                   : 'bg-lighter-white dark:bg-dark-blue',
-                index < 1 && 'rounded-t-md',
-                index < options.length - 1 && 'rounded-b-md',
+                size !== 'small' ? 'pr-9 pl-3' : 'pr-0 text-center',
               ]"
               role="option"
               @focusin="currentFocusedElementId = item.id"
@@ -117,6 +117,7 @@
               <select-dropdown-option
                 :is-highlighted="isHighlighted(item.id)"
                 :is-selected="localValue.id === item.id"
+                :should-show-selected="shouldShowSelected"
                 :name="item.name"
               />
             </li>
@@ -157,8 +158,6 @@ import {
   UP_ARROW_KEY_CODE,
 } from '~/constantes'
 
-// TODO whatinput=keyboard single-option focus = outline indigo
-
 export default {
   name: 'BrandSelect',
   components: { SelectDropdownOption, Icon },
@@ -193,7 +192,11 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      default: '',
+    },
+    shouldShowSelected: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -209,6 +212,11 @@ export default {
   computed: {
     hasErrors() {
       return this.errorText.length > 0
+    },
+    selectOptions() {
+      return this.shouldShowSelected
+        ? this.options
+        : this.options.filter((x) => x.id !== this.localValue.id)
     },
   },
   mounted() {
@@ -264,8 +272,6 @@ export default {
           return this.findNextElementToFocusAndFocus(UP_ARROW_KEY_CODE)
         case ESCAPE_KEY_CODE:
           return (this.isOpen = false)
-        default:
-          return (this.isOpen = false)
       }
     },
     handleWindowClick(evt) {
@@ -276,23 +282,23 @@ export default {
     },
     findNextElementToFocusAndFocus(keyCode) {
       if (!this.currentFocusedElementId) {
-        return this.focusElement(this.options[0].id)
+        return this.focusElement(this.selectOptions[0].id)
       }
 
-      const currentActiveElementIndex = this.options.findIndex(
+      const currentActiveElementIndex = this.selectOptions.findIndex(
         (x) => x.id === this.currentFocusedElementId
       )
       const isNextItemLastItem =
-        currentActiveElementIndex >= this.options.length - 1
+        currentActiveElementIndex >= this.selectOptions.length - 1
 
       // handle DOWN ARROW KEY CODE
       if (keyCode === DOWN_ARROW_KEY_CODE) {
         if (isNextItemLastItem) {
-          const firstItem = this.options[0]
+          const firstItem = this.selectOptions[0]
           return this.focusElement(firstItem.id)
         }
 
-        const nextItem = this.options[currentActiveElementIndex + 1]
+        const nextItem = this.selectOptions[currentActiveElementIndex + 1]
         return this.focusElement(nextItem.id)
       }
 
@@ -300,10 +306,10 @@ export default {
       if (keyCode === UP_ARROW_KEY_CODE) {
         const isFirstItem = currentActiveElementIndex === 0
         if (isFirstItem) {
-          const lastItem = this.options[this.options.length - 1]
+          const lastItem = this.selectOptions[this.selectOptions.length - 1]
           return this.focusElement(lastItem.id)
         } else {
-          const previousItem = this.options[currentActiveElementIndex - 1]
+          const previousItem = this.selectOptions[currentActiveElementIndex - 1]
           return this.focusElement(previousItem.id)
         }
       }

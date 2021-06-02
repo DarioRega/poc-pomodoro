@@ -14,6 +14,8 @@
         :class="[
           `brand-input__input--size-${size}`,
           `brand-input__input--${type}`,
+          isSelected && 'selected',
+          isCompleted && 'completed',
         ]"
         @change="onChange"
       />
@@ -21,28 +23,25 @@
         {{ label }}
       </label>
     </div>
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-class="-translate-y-4 opacity-0"
-      enter-to-class="translate-y-0 opacity-100"
-      leave-active-class="transform transition duration-200 ease-in"
-      leave-class="translate-y-0 opacity-100"
-      leave-to-class="-translate-y-4 opacity-0"
-    >
+    <transition-translate-y translate-y="-translate-y-4">
       <div
         v-show="hasErrors"
         class="mt-1 absolute text-right brand-input__errors w-full"
       >
         <p>{{ errorText }}</p>
       </div>
-    </transition>
+    </transition-translate-y>
   </div>
 </template>
 
 <script>
+import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
+
 export default {
   name: 'BrandInput',
-  // eslint-disable-next-line vue/no-unused-components
+  components: {
+    TransitionTranslateY,
+  },
   props: {
     value: {
       type: String,
@@ -75,6 +74,14 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

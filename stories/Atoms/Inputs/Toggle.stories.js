@@ -45,3 +45,14 @@ ToggledWithIcon.args = {
   toggled: true,
   withIcon: true,
 }
+
+export const ToggledSmall = Template.bind({})
+ToggledSmall.args = {
+  toggled: true,
+  size: 'small',
+}
+
+export const UnToggledSmall = Template.bind({})
+UnToggledSmall.args = {
+  size: 'small',
+}

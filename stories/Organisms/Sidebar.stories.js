@@ -35,7 +35,9 @@ const Template = (args, { argTypes }) => ({
       <current-time :is24h='false' :is-stacked='stacked' />
     </template>
     <template #timer>
-      <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.started' current-timer='23:00'>
+      <timer-sidebar
+        :is-stacked='stacked'
+        :status='status.POMODORO.started' current-timer='23:00'>
         <template #currentSessionInformations>
           <div class='text-center'>
             <p>Current session will end at 14:30 PM</p>

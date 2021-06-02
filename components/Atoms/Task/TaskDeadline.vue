@@ -2,42 +2,62 @@
   <div
     class="
       inline-flex
-      relative
       flex-col
       justify-center
       items-center
       self-center
+      h-full
       task-deadline
     "
+    :class="[
+      value && 'relative',
+      isSelected && 'selected',
+      isCompleted && 'completed',
+    ]"
   >
-    <p
-      v-if="value"
-      class="text-sm border-0 task-deadline__value text-dark-gray"
-    >
+    <p v-if="value" class="text-sm border-0 task-deadline__value">
       {{ value }}
     </p>
-    <div class="inline-flex mt-2">
+    <button
+      v-if="!value"
+      tabindex="0"
+      class="task-deadline__icon inline-flex focus:outline-none"
+      @click="isOpen = true"
+    >
+      <icon icon-name="addCalendar" />
+    </button>
+
+    <button
+      v-show="!showActions && value"
+      class="task-deadline__toggler absolute top-[1.2rem] inline-flex"
+      @click="showActions = !showActions"
+    >
+      <icon icon-name="threeDots" class="w-4" />
+    </button>
+    <div
+      v-if="showActions"
+      class="
+        task-deadline__actions
+        absolute
+        top-[1.7rem]
+        z-20
+        bg-light-white
+        dark:bg-dark-blue
+        py-2
+        px-1
+      "
+    >
       <button
-        v-if="value"
-        tabindex="1"
+        tabindex="0"
         class="task-deadline__icon mr-2 focus:outline-none"
         @click="isOpen = true"
       >
         <icon icon-name="editCalendar" />
       </button>
       <button
-        v-if="!value"
-        tabindex="1"
+        tabindex="0"
         class="task-deadline__icon ml-2 focus:outline-none"
-        @click="isOpen = true"
-      >
-        <icon icon-name="addCalendar" />
-      </button>
-      <button
-        v-else
-        tabindex="3"
-        class="task-deadline__icon ml-2 focus:outline-none"
-        @click="$emit('onChange', null, null)"
+        @click="handleRemoveValue"
       >
         <icon icon-name="removeCalendar" />
       </button>
@@ -45,13 +65,17 @@
     <div class="absolute calendar-container">
       <div v-show="isOpen" :class="value ? '-mt-4' : '-mt-8'">
         <flat-pickr
-          id="task-deadline-calendar"
+          :id="`task-deadline-calendar-${uniqueKey}`"
           v-model="date"
           :config="config"
-          @on-change="ko"
+          @on-change="onChange"
         />
         <div class="mt-3 text-center">
-          <brand-button type="primary" tabindex="2" @click="isOpen = false">
+          <brand-button
+            type="primary"
+            tabindex="0"
+            @click="handleCloseActionsCalendar"
+          >
             {{ closeButtonText }}
           </brand-button>
         </div>
@@ -67,11 +91,11 @@ import 'flatpickr/dist/flatpickr.css'
 import Icon from '../Icon'
 import BrandButton from '../BrandButton'
 
+// TODO Invalid locale warning message in browser
 const calendarLocales = {
   fr: require('flatpickr/dist/l10n/fr.js').default.fr,
   en: require('flatpickr/dist/l10n/default.js').default,
 }
-
 export default {
   name: 'TaskDeadline',
   components: {
@@ -92,9 +116,18 @@ export default {
       type: String,
       required: true,
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
+      showActions: false,
       date: null,
       calendar: undefined,
       isOpen: false,
@@ -104,29 +137,78 @@ export default {
       },
     }
   },
+  computed: {
+    uniqueKey() {
+      return Math.floor(Math.random() * 99999)
+    },
+  },
   mounted() {
     this.setCalendarInstance()
+    window.document.addEventListener('click', this.handleWindowClick)
+  },
+  beforeDestroy() {
+    window.document.removeEventListener('click', this.handleWindowClick)
   },
   methods: {
-    ko(dateTime, dateString) {
-      this.$emit('onChange', dateTime, dateString)
+    handleRemoveValue() {
+      this.showActions = false
+      this.$emit('onChange', null, null)
+    },
+    handleCloseActionsCalendar() {
+      this.showActions = false
+      this.isOpen = false
+    },
+    onChange(dateTime, dateString) {
+      this.$emit('change', { dateTime, dateString, locale: this.locale })
+      this.handleCloseActionsCalendar()
     },
     setCalendarInstance() {
-      const calendar = document.querySelector('#task-deadline-calendar')
+      const calendar = document.querySelector(
+        `#task-deadline-calendar-${this.uniqueKey}`
+      )
       if (this.locale !== 'en') {
         this.config.locale = calendarLocales[this.locale]
       }
       this.calendar = calendar._flatpickr
+    },
+    handleWindowClick(evt) {
+      if (!this.$el.contains(evt.target)) {
+        this.showActions = false
+        this.isOpen = false
+      }
     },
   },
 }
 </script>
 
 <style lang="scss">
-.task--selected {
+.task-deadline {
+  &__value {
+    @apply text-dark-gray;
+  }
+
+  &__icon,
+  &__toggler {
+    @apply transition-colors text-dark-gray;
+    &:hover {
+      @apply text-dark-blue;
+      @apply dark:text-celeste;
+    }
+    &:focus {
+      @apply text-dark-indigo;
+      @apply dark:text-light-indigo;
+    }
+    &:not(.task-deadline__toggler) > svg {
+      @apply w-5 h-5;
+    }
+  }
+}
+
+.task-deadline.selected {
   .task-deadline {
     &__value,
-    &__icon {
+    &__icon,
+    &__toggler {
       @apply text-dark-blue  #{!important};
       @apply dark:text-celeste #{!important};
       &:focus {
@@ -137,26 +219,22 @@ export default {
   }
 }
 
-.task-deadline {
-  &__icon {
-    @apply transition-colors text-dark-gray;
-    &:hover {
-      @apply text-dark-blue;
-      @apply dark:text-celeste;
-    }
-    &:focus {
-      @apply text-dark-indigo;
-      @apply dark:text-light-indigo;
-    }
-    & > svg {
-      @apply w-6 h-6;
+.task-deadline.completed {
+  .task-deadline {
+    &__value,
+    &__icon,
+    &__toggler {
+      @apply text-success;
+      &:focus {
+        @apply text-success;
+      }
     }
   }
 }
 
 // FLATPICKR
 .calendar-container {
-  @apply top-[4rem] right-0 left-[50%] flex justify-center z-[60] mx-auto;
+  @apply top-[3.3rem] right-0 left-[50%] flex justify-center z-[60] mx-auto;
 
   .flatpickr-input {
     @apply invisible w-0 h-0;

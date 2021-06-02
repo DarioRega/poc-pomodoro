@@ -1,7 +1,12 @@
 <template>
   <div class="timer-sidebar__expander timer-sidebar__expander--default">
     <button
-      class="focus:outline-none timer-sidebar__expander__button h-auto"
+      class="
+        focus:outline-none
+        timer-sidebar__expander__button
+        h-auto
+        inline-flex
+      "
       @click="$emit('click')"
     >
       <icon icon-name="expandScreen" class="w-5 h-5" />

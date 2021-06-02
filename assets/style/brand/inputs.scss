@@ -26,7 +26,9 @@
 
     // task type only
     &--task {
-      @apply border-transparent border-dashed shadow-none;
+      @apply py-0.5 px-1 #{!important};
+      @apply text-dark-gray border-transparent border-dashed shadow-none;
+      @apply dark:text-dark-gray;
       &:hover {
         @apply border-dark-gray;
       }
@@ -35,10 +37,23 @@
         @apply border-solid border-dark-indigo;
         @apply dark:border-light-indigo;
       }
+
+      &.selected {
+        @apply text-dark-blue;
+        @apply dark:text-celeste;
+      }
+
+      &.completed {
+        @apply text-success;
+      }
     }
   }
 
   &__input, &__select {
+    &--size-small {
+      @apply px-3;
+    }
+
     &--size-default {
       @apply py-1.5 px-3;
     }
@@ -51,6 +66,14 @@
   // text-area only
   &__textarea {
     @apply py-2 px-3;
+
+    &--task {
+      @apply px-2  #{!important};
+
+      &.completed {
+        @apply text-success;
+      }
+    }
   }
 
   // select only

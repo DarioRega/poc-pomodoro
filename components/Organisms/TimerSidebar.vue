@@ -1,76 +1,50 @@
 <template>
-  <div
-    class="flex flex-col justify-center items-center"
-    :class="isStacked ? 'timer-sidebar--stacked' : 'timer-sidebar'"
-  >
-    <div
-      v-show="!isStacked && shouldShowSessionInformation"
-      class="mb-3 max-w-full px-4"
-    >
-      <slot name="currentSessionInformations" />
-    </div>
-
-    <timer-sidebar-expander-stacked
-      v-show="isStacked"
-      class="mb-3"
-      :should-show-session-information="shouldShowSessionInformation"
-      :has-informations="hasInformations"
-      @click="handleScreenExpand"
-    />
-
-    <timer-sidebar-clock
-      :is-session-pending="isSessionPending"
-      :is-stacked="isStacked"
-      :should-show-start-text="shouldShowStartText"
-      :labels="labels"
-      :current-timer="currentTimer"
-      @click="$emit('onTimerClick')"
-    />
-
-    <timer-sidebar-expander-unstacked
-      v-show="!isStacked"
-      class="mt-4"
-      @click="handleScreenExpand"
-    />
-
-    <timer-sidebar-controls
-      :is-running="isRunning"
-      :is-paused="isPaused"
-      :is-status-pending-and-session-already-started="
-        isStatusPendingAndSessionAlreadyStarted
-      "
-      :is-stacked="isStacked"
-      :labels="labels"
-      @handleStart="handleStart"
-      @handlePause="handlePause"
-      @handleResume="handleResume"
-      @handleStop="handleStop"
-    />
+  <div>
+    <transition-sidebar-content>
+      <timer-sidebar-unstacked
+        v-show="!isStacked"
+        :status="status"
+        :labels="labels"
+        :current-timer="currentTimer"
+      >
+        <slot name="currentSessionInformations" />
+      </timer-sidebar-unstacked>
+    </transition-sidebar-content>
+    <transition-sidebar-content>
+      <timer-sidebar-stacked
+        v-show="isStacked"
+        :status="status"
+        :labels="labels"
+        :current-timer="currentTimer"
+      >
+        <slot name="currentSessionInformations" />
+      </timer-sidebar-stacked>
+    </transition-sidebar-content>
   </div>
 </template>
 
 <script>
-import { POMODORO_STATUS } from '../../constantes'
-import TimerSidebarControls from '../Atoms/TimerSidebarChildren/TimerSidebarControls'
-import TimerSidebarClock from '../Atoms/TimerSidebarChildren/TimerSidebarClock'
-import TimerSidebarExpanderStacked from '../Atoms/TimerSidebarChildren/TimerSidebarExpanderStacked'
-import TimerSidebarExpanderUnstacked from '../Atoms/TimerSidebarChildren/TimerSidebarExpanderUnstacked'
+import TimerSidebarStacked from '@/components/Organisms/TimerSidebarStacked'
+import TimerSidebarUnstacked from '@/components/Organisms/TimerSidebarUnstacked'
+import { POMODORO_STATUS } from '@/constantes'
+import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
 
 export default {
   name: 'TimerSidebar',
   components: {
-    TimerSidebarExpanderUnstacked,
-    TimerSidebarExpanderStacked,
-    TimerSidebarClock,
-    TimerSidebarControls,
+    TimerSidebarUnstacked,
+    TimerSidebarStacked,
+    TransitionSidebarContent,
   },
-
   props: {
-    status: {
-      type: String,
-      default: POMODORO_STATUS.SESSION.pending,
+    isStacked: {
+      type: Boolean,
+      default: false,
     },
-
+    currentTimer: {
+      type: String,
+      default: '',
+    },
     labels: {
       type: Object,
       default: () => ({
@@ -82,69 +56,9 @@ export default {
         restartCurrentSession: 'Restart session',
       }),
     },
-
-    isStacked: {
-      type: Boolean,
-      default: false,
-    },
-
-    currentTimer: {
+    status: {
       type: String,
-      default: '',
-    },
-  },
-
-  computed: {
-    isSessionPending() {
-      return this.status.includes(POMODORO_STATUS.SESSION.pending)
-    },
-    hasInformations() {
-      return !!this.$slots.currentSessionInformations
-    },
-    shouldShowStartText() {
-      return (
-        (this.status.includes('PENDING') || this.status.includes('PAUSED')) &&
-        !this.isSessionPending &&
-        !this.isStacked
-      )
-    },
-    shouldShowSessionInformation() {
-      return !this.status.includes('PENDING') && !this.isSessionPending
-    },
-    isStatusPendingAndSessionAlreadyStarted() {
-      return this.status.includes('PENDING') && !this.isSessionPending
-    },
-    isPaused() {
-      return this.status.includes('PAUSED') && !this.isSessionPending
-    },
-    isRunning() {
-      return this.status.includes('STARTED') && !this.isSessionPending
-    },
-  },
-  methods: {
-    handlePause() {
-      this.$emit('onPause')
-    },
-    handleResume() {
-      if (
-        this.isStacked &&
-        this.status === POMODORO_STATUS.POMODORO.pending &&
-        this.status === POMODORO_STATUS.SMALL_BREAK.pending &&
-        this.status === POMODORO_STATUS.BIG_BREAK.pending
-      ) {
-        this.handleStart()
-      } else {
-        this.$emit('onResume')
-      }
-    },
-    handleStop() {
-      this.$emit('onStop')
-    },
-    handleStart() {
-      this.$emit('onStart')
-    },
-    handleScreenExpand() {
-      this.$emit('onScreenExpand')
+      default: POMODORO_STATUS.SESSION.pending,
     },
   },
 }

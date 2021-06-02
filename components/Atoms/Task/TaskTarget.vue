@@ -1,6 +1,8 @@
 <template>
   <button
     class="
+      flex
+      items-center
       transition-colors
       duration-200
       focus:outline-none
@@ -10,15 +12,27 @@
       dark:focus:text-light-indigo
     "
     :class="[
-      isSelected && !isComplete
+      isSelected && !isCompleted
         ? 'text-dark-blue dark:text-celeste'
         : 'text-dark-gray',
-      isComplete && 'text-success',
+      isCompleted && 'text-success',
     ]"
     @click="$emit('click')"
+    @dblclick="$emit('dblclick')"
   >
     <icon
-      :icon-name="isComplete ? 'checkMarkRounded' : 'target'"
+      v-show="isArchiveEnabled"
+      icon-name="archiveBox"
+      class="w-5 h-5 text-darker-gray"
+    />
+    <icon
+      v-show="isDeleteEnabled"
+      icon-name="trash"
+      class="w-5 h-5 text-error"
+    />
+    <icon
+      v-show="!isArchiveEnabled && !isDeleteEnabled"
+      :icon-name="isCompleted ? 'checkMarkRounded' : 'target'"
       class="w-5 h-5"
     />
   </button>
@@ -34,7 +48,21 @@ export default {
       type: Boolean,
       default: false,
     },
-    isComplete: {
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the archive task mode on header
+    */
+    isArchiveEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    /*
+      If the user enabled the delete task mode on header
+    */
+    isDeleteEnabled: {
       type: Boolean,
       default: false,
     },
