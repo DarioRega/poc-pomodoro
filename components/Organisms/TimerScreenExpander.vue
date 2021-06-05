@@ -7,7 +7,7 @@
         @onPause="handlePauseTimer"
         @onResume="handleResumeTimer"
         @onSkip="handleSkipProcess"
-        @onStop="handleStopTimer"
+        @onAbort="handleAbort"
         @onStartSession="handleStartSession"
       />
     </div>
@@ -37,6 +37,9 @@ export default {
     ...mapActions({
       createNotification: 'globalState/createNotification',
     }),
+    handleStartSession() {
+      // TODO handle cases
+    },
     handleStartTimer() {
       // TODO handle
     },
@@ -46,7 +49,7 @@ export default {
     handleResumeTimer() {
       // TODO handle
     },
-    handleStopTimer() {
+    handleAbort() {
       const notification = {
         title: 'Abort session ?',
         description: 'Are you sure to abort the current session ?',
@@ -55,9 +58,7 @@ export default {
       }
       this.createNotification(notification)
     },
-    handleStartSession() {
-      // TODO handle cases
-    },
+
     handleSkipProcess() {
       // TODO handle cases
       const notification = {
@@ -72,7 +73,7 @@ export default {
       // TODO dispatch action
     },
     skipCurrentProcess() {
-      console.log('SKIPPPPPP')
+      // TODO dispatch action
     },
   },
 }

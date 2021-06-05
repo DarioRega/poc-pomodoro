@@ -18,7 +18,7 @@
     >
       <button
         class="timer-sidebar__controls__buttons text-error"
-        @click="$emit('handleStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" />
       </button>
@@ -37,7 +37,7 @@
     >
       <button
         class="timer-sidebar__controls__buttons text-error"
-        @click="$emit('handleStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" />
       </button>

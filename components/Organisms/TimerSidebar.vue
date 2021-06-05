@@ -6,7 +6,7 @@
         @onStart="handleStartTimer"
         @onPause="handlePauseTimer"
         @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
+        @onAbort="handleAbort"
         @onStartSession="handleStartSession"
         @onTimerClick="handleTimerClick"
         @onScreenExpand="$emit('onScreenExpand')"
@@ -18,7 +18,7 @@
         @onStart="handleStartTimer"
         @onPause="handlePauseTimer"
         @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
+        @onAbort="handleAbort"
         @onStartSession="handleStartSession"
         @onTimerClick="handleTimerClick"
         @onScreenExpand="$emit('onScreenExpand')"
@@ -64,6 +64,9 @@ export default {
     handleTimerClick() {
       this.$store.dispatch('sessions/onTimerClick')
       // TODO handle cases
+    },
+    handleAbort() {
+      //
     },
   },
 }

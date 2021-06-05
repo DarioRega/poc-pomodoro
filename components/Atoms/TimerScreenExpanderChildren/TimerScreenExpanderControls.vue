@@ -14,7 +14,7 @@
     <div v-show="getTimerState.isPaused" class="flex justify-center gap-x-12">
       <button
         class="screen-expander__control bg-error"
-        @click="$emit('onStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" class="w-2/5" />
       </button>
@@ -39,7 +39,7 @@
     >
       <button
         class="screen-expander__control bg-error"
-        @click="$emit('onStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" class="w-2/5" />
       </button>
