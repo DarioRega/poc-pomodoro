@@ -72,35 +72,9 @@ export default {
       return this.$store.state.globalState.modalsRefs
     },
   },
-  mounted() {
-    const notif = {
-      title: 'Delete Task',
-      description: 'Are you sure to delete the task ?',
-      actionRequired: false,
-      type: 'info',
-    }
-    const notifWithCalllback = {
-      title: 'Delete Task',
-      description: 'Are you sure to delete the task ?',
-      actionRequired: true,
-      type: 'info',
-      closeCallback: this.prout,
-      confirmCallback: this.confi,
-    }
-    this.$store.dispatch('globalState/createNotification', notif)
-    setTimeout(() => {
-      this.$store.dispatch('globalState/createNotification', notifWithCalllback)
-    }, 3000)
-  },
   methods: {
     handleToggleStacked() {
       this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
-    },
-    prout() {
-      console.log('CLOSE CALLBACK TRIGGERD')
-    },
-    confi() {
-      console.log('SUCCESS CALLBACK TRIGGERD')
     },
     handleScreenExpand() {
       this.closeAnyModals()
