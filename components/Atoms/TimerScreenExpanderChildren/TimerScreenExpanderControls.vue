@@ -11,30 +11,11 @@
     </div>
 
     <!--    PAUSED -->
-    <div v-show="getTimerState.isPaused" class="flex justify-center gap-x-12">
-      <button
-        class="screen-expander__control bg-error"
-        @click="$emit('onAbort')"
-      >
-        <icon icon-name="stop" class="w-2/5" />
-      </button>
-      <button
-        class="screen-expander__control bg-success"
-        @click="$emit('onResume')"
-      >
-        <icon icon-name="play" class="w-2/5" />
-      </button>
-      <button
-        class="screen-expander__control bg-dark-indigo dark:bg-light-indigo"
-        @click="$emit('onSkip')"
-      >
-        <icon icon-name="skip" class="w-2/5" />
-      </button>
-    </div>
-
-    <!--    PENDING STATUS BUT SESSION STARTED -->
     <div
-      v-show="getTimerState.isSessionStartedButPendingProcess"
+      v-show="
+        getTimerState.isPaused ||
+        getTimerState.isSessionStartedButPendingProcess
+      "
       class="flex justify-center gap-x-12"
     >
       <button
@@ -45,9 +26,9 @@
       </button>
       <button
         class="screen-expander__control bg-success"
-        @click="$emit('onStart')"
+        @click="handleResumeOrStart"
       >
-        <icon icon-name="play" class="w-2/5" />
+        <icon :icon-name="isResumeOrStart" class="w-2/5" />
       </button>
       <button
         class="screen-expander__control bg-dark-indigo dark:bg-light-indigo"
@@ -79,6 +60,18 @@ export default {
   computed: {
     getTimerState() {
       return this.$store.getters['sessions/getTimerState']
+    },
+    isResumeOrStart() {
+      return this.getTimerState.isPaused ? 'resume' : 'play'
+    },
+  },
+  methods: {
+    handleResumeOrStart() {
+      if (this.getTimerState.isPaused) {
+        this.$emit('onResume')
+      } else {
+        this.$emit('onStart')
+      }
     },
   },
 }
