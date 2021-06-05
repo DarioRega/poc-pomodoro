@@ -34,6 +34,7 @@
           :name="$t('Task status')"
           :status="task.status"
           :options="TASK_STATES"
+          :is-loading="isTaskStatusLoading"
           @change="handleTaskStatusChange"
         />
       </div>
@@ -136,6 +137,9 @@ export default {
   data() {
     return {
       taskName: '',
+      isTaskStatusLoading: false,
+      isTaskDeadlineLoading: false,
+      isTaskNameLoading: false,
     }
   },
   computed: {

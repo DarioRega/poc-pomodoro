@@ -11,6 +11,7 @@
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
             :current-status="status.value"
+            :is-loading="isLoading"
             :status-text="status.name"
             @click="toggleVisibility($event, true)"
             @keydown="toggleVisibility"
@@ -108,6 +109,10 @@ export default {
       type: String,
       required: true,
     },
+    isLoading: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -152,8 +157,9 @@ export default {
       }
     },
     selectOption(item) {
-      this.isOpen = false
       this.$emit('change', item)
+      // TODO ensure loading while action doing, then it
+      // this.isOpen = false
     },
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey
