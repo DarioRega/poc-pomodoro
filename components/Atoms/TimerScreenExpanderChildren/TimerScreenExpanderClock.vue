@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div v-show="!isSessionPending" class="mb-24 transition-all duration-300">
+    <div
+      v-show="!getTimerState.isSessionPending"
+      class="mb-24 transition-all duration-300"
+    >
       <p class="text-lead text-dark-gray mb-6">
-        {{ labels.currentSessionInformation }} {{ currentSessionEndTime }}
+        {{ $t('Current session will end at') }} {{ getCurrentSessionEndTime }}
       </p>
       <div class="flex items-center justify-center">
         <pomodoro-counter
-          v-for="(item, index) in sessionSteps"
+          v-for="(item, index) in getSessionSteps"
           :key="`pomodoro-counter-${index}`"
           class="w-12 h-12"
-          :class="index < sessionSteps.length && 'mr-6'"
+          :class="index < getSessionSteps.length && 'mr-6'"
           :status="item.status"
         />
       </div>
@@ -17,17 +20,17 @@
     <div
       class="flex justify-center items-center flex-row clock"
       :class="[
-        isRunning && 'running',
-        isPaused && 'paused',
-        isPending && 'pending',
+        getTimerState.isRunning && 'running',
+        getTimerState.isPaused && 'paused',
+        getTimerState.isPending && 'pending',
       ]"
     >
       <h2>
-        {{ currentTimer | getOnlyHours }}
+        {{ getCurrentTimer | getOnlyHours }}
       </h2>
       <h2 class="mx-1 font-bold">:</h2>
       <h2>
-        {{ currentTimer | getOnlyMinutes }}
+        {{ getCurrentTimer | getOnlyMinutes }}
       </h2>
     </div>
   </div>
@@ -53,41 +56,20 @@ export default {
       return value
     },
   },
-  props: {
-    isSessionPending: {
-      type: Boolean,
-      default: false,
+  computed: {
+    getCurrentTimer() {
+      return this.$store.getters['sessions/getCurrentTimer']
     },
-    isPending: {
-      type: Boolean,
-      default: false,
+    getCurrentSessionEndTime() {
+      return this.$store.getters['sessions/getCurrentSessionEndTime']
     },
-    isRunning: {
-      type: Boolean,
-      default: false,
+    getTimerState() {
+      return this.$store.getters['sessions/getTimerState']
     },
-    isPaused: {
-      type: Boolean,
-      default: false,
-    },
-    currentTimer: {
-      type: String,
-      required: true,
-    },
-    currentSessionEndTime: {
-      type: String,
-      required: true,
-    },
-    sessionSteps: {
-      type: Array,
-      default: () => [],
-    },
-    labels: {
-      type: Object,
-      required: true,
+    getSessionSteps() {
+      return this.$store.getters['sessions/getSessionSteps']
     },
   },
-  computed: {},
 }
 </script>
 <style lang="scss" scoped>

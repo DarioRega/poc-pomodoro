@@ -5,9 +5,9 @@
   >
     <div class="flex flex-col-reverse">
       <input
-        v-model.lazy="localValue"
         :type="inputType"
         :aria-label="name"
+        :value="value"
         :name="name"
         class="brand-input__input"
         :placeholder="placeholder"
@@ -17,7 +17,7 @@
           isSelected && 'selected',
           isCompleted && 'completed',
         ]"
-        @change="onChange"
+        @input="$emit('input', $event.target.value)"
       />
       <label v-if="label && type !== 'task'" class="brand-input__label">
         {{ label }}
@@ -84,22 +84,9 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      localValue: '',
-    }
-  },
   computed: {
     hasErrors() {
       return this.errorText.length > 0
-    },
-  },
-  mounted() {
-    this.localValue = this.value
-  },
-  methods: {
-    onChange(evt) {
-      this.$emit('change', evt.target.value)
     },
   },
 }

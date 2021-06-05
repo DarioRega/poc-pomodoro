@@ -2,37 +2,50 @@
   <section>
     <div
       class="header flex overflow-hidden min-h-[2.5rem]"
-      :class="isStacked && 'header--stacked'"
+      :class="isLayoutStacked && 'header--stacked'"
     >
       <div class="header__col task-name">
         <button
-          class="inline-flex items-center justify-center"
+          class="
+            task-grid-header-toggler
+            inline-flex
+            items-center
+            justify-center
+          "
           @click="$emit('onToggle')"
         >
-          <icon v-show="isToggled" icon-name="nakedArrowDown" class="w-4" />
-          <icon v-show="!isToggled" icon-name="nakedArrowUp" class="w-4" />
-          <h6 class="ml-4">{{ labels.all }}</h6>
+          <icon
+            v-show="isToggled"
+            icon-name="nakedArrowDown"
+            class="w-4 task-grid-header-toggler__icon"
+          />
+          <icon
+            v-show="!isToggled"
+            icon-name="nakedArrowUp"
+            class="w-4 task-grid-header-toggler__icon"
+          />
+          <h6 class="ml-4">{{ $t('All') }}</h6>
         </button>
       </div>
       <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
-        <h6>{{ labels.status }}</h6>
+        <h6>{{ $t('Status') }}</h6>
       </div>
 
       <div class="w-24 3xl:w-32 px-2 flex-none header__col header__col--center">
-        <h6>{{ labels.deadline }}</h6>
+        <h6>{{ $t('Deadline') }}</h6>
       </div>
 
       <div class="w-5/12 header__col pl-6">
         <div class="flex justify-between items-center w-full h-full">
-          <h6 class="flex-none w-24">{{ labels.description }}</h6>
+          <h6 class="flex-none w-24">{{ $t('Description') }}</h6>
           <div class="flex-1 flex items-center justify-end h-full">
             <task-grid-header-actions
               class="w-full h-full ml-2 2xl:ml-4"
               :should-show-completed-task="shouldShowCompletedTask"
               :label="
                 clientWidth < 1400
-                  ? labels.showCompletedTasksCut
-                  : labels.showCompletedTasks
+                  ? $t('Show completed')
+                  : $t('Show completed tasks')
               "
               @onArchiveBoxClick="$emit('onArchiveBoxClick')"
               @onTrashClick="$emit('onTrashClick')"
@@ -61,11 +74,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    labels: {
-      type: Object,
-      required: true,
-    },
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },

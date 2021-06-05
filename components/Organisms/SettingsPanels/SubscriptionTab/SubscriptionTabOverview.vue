@@ -10,22 +10,22 @@
       "
     >
       <div class="cards__card">
-        <label-with-data :label="labels.estimateOfInvoice">
-          <p>10.77 USD {{ labels.taxIncluded }}</p>
-          <p>{{ labels.nextInvoice }} Nov 18, 2021</p>
+        <label-with-data :label="$t('Estimate of the invoice')">
+          <p>10.77 USD {{ $t('tax included') }}</p>
+          <p>{{ $t('Next invoice') }} Nov 18, 2021</p>
         </label-with-data>
       </div>
 
       <div class="cards__card">
-        <label-with-data :label="labels.invoiceInformation">
+        <label-with-data :label="$t('Invoice information')">
           <div class="flex flex-row justify-between items-start">
             <div>
-              <p class="subtitle">{{ labels.billingPeriod }}</p>
+              <p class="subtitle">{{ $t('Billing period') }}</p>
               <!--              TODO conditional rendering for label depending the plan -->
-              <p class="capitalize">{{ labels.annual }}</p>
+              <p class="capitalize">{{ $t('annual') }}</p>
             </div>
             <div>
-              <p class="subtitle">{{ labels.paymentMethod }}</p>
+              <p class="subtitle">{{ $t('Payment method') }}</p>
               <!--              TODO add paypal, or credits cards logo-->
               <!--              TODO conditional rendering for logo depending the plan -->
               <p>Paypal</p>
@@ -35,7 +35,7 @@
       </div>
 
       <div class="cards__card">
-        <label-with-data :label="labels.billingHistory">
+        <label-with-data :label="$t('Billing history')">
           <!--          TODO v-for on billing history max 5 entry, it's just a preview here-->
           <div class="flex flex-col">
             <div class="flex flex-row justify-between">
@@ -51,7 +51,7 @@
               <p>10.77 $USD</p>
             </div>
             <div class="text-center mt-2">
-              <p v-show="isShortHistory">{{ labels.thatsAll }}</p>
+              <p v-show="isShortHistory">{{ $t("That's all") }}</p>
               <a
                 v-show="!isShortHistory"
                 tabindex="0"
@@ -65,7 +65,7 @@
                   focus:underline
                 "
                 @click="$emit('onSeeAllHistory')"
-                >{{ labels.viewAllHistory }}</a
+                >{{ $t('View all history') }}</a
               >
             </div>
           </div>
@@ -73,7 +73,7 @@
       </div>
 
       <div class="cards__card">
-        <label-with-data :label="labels.billingContact">
+        <label-with-data :label="$t('Billing contact')">
           <div class="flex text-current">
             <div class="inline-flex mr-4">
               <div
@@ -114,12 +114,6 @@ import Icon from '@/components/Atoms/Icon'
 export default {
   name: 'SubscriptionTabOverview',
   components: { LabelWithData, Icon },
-  props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
-  },
   computed: {
     isShortHistory() {
       return false

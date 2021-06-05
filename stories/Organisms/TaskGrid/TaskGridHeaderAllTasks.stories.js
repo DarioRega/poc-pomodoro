@@ -4,13 +4,10 @@ export default {
   title: 'Organisms/TaskGrid/Header',
   component: TaskGridHeaderAllTasks,
   argTypes: {
-    labels: {
-      control: { type: 'object' },
-    },
     isToggled: {
       control: { type: 'radio', options: [true, false] },
     },
-    isStacked: {
+    isLayoutStacked: {
       control: { type: 'radio', options: [true, false] },
     },
   },
@@ -19,19 +16,7 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { TaskGridHeaderAllTasks },
-  computed: {
-    getLabels() {
-      return {
-        all: 'All',
-        status: 'Status',
-        deadline: 'Deadline',
-        description: 'Description',
-        showCompletedTasks: 'Show completed tasks',
-        showCompletedTasksCut: 'Show complete',
-      }
-    },
-  },
-  template: `<task-grid-header-all-tasks v-bind='$props' :labels='getLabels' />`,
+  template: `<task-grid-header-all-tasks v-bind='$props' />`,
 })
 
 export const Default = Template.bind({})

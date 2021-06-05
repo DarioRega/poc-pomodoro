@@ -11,9 +11,10 @@
     <!--      v-show="!isSessionPending"-->
     <!--      class="text-sm text-dark-gray mb-6 font-bold px-2"-->
     <!--    >-->
-    <!--      {{ labels.currentSessionInformation }} {{ currentSessionEndTime }}-->
+    <!--      {{ $t('Current session will end at') }} {{ currentSessionEndTime }}-->
     <!--    </p>-->
     <button
+      v-show="getTimerState.isSessionStartedButPendingProcess"
       class="timer-sidebar__expander__button"
       @mouseenter="isInformationTooltipVisible = true"
       @onmouseleave="isInformationTooltipVisible = false"
@@ -29,24 +30,15 @@ import Icon from '../Icon'
 export default {
   name: 'TimerSidebarExpanderStacked',
   components: { Icon },
-  props: {
-    isSessionPending: {
-      type: Boolean,
-      default: false,
-    },
-    currentSessionEndTime: {
-      type: String,
-      default: '',
-    },
-    labels: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
   data() {
     return {
       isInformationTooltipVisible: false,
     }
+  },
+  computed: {
+    getTimerState() {
+      return this.$store.getters['sessions/getTimerState']
+    },
   },
 }
 </script>

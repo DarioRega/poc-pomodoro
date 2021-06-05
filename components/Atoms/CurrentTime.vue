@@ -11,7 +11,7 @@
   >
     <transition-sidebar-content>
       <div
-        v-show="!isStacked"
+        v-show="!isLayoutStacked"
         class="
           inline-flex
           justify-center
@@ -28,7 +28,10 @@
         <h2>
           {{ currentTime | getOnlyMinutes }}
         </h2>
-        <div v-show="!is24h && !isStacked" class="flex-col items-center ml-3">
+        <div
+          v-show="!is24hFormat && !isLayoutStacked"
+          class="flex-col items-center ml-3"
+        >
           <p class="am-pm" :class="isAM && 'active'">AM</p>
           <p class="am-pm" :class="!isAM && 'active'">PM</p>
         </div>
@@ -37,7 +40,7 @@
 
     <transition-sidebar-content>
       <div
-        v-show="isStacked"
+        v-show="isLayoutStacked"
         class="heading-current-time__container text-center"
       >
         <h2>
@@ -46,7 +49,7 @@
         <h2>
           {{ currentTime | getOnlyMinutes }}
         </h2>
-        <div v-show="!is24h && isStacked" class="text-center mt-1">
+        <div v-show="!is24hFormat && isLayoutStacked" class="text-center mt-1">
           <p class="am-pm active">
             {{ currentTime | getOnlyAmPm }}
           </p>
@@ -94,29 +97,16 @@ export default {
     },
   },
   props: {
-    timeZoneChoosen: {
-      type: String,
-      default: '',
-    },
-    is24h: {
-      type: Boolean,
-      default: true,
-    },
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },
   },
-  data() {
-    return {
-      timeZone: '',
-    }
-  },
   computed: {
     currentTime() {
-      if (this.timeZone) {
-        const format = this.is24h ? 'HH:mm' : 'hh:mm A'
-        return moment().tz(this.timeZone).format(format)
+      if (this.getTimezone) {
+        const format = this.is24hFormat ? 'HH:mm' : 'hh:mm A'
+        return moment().tz(this.getTimezone).format(format)
       }
       return ''
     },
@@ -128,13 +118,14 @@ export default {
       }
       return false
     },
-  },
-  mounted() {
-    if (!this.timeZoneChoosen) {
-      this.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    } else {
-      this.timeZone = this.timeZoneChoosen
-    }
+    is24hFormat() {
+      return this.$store.getters[
+        'settings/getIsUserSettings24hTimeFormatDisplay'
+      ]
+    },
+    getTimezone() {
+      return this.$store.getters['settings/getUserSettingTimezone']
+    },
   },
 }
 </script>

@@ -20,7 +20,7 @@
           h-6
           text-dark-blue
           dark:text-celeste
-          hover:text-opacity-80
+          hover:opacity-80
           focus:outline-none
         "
         @click="$emit(action.emitter)"

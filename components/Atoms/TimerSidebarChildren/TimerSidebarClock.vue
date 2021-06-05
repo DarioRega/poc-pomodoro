@@ -4,15 +4,15 @@
     @click="$emit('click')"
   >
     <!--    SESSION PENDING -->
-    <div v-if="isSessionPending">
-      <p v-show="isStacked" class="text-base font-bold">
-        {{ labels.start }}
+    <div v-if="getTimerState.isSessionPending">
+      <p v-show="isLayoutStacked" class="text-base font-bold">
+        {{ $t('Start') }}
       </p>
       <p
-        v-show="!isStacked"
+        v-show="!isLayoutStacked"
         class="text-base px-4 xl:px-0 xl:text-lead font-bold"
       >
-        {{ labels.startSession }}
+        {{ $t('Start session') }}
       </p>
     </div>
 
@@ -24,14 +24,14 @@
         items-center
         timer-sidebar__clock--time-visible
       "
-      :class="isStacked ? 'flex-col' : 'flex-row'"
+      :class="isLayoutStacked ? 'flex-col' : 'flex-row'"
     >
       <h2>
-        {{ currentTimer | getOnlyHours }}
+        {{ getCurrentTimer | getOnlyHours }}
       </h2>
-      <h2 v-if="!isStacked" class="mx-0.5">:</h2>
+      <h2 v-if="!isLayoutStacked" class="mx-0.5">:</h2>
       <h2>
-        {{ currentTimer | getOnlyMinutes }}
+        {{ getCurrentTimer | getOnlyMinutes }}
       </h2>
     </div>
   </button>
@@ -55,21 +55,17 @@ export default {
     },
   },
   props: {
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },
-    isSessionPending: {
-      type: Boolean,
-      default: false,
+  },
+  computed: {
+    getTimerState() {
+      return this.$store.getters['sessions/getTimerState']
     },
-    currentTimer: {
-      type: String,
-      required: true,
-    },
-    labels: {
-      type: Object,
-      required: true,
+    getCurrentTimer() {
+      return this.$store.getters['sessions/getCurrentTimer']
     },
   },
 }

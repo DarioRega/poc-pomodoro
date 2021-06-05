@@ -2,39 +2,39 @@
   <container-reset-password-page :has-loader="false">
     <transition-opacity>
       <container-reset-password-card
-        :greeting="labels.greeting"
-        :additional-info="labels.additionalInfo"
+        :greeting="$t('Reset my password')"
+        :additional-info="$t('Fill these fields and you\'re good to go')"
       >
         <container-reset-password-row class="mb-4">
           <brand-input
             name="email"
-            :placeholder="labels.placeholders.email"
+            :placeholder="$t('Enter email')"
             :value="login.email"
             :error-text="formErrors.email"
             class="w-full"
-            @change="login.email = $event"
+            @change.native="login.email = $event.target.value"
           />
         </container-reset-password-row>
         <container-reset-password-row class="mb-4">
           <brand-input
             name="password"
-            :placeholder="labels.placeholders.password"
+            :placeholder="$t('Set new password')"
             :value="login.password"
             :error-text="formErrors.password"
             input-type="password"
             class="w-full"
-            @change="login.password = $event"
+            @change.native="login.password = $event.target.value"
           />
         </container-reset-password-row>
         <container-reset-password-row class="mb-4">
           <brand-input
             name="confirmPassword"
-            :placeholder="labels.placeholders.confirmPassword"
+            :placeholder="$t('Confirm new password')"
             :value="login.confirmPassword"
             :error-text="formErrors.confirmPassword"
             input-type="password"
             class="w-full"
-            @change="login.confirmPassword = $event"
+            @change.native="login.confirmPassword = $event.target.value"
           />
         </container-reset-password-row>
         <brand-button
@@ -42,12 +42,12 @@
           :is-loading="isLoading"
           @click="handleSubmit"
         >
-          {{ labels.register }}
+          {{ $t('Continue') }}
         </brand-button>
         <redirect-actions-footer
           class="text-dark-indigo dark:text-light-indigo"
           primary-action-redirect="/login"
-          :primary-label="labels.alreadyHaveAnAccount"
+          :primary-label="$t('Already have an account ? Log in')"
         />
       </container-reset-password-card>
     </transition-opacity>
@@ -64,7 +64,7 @@ import ContainerResetPasswordPage from '@/components/Templates/Login/ContainerPa
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
-  name: 'PageResetPassword',
+  name: 'ResetPassword',
   components: {
     BrandInput,
     ContainerResetPasswordRow,
@@ -77,7 +77,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      labels: {},
       login: {
         email: '',
         password: '',
@@ -104,8 +103,7 @@ export default {
       this.validateFullName(newValue)
     },
   },
-  beforeMount() {
-    this.setLabels()
+  mounted() {
     const email = this.$route.query.email
     if (email) {
       this.login.email = email
@@ -114,7 +112,7 @@ export default {
   methods: {
     validateEmptyFields(property, value) {
       if (!value) {
-        this.formErrors[property] = this.labels.emptyField
+        this.formErrors[property] = this.$t("Field can't be empty")
         return false
       }
       return true
@@ -124,7 +122,7 @@ export default {
         return false
       }
       if (!this.$regexValidate('email', value)) {
-        this.formErrors.email = this.labels.emailError
+        this.formErrors.email = this.$t('Invalid email')
         return false
       }
       if (this.formErrors.email) {
@@ -137,7 +135,7 @@ export default {
         return false
       }
       if (value.length < 8) {
-        this.formErrors.password = this.labels.passwordError
+        this.formErrors.password = this.$t('Password too short')
         return false
       }
       if (this.formErrors.password) {
@@ -151,7 +149,7 @@ export default {
       }
       if (this.login.password) {
         if (this.login.password !== value) {
-          this.formErrors.confirmPassword = this.labels.confirmPasswordError
+          this.formErrors.confirmPassword = this.$t("Passwords don't match")
           return false
         } else if (this.formErrors.confirmPassword) {
           this.formErrors.confirmPassword = ''
@@ -174,25 +172,6 @@ export default {
         setTimeout(() => {
           this.isLoading = false
         }, 4000)
-      }
-    },
-    // TODO pick theses labels from json files
-    setLabels() {
-      this.labels = {
-        greeting: 'Reset my password',
-        additionalInfo: "Fill these fields and you're good to go",
-        emailError: 'Invalid email',
-        passwordError: 'Password too short',
-        confirmPasswordError: "Passwords don't match",
-        emptyField: "Field can't be empty",
-        loading: 'Loading your environment',
-        continue: 'Continue',
-        alreadyHaveAnAccount: 'Already have an account ? Log in',
-        placeholders: {
-          email: 'Enter email',
-          password: 'Set new password',
-          confirmPassword: 'Confirm new password',
-        },
       }
     },
   },

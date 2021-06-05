@@ -2,23 +2,23 @@
   <section class="w-full max-w-lg mx-auto h-full justify-center">
     <label-with-data
       class="w-full text-left"
-      :label="labels.invoiceInformation"
+      :label="$t('Invoice information')"
     />
 
     <!--  BILLING PERIOD -->
     <label-with-data
       :is-small="true"
       class="w-full text-left mb-4"
-      :label="labels.billingPeriod"
+      :label="$t('Billing period')"
     >
-      <p class="capitalize">{{ labels.annual }}</p>
+      <p class="capitalize">{{ $t('annual') }}</p>
     </label-with-data>
 
     <!--  PAYMENT METHOD -->
     <label-with-data
       :is-small="true"
       class="w-full text-left mb-4"
-      :label="labels.paymentMethod"
+      :label="$t('Payment method')"
     >
       <p>Paypal logo</p>
     </label-with-data>
@@ -27,7 +27,7 @@
     <label-with-data
       :is-small="true"
       class="w-full text-left"
-      :label="labels.billingContact"
+      :label="$t('Billing contact')"
     >
       <div class="flex items-start justify-start text-current mt-2">
         <div class="inline-flex mr-4">
@@ -60,7 +60,7 @@
     </label-with-data>
     <div class="mt-10 text-center">
       <brand-button @click="$emit('onManageSubscriptionInformations')">
-        {{ labels.manageInvoicesInformations }}
+        {{ $t('Manage invoices information') }}
       </brand-button>
     </div>
   </section>
@@ -74,12 +74,6 @@ import BrandButton from '@/components/Atoms/BrandButton'
 export default {
   name: 'SubscriptionTabInvoiceInformations',
   components: { LabelWithData, Icon, BrandButton },
-  props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
-  },
 }
 </script>
 <style scoped lang="scss">

@@ -1,7 +1,7 @@
 <template>
   <div class="timer-sidebar__controls">
     <!--  IS RUNNING -->
-    <div v-show="isRunning" class="timer-sidebar__controls">
+    <div v-show="getTimerState.isRunning" class="timer-sidebar__controls">
       <button
         class="timer-sidebar__controls__buttons text-error"
         @click="$emit('handlePause')"
@@ -12,9 +12,9 @@
 
     <!--    IS PAUSED -->
     <div
-      v-show="isPaused"
+      v-show="getTimerState.isPaused"
       class="timer-sidebar__controls"
-      :class="isStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
+      :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
     >
       <button
         class="timer-sidebar__controls__buttons text-error"
@@ -31,9 +31,9 @@
     </div>
     <!--    PENDING BUT SESSION STARTED -->
     <div
-      v-show="isSessionStartedButPendingProcess"
+      v-show="getTimerState.isSessionStartedButPendingProcess"
       class="timer-sidebar__controls"
-      :class="isStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
+      :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
     >
       <button
         class="timer-sidebar__controls__buttons text-error"
@@ -58,21 +58,14 @@ export default {
   name: 'TimerSidebarControls',
   components: { Icon },
   props: {
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },
-    isRunning: {
-      type: Boolean,
-      default: false,
-    },
-    isPaused: {
-      type: Boolean,
-      default: false,
-    },
-    isSessionStartedButPendingProcess: {
-      type: Boolean,
-      default: false,
+  },
+  computed: {
+    getTimerState() {
+      return this.$store.getters['sessions/getTimerState']
     },
   },
 }

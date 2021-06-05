@@ -12,9 +12,6 @@ export default {
   title: 'Organisms/TaskGrid/GridAllTasks',
   component: TaskGridAllTasks,
   argTypes: {
-    labels: {
-      control: { type: 'object' },
-    },
     tasks: {
       control: { type: 'array' },
     },
@@ -30,7 +27,7 @@ const Template = (args, { argTypes }) => ({
     }
   },
   mounted() {
-    this.stacked = args.isStacked
+    this.stacked = args.isLayoutStacked
   },
   computed: {
     status() {
@@ -39,56 +36,26 @@ const Template = (args, { argTypes }) => ({
     hasSidebarExample() {
       return args.withSidebar
     },
-    getLabels() {
-      return {
-        header: {
-          all: 'All',
-          status: 'Status',
-          deadline: 'Deadline',
-          description: 'Description',
-          showCompletedTasks: 'Show completed tasks',
-          showCompletedTasksCut: 'Show completed',
-        },
-        body: {
-          taskName: 'Task name',
-          taskStatusName: 'Task status',
-          taskDescription: 'Task description',
-          closeCalendar: 'Close',
-        },
-        general: {
-          amountOfTasksToDisplay: 'Tasks to display',
-        },
-        clock: {
-          resume: 'Resume',
-          pause: 'Pause',
-          stop: 'Stop',
-          start: 'Start',
-          startSession: 'Start session',
-          restartCurrentSession: 'Restart session',
-          currentSessionInformation: 'Current session will end at',
-        },
-      }
-    },
   },
   template: `
     <div class='w-full'>
       <div class='app-layout'  v-if='hasSidebarExample'>
-      <sidebar class='app-layout__sidebar' v-bind='$props' :is-stacked='stacked' @onToggleStacked='stacked = $event'>
+      <sidebar class='app-layout__sidebar' v-bind='$props' :is-layout-stacked='stacked' @onToggleStacked='stacked = $event'>
         <template #currentTime>
-          <current-time :is24h='false' :is-stacked='stacked' />
+          <current-time :is24h='false' :is-layout-stacked='stacked' />
         </template>
         <template #timer>
-          <timer-sidebar :is-stacked='stacked' :status='status.POMODORO.paused' :is-paused='true' current-session-end-time='15:35 AM' current-timer='23:00' :labels='getLabels.clock' />
+          <timer-sidebar :is-layout-stacked='stacked' :status='status.POMODORO.paused' :is-paused='true' current-session-end-time='15:35 AM' current-timer='23:00'  />
         </template>
       </sidebar>
       <section class='app-layout__main-content' :class="stacked && 'app-layout__main-content--stacked' ">
         <div class='w-full'>
-          <task-grid-all-tasks v-bind='$props' :labels='getLabels'/>
+          <task-grid-all-tasks v-bind='$props' />
         </div>
       </section>
       </div>
       <div v-else>
-          <task-grid-all-tasks v-bind='$props' :labels='getLabels'/>
+          <task-grid-all-tasks v-bind='$props' />
       </div>
     </div>
   `,

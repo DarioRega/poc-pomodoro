@@ -10,8 +10,8 @@
             aria-haspopup="listbox"
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
-            :current-status="localValue.value"
-            :status-text="localValue.name"
+            :current-status="status.value"
+            :status-text="status.name"
             @click="toggleVisibility($event, true)"
             @keydown="toggleVisibility"
           />
@@ -96,7 +96,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    value: {
+    status: {
       type: Object,
       default: () => ({}),
     },
@@ -114,18 +114,12 @@ export default {
       highlightedItemId: '',
       currentFocusedElementId: 0,
       isOpen: false,
-      localValue: {
-        id: null,
-      },
     }
   },
   computed: {
     filteredOptions() {
-      return this.options.filter((x) => x.id !== this.localValue.id)
+      return this.options.filter((x) => x.id !== this.status.id)
     },
-  },
-  beforeMount() {
-    this.localValue = this.value
   },
   mounted() {
     window.document.addEventListener('click', this.handleWindowClick)
@@ -158,9 +152,8 @@ export default {
       }
     },
     selectOption(item) {
-      this.localValue = item
       this.isOpen = false
-      this.$emit('change', item.id)
+      this.$emit('change', item)
     },
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey

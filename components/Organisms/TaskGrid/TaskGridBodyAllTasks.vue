@@ -2,7 +2,7 @@
   <section>
     <div
       class="header flex items-center"
-      :class="isStacked && 'header--stacked'"
+      :class="isLayoutStacked && 'header--stacked'"
     >
       <div class="header__col task-name">
         <task-target
@@ -19,22 +19,22 @@
           class="w-5 text-dark-indigo dark:text-light-indigo ml-2 mr-2"
         />
         <brand-input
-          :value="task.name"
-          :name="labels.taskName"
+          :name="$t('Task name')"
           :is-selected="isSelected"
           :is-completed="isCompleted"
           type="task"
           class="w-full"
           :class="[isRunning ? 'pr-0' : 'pl-3']"
-          @change="$emit('onTaskNameChange', $event, task.id)"
+          :value="taskName"
+          @change.native="taskName = $event.target.value"
         />
       </div>
       <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
         <task-select-status
-          :name="labels.taskStatusName"
-          :value="task.status"
+          :name="$t('Task status')"
+          :status="task.status"
           :options="TASK_STATES"
-          @change="$emit('onTaskStatusChange', $event, task.id)"
+          @change="handleTaskStatusChange"
         />
       </div>
 
@@ -49,11 +49,11 @@
         "
       >
         <task-deadline
-          :close-button-text="labels.closeCalendar"
+          :close-button-text="$t('Close')"
           :value="task.deadline"
           :is-selected="isSelected"
           :is-completed="isCompleted"
-          @change="$emit('onDeadlineChange', $event, task.id)"
+          @change="handleTaskDeadlineChange"
         />
       </div>
 
@@ -84,10 +84,6 @@ export default {
     TaskDeadline,
   },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     task: {
       type: Object,
       required: true,
@@ -111,7 +107,7 @@ export default {
     /*
       If the sidebar is stacked or normal width
     */
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },
@@ -137,6 +133,11 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      taskName: '',
+    }
+  },
   computed: {
     // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
     TASK_STATUS_VALUES() {
@@ -151,6 +152,22 @@ export default {
           name: FAKER_TASK_STATUS_NAMES[x],
         }
       })
+    },
+  },
+  watch: {
+    taskName(newValue, oldValue) {
+      // TODO + validation dispatch action
+    },
+  },
+  mounted() {
+    this.taskName = this.task.name
+  },
+  methods: {
+    handleTaskStatusChange(status) {
+      // TODO dispatch action with task id
+    },
+    handleTaskDeadlineChange(dateTime, dateString) {
+      // TODO dispatch action with task id
     },
   },
 }

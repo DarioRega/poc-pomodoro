@@ -2,49 +2,49 @@
   <container-register-page :has-loader="false">
     <transition-opacity>
       <container-register-card
-        :greeting="labels.greeting"
-        :additional-info="labels.additionalInfo"
+        :greeting="$t('Welcome')"
+        :additional-info="$t('Fill these steps to create an account')"
       >
         <container-register-row class="mb-4 mt-2">
           <brand-input
             name="fullName"
-            :placeholder="labels.placeholders.fullName"
+            :placeholder="$t('Enter full name')"
             :value="register.fullName"
             :error-text="formErrors.fullName"
             class="w-full"
-            @change="register.fullName = $event"
+            @change.native="register.fullName = $event.target.value"
           />
         </container-register-row>
         <container-register-row class="mb-4">
           <brand-input
             name="email"
-            :placeholder="labels.placeholders.email"
+            :placeholder="$t('Enter email')"
             :value="register.email"
             :error-text="formErrors.email"
             class="w-full"
-            @change="register.email = $event"
+            @change.native="register.email = $event.target.value"
           />
         </container-register-row>
         <container-register-row class="mb-4">
           <brand-input
             name="password"
-            :placeholder="labels.placeholders.password"
+            :placeholder="$t('Create password')"
             :value="register.password"
             :error-text="formErrors.password"
             input-type="password"
             class="w-full"
-            @change="register.password = $event"
+            @change.native="register.password = $event.target.value"
           />
         </container-register-row>
         <container-register-row class="mb-4">
           <brand-input
             name="confirmPassword"
-            :placeholder="labels.placeholders.confirmPassword"
+            :placeholder="$t('Confirm password')"
             :value="register.confirmPassword"
             :error-text="formErrors.confirmPassword"
             input-type="password"
             class="w-full"
-            @change="register.confirmPassword = $event"
+            @change.native="register.confirmPassword = $event.target.value"
           />
         </container-register-row>
         <brand-button
@@ -52,12 +52,12 @@
           :is-loading="isLoading"
           @click="handleSubmit"
         >
-          {{ labels.register }}
+          {{ $t('Sign up') }}
         </brand-button>
         <redirect-actions-footer
           class="text-dark-indigo dark:text-light-indigo"
           primary-action-redirect="/login"
-          :primary-label="labels.alreadyHaveAnAccount"
+          :primary-label="$t('Already have an account ? Log in')"
         />
       </container-register-card>
     </transition-opacity>
@@ -87,7 +87,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      labels: {},
       register: {
         fullName: '',
         email: '',
@@ -116,13 +115,10 @@ export default {
       this.validateFullName(newValue)
     },
   },
-  beforeMount() {
-    this.setLabels()
-  },
   methods: {
     validateEmptyFields(property, value) {
       if (!value) {
-        this.formErrors[property] = this.labels.emptyField
+        this.formErrors[property] = this.$t("Field can't be empty")
         return false
       }
       return true
@@ -132,7 +128,7 @@ export default {
         return false
       }
       if (!this.$regexValidate('email', value)) {
-        this.formErrors.email = this.labels.emailError
+        this.formErrors.email = this.$t('Invalid email')
         return false
       }
       if (this.formErrors.email) {
@@ -145,7 +141,7 @@ export default {
         return false
       }
       if (value.length < 8) {
-        this.formErrors.password = this.labels.passwordError
+        this.formErrors.password = this.$t('Password too short')
         return false
       }
       if (this.formErrors.password) {
@@ -159,7 +155,7 @@ export default {
       }
       if (this.register.password) {
         if (this.register.password !== value) {
-          this.formErrors.confirmPassword = this.labels.confirmPasswordError
+          this.formErrors.confirmPassword = this.$t("Passwords don't match")
           return false
         } else if (this.formErrors.confirmPassword) {
           this.formErrors.confirmPassword = ''
@@ -172,7 +168,7 @@ export default {
         return false
       }
       if (value.length < 4) {
-        this.formErrors.fullName = this.labels.fullNameError
+        this.formErrors.fullName = this.$t("Full name can't be that short")
         return false
       }
       if (this.formErrors.fullName) {
@@ -195,27 +191,6 @@ export default {
         setTimeout(() => {
           this.isLoading = false
         }, 4000)
-      }
-    },
-    // TODO pick theses labels from json files
-    setLabels() {
-      this.labels = {
-        greeting: 'Welcome',
-        additionalInfo: 'Fill these steps to create an account',
-        emailError: 'Invalid email',
-        passwordError: 'Password too short',
-        fullNameError: "Full name can't be that short",
-        confirmPasswordError: "Passwords don't match",
-        emptyField: "Field can't be empty",
-        loading: 'Loading your environment',
-        register: 'Sign up',
-        alreadyHaveAnAccount: 'Already have an account ? Log in',
-        placeholders: {
-          fullName: 'Enter full name',
-          email: 'Enter email',
-          password: 'Create password',
-          confirmPassword: 'Confirm password',
-        },
       }
     },
   },

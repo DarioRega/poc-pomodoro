@@ -3,11 +3,6 @@ import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
 export default {
   title: 'Atoms/Loaders/Screen',
   component: ScreenLoader,
-  argTypes: {
-    type: {
-      control: { type: 'select', options: ['primary', 'secondary', 'naked'] },
-    },
-  },
 }
 
 const Template = (args, { argTypes }) => ({

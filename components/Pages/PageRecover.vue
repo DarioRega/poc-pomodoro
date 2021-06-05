@@ -2,17 +2,17 @@
   <container-recovery-page :has-loader="false">
     <transition-opacity>
       <container-recovery-card
-        :greeting="labels.greeting"
+        :greeting="$t('Can\'t log in ?')"
         :additional-info="currentAdditionalInfo"
       >
         <container-recovery-row>
           <brand-input
             name="email"
-            :placeholder="labels.placeholders.email"
+            :placeholder="$t('Enter email')"
             :value="recoveryEmail"
             :error-text="emailErrorText"
             class="w-full"
-            @change="recoveryEmail = $event"
+            @change.native="recoveryEmail = $event.target.value"
           />
         </container-recovery-row>
         <brand-button
@@ -26,8 +26,8 @@
           class="text-dark-indigo dark:text-light-indigo"
           primary-action-redirect="/login"
           secondary-action-redirect="/register"
-          :primary-label="labels.returnToLogin"
-          :secondary-label="labels.register"
+          :primary-label="$t('Return to login')"
+          :secondary-label="$t('Sign up instead')"
         />
       </container-recovery-card>
     </transition-opacity>
@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      labels: {},
       recoveryEmail: '',
       emailErrorText: '',
       hasSuccessfullySentRecoveryLink: true,
@@ -66,17 +65,14 @@ export default {
   computed: {
     primaryActionLabel() {
       return this.hasSuccessfullySentRecoveryLink
-        ? this.labels.resendRecoveryLink
-        : this.labels.sendRecoveryLink
+        ? this.$t('Resend recovery link')
+        : this.$t('Send recovery link')
     },
     currentAdditionalInfo() {
       return this.hasSuccessfullySentRecoveryLink
-        ? this.labels.successProcessSendRecoveryLinkTo
-        : this.labels.sendRecoveryLinkTo
+        ? this.$t('We went a recovery link to you at')
+        : this.$t("We'll send a recovery link to")
     },
-  },
-  beforeMount() {
-    this.setLabels()
   },
   methods: {
     handleRecover() {
@@ -95,29 +91,10 @@ export default {
           }
           this.handleRecover()
         } else {
-          this.emailErrorText = this.labels.emailError
+          this.emailErrorText = this.$t('Invalid email')
         }
       } else {
-        this.emailErrorText = this.labels.emptyField
-      }
-    },
-    // TODO pick theses labels from json files
-    setLabels() {
-      this.labels = {
-        greeting: "Can't log in ?",
-        sendRecoveryLinkTo: "We'll send a recovery link to",
-        successProcessSendRecoveryLinkTo: 'We sent a recovery link to you at',
-        resendRecoveryLink: 'Resend recovery link',
-        emailError: 'Invalid email',
-        emptyField: "Field can't be empty",
-        loading: 'Loading your environment',
-        sendRecoveryLink: 'Send recovery link',
-        returnToLogin: 'Return to log in',
-        register: 'Sign up instead',
-        cantLogin: "Can't log in ?",
-        placeholders: {
-          email: 'Enter email',
-        },
+        this.emailErrorText = this.$t("Field can't be empty")
       }
     },
   },

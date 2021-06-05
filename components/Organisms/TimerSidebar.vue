@@ -2,46 +2,26 @@
   <div>
     <transition-sidebar-content>
       <timer-sidebar-unstacked
-        v-show="!isStacked"
-        :status="status"
-        :labels="labels"
-        :current-timer="currentTimer"
-        :current-session-end-time="currentSessionEndTime"
-        :is-session-pending="isSessionPending"
-        :is-session-started-but-pending-process="
-          isSessionStartedButPendingProcess
-        "
-        :is-paused="isPaused"
-        :is-pending="isPending"
-        :is-running="isRunning"
-        @onStart="handleStart"
-        @onPause="handlePause"
-        @onResume="handleResume"
-        @onStop="handlePause"
+        v-show="!isLayoutStacked"
+        @onStart="handleStartTimer"
+        @onPause="handlePauseTimer"
+        @onResume="handleResumeTimer"
+        @onStop="handlePauseTimer"
+        @onStartSession="handleStartSession"
         @onTimerClick="handleTimerClick"
-        @onScreenExpand="handleScreenExpand"
+        @onScreenExpand="$emit('onScreenExpand')"
       />
     </transition-sidebar-content>
     <transition-sidebar-content>
       <timer-sidebar-stacked
-        v-show="isStacked"
-        :status="status"
-        :labels="labels"
-        :current-timer="currentTimer"
-        :current-session-end-time="currentSessionEndTime"
-        :is-session-pending="isSessionPending"
-        :is-session-started-but-pending-process="
-          isSessionStartedButPendingProcess
-        "
-        :is-paused="isPaused"
-        :is-pending="isPending"
-        :is-running="isRunning"
-        @onStart="handleStart"
-        @onPause="handlePause"
-        @onResume="handleResume"
-        @onStop="handlePause"
+        v-show="isLayoutStacked"
+        @onStart="handleStartTimer"
+        @onPause="handlePauseTimer"
+        @onResume="handleResumeTimer"
+        @onStop="handlePauseTimer"
+        @onStartSession="handleStartSession"
         @onTimerClick="handleTimerClick"
-        @onScreenExpand="handleScreenExpand"
+        @onScreenExpand="$emit('onScreenExpand')"
       />
     </transition-sidebar-content>
   </div>
@@ -50,7 +30,6 @@
 <script>
 import TimerSidebarStacked from '@/components/Organisms/TimerSidebarStacked'
 import TimerSidebarUnstacked from '@/components/Organisms/TimerSidebarUnstacked'
-import { POMODORO_STATUS } from '@/constantes'
 import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
 
 export default {
@@ -61,65 +40,30 @@ export default {
     TransitionSidebarContent,
   },
   props: {
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
-    },
-    isRunning: {
-      type: Boolean,
-      default: false,
-    },
-    isPaused: {
-      type: Boolean,
-      default: false,
-    },
-    isPending: {
-      type: Boolean,
-      default: false,
-    },
-    isSessionPending: {
-      type: Boolean,
-      default: false,
-    },
-    isSessionStartedButPendingProcess: {
-      type: Boolean,
-      default: false,
-    },
-    currentTimer: {
-      type: String,
-      default: '',
-    },
-    currentSessionEndTime: {
-      type: String,
-      required: true,
-    },
-    labels: {
-      type: Object,
-      required: true,
-    },
-    status: {
-      type: String,
-      default: POMODORO_STATUS.SESSION.pending,
     },
   },
   methods: {
-    handlePause() {
+    handleStartTimer() {
       // TODO handle
     },
-    handleStart() {
+    handlePauseTimer() {
       // TODO handle
     },
-    handleResume() {
+    handleResumeTimer() {
       // TODO handle
     },
-    handleStop() {
+    handleStopTimer() {
       // TODO handle
     },
-    handleScreenExpand() {
-      // TODO handle
+    handleStartSession() {
+      // TODO handle cases
     },
     handleTimerClick() {
-      // TODO handle
+      this.$store.dispatch('sessions/onTimerClick')
+      // TODO handle cases
     },
   },
 }

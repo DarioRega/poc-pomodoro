@@ -2,25 +2,25 @@
   <modal :is-open="isOpen" size="large">
     <template #header>
       <h5 class="text-dark-blue dark:text-celeste">
-        {{ labels.startASession }}
+        {{ $t('Start a session') }}
       </h5>
     </template>
     <template #body>
       <panel-select-running-task
-        :tasks="tasks"
-        :previous-task="previousTask"
-        :labels="labels"
         :is-loading="isLoading"
-        @onSelectTask="$emit('onRunWithTask', $event)"
+        @onSelectTask="handleRunWithTask"
       />
     </template>
     <template #footer>
       <div class="flex justify-between">
         <brand-button type="secondary" @click="$emit('onClose')"
-          >{{ labels.close }}
+          >{{ $t('Close') }}
         </brand-button>
-        <brand-button type="primary" @click="$emit('onRunWithoutTask')"
-          >{{ labels.iJustWantTheTimer }}
+        <brand-button
+          :is-loading="isLoading"
+          type="primary"
+          @click="handleRunWithoutTask"
+          >{{ $t('I just want the timer') }}
         </brand-button>
       </div>
     </template>
@@ -40,21 +40,19 @@ export default {
       type: Boolean,
       default: true,
     },
-    isLoading: {
-      type: Boolean,
-      default: false,
+  },
+  data() {
+    return {
+      isLoading: false,
+    }
+  },
+  methods: {
+    // TODO  dont forget in action to set the component to load
+    handleRunWithTask(task) {
+      // TODO vuex action
     },
-    tasks: {
-      type: Array,
-      default: () => [],
-    },
-    previousTask: {
-      type: Object,
-      default: () => ({}),
-    },
-    labels: {
-      type: Object,
-      required: true,
+    handleRunWithoutTask() {
+      // TODO vuex action
     },
   },
 }

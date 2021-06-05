@@ -58,7 +58,7 @@ button:focus {
   }
 
   &__main-content {
-    @apply flex justify-center mx-auto absolute right-[2rem];
+    @apply flex justify-center mx-auto absolute right-[2rem] py-4;
 
     width: calc(100vw - 17rem);
     transition: width 500ms ease-in-out;

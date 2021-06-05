@@ -7,7 +7,7 @@ export default {
     currentTimer: {
       control: { type: 'text' },
     },
-    isStacked: {
+    isLayoutStacked: {
       control: { type: 'select', options: [true, false] },
     },
     isSessionPending: {
@@ -22,21 +22,15 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   computed: {
-    getLabels() {
-      return {
-        start: 'Start',
-        startSession: 'Start session',
-      }
-    },
     shouldStack() {
-      return args.isStacked
+      return args.isLayoutStacked
     },
   },
   components: { TimerSidebarClock },
   template: `
     <div :class="shouldStack ? 'w-24' : 'w-72'">
         <div :class="shouldStack ? 'timer-sidebar--stacked' : 'timer-sidebar'">
-          <timer-sidebar-clock v-bind="$props" :labels="getLabels" />
+          <timer-sidebar-clock v-bind="$props" />
         </div>
     </div>`,
 })
@@ -60,13 +54,13 @@ ShowStartText.args = {
 
 export const StackedDefault = Template.bind({})
 StackedDefault.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   currentTimer: '20:00',
 }
 
 export const StackedPending = Template.bind({})
 StackedPending.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   isSessionPending: true,
   currentTimer: '20:00',
 }

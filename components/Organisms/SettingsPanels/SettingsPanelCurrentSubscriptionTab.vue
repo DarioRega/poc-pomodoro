@@ -8,26 +8,21 @@
     <div>
       <subscription-tab-overview
         v-show="currentActiveTab === steps.OVERVIEW"
-        :labels="labels"
         @onSeeAllHistory="currentActiveTab = steps.BILLING_HISTORY"
       />
       <subscription-tab-estimate-of-invoice
         v-show="currentActiveTab === steps.ESTIMATE_OF_INVOICE"
-        :labels="labels"
       />
       <subscription-tab-invoice-informations
         v-show="currentActiveTab === steps.INVOICE_INFORMATIONS"
-        :labels="labels"
         @onManageInvoicesInformations="handleManageInvoicesInformations"
       />
       <subscription-tab-billing-history
         v-show="currentActiveTab === steps.BILLING_HISTORY"
-        :labels="labels"
         @onRequestDownloadInvoice="handleRequestDownloadInvoice"
       />
       <subscription-tab-current-subscription
         v-show="currentActiveTab === steps.CURRENT_SUBSCRIPTION"
-        :labels="labels"
         @onManageSubscription="handleManageSubscription"
       />
     </div>
@@ -35,10 +30,7 @@
 </template>
 
 <script>
-import {
-  SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS,
-  SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES,
-} from '@/constantes'
+import { SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES } from '@/constantes'
 import SettingsPanelSubscriptionTabs from '@/components/Organisms/SettingsPanels/SubscriptionTab/SettingsPanelSubscriptionTabs'
 import SubscriptionTabOverview from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabOverview'
 import SubscriptionTabEstimateOfInvoice from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabEstimateOfInvoice'
@@ -57,14 +49,6 @@ export default {
     SubscriptionTabCurrentSubscription,
   },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
-    commonLabels: {
-      type: Object,
-      required: true,
-    },
     values: {
       type: Object,
       required: true,
@@ -81,9 +65,9 @@ export default {
       return SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES
     },
   },
-  beforeMount() {
+  mounted() {
     this.localValues = this.values
-    this.currentActiveTab = SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS[4].step
+    this.currentActiveTab = this.steps.OVERVIEW
   },
   methods: {
     handleManageInvoicesInformations() {

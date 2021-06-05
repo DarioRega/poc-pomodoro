@@ -9,13 +9,11 @@
       px-4
       xl:px-6
       rounded-md
-      min-h-[30rem]
     "
   >
     <task-grid-header-all-tasks
-      :labels="labels.header"
       :is-toggled="isToggled"
-      :is-stacked="isStacked"
+      :is-layout-stacked="isLayoutStacked"
       :should-show-completed-task="showCompletedTasks"
       class="mb-4"
       @onToggle="isToggled = !isToggled"
@@ -24,37 +22,32 @@
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
-      <div v-show="isToggled" class="min-h-[15rem]">
+      <div v-show="isToggled" class="min-h-[30rem]">
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
           :task="task"
-          :is-stacked="isStacked"
+          :is-layout-stacked="isLayoutStacked"
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.status.value === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
-          :labels="labels.body"
           class="mb-3"
           @onTargetClick="handleClickTaskTarget"
           @onChangeRunningTask="handleChangeRunningTask"
-          @onTaskNameChange="handleChangeTaskName"
-          @onTaskStatusChange="handleChangeTaskStatus"
-          @onTaskDescriptionChange="handleChangeTaskDescription"
-          @onDeadlineChange="handleChangeDeadline"
         >
           <div class="absolute w-full -mt-4 right-0 pl-4 mr-0">
-            <BrandTextarea
+            <brand-textarea
               v-show="index === 0"
               :value="currentTaskSelected.description"
-              :name="labels.body.taskDescription"
+              :name="$t('Task description')"
               :is-selected="true"
               :is-completed="isCompletedDescription"
               type="task"
               class="w-full"
-              @change="handleChangeTaskDescription"
+              @change.native="handleChangeTaskDescription($event.target.value)"
             />
           </div>
         </task-grid-body-all-tasks>
@@ -64,7 +57,7 @@
       <div v-show="isToggled">
         <task-grid-pagination
           class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
-          :label="labels.general.amountOfTasksToDisplay"
+          :label="$t('Tasks to display')"
           @onPaginationChange="amountOfTasksToDisplays = $event"
         />
       </div>
@@ -90,10 +83,6 @@ export default {
     TransitionOpacity,
   },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     currentTaskSelected: {
       type: Object,
       default: () => ({}),
@@ -106,7 +95,7 @@ export default {
       type: Array,
       required: true,
     },
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
     },
@@ -122,13 +111,15 @@ export default {
   },
   computed: {
     isCompletedDescription() {
-      return this.currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
+      if (this.currentTaskSelected.status) {
+        return this.currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
+      }
+      return false
     },
     tasksList() {
       let tasksArray = this.tasks
-
       if (!this.showCompletedTasks) {
-        tasksArray = this.tasksListNoComplete()
+        tasksArray = this.tasksListNoComplete
       }
       if (this.amountOfTasksToDisplays === 'all') {
         return tasksArray
@@ -136,21 +127,36 @@ export default {
         return this.taskListOnlyAmountToDisplay(tasksArray)
       }
     },
-    TASK_STATUS_VALUES() {
-      return TASK_STATUS_VALUES
-    },
-  },
-  methods: {
     tasksListNoComplete() {
       return this.tasks.filter(
         (task) => task.status.value !== TASK_STATUS_VALUES.DONE
       )
     },
+    TASK_STATUS_VALUES() {
+      return TASK_STATUS_VALUES
+    },
+  },
+  mounted() {
+    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasks[0])
+  },
+
+  methods: {
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
     handleClickTaskTarget(taskId) {
       // TODO handle
+      if (this.isArchiveEnabled) {
+        // TODO DISPATCH UPDATE TASK STATUS
+      }
+      if (this.isDeleteEnabled) {
+        // TODO SHOW CONFIRM
+        // TODO DISPATCH DELETE TASK
+      }
+      if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
+        const selectedTask = this.$store.getters['tasks/getTaskById'](taskId)
+        this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
+      }
       // check if isArchiveEnabled or isDeleteEnabled to handle custom event
       // if both of them are false, just fire the select task event
     },
@@ -159,18 +165,9 @@ export default {
       // verify if pomodoro is running, if not show notification warning
       // then if running, change the currentTaskRunning in state and send call api to notify
     },
-    handleChangeTaskName(value, taskId) {
-      // TODO handle
-    },
-    handleChangeTaskStatus(statusId, taskId) {
-      // TODO handle
-    },
     handleChangeTaskDescription(value) {
-      // TODO handle
+      // TODO dispatch action (with current select task id)
       // /!\ add in handler these params  => (this.currentTaskSelected.id, value)
-    },
-    handleChangeDeadline({ dateTime, dateString, locale }, taskId) {
-      // TODO handle
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
