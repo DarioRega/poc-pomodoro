@@ -29,6 +29,8 @@
       :is-expanded="isTimerScreenExpanderOpen"
       @onClose="handleCloseScreenExpander"
     />
+    <!--  Notifications -->
+    <notifications-container />
   </div>
 </template>
 
@@ -40,6 +42,7 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 
 export default {
   name: 'PageIndex',
@@ -51,6 +54,7 @@ export default {
     ModalPanelSelectRunningTask,
     ModalSettingsPanel,
     TimerScreenExpander,
+    NotificationsContainer,
   },
   data() {
     return {
@@ -68,11 +72,36 @@ export default {
       return this.$store.state.globalState.modalsRefs
     },
   },
+  mounted() {
+    const notif = {
+      title: 'Delete Task',
+      description: 'Are you sure to delete the task ?',
+      actionRequired: false,
+      type: 'info',
+    }
+    const notifWithCalllback = {
+      title: 'Delete Task',
+      description: 'Are you sure to delete the task ?',
+      actionRequired: true,
+      type: 'info',
+      closeCallback: this.prout,
+      confirmCallback: this.confi,
+    }
+    this.$store.dispatch('globalState/createNotification', notif)
+    setTimeout(() => {
+      this.$store.dispatch('globalState/createNotification', notifWithCalllback)
+    }, 3000)
+  },
   methods: {
     handleToggleStacked() {
       this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
     },
-
+    prout() {
+      console.log('CLOSE CALLBACK TRIGGERD')
+    },
+    confi() {
+      console.log('SUCCESS CALLBACK TRIGGERD')
+    },
     handleScreenExpand() {
       this.closeAnyModals()
       this.isTimerScreenExpanderOpen = true

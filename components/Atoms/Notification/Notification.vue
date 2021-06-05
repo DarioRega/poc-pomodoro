@@ -25,7 +25,7 @@
           class="inline-flex flex-shrink-0 mx-auto mr-5 text-center"
           :class="textType"
         >
-          <icon :icon-name="type" class="w-10 h-10" />
+          <icon :icon-name="type" class="w-6 h-6" />
         </div>
 
         <div class="flex-1">
@@ -44,7 +44,7 @@
             @onConfirm="$emit('onConfirm')"
             @onCancel="$emit('onClose')"
           >
-            {{ actionText }}
+            {{ defaultActionText }}
           </notification-action>
         </div>
       </div>
@@ -69,6 +69,10 @@ export default {
   name: 'Notification',
   components: { NotificationAction, Icon },
   props: {
+    notificationId: {
+      type: Number,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -95,7 +99,7 @@ export default {
     },
     actionText: {
       type: String,
-      default: 'Confirm',
+      default: '',
     },
     lifeTime: {
       type: Number,
@@ -103,6 +107,9 @@ export default {
     },
   },
   computed: {
+    defaultActionText() {
+      return this.actionText ? this.actionText : this.$t('Confirm')
+    },
     textType() {
       return {
         'text-success': this.type === 'success',
@@ -119,7 +126,10 @@ export default {
   methods: {
     autoCloseNotification() {
       setTimeout(() => {
-        this.$emit('onClose')
+        this.$store.commit(
+          'globalState/REMOVE_NOTIFICATION',
+          this.notificationId
+        )
       }, this.lifeTime * 1000)
     },
   },
