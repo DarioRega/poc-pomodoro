@@ -19,7 +19,7 @@
       dark:hover:bg-opacity-80
       focus:outline-none
     "
-    :class="classes"
+    :class="[classes, isLoading && 'task-current-status--loading']"
     @click="$emit('click', $event)"
     @keydown="$emit('keydown', $event)"
     @mouseenter="$emit('mouseenter')"
@@ -46,6 +46,10 @@ export default {
     shouldFocus: {
       type: Boolean,
       default: false,
+    },
+    isLoading: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
@@ -75,3 +79,17 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+.task-current-status--loading {
+  @apply text-dark-indigo bg-dark-indigo #{!important};
+  @apply dark:text-light-indigo dark:bg-light-indigo #{!important};
+
+  &::after {
+    @apply w-4 h-4 absolute inset-0 m-auto border-4 border-transparent rounded-[50%] text-current fill-current;
+
+    content: '';
+    border-top-color: white;
+    animation: small-loading-spinner 1s ease infinite;
+  }
+}
+</style>

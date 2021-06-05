@@ -115,17 +115,7 @@ button[class*='--loading'] {
 
     content: '';
     border-top-color: white;
-    animation: button-loading-spinner 1s ease infinite;
-  }
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
+    animation: small-loading-spinner 1s ease infinite;
   }
 }
 </style>
