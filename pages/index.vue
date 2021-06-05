@@ -1,68 +1,88 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">frontend</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <div class="app-layout">
+    <index-sidebar @onScreenExpand="handleScreenExpand" />
+    <section
+      class="app-layout__main-content"
+      :class="isLayoutStacked && 'app-layout__main-content--stacked'"
+    >
+      <div class="w-full">
+        <index-top-header class="pb-32" />
+        <current-tab-header class="flex justify-between" />
+        <task-tables class="w-full pt-5" :is-layout-stacked="isLayoutStacked" />
       </div>
-    </div>
+    </section>
+
+    <!--    MODAL SELECT RUNNING TASK -->
+    <modal-panel-select-running-task
+      :is-open="currentModalOpen === modalsRefs.SELECT_RUNNING_TASK"
+      @onClose="closeAnyModals"
+    />
+
+    <!--    MODAL SETTINGS -->
+    <modal-settings-panel
+      :is-open="currentModalOpen === modalsRefs.SETTINGS"
+      @onClose="closeAnyModals"
+    />
+
+    <!--    TIMER SCREEN EXPANDER -->
+    <timer-screen-expander
+      :is-expanded="isTimerScreenExpanderOpen"
+      @onClose="handleCloseScreenExpander"
+    />
   </div>
 </template>
 
 <script>
-export default {}
+import IndexTopHeader from '@/components/Templates/IndexPageComponentsGroup/IndexTopHeader'
+import CurrentTabHeader from '@/components/Templates/IndexPageComponentsGroup/CurrentTabHeader'
+import IndexSidebar from '@/components/Templates/IndexPageComponentsGroup/IndexSidebar'
+import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTables'
+import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
+import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
+import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+
+export default {
+  name: 'Index',
+  components: {
+    TaskTables,
+    IndexSidebar,
+    IndexTopHeader,
+    CurrentTabHeader,
+    ModalPanelSelectRunningTask,
+    ModalSettingsPanel,
+    TimerScreenExpander,
+  },
+  data() {
+    return {
+      isTimerScreenExpanderOpen: false,
+    }
+  },
+  computed: {
+    isLayoutStacked() {
+      return this.$store.state.globalState.isLayoutStacked
+    },
+    currentModalOpen() {
+      return this.$store.state.globalState.currentModalOpen
+    },
+    modalsRefs() {
+      return this.$store.state.globalState.modalsRefs
+    },
+  },
+  methods: {
+    handleToggleStacked() {
+      this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
+    },
+
+    handleScreenExpand() {
+      this.closeAnyModals()
+      this.isTimerScreenExpanderOpen = true
+    },
+    handleCloseScreenExpander() {
+      this.isTimerScreenExpanderOpen = false
+    },
+    closeAnyModals() {
+      this.$store.commit('globalState/RESET_CURRENT_MODAL_OPEN')
+    },
+  },
+}
 </script>
-
-<style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

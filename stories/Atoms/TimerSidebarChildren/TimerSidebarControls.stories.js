@@ -25,7 +25,7 @@ export default {
     isPending: {
       control: { type: 'select', options: [true, false] },
     },
-    isStacked: {
+    isLayoutStacked: {
       control: { type: 'select', options: [true, false] },
     },
     isSessionPending: {
@@ -43,7 +43,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   computed: {
     shouldStack() {
-      return args.isStacked
+      return args.isLayoutStacked
     },
   },
   components: { TimerSidebarControls },
@@ -72,18 +72,18 @@ SessionStartedButPendingProcess.args = {
 
 export const StackedRunning = Template.bind({})
 StackedRunning.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   isRunning: true,
 }
 
 export const StackedPaused = Template.bind({})
 StackedPaused.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   isPaused: true,
 }
 
 export const StackedSessionStartedButPendingProcess = Template.bind({})
 StackedSessionStartedButPendingProcess.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   isSessionStartedButPendingProcess: true,
 }

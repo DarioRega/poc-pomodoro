@@ -3,29 +3,27 @@
     <!--  BILLING PERIOD -->
     <label-with-data
       class="w-full text-left mb-4"
-      :label="labels.billingPeriod"
+      :label="$t('Billing period')"
     >
-      <p class="subtitle">{{ labels.activeSubscription }}</p>
+      <p class="subtitle">{{ $t('Active subscription') }}</p>
       <div class="border border-dark-gray rounded-md p-4 mt-4">
         <div class="flex justify-between items-center">
           <p class="subtitle font-bold text-dark-blue dark:text-celeste">
             LOGO
           </p>
           <h5 class="text-dark-blue dark:text-celeste">
-            {{ isPremium ? labels.premiumPlanName : labels.freemiumPlanName }}
+            {{ isPremium ? $t('Pomodoro premium') : $t('Free plan') }}
           </h5>
         </div>
         <div class="flex justify-between items-center mt-6">
           <div>
-            <p class="subtitle">{{ labels.users }}</p>
-            <p class="text-dark-gray">
-              1 {{ labels.outOf }} {{ labels.users }}
-            </p>
+            <p class="subtitle">{{ $t('users') }}</p>
+            <p class="text-dark-gray">1 {{ $t('out of') }} {{ $t('users') }}</p>
           </div>
           <div>
-            <p class="subtitle capitalize">{{ labels.tasks }}</p>
+            <p class="subtitle capitalize">{{ $t('tasks') }}</p>
             <p class="text-dark-gray">
-              1 {{ labels.outOf }} 4 {{ labels.tasks }}
+              1 {{ $t('out of') }} 4 {{ $t('tasks') }}
             </p>
           </div>
         </div>
@@ -35,10 +33,10 @@
             class="capitalize"
             @click="$emit('onUpgrade')"
           >
-            {{ labels.manageSubscription }}
+            {{ $t('Manage subscription') }}
           </brand-button>
           <brand-button v-else class="capitalize" @click="$emit('onUpgrade')">
-            {{ labels.upgrade }}
+            {{ $t('Upgrade') }}
           </brand-button>
         </div>
       </div>
@@ -54,10 +52,6 @@ export default {
   name: 'SubscriptionTabCurrentSubscription',
   components: { LabelWithData, BrandButton },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     isPremium: {
       type: Boolean,
       default: false,

@@ -1,5 +1,4 @@
 import SettingsPanelGeneralTab from '@/components/Organisms/SettingsPanels/SettingsPanelGeneralTab'
-import { SETTINGS_PANEL_LABELS } from '@/constantes/labels'
 
 export default {
   title: 'Organisms/SettingsPanels/GeneralTab',
@@ -10,12 +9,6 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { SettingsPanelGeneralTab },
   computed: {
-    getLabels() {
-      return SETTINGS_PANEL_LABELS.generalTab
-    },
-    getCommonLabels() {
-      return SETTINGS_PANEL_LABELS.commons
-    },
     mockValues() {
       return {
         displayLanguage: {
@@ -108,7 +101,7 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div class='max-w-3xl mx-auto bg-light-white dark:bg-darker-blue'>
     <div class="bg-lighter-white dark:bg-dark-blue p-6">
-      <settings-panel-general-tab :labels='getLabels' :common-labels='getCommonLabels' :values='mockValues' :options='mockOptions' />
+      <settings-panel-general-tab :values='mockValues' :options='mockOptions' />
     </div>
     </div>
   `,

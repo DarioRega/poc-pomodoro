@@ -19,7 +19,7 @@ const Template = (args, { argTypes }) => ({
   template: `<modal-settings-panel v-bind='$props'/>`,
 })
 
-export const Open = Template.bind({})
-Open.args = {
+export const Default = Template.bind({})
+Default.args = {
   isOpen: true,
 }

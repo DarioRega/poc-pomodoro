@@ -60,5 +60,5 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({})
 Default.args = {
   name: 'myName',
-  value: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
+  status: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
 }

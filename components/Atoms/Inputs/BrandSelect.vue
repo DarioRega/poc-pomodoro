@@ -31,7 +31,7 @@
           @keydown="toggleVisibility"
         >
           <span class="block text-current truncate">
-            {{ localValue.name || placeholder }}
+            {{ value.name || placeholder }}
           </span>
           <span
             class="
@@ -116,7 +116,7 @@
             >
               <select-dropdown-option
                 :is-highlighted="isHighlighted(item.id)"
-                :is-selected="localValue.id === item.id"
+                :is-selected="value.id === item.id"
                 :should-show-selected="shouldShowSelected"
                 :name="item.name"
               />
@@ -204,9 +204,6 @@ export default {
       highlightedItemId: '',
       currentFocusedElementId: 0,
       isOpen: false,
-      localValue: {
-        id: null,
-      },
     }
   },
   computed: {
@@ -216,11 +213,10 @@ export default {
     selectOptions() {
       return this.shouldShowSelected
         ? this.options
-        : this.options.filter((x) => x.id !== this.localValue.id)
+        : this.options.filter((x) => x.id !== this.value.id)
     },
   },
   mounted() {
-    this.localValue = this.value
     window.document.addEventListener('click', this.handleWindowClick)
   },
   beforeDestroy() {
@@ -251,7 +247,6 @@ export default {
       }
     },
     selectOption(item) {
-      this.localValue = item
       this.isOpen = false
       this.$emit('change', item)
     },

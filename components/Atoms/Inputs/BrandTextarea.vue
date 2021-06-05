@@ -2,8 +2,8 @@
   <div class="brand-input" :class="hasErrors && 'brand-input--has-errors'">
     <div class="flex flex-col-reverse">
       <textarea
-        v-model.lazy="localValue"
         :name="name"
+        :value="value"
         :aria-label="name"
         :rows="type === 'task' ? 13 : 4"
         class="resize-none brand-input__textarea"
@@ -12,7 +12,7 @@
           isSelected && 'selected',
           isCompleted && 'completed',
         ]"
-        @change="onChange"
+        @input="$emit('input', $event.target.value)"
       ></textarea>
       <label v-if="label && type !== 'task'" class="brand-input__label">
         {{ label }}
@@ -66,11 +66,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      localValue: '',
-    }
   },
   computed: {
     hasErrors() {

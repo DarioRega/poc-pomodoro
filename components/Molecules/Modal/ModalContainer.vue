@@ -45,6 +45,7 @@
               dark:bg-opacity-40
             "
             aria-hidden="true"
+            @click="handleClose"
           ></div>
         </transition>
         <transition
@@ -58,7 +59,7 @@
           <div v-show="isOpen" class="w-full">
             <span
               class="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
+              :aria-hidden="isOpen"
               >&#8203;</span
             >
             <slot />
@@ -75,6 +76,11 @@ export default {
     isOpen: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    handleClose() {
+      this.$store.commit('globalState/RESET_CURRENT_MODAL_OPEN')
     },
   },
 }

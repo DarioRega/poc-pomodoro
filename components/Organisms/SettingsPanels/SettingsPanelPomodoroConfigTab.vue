@@ -3,18 +3,18 @@
     <!--    TIME PER POMODORO -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.pomodoroDuration.title }}</h6>
-        <p>{{ labels.pomodoroDuration.description }}</p>
+        <h6>{{ $t('Time per pomodoro') }}</h6>
+        <p>{{ $t('Manage how long a pomodoro should last') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <input-slider
           :value="values.pomodoro_duration"
           :max="60"
           :min="15"
-          @change="localValues.pomodoro_duration = $event"
+          @change="$emit('onPomodoroDurationChange', $event)"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${localValues.pomodoro_duration} ${commonLabels.minutes}` }}
+            {{ `${values.pomodoro_duration} ${$t('minutes')}` }}
           </p>
         </input-slider>
       </div>
@@ -23,8 +23,8 @@
     <!--    TIME PER SMALL BREAK -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.smallBreakDuration.title }}</h6>
-        <p>{{ labels.smallBreakDuration.description }}</p>
+        <h6>{{ $t('Time per small break') }}</h6>
+        <p>{{ $t('Manage how long a small break should last') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <input-slider
@@ -32,10 +32,10 @@
           :max="15"
           :min="1"
           :interval="1"
-          @change="localValues.small_break_duration = $event"
+          @change="$emit('onSmallBreakDurationChange', $event)"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${localValues.small_break_duration} ${minuteOrMinutes}` }}
+            {{ `${values.small_break_duration} ${minuteOrMinutes}` }}
           </p>
         </input-slider>
       </div>
@@ -44,8 +44,8 @@
     <!--    TIME PER LONG BREAK -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.bigBreakDuration.title }}</h6>
-        <p>{{ labels.bigBreakDuration.description }}</p>
+        <h6>{{ $t('Time per big break') }}</h6>
+        <p>{{ $t('Manage how long a big break should last') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <input-slider
@@ -53,10 +53,10 @@
           :max="30"
           :min="10"
           :interval="1"
-          @change="localValues.big_break_duration = $event"
+          @change="$emit('onBigBreakDurationChange', $event)"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${localValues.big_break_duration} ${commonLabels.minutes}` }}
+            {{ `${values.big_break_duration} ${$t('minute')}` }}
           </p>
         </input-slider>
       </div>
@@ -65,8 +65,8 @@
     <!--    POMODORO QUANTITY -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.pomodoroQuantity.title }}</h6>
-        <p>{{ labels.pomodoroQuantity.description }}</p>
+        <h6>{{ $t('Pomodoro per session') }}</h6>
+        <p>{{ $t('How many pomodoro you whis to do per session') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <input-slider
@@ -74,10 +74,10 @@
           :max="10"
           :min="2"
           :interval="1"
-          @change="localValues.pomodoro_quantity = $event"
+          @change="$emit('onPomodoroQuantityChange', $event)"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${localValues.pomodoro_quantity} ${commonLabels.pomodoros}` }}
+            {{ `${values.pomodoro_quantity} ${$t('pomodoros')}` }}
           </p>
         </input-slider>
       </div>
@@ -86,14 +86,18 @@
     <!--  NOISE NOTIFICATION END PROCESS  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.noiseNotificationEndProcess.title }}</h6>
-        <p>{{ labels.noiseNotificationEndProcess.description }}</p>
+        <h6>{{ $t('Noise notification notice') }}</h6>
+        <p>
+          {{
+            $t('Play a sound when a pomodoro, small break or long break ends')
+          }}
+        </p>
       </div>
       <div class="settings-panel__configurations">
         <toggle
           :toggled="values.noise_notification_end_process"
           class="justify-end"
-          @toggle="localValues.noise_notification_end_process = $event"
+          @toggle="$emit('onNoiseNotificationChange', $event)"
         />
       </div>
     </div>
@@ -101,14 +105,20 @@
     <!--  START POMODORO AUTO  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.startPomodoroAuto.title }}</h6>
-        <p>{{ labels.startPomodoroAuto.description }}</p>
+        <h6>{{ $t('Automatically start a pomodoro') }}</h6>
+        <p>
+          {{
+            $t(
+              'Skip the pending validation on pomodoro and start them automatically after your break ends'
+            )
+          }}
+        </p>
       </div>
       <div class="settings-panel__configurations">
         <toggle
           :toggled="values.start_pomodoro_auto"
           class="justify-end"
-          @toggle="localValues.start_pomodoro_auto = $event"
+          @toggle="$emit('onStartPomodoroAutoChange', $event)"
         />
       </div>
     </div>
@@ -116,14 +126,20 @@
     <!--  START SMALL BREAK AUTO AUTO  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.startSmallBreakAuto.title }}</h6>
-        <p>{{ labels.startSmallBreakAuto.description }}</p>
+        <h6>{{ $t('Automatically start small break') }}</h6>
+        <p>
+          {{
+            $t(
+              'Skip the pending validation on small break and start them automatically after your pomodoro ends'
+            )
+          }}
+        </p>
       </div>
       <div class="settings-panel__configurations">
         <toggle
           :toggled="values.start_small_break_auto"
           class="justify-end"
-          @toggle="localValues.start_small_break_auto = $event"
+          @toggle="$emit('onStartSmallBreakAutoChange', $event)"
         />
       </div>
     </div>
@@ -131,50 +147,37 @@
     <!--  START LONG BREAK AUTO AUTO  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
-        <h6>{{ labels.startLongBreakAuto.title }}</h6>
-        <p>{{ labels.startLongBreakAuto.description }}</p>
+        <h6>{{ $t('Automatically start long break') }}</h6>
+        <p>
+          {{
+            $t(
+              'Skip the pending validation on long breaks and start them automatically after your pomodoro ends'
+            )
+          }}
+        </p>
       </div>
       <div class="settings-panel__configurations">
         <toggle
           :toggled="values.start_big_break_auto"
           class="justify-end"
-          @toggle="localValues.start_big_break_auto = $event"
+          @toggle="$emit('onStartBigBreakAutoChange', $event)"
         />
       </div>
     </div>
-
-    <settings-panel-save-or-reset-settings
-      :has-reset="isDefaultSettingsConfiguration"
-      :is-loading="isLoading"
-      :save-changes-label="commonLabels.saveChanges"
-      :reset-default-label="commonLabels.resetDefault"
-      @onSave="handleSave"
-      @onResetDefault="handleResetDefault"
-    />
   </section>
 </template>
 
 <script>
 import Toggle from '@/components/Atoms/Inputs/Toggle'
-import SettingsPanelSaveOrResetSettings from '@/components/Organisms/SettingsPanels/SettingsPanelSaveOrResetSettings'
 import InputSlider from '@/components/Atoms/Inputs/InputSlider'
 
 export default {
   name: 'SettingsPanelPomodoroConfigTab',
   components: {
     Toggle,
-    SettingsPanelSaveOrResetSettings,
     InputSlider,
   },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
-    commonLabels: {
-      type: Object,
-      required: true,
-    },
     values: {
       type: Object,
       required: true,
@@ -192,31 +195,17 @@ export default {
         start_small_break_auto: false,
         start_big_break_auto: false,
       },
-      isLoading: false,
     }
   },
   computed: {
-    isDefaultSettingsConfiguration() {
-      // TODO verify how to know if it's the default config or user one
-      return true
-    },
     minuteOrMinutes() {
       return this.localValues.pomodoro_quantity < 2
-        ? this.commonLabels.minute
-        : this.commonLabels.minutes
+        ? this.$t('minute')
+        : this.$t('minutes')
     },
   },
-  beforeMount() {
+  mounted() {
     this.localValues = this.values
-  },
-  methods: {
-    handleSave() {
-      // TODO verify with Renato how we manage this
-    },
-    handleResetDefault() {
-      // TODO pop confirm
-      // reset to default general settings to show only on default configuration not user config
-    },
   },
 }
 </script>

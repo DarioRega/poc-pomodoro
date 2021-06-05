@@ -1,21 +1,21 @@
 <template>
   <section class="w-full max-w-xl mx-auto h-full justify-center">
-    <label-with-data class="w-full text-left" :label="labels.billingHistory" />
+    <label-with-data class="w-full text-left" :label="$t('Billing history')" />
     <div class="billing-history__table--header mb-2">
       <div class="billing-history__header--column w-1/4">
-        <p class="capitalize">{{ labels.dated }}</p>
+        <p class="capitalize">{{ $t('dated') }}</p>
       </div>
       <div class="billing-history__header--column w-1/4">
-        <p>{{ labels.billNumber }}</p>
+        <p>{{ $t('Bill number') }}</p>
       </div>
       <div class="billing-history__header--column w-1/5">
-        <p>{{ labels.billingPeriod }}</p>
+        <p>{{ $t('Billing period') }}</p>
       </div>
       <div class="billing-history__header--column w-1/5">
-        <p class="capitalize">{{ labels.amount }}</p>
+        <p class="capitalize">{{ $t('amount') }}</p>
       </div>
       <div class="billing-history__header--column w-[10%]">
-        <p class="capitalize">{{ labels.actions }}</p>
+        <p class="capitalize">{{ $t('actions') }}</p>
       </div>
     </div>
 
@@ -60,10 +60,6 @@ export default {
   name: 'SubscriptionTabBillingHistory',
   components: { LabelWithData, Icon },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     rows: {
       type: Array,
       default: () => [1, 2, 3, 4, 5],

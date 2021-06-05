@@ -19,6 +19,11 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
 
+  vue: {
+    config: {
+      productionTip: false,
+    },
+  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -36,8 +41,17 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'nuxt-i18n',
   ],
 
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+      silentTranslationWarn: true,
+    },
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 

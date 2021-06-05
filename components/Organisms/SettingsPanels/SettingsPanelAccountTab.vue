@@ -5,15 +5,15 @@
       class="settings-panel__container settings-panel__container--account-tab"
     >
       <div class="settings-panel__labels">
-        <h6>{{ labels.fullName.title }}</h6>
-        <p>{{ labels.fullName.description }}</p>
+        <h6>{{ $t('Full name') }}</h6>
+        <p>{{ $t('Current full name') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <brand-input
-          :value="localValues.fullName"
           name="full name"
           :error-text="errors.fullName"
-          @change="localValues.fullName = $event"
+          :value="localValues.fullName"
+          @change.native="localValues.fullName"
         />
         <div class="settings-panel__actions">
           <brand-button
@@ -21,7 +21,7 @@
             :is-disabled="onGoingActions.includes('fullName')"
             @click="handleChangeFullName"
           >
-            {{ labels.fullName.action }}
+            {{ $t('Change full name') }}
           </brand-button>
         </div>
       </div>
@@ -32,15 +32,15 @@
       class="settings-panel__container settings-panel__container--account-tab"
     >
       <div class="settings-panel__labels">
-        <h6>{{ labels.email.title }}</h6>
-        <p>{{ labels.email.description }}</p>
+        <h6>{{ $t('Email') }}</h6>
+        <p>{{ $t('Current email for login') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <brand-input
-          :value="localValues.email"
           name="full name"
           :error-text="errors.email"
-          @change="localValues.email = $event"
+          :value="localValues.email"
+          @change.native="localValues.email = $event.target.value"
         />
         <div class="settings-panel__actions">
           <brand-button
@@ -48,7 +48,7 @@
             :is-disabled="onGoingActions.includes('email')"
             @click="handleChangeEmail"
           >
-            {{ labels.email.action }}
+            {{ $t('Change email') }}
           </brand-button>
         </div>
       </div>
@@ -59,25 +59,25 @@
       class="settings-panel__container settings-panel__container--account-tab"
     >
       <div class="settings-panel__labels">
-        <h6>{{ labels.password.title }}</h6>
-        <p>{{ labels.password.description }}</p>
+        <h6>{{ $t('Password') }}</h6>
+        <p>{{ $t('Current password for login') }}</p>
       </div>
       <div class="settings-panel__configurations">
         <brand-input
-          :value="localValues.password"
           name="password"
           :error-text="errors.password"
           input-type="password"
-          @change="localValues.password = $event"
+          :value="localValues.password"
+          @change.native="localValues.password = $event.target.value"
         />
         <brand-input
           class="mt-10"
           :value="localValues.confirmPassword"
           name="password"
-          :placeholder="labels.password.confirmPassword"
+          :placeholder="$t('Confirm password')"
           :error-text="errors.confirmPassword"
           input-type="password"
-          @change="localValues.confirmPassword = $event"
+          @change.native="localValues.confirmPassword = $event.target.value"
         />
         <div class="settings-panel__actions">
           <brand-button
@@ -85,7 +85,7 @@
             :is-disabled="onGoingActions.includes('password')"
             @click="handleChangePassword"
           >
-            {{ labels.password.action }}
+            {{ $t('Change password') }}
           </brand-button>
         </div>
       </div>
@@ -101,10 +101,6 @@ export default {
   name: 'SettingsPanelAccountTab',
   components: { BrandInput, BrandButton },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     values: {
       type: Object,
       required: true,
@@ -137,7 +133,7 @@ export default {
       }
     },
   },
-  beforeMount() {
+  mounted() {
     const { fullName, email } = this.values
     // security, we don't display password in input
     this.localValues = {
@@ -150,7 +146,7 @@ export default {
   methods: {
     validateEmptyFields(fieldProperty) {
       if (!this.localValues.fullName) {
-        this.errors[fieldProperty] = this.labels.errors.emptyField
+        this.errors[fieldProperty] = this.$t('Field is required')
         return false
       } else if (this.errors[fieldProperty]) {
         this.errors[fieldProperty] = ''
@@ -161,7 +157,9 @@ export default {
       if (
         this.localValues[fieldProperty].trim() === this.values[fieldProperty]
       ) {
-        this.errors[fieldProperty] = this.labels.errors.noChange
+        this.errors[fieldProperty] = this.$t(
+          'A new value is required to update'
+        )
         return false
       } else if (this.errors[fieldProperty]) {
         this.errors[fieldProperty] = ''
@@ -195,7 +193,7 @@ export default {
       if (this.validateEmptyFields(fieldProperty)) {
         if (this.validateChange(fieldProperty)) {
           if (!this.$regexValidate('email', this.localValues.email)) {
-            this.errors.email = this.labels.errors.invalidEmail
+            this.errors.email = this.$t('Invalid email')
           } else {
             this.setLoadingOnProperty(fieldProperty)
             // TODO axios call
@@ -211,11 +209,11 @@ export default {
       if (this.validateEmptyFields(fieldProperty)) {
         if (this.validateChange(fieldProperty)) {
           if (this.localValues.password !== this.localValues.confirmPassword) {
-            this.errors.confirmPassword = this.labels.errors.confirmPassword
+            this.errors.confirmPassword = this.$t('Passwords are different')
             hasError = true
           }
           if (this.localValues.password.length < 8) {
-            this.errors.password = this.labels.errors.password
+            this.errors.password = this.$t('Password too short')
             hasError = true
           }
           if (!hasError) {

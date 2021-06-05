@@ -19,6 +19,9 @@
   .task-grid-header-actions:focus {
     @extend .brand-focus-ring--indigo;
   }
+  .task-grid-header-toggler:focus  .task-grid-header-toggler__icon {
+    @extend .brand-focus-ring--indigo;
+  }
 
   // TaskCurrentStatus.vue
   .task-current-status:focus {
@@ -78,6 +81,9 @@
 
   // TaskGridHeaderActions.vue
   .task-grid-header-actions:focus {
+    @extend .brand-dark-focus-ring--indigo;
+  }
+  .task-grid-header-toggler:focus  .task-grid-header-toggler__icon {
     @extend .brand-dark-focus-ring--indigo;
   }
 

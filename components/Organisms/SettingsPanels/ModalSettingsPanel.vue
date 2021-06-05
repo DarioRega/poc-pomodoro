@@ -1,7 +1,7 @@
 <template>
   <modal :is-open="isOpen" size="large">
     <template #header>
-      <h5 class="text-dark-blue dark:text-celeste">Settings</h5>
+      <h5 class="text-dark-blue dark:text-celeste">{{ $t('Settings') }}</h5>
     </template>
     <template #body>
       <settings-panel />
@@ -9,8 +9,8 @@
     <template #footer>
       <div class="flex justify-end">
         <brand-button type="primary" @click="$emit('onClose')"
-          >Close</brand-button
-        >
+          >{{ $t('Close') }}
+        </brand-button>
       </div>
     </template>
   </modal>
@@ -30,5 +30,6 @@ export default {
       default: true,
     },
   },
+  mounted() {},
 }
 </script>

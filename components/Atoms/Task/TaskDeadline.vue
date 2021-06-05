@@ -87,14 +87,13 @@
 <script>
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-
+import { fr } from '@/constantes/calendarLocales/fr'
 import Icon from '../Icon'
 import BrandButton from '../BrandButton'
 
 // TODO Invalid locale warning message in browser
 const calendarLocales = {
-  fr: require('flatpickr/dist/l10n/fr.js').default.fr,
-  en: require('flatpickr/dist/l10n/default.js').default,
+  fr,
 }
 export default {
   name: 'TaskDeadline',
@@ -107,10 +106,6 @@ export default {
     value: {
       type: String,
       default: null,
-    },
-    locale: {
-      type: String,
-      default: 'default',
     },
     closeButtonText: {
       type: String,
@@ -133,7 +128,7 @@ export default {
       isOpen: false,
       config: {
         inline: true,
-        locale: calendarLocales.en,
+        locale: this.$i18n.locale || this.$i18n.fallbackLocale,
       },
     }
   },
@@ -152,22 +147,22 @@ export default {
   methods: {
     handleRemoveValue() {
       this.showActions = false
-      this.$emit('onChange', null, null)
+      this.$emit('change', null, null)
     },
     handleCloseActionsCalendar() {
       this.showActions = false
       this.isOpen = false
     },
     onChange(dateTime, dateString) {
-      this.$emit('change', { dateTime, dateString, locale: this.locale })
+      this.$emit('change', dateTime, dateString)
       this.handleCloseActionsCalendar()
     },
     setCalendarInstance() {
       const calendar = document.querySelector(
         `#task-deadline-calendar-${this.uniqueKey}`
       )
-      if (this.locale !== 'en') {
-        this.config.locale = calendarLocales[this.locale]
+      if (this.locale !== this.$i18n.fallbackLocale) {
+        this.config.locale = calendarLocales[this.$i18n.locale]
       }
       this.calendar = calendar._flatpickr
     },

@@ -2,7 +2,6 @@
   <aside
     class="
       app-layout__sidebar
-      py-2
       flex
       relative
       flex-shrink-0
@@ -11,7 +10,7 @@
       bg-light-white
       dark:bg-dark-blue
     "
-    :class="isStacked ? 'stacked w-24' : 'w-52 xl:w-64 3xl:w-80'"
+    :class="isLayoutStacked ? 'stacked w-24' : 'w-52 xl:w-64 3xl:w-80'"
   >
     <button
       class="
@@ -23,22 +22,22 @@
         xl:w-10
         focus:outline-none
       "
-      @click="$emit('onToggleStacked', !isStacked)"
+      @click="handleToggleStacked"
     >
       <icon
-        v-show="!isStacked"
+        v-show="!isLayoutStacked"
         icon-name="arrowCircleLeft"
         class="w-full h-full"
       />
       <icon
-        v-show="isStacked"
+        v-show="isLayoutStacked"
         icon-name="arrowCircleRight"
         class="w-full h-full"
       />
     </button>
     <div
       class="flex overflow-auto flex-col py-6 w-full max-w-full"
-      :class="isStacked ? 'px-2' : 'px-6'"
+      :class="isLayoutStacked ? 'px-2' : 'px-6'"
     >
       <slot name="currentTime" />
       <div class="mt-8">
@@ -58,9 +57,14 @@ export default {
   name: 'Sidebar',
   components: { Icon },
   props: {
-    isStacked: {
+    isLayoutStacked: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    handleToggleStacked() {
+      this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
     },
   },
 }

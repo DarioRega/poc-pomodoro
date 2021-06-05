@@ -18,6 +18,11 @@ export default {
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { BrandInput },
+  data() {
+    return {
+      model: args.value,
+    }
+  },
   template: `
     <div class="max-w-xs">
       <brand-input v-bind="$props" />

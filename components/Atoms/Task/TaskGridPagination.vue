@@ -34,12 +34,12 @@ export default {
       ],
     }
   },
-  beforeMount() {
+  mounted() {
     this.$emit('onPaginationChange', this.options[0].id)
   },
   methods: {
     handleChange(item) {
-      this.$emit('onPaginationChange', item.id)
+      this.$emit('onPaginationChange', item)
     },
   },
 }

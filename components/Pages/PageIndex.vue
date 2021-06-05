@@ -1,80 +1,88 @@
-<!--<template>-->
-<!--  <section>-->
-<!--    <div class="app-layout">-->
-<!--      <sidebar-->
-<!--        class="app-layout__sidebar"-->
-<!--        v-bind="$props"-->
-<!--        :is-stacked="isStacked"-->
-<!--        @onToggleStacked="isStacked = $event"-->
-<!--      >-->
-<!--        <template #currentTime>-->
-<!--          <current-time :is24h="false" :is-stacked="isStacked" />-->
-<!--        </template>-->
-<!--        <template #timer>-->
-<!--          <timer-sidebar-->
-<!--            :is-stacked="isStacked"-->
-<!--            :status="status.POMODORO.started"-->
-<!--            current-timer="23:00"-->
-<!--            :labels="labels.clock"-->
-<!--          >-->
-<!--            <template #currentSessionInformations>-->
-<!--              <div class="text-center">-->
-<!--                <p>Current session will end at 14:30 PM</p>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </timer-sidebar>-->
-<!--        </template>-->
-<!--      </sidebar>-->
-<!--      <section-->
-<!--        class="app-layout__main-content"-->
-<!--        :class="isStacked && 'app-layout__main-content&#45;&#45;stacked'"-->
-<!--      >-->
-<!--        <div class="w-full">-->
-<!--          <task-grid-all-tasks v-bind="$props" :labels="labels" />-->
-<!--        </div>-->
-<!--      </section>-->
-<!--    </div>-->
-<!--  </section>-->
-<!--</template>-->
+<template>
+  <div class="app-layout">
+    <index-sidebar @onScreenExpand="handleScreenExpand" />
+    <section
+      class="app-layout__main-content"
+      :class="isLayoutStacked && 'app-layout__main-content--stacked'"
+    >
+      <div class="w-full">
+        <index-top-header class="pb-32" />
+        <current-tab-header class="flex justify-between" />
+        <task-tables class="w-full pt-5" :is-layout-stacked="isLayoutStacked" />
+      </div>
+    </section>
 
-<!--<script>-->
-<!--export default {-->
-<!--  name: 'PageIndex.vue',-->
-<!--  data() {-->
-<!--    return {-->
-<!--      isStacked: false,-->
-<!--    }-->
-<!--  },-->
-<!--  computed: {-->
-<!--    labels() {-->
-<!--      return {-->
-<!--        header: {-->
-<!--          all: 'All',-->
-<!--          status: 'Status',-->
-<!--          deadline: 'Deadline',-->
-<!--          description: 'Description',-->
-<!--          showCompletedTasks: 'Show completed tasks',-->
-<!--          showCompletedTasksCut: 'Show completed',-->
-<!--        },-->
-<!--        body: {-->
-<!--          taskName: 'Task name',-->
-<!--          taskStatusName: 'Task status',-->
-<!--          taskDescription: 'Task description',-->
-<!--          closeCalendar: 'Close',-->
-<!--        },-->
-<!--        general: {-->
-<!--          amountOfTasksToDisplay: 'Tasks to display',-->
-<!--        },-->
-<!--        clock: {-->
-<!--          resume: 'Resume',-->
-<!--          pause: 'Pause',-->
-<!--          stop: 'Stop',-->
-<!--          start: 'Start',-->
-<!--          startSession: 'Start session',-->
-<!--          restartCurrentSession: 'Restart session',-->
-<!--        },-->
-<!--      }-->
-<!--    },-->
-<!--  },-->
-<!--}-->
-<!--</script>-->
+    <!--    MODAL SELECT RUNNING TASK -->
+    <modal-panel-select-running-task
+      :is-open="currentModalOpen === modalsRefs.SELECT_RUNNING_TASK"
+      @onClose="closeAnyModals"
+    />
+
+    <!--    MODAL SETTINGS -->
+    <modal-settings-panel
+      :is-open="currentModalOpen === modalsRefs.SETTINGS"
+      @onClose="closeAnyModals"
+    />
+
+    <!--    TIMER SCREEN EXPANDER -->
+    <timer-screen-expander
+      :is-expanded="isTimerScreenExpanderOpen"
+      @onClose="handleCloseScreenExpander"
+    />
+  </div>
+</template>
+
+<script>
+import IndexTopHeader from '@/components/Templates/IndexPageComponentsGroup/IndexTopHeader'
+import CurrentTabHeader from '@/components/Templates/IndexPageComponentsGroup/CurrentTabHeader'
+import IndexSidebar from '@/components/Templates/IndexPageComponentsGroup/IndexSidebar'
+import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTables'
+import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
+import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
+import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+
+export default {
+  name: 'PageIndex',
+  components: {
+    TaskTables,
+    IndexSidebar,
+    IndexTopHeader,
+    CurrentTabHeader,
+    ModalPanelSelectRunningTask,
+    ModalSettingsPanel,
+    TimerScreenExpander,
+  },
+  data() {
+    return {
+      isTimerScreenExpanderOpen: false,
+    }
+  },
+  computed: {
+    isLayoutStacked() {
+      return this.$store.state.globalState.isLayoutStacked
+    },
+    currentModalOpen() {
+      return this.$store.state.globalState.currentModalOpen
+    },
+    modalsRefs() {
+      return this.$store.state.globalState.modalsRefs
+    },
+  },
+  methods: {
+    handleToggleStacked() {
+      this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
+    },
+
+    handleScreenExpand() {
+      this.closeAnyModals()
+      this.isTimerScreenExpanderOpen = true
+    },
+    handleCloseScreenExpander() {
+      this.isTimerScreenExpanderOpen = false
+    },
+    closeAnyModals() {
+      this.$store.commit('globalState/RESET_CURRENT_MODAL_OPEN')
+    },
+  },
+}
+</script>

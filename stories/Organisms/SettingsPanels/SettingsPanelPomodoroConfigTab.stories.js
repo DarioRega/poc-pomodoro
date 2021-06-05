@@ -1,21 +1,14 @@
-import SettingsPanelPomodoroConfig from '@/components/Organisms/SettingsPanels/SettingsPanelPomodoroConfigTab'
-import { SETTINGS_PANEL_LABELS } from '@/constantes/labels'
+import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanels/SettingsPanelPomodoroConfigTab'
 
 export default {
   title: 'Organisms/SettingsPanels/PomodoroConfig',
-  component: SettingsPanelPomodoroConfig,
+  component: SettingsPanelPomodoroConfigTab,
 }
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { SettingsPanelPomodoroConfig },
+  components: { SettingsPanelPomodoroConfigTab },
   computed: {
-    getLabels() {
-      return SETTINGS_PANEL_LABELS.pomodoroConfigTab
-    },
-    getCommonLabels() {
-      return SETTINGS_PANEL_LABELS.commons
-    },
     mockValues() {
       return {
         pomodoro_duration: 25,
@@ -32,7 +25,7 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div class='max-w-3xl mx-auto bg-light-white dark:bg-darker-blue'>
     <div class="bg-lighter-white dark:bg-dark-blue p-6">
-      <settings-panel-pomodoro-config-tab :labels='getLabels' :common-labels='getCommonLabels' :values='mockValues' />
+      <settings-panel-pomodoro-config-tab :values='mockValues' />
     </div>
     </div>
   `,

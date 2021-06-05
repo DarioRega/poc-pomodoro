@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS } from '@/constantes'
 import TabLink from '@/components/Atoms/TabLink'
 
 export default {
@@ -29,7 +28,9 @@ export default {
   },
   computed: {
     tabs() {
-      return SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS
+      return this.$store.getters['settings/getSubscriptionsSettingsPanelSteps'](
+        this.$i18n
+      )
     },
   },
 }

@@ -6,7 +6,7 @@ export default {
   title: 'Organisms/TimerScreenExpander',
   component: TimerScreenExpander,
   argTypes: {
-    status: {
+    currentStatus: {
       control: {
         type: 'select',
         options: [
@@ -27,15 +27,6 @@ const Template = (args, { argTypes }) => ({
     return {
       interval: null,
       timer: '',
-      getLabels: {
-        resume: 'Resume',
-        pause: 'Pause',
-        stop: 'Stop',
-        start: 'Start',
-        startSession: 'Start session',
-        restartCurrentSession: 'Restart session',
-        currentSessionInformation: 'Current session will end at',
-      },
     }
   },
   computed: {
@@ -49,26 +40,26 @@ const Template = (args, { argTypes }) => ({
     },
   },
   mounted() {
-    if (args.status === POMODORO_STATUS.POMODORO.started) {
+    if (args.currentStatus === POMODORO_STATUS.POMODORO.STARTED) {
       const interval = 1000
       this.interval = setInterval(() => {
         const diff = moment(args.end_time).unix() - moment().unix()
         this.timer = moment.unix(diff).format('mm:ss')
       }, interval)
     }
-    if (args.status === POMODORO_STATUS.SESSION.pending) {
+    if (args.currentStatus === POMODORO_STATUS.SESSION.PENDING) {
       this.timer = '25:00'
     }
-    if (args.status === POMODORO_STATUS.SMALL_BREAK.pending) {
+    if (args.currentStatus === POMODORO_STATUS.SMALL_BREAK.PENDING) {
       this.timer = '05:00'
     }
-    if (args.status === POMODORO_STATUS.BIG_BREAK.pending) {
+    if (args.currentStatus === POMODORO_STATUS.BIG_BREAK.PENDING) {
       this.timer = '15:00'
     }
-    if (args.status === POMODORO_STATUS.POMODORO.paused) {
+    if (args.currentStatus === POMODORO_STATUS.POMODORO.STARTED) {
       this.timer = '12:43'
     }
-    if (args.status === POMODORO_STATUS.POMODORO.pending) {
+    if (args.currentStatus === POMODORO_STATUS.POMODORO.PENDING) {
       this.timer = '25:00'
     }
   },
@@ -77,39 +68,39 @@ const Template = (args, { argTypes }) => ({
       clearInterval(this.interval)
     }
   },
-  template: `<timer-screen-expander v-bind="$props" :current-timer="timer" current-session-end-time='15:32 AM' :session-steps='mockSessionsSteps' :labels="getLabels"/>`,
+  template: `<timer-screen-expander :is-expanded='true' v-bind="$props" :current-timer="timer" current-session-end-time='15:32 AM' :session-steps='mockSessionsSteps' />`,
 })
 
 export const SessionPending = Template.bind({})
 SessionPending.args = {
-  status: POMODORO_STATUS.SESSION.pending,
+  currentStatus: POMODORO_STATUS.SESSION.PENDING,
   isSessionPending: true,
   isPending: true,
 }
 
 export const SessionStartedPomodoroPending = Template.bind({})
 SessionStartedPomodoroPending.args = {
-  status: POMODORO_STATUS.POMODORO.pending,
+  currentStatus: POMODORO_STATUS.POMODORO.PENDING,
   isSessionStartedButPendingProcess: true,
   isPending: true,
 }
 
 export const SessionPomodoroRunning = Template.bind({})
 SessionPomodoroRunning.args = {
-  status: POMODORO_STATUS.POMODORO.started,
+  currentStatus: POMODORO_STATUS.POMODORO.STARTED,
   isRunning: true,
   end_time: moment().add(28, 'minutes'),
 }
 
 export const SessionSmallBreakPending = Template.bind({})
 SessionSmallBreakPending.args = {
-  status: POMODORO_STATUS.SMALL_BREAK.pending,
+  currentStatus: POMODORO_STATUS.SMALL_BREAK.PENDING,
   isSessionStartedButPendingProcess: true,
   isPending: true,
 }
 
 export const SessionPomodoroPaused = Template.bind({})
 SessionPomodoroPaused.args = {
-  status: POMODORO_STATUS.POMODORO.paused,
+  currentStatus: POMODORO_STATUS.POMODORO.PAUSED,
   isPaused: true,
 }

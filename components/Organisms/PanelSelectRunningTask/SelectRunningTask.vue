@@ -104,8 +104,14 @@
                 dark:bg-dark-blue
               "
             >
-              <p class="block font-semibold truncate option-name mb-0">
-                {{ labels.noResultsFounds }}: <em>{{ inputValue }}</em>
+              <p
+                v-if="hasNoTasksYet"
+                class="block font-semibold truncate option-name mb-0"
+              >
+                {{ $t('No tasks created yet') }}
+              </p>
+              <p v-else class="block font-semibold truncate option-name mb-0">
+                {{ $t('No results founds for') }}: <em>{{ inputValue }}</em>
               </p>
             </li>
             <li
@@ -166,10 +172,6 @@ export default {
   name: 'SelectRunningTask',
   components: { SelectDropdownOption, Icon },
   props: {
-    labels: {
-      type: Object,
-      required: true,
-    },
     options: {
       type: Array,
       default: () => [],
@@ -197,6 +199,7 @@ export default {
   },
   data() {
     return {
+      hasNoTasksYet: false,
       highlightedItemId: '',
       currentFocusedElementId: 0,
       isOpen: false,
@@ -214,9 +217,13 @@ export default {
       return this.options
     },
     filteredOptions() {
-      return this.options.filter((x) =>
-        x.name.toLowerCase().includes(this.inputValue.toLowerCase())
-      )
+      if (this.options.length < 1) {
+        return this.options
+      } else {
+        return this.options.filter((x) =>
+          x.name.toLowerCase().includes(this.inputValue.toLowerCase())
+        )
+      }
     },
   },
   watch: {
@@ -232,16 +239,18 @@ export default {
     },
   },
   mounted() {
-    window.document.addEventListener('click', this.handleWindowClick)
-  },
-  beforeDestroy() {
-    window.document.removeEventListener('click', this.handleWindowClick)
+    // TODO Open once,without tasks, then create a task and reopen to verify if hasNopTasksYet has changed to false
+    if (this.options.length < 1) {
+      this.hasNoTasksYet = true
+    } else {
+      this.hasNoTasksYet = false
+    }
   },
   methods: {
     formatOptionText(item) {
       const { name, project, subProject } = item
       return `${name} ${subProject ? `, in ${subProject}` : ''} ${
-        project ? `, from ${project} ${this.labels.project}` : ''
+        project ? `, from ${project} ${this.$t('project')}` : ''
       }`
     },
     isHighlighted(itemId) {

@@ -1,19 +1,22 @@
 <template>
-  <container-login-page :is-loading="isLoading" :loading-label="labels.loading">
+  <container-login-page
+    :is-loading="isLoading"
+    :loading-label="$t('Loading your environment')"
+  >
     <transition-opacity>
       <container-login-card
         v-show="!isLoading"
-        :greeting="labels.greeting"
+        :greeting="$t('Welcome back')"
         :additional-info="currentStep.stepLabel"
       >
         <container-login-row>
           <brand-input
             name="email"
-            :placeholder="labels.placeholders.email"
             :value="login.email"
+            :placeholder="$t('Enter email')"
             :error-text="emailErrorText"
             class="w-full"
-            @change="login.email = $event"
+            @change.native="login.email = $event.target.value"
           />
         </container-login-row>
         <transition-translate-y duration-amount="500">
@@ -22,10 +25,10 @@
               name="password"
               class="flex-1"
               input-type="password"
-              :placeholder="labels.placeholders.password"
+              :placeholder="$t('Enter password')"
               :value="login.password"
               :error-text="passwordErrorText"
-              @change="login.password = $event"
+              @change.native="login.password = $event.target.value"
             />
           </container-login-row>
         </transition-translate-y>
@@ -37,10 +40,10 @@
         </brand-button>
         <redirect-actions-footer
           class="text-dark-indigo dark:text-light-indigo"
-          :primary-label="labels.cantLogin"
+          :primary-label="$t('Can\'t log in ?')"
           primary-action-redirect="/recover"
           secondary-action-redirect="/register"
-          :secondary-label="labels.register"
+          :secondary-label="$t('Sign up instead')"
         />
       </container-login-card>
     </transition-opacity>
@@ -77,7 +80,6 @@ export default {
         stepLabel: '',
         stepLostLabel: '',
       },
-      labels: {},
       login: {
         email: '',
         password: '',
@@ -89,17 +91,17 @@ export default {
   computed: {
     primaryActionLabel() {
       return this.currentStep.name === 'email'
-        ? this.labels.continue
-        : this.labels.login
+        ? this.$t('Continue')
+        : this.$t('Log in')
     },
   },
-  beforeMount() {
-    this.setLabels()
+  mounted() {
+    this.setInitialStep()
   },
   methods: {
     handleLogin() {
       if (!this.login.password) {
-        this.passwordErrorText = this.labels.emptyField
+        this.passwordErrorText = this.$t("Field can't be empty")
       } else {
         if (this.passwordErrorText) {
           this.passwordErrorText = ''
@@ -124,14 +126,14 @@ export default {
           }
           this.currentStep = {
             name: 'password',
-            stepLabel: this.labels.password,
-            stepLostLabel: this.labels.lostPassword,
+            stepLabel: this.$t('Enter your password to login'),
+            stepLostLabel: this.$t('I lost my password'),
           }
         } else {
-          this.emailErrorText = this.labels.emailError
+          this.emailErrorText = this.$t('Invalid email')
         }
       } else {
-        this.emailErrorText = this.labels.emptyField
+        this.emailErrorText = this.$t("Field can't be empty")
       }
     },
     handleIconClick() {
@@ -142,32 +144,11 @@ export default {
       }
     },
     // TODO pick theses labels from json files
-    setLabels() {
-      this.labels = {
-        greeting: 'Welcome back',
-        email: 'Enter your email to continue',
-        password: 'Enter your password to log in',
-        lostEmail: 'I lost my email',
-        lostPassword: 'I lost my password',
-        emailError: 'Invalid email',
-        emptyField: "Field can't be empty",
-        loading: 'Loading your environment',
-        continue: 'Continue',
-        login: 'Log In',
-        register: 'Sign up instead',
-        cantLogin: "Can't log in ?",
-        placeholders: {
-          email: 'Email',
-          password: 'Password',
-        },
-      }
-      this.setCurrentStepLabels()
-    },
-    setCurrentStepLabels() {
+    setInitialStep() {
       this.currentStep = {
         ...this.currentStep,
-        stepLabel: this.labels.email,
-        stepLostLabel: this.labels.lostEmail,
+        stepLabel: this.$t('Enter your email to continue'),
+        stepLostLabel: this.$t('I lost my email'),
       }
     },
   },

@@ -17,43 +17,59 @@
       "
     >
       <settings-panel-general-tab
-        v-if="currentActiveTab === steps.GENERAL"
-        :labels="labels.generalTab"
-        :common-labels="labels.commons"
-        :values="mockValues.generalTab"
-        :options="mockOptions"
+        v-if="currentActiveTab === stepsValues.GENERAL"
+        :values="settingsValues.generalTab"
+        :options="settingsOptions"
+        @onDisplayLanguageChange="handleDisplayLanguageChange"
+        @onTimezoneChange="handleTimezoneChange"
+        @onTimeDisplayFormatChange="handleTimeDisplayFormatChange"
+        @onThemeChange="handleThemeChange"
+        @onBugReportsChange="handleBugReportChange"
+        @onAnalyticsChange="handleAnalyticsChange"
       />
       <settings-panel-account-tab
-        v-if="currentActiveTab === steps.ACCOUNT"
-        :labels="labels.accountTab"
-        :common-labels="labels.commons"
-        :values="mockValues.accountTab"
+        v-if="currentActiveTab === stepsValues.ACCOUNT"
+        :values="settingsValues.accountTab"
       />
       <settings-panel-pomodoro-config-tab
-        v-if="currentActiveTab === steps.POMODORO_CONFIG"
-        :labels="labels.pomodoroConfigTab"
-        :common-labels="labels.commons"
-        :values="mockValues.pomodoroConfigTab"
+        v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
+        :values="settingsValues.pomodoroConfigTab"
+        @onPomodoroDurationChange="handlePomodoroDurationChange"
+        @onSmallBreakDurationChange="handleBigBreakDurationChange"
+        @onBigBreakDurationChange="handleBigBreakDurationChange"
+        @onPomodoroQuantityChange="handlePomodoroQuantityChange"
+        @onNoiseNotificationChange="handleNoiseNotificationChange"
+        @onStartPomodoroAutoChange="handleStartPomodoroAutoChange"
+        @onStartSmallBreakAutoChange="handleStartSmallBreakAutoCharge"
+        @onStartBigBreakAutoChange="handleStartBigBreakAutoChange"
       />
       <settings-panel-current-subscription-tab
-        v-if="currentActiveTab === steps.SUBSCRIPTION"
-        :labels="labels.subscriptionTab"
-        :common-labels="labels.commons"
-        :values="mockValues.subscriptionTab"
+        v-if="currentActiveTab === stepsValues.SUBSCRIPTION"
+        :values="settingsValues.subscriptionTab"
       />
     </div>
+    <settings-panel-save-or-reset-settings
+      v-show="isSaveOrResetPossible"
+      :has-reset="isDefaultSettingsConfiguration"
+      :is-loading="isLoading"
+      :save-changes-label="$t('Save changes')"
+      :reset-default-label="$t('Reset to defaults')"
+      @onSave="handleSave"
+      @onReset="handleResetDefault"
+    />
   </section>
 </template>
 
 <script>
+import _ from 'lodash'
 import SettingsPanelMainTabs from '@/components/Organisms/SettingsPanels/SettingsPanelMainTabs'
 import SettingsPanelGeneralTab from '@/components/Organisms/SettingsPanels/SettingsPanelGeneralTab'
 import SettingsPanelAccountTab from '@/components/Organisms/SettingsPanels/SettingsPanelAccountTab'
 import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanels/SettingsPanelPomodoroConfigTab'
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
 
-import { SETTINGS_PANEL_STEPS, SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import { SETTINGS_PANEL_LABELS } from '@/constantes/labels'
+import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
+import SettingsPanelSaveOrResetSettings from '@/components/Organisms/SettingsPanels/SettingsPanelSaveOrResetSettings'
 
 export default {
   name: 'SettingsPanel',
@@ -63,131 +79,100 @@ export default {
     SettingsPanelAccountTab,
     SettingsPanelPomodoroConfigTab,
     SettingsPanelCurrentSubscriptionTab,
+    SettingsPanelSaveOrResetSettings,
   },
   data() {
     return {
       currentActiveTab: '',
+      settingsValues: {},
+      isLoading: false,
     }
   },
   computed: {
-    labels() {
-      return SETTINGS_PANEL_LABELS
-    },
-    mockValues() {
-      // TODO getter from store where settings are saved
-      return {
-        generalTab: {
-          displayLanguage: {
-            id: 1434,
-            value: 'en',
-            name: 'English',
-          },
-          timezone: {
-            id: 143434,
-            value: 'gmt+1',
-            name: 'GMT+1',
-          },
-          timeDisplayFormat: {
-            id: 123,
-            value: 'am/pm',
-            name: 'AM/PM',
-          },
-          theme: {
-            id: 2354,
-            value: 'dusk',
-            name: 'Dusk',
-          },
-          bugReports: false,
-          analytics: true,
-        },
-        accountTab: {
-          fullName: 'Dario Regazzoni',
-          email: 'dario.regazzoni@outlook.fr',
-          password: 'proutkaka',
-        },
-        pomodoroConfigTab: {
-          pomodoro_duration: 25,
-          small_break_duration: 5,
-          big_break_duration: 15,
-          pomodoro_quantity: 5,
-          noise_notification_end_process: false,
-          start_pomodoro_auto: true,
-          start_small_break_auto: true,
-          start_big_break_auto: false,
-        },
-        subscriptionTab: {
-          //
-        },
+    isSaveOrResetPossible() {
+      switch (this.currentActiveTab) {
+        case this.stepsValues.GENERAL:
+          return true
+        case this.stepsValues.POMODORO_CONFIG:
+          return true
+        default:
+          return false
       }
     },
-    mockOptions() {
-      return {
-        displayLanguages: [
-          {
-            id: 1434,
-            value: 'en',
-            name: 'English',
-          },
-          {
-            id: 1324,
-            value: 'fr',
-            name: 'Français',
-          },
-          {
-            id: 132544,
-            value: 'it',
-            name: 'Italiano',
-          },
-        ],
-        timezones: [
-          {
-            id: 434,
-            value: 'gmt+1',
-            name: 'GMT + 1',
-          },
-          {
-            id: 1354524,
-            value: 'gmt+2',
-            name: 'GMT + 2',
-          },
-          {
-            id: 132544,
-            value: 'gmt+3',
-            name: 'GMT + 3',
-          },
-        ],
-        timeDisplayFormats: [
-          {
-            id: 123,
-            value: '12',
-            name: 'AM/PM',
-          },
-          {
-            id: 4123,
-            value: '24',
-            name: '24H',
-          },
-        ],
-        themes: [
-          {
-            id: 2354,
-            value: 'dusk',
-            name: 'Dusk',
-          },
-          {
-            id: 235454,
-            value: 'light',
-            name: 'Light',
-          },
-        ],
-      }
+    settingsOptions() {
+      return this.$store.state.settings.settingsOptions
     },
-    steps() {
+    stepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
+    isDefaultSettingsConfiguration() {
+      // TODO verify how to know if it's the default config or user one
+      return true
+    },
   },
-  beforeMount() {
-    this.currentActiveTab = SETTINGS_PANEL_STEPS[3].step
+
+  mounted() {
+    this.settingsValues = _.cloneDeep(this.$store.state.settings.settingsValues)
+    this.currentActiveTab = this.stepsValues.GENERAL
+  },
+  methods: {
+    /*
+      Global events
+    */
+    handleSave() {
+      // TODO action vuex
+    },
+    handleResetDefault() {
+      // TODO pop confirm
+      // reset to default general settings to show only on default configuration not user config
+    },
+    /*
+      General tab events
+    */
+    handleDisplayLanguageChange(value) {
+      this.settingsValues.generalTab.displayLanguage = value
+    },
+    handleTimezoneChange(value) {
+      this.settingsValues.generalTab.timezone = value
+    },
+    handleTimeDisplayFormatChange(value) {
+      this.settingsValues.generalTab.displayLanguage = value
+    },
+    handleThemeChange(value) {
+      this.settingsValues.generalTab.theme = value
+    },
+    handleBugReportChange(value) {
+      this.settingsValues.generalTab.bugReports = value
+    },
+    handleAnalyticsChange(value) {
+      this.settingsValues.generalTab.analytics = value
+    },
+
+    /*
+      Pomodoro config events
+     */
+    handlePomodoroDurationChange(value) {
+      this.settingsValues.pomodoroConfigTab.pomodoro_duration = value
+    },
+    handleBigBreakDurationChange(value) {
+      this.settingsValues.pomodoroConfigTab.small_break_duration = value
+    },
+    handlePomodoroQuantityChange(value) {
+      this.settingsValues.pomodoroConfigTab.pomodoro_quantity = value
+    },
+    handleNoiseNotificationChange(value) {
+      this.settingsValues.pomodoroConfigTab.noise_notification_end_process =
+        value
+    },
+    handleStartPomodoroAutoChange(value) {
+      this.settingsValues.pomodoroConfigTab.start_pomodoro_auto = value
+    },
+    handleStartSmallBreakAutoCharge(value) {
+      this.settingsValues.pomodoroConfigTab.start_small_break_auto = value
+    },
+    handleStartBigBreakAutoChange(value) {
+      this.settingsValues.pomodoroConfigTab.start_big_break_auto = value
+    },
   },
 }
 </script>

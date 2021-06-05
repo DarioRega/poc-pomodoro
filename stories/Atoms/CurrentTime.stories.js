@@ -21,7 +21,7 @@ const Template = (args, { argTypes }) => ({
   components: { CurrentTime },
   computed: {
     shouldStack() {
-      return args.isStacked
+      return args.isLayoutStacked
     },
   },
   template: `
@@ -46,11 +46,11 @@ NotAmPm.args = {}
 
 export const StackedAmPm = Template.bind({})
 StackedAmPm.args = {
-  isStacked: true,
+  isLayoutStacked: true,
   is24h: false,
 }
 
 export const StackedNotAmPm = Template.bind({})
 StackedNotAmPm.args = {
-  isStacked: true,
+  isLayoutStacked: true,
 }

@@ -7,18 +7,11 @@ export default {
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  computed: {
-    getLabels() {
-      return {
-        currentSessionInformation: 'Current session will end at',
-      }
-    },
-  },
   components: { TimerSidebarExpanderStacked },
   template: `
     <div class="w-24">
         <div class="timer-sidebar--stacked">
-          <timer-sidebar-expander-stacked v-bind="$props" :labels="getLabels" />
+          <timer-sidebar-expander-stacked v-bind="$props" />
         </div>
     </div>`,
 })
