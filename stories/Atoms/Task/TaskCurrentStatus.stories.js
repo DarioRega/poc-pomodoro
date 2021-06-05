@@ -28,22 +28,22 @@ const Template = (args, { argTypes }) => ({
 export const Done = Template.bind({})
 Done.args = {
   currentStatus: TASK_STATUS_VALUES.DONE,
-  statusText: 'DONE',
+  statusText: 'done',
 }
 
 export const DefaultTodo = Template.bind({})
 DefaultTodo.args = {
   currentStatus: TASK_STATUS_VALUES.TODO,
-  statusText: 'TODO',
+  statusText: 'todo',
 }
 
 export const InProgress = Template.bind({})
 InProgress.args = {
   currentStatus: TASK_STATUS_VALUES.IN_PROGRESS,
-  statusText: 'IN PROGRESS',
+  statusText: 'ongoing',
 }
 export const Archived = Template.bind({})
 Archived.args = {
   currentStatus: TASK_STATUS_VALUES.ARCHIVED,
-  statusText: 'ARCHIVED',
+  statusText: 'archived',
 }
