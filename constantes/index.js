@@ -4,6 +4,8 @@ export const DOWN_ARROW_KEY_CODE = 40
 export const UP_ARROW_KEY_CODE = 38
 export const ESCAPE_KEY_CODE = 27
 
+export const SIDEBAR_TOGGLE_ANIMATION_TIMEOUT = 500
+
 export const TASK_STATUS_VALUES = {
   DONE: 'DONE',
   IN_PROGRESS: 'ONGOING',
