@@ -24,6 +24,12 @@
       >
         <icon icon-name="play" class="w-2/5" />
       </button>
+      <button
+        class="screen-expander__control bg-dark-indigo dark:bg-light-indigo"
+        @click="$emit('onSkip')"
+      >
+        <icon icon-name="skip" class="w-2/5" />
+      </button>
     </div>
 
     <!--    PENDING STATUS BUT SESSION STARTED -->
@@ -42,6 +48,12 @@
         @click="$emit('onStart')"
       >
         <icon icon-name="play" class="w-2/5" />
+      </button>
+      <button
+        class="screen-expander__control bg-dark-indigo dark:bg-light-indigo"
+        @click="$emit('onSkip')"
+      >
+        <icon icon-name="skip" class="w-2/5" />
       </button>
     </div>
 
@@ -77,7 +89,7 @@ export default {
     @apply flex justify-center;
   }
   &__control {
-    @apply w-20 h-20 rounded-full text-celeste;
+    @apply w-20 h-20 rounded-full text-celeste flex items-center justify-center;
     &:hover {
       @apply bg-opacity-80;
     }

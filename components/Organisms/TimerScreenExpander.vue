@@ -6,7 +6,8 @@
         @onStart="handleStartTimer"
         @onPause="handlePauseTimer"
         @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
+        @onSkip="handleSkipProcess"
+        @onStop="handleStopTimer"
         @onStartSession="handleStartSession"
       />
     </div>
@@ -17,6 +18,7 @@
 import ScreenExpander from '@/components/Molecules/ScreenExpander'
 import TimerScreenExpanderClock from '@/components/Atoms/TimerScreenExpanderChildren/TimerScreenExpanderClock'
 import TimerScreenExpanderControls from '@/components/Atoms/TimerScreenExpanderChildren/TimerScreenExpanderControls'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'TimerScreenExpander',
@@ -32,6 +34,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      createNotification: 'globalState/createNotification',
+    }),
     handleStartTimer() {
       // TODO handle
     },
@@ -42,10 +47,32 @@ export default {
       // TODO handle
     },
     handleStopTimer() {
-      // TODO handle
+      const notification = {
+        title: 'Abort session ?',
+        description: 'Are you sure to abort the current session ?',
+        actionRequired: true,
+        confirmCallback: this.abortCurrentSession,
+      }
+      this.createNotification(notification)
     },
     handleStartSession() {
       // TODO handle cases
+    },
+    handleSkipProcess() {
+      // TODO handle cases
+      const notification = {
+        title: 'Skip process ?',
+        description: 'Are you sure to skip the current process ?',
+        actionRequired: true,
+        confirmCallback: this.skipCurrentProcess(),
+      }
+      this.createNotification(notification)
+    },
+    abortCurrentSession() {
+      // TODO dispatch action
+    },
+    skipCurrentProcess() {
+      console.log('SKIPPPPPP')
     },
   },
 }
