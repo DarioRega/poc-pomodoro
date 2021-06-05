@@ -62,3 +62,10 @@ Default.args = {
   name: 'myName',
   status: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
 }
+
+export const Loading = Template.bind({})
+Loading.args = {
+  name: 'myName',
+  status: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
+  isLoading: true,
+}
