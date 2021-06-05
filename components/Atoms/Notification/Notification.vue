@@ -41,8 +41,8 @@
 
           <notification-action
             v-if="actionRequired"
-            @onConfirm="$emit('onConfirm')"
-            @onCancel="$emit('onClose')"
+            @onConfirm="handleConfirm"
+            @onCancel="handleClose"
           >
             {{ defaultActionText }}
           </notification-action>
@@ -53,7 +53,7 @@
         v-if="allowClose"
         class="flex absolute top-0 right-0 bottom-0 items-center mr-6"
       >
-        <button class="btn-close" @click="$emit('onClose')">
+        <button class="btn-close" @click="handleClose">
           <span class="sr-only">Close</span>
           <icon icon-name="close" class="w-4 h-4" />
         </button>
@@ -80,6 +80,10 @@ export default {
     description: {
       type: String,
       default: '',
+    },
+    selfCloseDispatch: {
+      type: Function,
+      required: true,
     },
     type: {
       type: String,
@@ -124,12 +128,17 @@ export default {
     }
   },
   methods: {
+    handleConfirm() {
+      this.$emit('onConfirm')
+      this.selfCloseDispatch()
+    },
+    handleClose() {
+      this.selfCloseDispatch()
+      this.$emit('onClose')
+    },
     autoCloseNotification() {
       setTimeout(() => {
-        this.$store.commit(
-          'globalState/REMOVE_NOTIFICATION',
-          this.notificationId
-        )
+        this.selfCloseDispatch()
       }, this.lifeTime * 1000)
     },
   },

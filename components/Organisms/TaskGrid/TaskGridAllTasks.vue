@@ -147,11 +147,22 @@ export default {
     handleClickTaskTarget(taskId) {
       // TODO handle
       if (this.isArchiveEnabled) {
-        // TODO DISPATCH UPDATE TASK STATUS
+        this.archiveTask(taskId)
       }
       if (this.isDeleteEnabled) {
-        // TODO SHOW CONFIRM
-        // TODO DISPATCH DELETE TASK
+        const deleteNotification = {
+          title: this.$t('Delete task ?'),
+          description: this.$t(
+            "Are you sure to delete this task ? This action can't be revoked"
+          ),
+          actionRequired: true,
+          type: 'info',
+          confirmCallback: () => this.deleteTask(taskId),
+        }
+        this.$store.dispatch(
+          'globalState/createNotification',
+          deleteNotification
+        )
       }
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
         const selectedTask = this.$store.getters['tasks/getTaskById'](taskId)
@@ -183,6 +194,12 @@ export default {
         this.isArchiveEnabled = false
       }
       this.isDeleteEnabled = !this.isDeleteEnabled
+    },
+    archiveTask(taskId) {
+      // TODO dispatch action to delete
+    },
+    deleteTask(taskId) {
+      // TODO dispatch action to delete
     },
   },
 }

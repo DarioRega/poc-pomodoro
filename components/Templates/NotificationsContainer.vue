@@ -1,15 +1,20 @@
 <template>
-  <section class="fixed top-[5rem] right-[3rem] flex flex-col z-40">
+  <section
+    v-show="currentNotifications.length > 0"
+    class="fixed top-[5rem] right-[3rem] flex flex-col z-40 max-w-[20rem]"
+  >
     <notification
-      v-for="notification in currentNotifications"
-      :key="notification.id"
+      v-for="(notification, index) in currentNotifications"
+      :key="notification.notificationId"
+      class="min-w-[20rem]"
       :notification-id="notification.notificationId"
       :type="notification.type"
       :title="notification.title"
       :description="notification.description"
       :action-required="notification.actionRequired"
+      :self-close-dispatch="notification.selfCloseDispatch"
       :should-show="true"
-      class="mb-6"
+      :class="index < currentNotifications.length - 1 && ' mb-6'"
       @onConfirm="handleConfirm(notification)"
       @onClose="handleClose(notification)"
     />
