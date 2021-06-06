@@ -40,6 +40,8 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+import { mapGetters } from 'vuex'
+import moment from 'moment-timezone'
 
 export default {
   name: 'PageIndex',
@@ -55,9 +57,29 @@ export default {
   data() {
     return {
       isTimerScreenExpanderOpen: false,
+      timerInterval: null,
     }
   },
+  watch: {
+    isSessionPaused(newValue, oldValue) {
+      if (this.isSessionStarted && newValue) {
+        // DISTACH RESTING TIME, KILL INTERVAL
+        console.log('Session paused !')
+      }
+      if (this.isSessionStarted && !newValue) {
+        console.log('SESSION NOT PAUSED START INTERVAL')
+        this.startInterval()
+      }
+    },
+  },
   computed: {
+    ...mapGetters({
+      isSessionPaused: 'sessions/isSessionPaused',
+      isSessionStarted: 'sessions/isSessionStarted',
+    }),
+    currentStepEndTime() {
+      return this.$store.state.sessions.currentStep.end_time
+    },
     isLayoutStacked() {
       return this.$store.state.globalState.isLayoutStacked
     },
@@ -68,11 +90,24 @@ export default {
       return this.$store.state.globalState.modalsRefs
     },
   },
+  beforeDestroy() {
+    this.killInterval()
+  },
   methods: {
+    killInterval() {
+      clearInterval(this.interval)
+    },
+    startInterval() {
+      const interval = 1000
+      this.interval = setInterval(() => {
+        const diff = moment(this.currentStepEndTime).unix() - moment().unix()
+        const timer = moment.unix(diff).format('mm:ss')
+        this.$store.commit('timer/SET_TIMER', timer)
+      }, interval)
+    },
     handleToggleStacked() {
       this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
     },
-
     handleScreenExpand() {
       this.closeAnyModals()
       this.isTimerScreenExpanderOpen = true
