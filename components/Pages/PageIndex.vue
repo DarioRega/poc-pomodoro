@@ -60,22 +60,11 @@ export default {
       timerInterval: null,
     }
   },
-  watch: {
-    isSessionPaused(newValue, oldValue) {
-      if (this.isSessionStarted && newValue) {
-        // DISTACH RESTING TIME, KILL INTERVAL
-        console.log('Session paused !')
-      }
-      if (this.isSessionStarted && !newValue) {
-        console.log('SESSION NOT PAUSED START INTERVAL')
-        this.startInterval()
-      }
-    },
-  },
   computed: {
     ...mapGetters({
       isSessionPaused: 'sessions/isSessionPaused',
       isSessionStarted: 'sessions/isSessionStarted',
+      getCurrentTimer: 'timer/getCurrentTimer',
     }),
     currentStepEndTime() {
       return this.$store.state.sessions.currentStep.end_time
@@ -89,6 +78,23 @@ export default {
     modalsRefs() {
       return this.$store.state.globalState.modalsRefs
     },
+  },
+  watch: {
+    isSessionPaused(newValue, oldValue) {
+      if (this.isSessionStarted && newValue) {
+        if (this.timerInterval) {
+          this.killInterval()
+        }
+      }
+      if (this.isSessionStarted && !newValue) {
+        this.startInterval()
+      }
+    },
+  },
+  mounted() {
+    if (this.isSessionStarted && !this.isSessionPaused) {
+      this.startInterval()
+    }
   },
   beforeDestroy() {
     this.killInterval()

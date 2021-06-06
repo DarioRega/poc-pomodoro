@@ -29,11 +29,9 @@ export const calculateTimeInSeconds = (stringNumber) => {
   return seconds
 }
 
-export const timerInterval = () => {
-  const interval = 1000
-
-  this.interval = setInterval(() => {
-    const diff = moment(args.end_time).unix() - moment().unix()
-    this.timer = moment.unix(diff).format('mm:ss')
-  }, interval)
+export const getOnlyHoursAndMinutes = (timeString) => {
+  if (timeString && timeString.length === 8) {
+    const arrayValuesSplitted = timeString.split(':')
+    return `${arrayValuesSplitted[1]}:${arrayValuesSplitted[2]}`
+  }
 }
