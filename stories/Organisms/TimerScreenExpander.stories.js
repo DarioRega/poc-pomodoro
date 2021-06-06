@@ -40,7 +40,7 @@ const Template = (args, { argTypes }) => ({
     },
   },
   mounted() {
-    if (args.currentStatus === POMODORO_STATUS.POMODORO.STARTED) {
+    if (args.currentStatus === POMODORO_STATUS.POMODORO.IN_PROGRESS) {
       const interval = 1000
       this.interval = setInterval(() => {
         const diff = moment(args.end_time).unix() - moment().unix()
@@ -56,7 +56,7 @@ const Template = (args, { argTypes }) => ({
     if (args.currentStatus === POMODORO_STATUS.BIG_BREAK.PENDING) {
       this.timer = '15:00'
     }
-    if (args.currentStatus === POMODORO_STATUS.POMODORO.STARTED) {
+    if (args.currentStatus === POMODORO_STATUS.POMODORO.IN_PROGRESS) {
       this.timer = '12:43'
     }
     if (args.currentStatus === POMODORO_STATUS.POMODORO.PENDING) {
@@ -87,7 +87,7 @@ SessionStartedPomodoroPending.args = {
 
 export const SessionPomodoroRunning = Template.bind({})
 SessionPomodoroRunning.args = {
-  currentStatus: POMODORO_STATUS.POMODORO.STARTED,
+  currentStatus: POMODORO_STATUS.POMODORO.IN_PROGRESS,
   isRunning: true,
   end_time: moment().add(28, 'minutes'),
 }

@@ -41,7 +41,7 @@ const Template = (args, { argTypes }) => ({
     }
   },
   mounted() {
-    if (args.status === POMODORO_STATUS.POMODORO.STARTED) {
+    if (args.status === POMODORO_STATUS.POMODORO.IN_PROGRESS) {
       const interval = 1000
       this.interval = setInterval(() => {
         const diff = moment(args.end_time).unix() - moment().unix()
@@ -99,7 +99,7 @@ SessionStartedPomodoroPending.args = {
 
 export const SessionPomodoroRunning = Template.bind({})
 SessionPomodoroRunning.args = {
-  status: POMODORO_STATUS.POMODORO.STARTED,
+  status: POMODORO_STATUS.POMODORO.IN_PROGRESS,
   currentSessionEndTime: '15:35 AM',
   isRunning: true,
   end_time: moment().add(28, 'minutes'),
@@ -141,7 +141,7 @@ StackedSessionStartedPomodoroPending.args = {
 
 export const StackedSessionPomodoroRunning = Template.bind({})
 StackedSessionPomodoroRunning.args = {
-  status: POMODORO_STATUS.POMODORO.STARTED,
+  status: POMODORO_STATUS.POMODORO.IN_PROGRESS,
   currentSessionEndTime: '15:35 AM',
   isRunning: true,
   end_time: moment().add(28, 'minutes'),

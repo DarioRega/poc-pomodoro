@@ -111,7 +111,7 @@ export default {
     },
     isLoading: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {

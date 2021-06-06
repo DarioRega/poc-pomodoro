@@ -26,7 +26,7 @@
       </button>
     </div>
 
-    <!--    PENDING STATUS BUT SESSION STARTED -->
+    <!--    PENDING STATUS BUT SESSION IN_PROGRESS -->
     <div
       v-show="getTimerState.isSessionStartedButPendingProcess"
       class="flex justify-center gap-x-12"
@@ -45,7 +45,7 @@
       </button>
     </div>
 
-    <!-- SESSION NOT STARTED -->
+    <!-- SESSION NOT IN_PROGRESS -->
     <div v-if="getTimerState.isSessionPending" class="text-center mt-8">
       <brand-button
         class="uppercase font-bold"

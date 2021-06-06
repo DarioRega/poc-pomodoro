@@ -29,7 +29,7 @@
         <icon icon-name="play" />
       </button>
     </div>
-    <!--    PENDING BUT SESSION STARTED -->
+    <!--    PENDING BUT SESSION IN_PROGRESS -->
     <div
       v-show="getTimerState.isSessionStartedButPendingProcess"
       class="timer-sidebar__controls"
