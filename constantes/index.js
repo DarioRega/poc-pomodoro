@@ -30,6 +30,7 @@ export const STEPS_STATUS = {
   IN_PROGRESS: 'IN_PROGRESS',
   PAUSED: 'PAUSED',
   DONE: 'DONE',
+  SKIPPED: 'SKIPPED',
 }
 
 export const SETTINGS_PANEL_STEPS_VALUES = {
