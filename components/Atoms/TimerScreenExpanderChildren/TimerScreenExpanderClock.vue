@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     getCurrentTimer() {
-      return this.$store.getters['sessions/getCurrentTimer']
+      return this.$store.getters['timer/getCurrentTimer']
     },
     getCurrentSessionEndTime() {
       return this.$store.getters['sessions/getCurrentSessionEndTime']
