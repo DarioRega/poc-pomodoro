@@ -3,11 +3,12 @@
     <timer-screen-expander-clock />
     <div class="mt-16">
       <timer-screen-expander-controls
-        @onStart="handleStartTimer"
-        @onPause="handlePauseTimer"
-        @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
-        @onStartSession="handleStartSession"
+        @onStart="startCurrentStep"
+        @onPause="pauseCurrentStep"
+        @onResume="resumeCurrentStep"
+        @onSkip="onSkipCurrentStepClick"
+        @onAbort="onAbortClick"
+        @onStartSession="startSession"
       />
     </div>
   </screen-expander>
@@ -17,6 +18,7 @@
 import ScreenExpander from '@/components/Molecules/ScreenExpander'
 import TimerScreenExpanderClock from '@/components/Atoms/TimerScreenExpanderChildren/TimerScreenExpanderClock'
 import TimerScreenExpanderControls from '@/components/Atoms/TimerScreenExpanderChildren/TimerScreenExpanderControls'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'TimerScreenExpander',
@@ -32,21 +34,14 @@ export default {
     },
   },
   methods: {
-    handleStartTimer() {
-      // TODO handle
-    },
-    handlePauseTimer() {
-      // TODO handle
-    },
-    handleResumeTimer() {
-      // TODO handle
-    },
-    handleStopTimer() {
-      // TODO handle
-    },
-    handleStartSession() {
-      // TODO handle cases
-    },
+    ...mapActions({
+      onAbortClick: 'sessions/onAbortClick',
+      onSkipCurrentStepClick: 'sessions/onSkipCurrentStepClick',
+      pauseCurrentStep: 'sessions/pauseCurrentStep',
+      resumeCurrentStep: 'sessions/resumeCurrentStep',
+      startCurrentStep: 'sessions/startCurrentStep',
+      startSession: 'sessions/startSession',
+    }),
   },
 }
 </script>
