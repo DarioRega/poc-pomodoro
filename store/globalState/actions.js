@@ -1,11 +1,13 @@
 export default {
   async login({ dispatch, rootState }, payload) {
-    await this.$auth.loginWith('laravelSanctum', {
+    const { data } = await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
+    // TODO must be there or no ?
+    this.$auth.setUser(data)
     dispatch('getEnvironnement')
   },
-  async logout({ dispatch, rootState }, payload) {
+  async logout({ dispatch, rootState }) {
     await this.$auth.logout()
   },
 
