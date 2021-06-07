@@ -33,7 +33,7 @@
         uppercase
         tracking-wider
         text-3xl
-        mb-16
+        mb-4
       "
     >
       Pomodoro
