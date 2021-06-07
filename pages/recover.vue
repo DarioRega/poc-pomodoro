@@ -97,7 +97,7 @@ export default {
         await this.$store.dispatch('globalState/createNotification', {
           type: 'success',
           title: this.$t('All done !'),
-          description: this.$t('Recovery link successfuly sent'),
+          description: this.$t('Recovery link successfully sent'),
         })
         this.hasSuccessfullySentRecoveryLink = true
       } catch (err) {
