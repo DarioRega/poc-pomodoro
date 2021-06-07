@@ -57,18 +57,20 @@ export default {
       silentTranslationWarn: true,
     },
   },
+  env: {
+    BASE_URL: process.env.BASE_URL,
+    API_URL: process.env.API_URL,
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    axios: {
-      baseUrl: process.env.API_URL,
-      credentials: true,
-    },
+    baseUrl: process.env.API_URL,
+    credentials: true,
   },
   auth: {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: process.env.BASE_URL || 'http://localhost:80',
+        url: process.env.API_URL || 'http://localhost:80',
       },
     },
     plugins: [],

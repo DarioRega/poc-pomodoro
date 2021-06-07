@@ -1,5 +1,10 @@
 <template>
-  <container-register-page :has-loader="false">
+  <container-register-page :has-loader="false" class="relative">
+    <error-banner
+      v-if="hasErrors"
+      :title="errorResponse.title"
+      :errors="errorResponse.errors"
+    />
     <transition-opacity>
       <container-register-card
         :greeting="$t('Welcome')"
@@ -7,12 +12,12 @@
       >
         <container-register-row class="mb-4 mt-2">
           <brand-input
-            name="fullName"
+            name="name"
             :placeholder="$t('Enter full name')"
-            :value="register.fullName"
-            :error-text="formErrors.fullName"
+            :value="register.name"
+            :error-text="formErrors.name"
             class="w-full"
-            @change.native="register.fullName = $event.target.value"
+            @change.native="register.name = $event.target.value"
           />
         </container-register-row>
         <container-register-row class="mb-4">
@@ -38,13 +43,15 @@
         </container-register-row>
         <container-register-row class="mb-4">
           <brand-input
-            name="confirmPassword"
+            name="password_confirmation"
             :placeholder="$t('Confirm password')"
-            :value="register.confirmPassword"
-            :error-text="formErrors.confirmPassword"
+            :value="register.password_confirmation"
+            :error-text="formErrors.password_confirmation"
             input-type="password"
             class="w-full"
-            @change.native="register.confirmPassword = $event.target.value"
+            @change.native="
+              register.password_confirmation = $event.target.value
+            "
           />
         </container-register-row>
         <brand-button
@@ -72,6 +79,8 @@ import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsF
 import ContainerRegisterCard from '@/components/Templates/Login/ContainerCard'
 import ContainerRegisterPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
+import { getCorsPermission } from '@/helpers/cors'
+import ErrorBanner from '@/components/Atoms/ErrorBanner'
 
 export default {
   name: 'Register',
@@ -83,38 +92,41 @@ export default {
     RedirectActionsFooter,
     TransitionOpacity,
     ContainerRegisterPage,
+    ErrorBanner,
   },
   data() {
     return {
+      hasErrors: false,
+      errorResponse: {},
       isLoading: false,
       register: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
       formErrors: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
     }
   },
-  watch: {
-    'register.confirmPassword'(newValue, oldValue) {
-      this.validateConfirmPassword(newValue)
-    },
-    'register.password'(newValue, oldValue) {
-      this.validatePassword(newValue)
-    },
-    'register.email'(newValue, oldValue) {
-      this.validateEmail(newValue)
-    },
-    'register.fullName'(newValue, oldValue) {
-      this.validateFullName(newValue)
-    },
-  },
+  // watch: {
+  //   'register.password_confirmation'(newValue, oldValue) {
+  //     this.validateConfirmPassword(newValue)
+  //   },
+  //   'register.password'(newValue, oldValue) {
+  //     this.validatePassword(newValue)
+  //   },
+  //   'register.email'(newValue, oldValue) {
+  //     this.validateEmail(newValue)
+  //   },
+  //   'register.name'(newValue, oldValue) {
+  //     this.validateFullName(newValue)
+  //   },
+  // },
   methods: {
     validateEmptyFields(property, value) {
       if (!value) {
@@ -150,48 +162,76 @@ export default {
       return true
     },
     validateConfirmPassword(value) {
-      if (!this.validateEmptyFields('confirmPassword', value)) {
+      if (!this.validateEmptyFields('password_confirmation', value)) {
         return false
       }
       if (this.register.password) {
         if (this.register.password !== value) {
-          this.formErrors.confirmPassword = this.$t("Passwords don't match")
+          this.formErrors.password_confirmation = this.$t(
+            "Passwords don't match"
+          )
           return false
-        } else if (this.formErrors.confirmPassword) {
-          this.formErrors.confirmPassword = ''
+        } else if (this.formErrors.password_confirmation) {
+          this.formErrors.password_confirmation = ''
         }
       }
       return true
     },
     validateFullName(value) {
-      if (!this.validateEmptyFields('fullName', value)) {
+      if (!this.validateEmptyFields('name', value)) {
         return false
       }
       if (value.length < 4) {
-        this.formErrors.fullName = this.$t("Full name can't be that short")
+        this.formErrors.name = this.$t("Full name can't be that short")
         return false
       }
-      if (this.formErrors.fullName) {
-        this.formErrors.fullName = ''
+      if (this.formErrors.name) {
+        this.formErrors.name = ''
       }
       return true
     },
-    handleSubmit() {
-      const { fullName, email, password, confirmPassword } = this.register
-      const validations = [
-        this.validateFullName(fullName),
-        this.validateEmail(email),
-        this.validatePassword(password),
-        this.validateConfirmPassword(confirmPassword),
-      ]
-
-      if (validations.every((x) => x === true)) {
-        // TODO axios call register + then login, remove setTimeout afterwards
-        this.isLoading = true
-        setTimeout(() => {
-          this.isLoading = false
-        }, 4000)
+    handleDisplayFormError(errorResponse) {
+      console.log('ERRORREponse', errorResponse)
+      let errorList = ``
+      Object.keys(errorResponse).forEach((x) => {
+        errorResponse[x].forEach((y) => {
+          errorList += `<li>${y}</li>`
+        })
+      })
+      console.log('error list', errorList)
+      this.errorResponse = {
+        title: this.$t('Error'),
+        errors: errorList,
       }
+      this.hasErrors = true
+    },
+    async handleSubmit() {
+      const { email, password } = this.register
+      // const validations = [
+      //   this.validateFullName(name),
+      //   this.validateEmail(email),
+      //   this.validatePassword(password),
+      //   this.validateConfirmPassword(password_confirmation),
+      // ]
+
+      // if (validations.every((x) => x === true)) {
+      this.isLoading = true
+
+      await getCorsPermission(this.$axios)
+      try {
+        await this.$axios.post(`/register`, this.register)
+        await this.$auth.loginWith('laravelSanctum', {
+          data: { email, password },
+        })
+      } catch (err) {
+        this.handleDisplayFormError(err.response.data.errors)
+      } finally {
+        this.isLoading = false
+      }
+      // console.log('REGISTER SUCCESS')
+
+      // console.log('LOGIN SUCCESS', this.$auth.user)
+      // }
     },
   },
 }
