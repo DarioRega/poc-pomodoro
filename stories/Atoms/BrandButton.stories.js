@@ -10,6 +10,9 @@ export default {
     isDisabled: {
       control: { type: 'select', options: [true, false] },
     },
+    size: {
+      control: { type: 'select', options: ['default', 'small'] },
+    },
   },
 }
 
@@ -71,4 +74,25 @@ ExampleBiggerButtonLoading.args = {
   type: 'primary',
   makeBigger: true,
   isLoading: true,
+}
+
+export const PrimarySmall = Template.bind({})
+PrimarySmall.args = {
+  slotcontent: 'Continue',
+  type: 'primary',
+  size: 'small',
+}
+
+export const SecondarySmall = Template.bind({})
+SecondarySmall.args = {
+  slotcontent: 'Continue',
+  type: 'secondary',
+  size: 'small',
+}
+
+export const NakedSmall = Template.bind({})
+NakedSmall.args = {
+  slotcontent: 'Continue',
+  type: 'naked',
+  size: 'small',
 }

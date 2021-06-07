@@ -3,12 +3,13 @@
     <transition-sidebar-content>
       <timer-sidebar-unstacked
         v-show="isUnStacked"
-        @onStart="handleStartTimer"
-        @onPause="handlePauseTimer"
-        @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
-        @onStartSession="handleStartSession"
-        @onTimerClick="handleTimerClick"
+        @onStart="startCurrentStep"
+        @onPause="pauseCurrentStep"
+        @onResume="resumeCurrentStep"
+        @onSkip="onSkipCurrentStepClick"
+        @onAbort="onAbortClick"
+        @onStartSession="startSession"
+        @onTimerClick="onTimerClick"
         @onScreenExpand="$emit('onScreenExpand')"
       />
     </transition-sidebar-content>
@@ -16,12 +17,13 @@
     <transition-sidebar-content>
       <timer-sidebar-stacked
         v-show="isStacked"
-        @onStart="handleStartTimer"
-        @onPause="handlePauseTimer"
-        @onResume="handleResumeTimer"
-        @onStop="handlePauseTimer"
-        @onStartSession="handleStartSession"
-        @onTimerClick="handleTimerClick"
+        @onStart="startCurrentStep"
+        @onPause="pauseCurrentStep"
+        @onResume="resumeCurrentStep"
+        @onSkip="onSkipCurrentStepClick"
+        @onAbort="onAbortClick"
+        @onStartSession="startSession"
+        @onTimerClick="onTimerClick"
         @onScreenExpand="$emit('onScreenExpand')"
       />
     </transition-sidebar-content>
@@ -32,6 +34,7 @@
 import TimerSidebarStacked from '@/components/Organisms/TimerSidebarStacked'
 import TimerSidebarUnstacked from '@/components/Organisms/TimerSidebarUnstacked'
 import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
+import { mapActions } from 'vuex'
 import { SIDEBAR_TOGGLE_ANIMATION_TIMEOUT } from '@/constantes'
 
 export default {
@@ -83,25 +86,15 @@ export default {
     }
   },
   methods: {
-    handleStartTimer() {
-      // TODO handle
-    },
-    handlePauseTimer() {
-      // TODO handle
-    },
-    handleResumeTimer() {
-      // TODO handle
-    },
-    handleStopTimer() {
-      // TODO handle
-    },
-    handleStartSession() {
-      // TODO handle cases
-    },
-    handleTimerClick() {
-      this.$store.dispatch('sessions/onTimerClick')
-      // TODO handle cases
-    },
+    ...mapActions({
+      onAbortClick: 'sessions/onAbortClick',
+      onSkipCurrentStepClick: 'sessions/onSkipCurrentStepClick',
+      onTimerClick: 'sessions/onTimerClick',
+      pauseCurrentStep: 'sessions/pauseCurrentStep',
+      resumeCurrentStep: 'sessions/resumeCurrentStep',
+      startCurrentStep: 'sessions/startCurrentStep',
+      startSession: 'sessions/startSession',
+    }),
   },
 }
 </script>

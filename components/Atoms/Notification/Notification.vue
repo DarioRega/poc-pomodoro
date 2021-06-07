@@ -25,7 +25,7 @@
           class="inline-flex flex-shrink-0 mx-auto mr-5 text-center"
           :class="textType"
         >
-          <icon :icon-name="type" class="w-10 h-10" />
+          <icon :icon-name="type" class="w-6 h-6" />
         </div>
 
         <div class="flex-1">
@@ -41,10 +41,10 @@
 
           <notification-action
             v-if="actionRequired"
-            @onConfirm="$emit('onConfirm')"
-            @onCancel="$emit('onClose')"
+            @onConfirm="handleConfirm"
+            @onCancel="handleClose"
           >
-            {{ actionText }}
+            {{ defaultActionText }}
           </notification-action>
         </div>
       </div>
@@ -53,7 +53,7 @@
         v-if="allowClose"
         class="flex absolute top-0 right-0 bottom-0 items-center mr-6"
       >
-        <button class="btn-close" @click="$emit('onClose')">
+        <button class="btn-close" @click="handleClose">
           <span class="sr-only">Close</span>
           <icon icon-name="close" class="w-4 h-4" />
         </button>
@@ -69,6 +69,10 @@ export default {
   name: 'Notification',
   components: { NotificationAction, Icon },
   props: {
+    notificationId: {
+      type: Number,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -76,6 +80,10 @@ export default {
     description: {
       type: String,
       default: '',
+    },
+    selfCloseDispatch: {
+      type: Function,
+      required: true,
     },
     type: {
       type: String,
@@ -95,7 +103,7 @@ export default {
     },
     actionText: {
       type: String,
-      default: 'Confirm',
+      default: '',
     },
     lifeTime: {
       type: Number,
@@ -103,6 +111,9 @@ export default {
     },
   },
   computed: {
+    defaultActionText() {
+      return this.actionText ? this.actionText : this.$t('Confirm')
+    },
     textType() {
       return {
         'text-success': this.type === 'success',
@@ -117,9 +128,17 @@ export default {
     }
   },
   methods: {
+    handleConfirm() {
+      this.$emit('onConfirm')
+      this.selfCloseDispatch()
+    },
+    handleClose() {
+      this.selfCloseDispatch()
+      this.$emit('onClose')
+    },
     autoCloseNotification() {
       setTimeout(() => {
-        this.$emit('onClose')
+        this.selfCloseDispatch()
       }, this.lifeTime * 1000)
     },
   },

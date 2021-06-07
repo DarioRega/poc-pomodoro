@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-col-reverse">
-      <div class="relative">
+      <div class="relative flex flex-col items-center">
         <div class="text-center flex justify-center w-full relative">
           <task-current-status
             ref="triggerDropdown"
@@ -29,15 +29,22 @@
           <ul
             v-if="isOpen"
             class="
-              overflow-auto
               absolute
+              min-w-[8rem]
               bg-light-white
               dark:bg-dark-blue
+              border border-dark-gray
+              shadow-sm
+              rounded-md
               z-10
-              mt-2
+              py-1.5
+              top-[2.5rem]
               w-full
               text-center
               focus:outline-none
+              flex flex-col
+              items-center
+              justify-center
             "
             tabindex="-1"
             role="listbox"
@@ -111,7 +118,7 @@ export default {
     },
     isLoading: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {
