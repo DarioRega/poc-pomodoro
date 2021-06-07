@@ -44,6 +44,10 @@ export default {
     @apply py-2 px-4;
   }
 
+  &--small {
+    @apply py-1 px-2 text-xs font-semibold;
+  }
+
   &:hover {
     @apply opacity-90;
   }
