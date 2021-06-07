@@ -8,4 +8,12 @@ export default {
   TOGGLE_STACKED_LAYOUT(state) {
     state.isLayoutStacked = !state.isLayoutStacked
   },
+  CREATE_NOTIFICATION(state, payload) {
+    state.currentNotifications.push(payload)
+  },
+  REMOVE_NOTIFICATION(state, payload) {
+    state.currentNotifications = state.currentNotifications.filter(
+      (x) => x.notificationId !== payload
+    )
+  },
 }

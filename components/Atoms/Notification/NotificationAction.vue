@@ -1,9 +1,10 @@
 <template>
   <div class="flex mt-6">
-    <brand-button type="primary" @click="$emit('onConfirm')">
+    <brand-button size="small" type="primary" @click="$emit('onConfirm')">
       <slot />
     </brand-button>
     <brand-button
+      size="small"
       type="secondary"
       class="
         inline-flex

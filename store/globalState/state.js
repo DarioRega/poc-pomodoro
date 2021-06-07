@@ -1,5 +1,6 @@
 export default () => ({
   currentModalOpen: '',
+  currentNotifications: [],
   modalsRefs: {
     SETTINGS: 'SETTINGS',
     SELECT_RUNNING_TASK: 'SELECT_RUNNING_TASK',
