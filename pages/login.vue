@@ -120,7 +120,7 @@ export default {
         }
         this.isLoading = true
         try {
-          await this.$auth.loginWith('laravelSanctum', { data: this.login })
+          await this.$store.dispatch('globalState/login', this.login)
         } catch (err) {
           this.handleDisplayFormError(err.response.data.errors)
           this.hasErrors = true

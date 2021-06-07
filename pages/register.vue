@@ -226,8 +226,9 @@ export default {
     },
     async login(email, password) {
       try {
-        await this.$auth.loginWith('laravelSanctum', {
-          data: { email, password },
+        await this.$store.dispatch('globalState/login', {
+          email,
+          password,
         })
       } catch (err) {
         this.errorResponse = {
