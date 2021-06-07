@@ -11,41 +11,34 @@
     </div>
 
     <!--    PAUSED -->
-    <div v-show="getTimerState.isPaused" class="flex justify-center gap-x-12">
-      <button
-        class="screen-expander__control bg-error"
-        @click="$emit('onStop')"
-      >
-        <icon icon-name="stop" class="w-2/5" />
-      </button>
-      <button
-        class="screen-expander__control bg-success"
-        @click="$emit('onResume')"
-      >
-        <icon icon-name="play" class="w-2/5" />
-      </button>
-    </div>
-
-    <!--    PENDING STATUS BUT SESSION IN_PROGRESS -->
     <div
-      v-show="getTimerState.isSessionStartedButPendingProcess"
+      v-show="
+        getTimerState.isPaused ||
+        getTimerState.isSessionStartedButPendingProcess
+      "
       class="flex justify-center gap-x-12"
     >
       <button
         class="screen-expander__control bg-error"
-        @click="$emit('onStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" class="w-2/5" />
       </button>
       <button
         class="screen-expander__control bg-success"
-        @click="$emit('onStart')"
+        @click="handleResumeOrStart"
       >
-        <icon icon-name="play" class="w-2/5" />
+        <icon :icon-name="isResumeOrStart" class="w-2/5" />
+      </button>
+      <button
+        class="screen-expander__control bg-dark-indigo dark:bg-light-indigo"
+        @click="$emit('onSkip')"
+      >
+        <icon icon-name="skip" class="w-2/5" />
       </button>
     </div>
 
-    <!-- SESSION NOT IN_PROGRESS -->
+    <!-- SESSION NOT STARTED -->
     <div v-if="getTimerState.isSessionPending" class="text-center mt-8">
       <brand-button
         class="uppercase font-bold"
@@ -68,6 +61,18 @@ export default {
     getTimerState() {
       return this.$store.getters['sessions/getTimerState']
     },
+    isResumeOrStart() {
+      return this.getTimerState.isPaused ? 'resume' : 'play'
+    },
+  },
+  methods: {
+    handleResumeOrStart() {
+      if (this.getTimerState.isPaused) {
+        this.$emit('onResume')
+      } else {
+        this.$emit('onStart')
+      }
+    },
   },
 }
 </script>
@@ -77,7 +82,7 @@ export default {
     @apply flex justify-center;
   }
   &__control {
-    @apply w-20 h-20 rounded-full text-celeste;
+    @apply w-20 h-20 rounded-full text-celeste flex items-center justify-center;
     &:hover {
       @apply bg-opacity-80;
     }

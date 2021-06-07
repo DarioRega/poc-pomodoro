@@ -13,6 +13,8 @@
     :class="isLayoutStacked ? 'stacked w-24' : 'w-52 xl:w-64 3xl:w-80'"
   >
     <button
+      ref="sidebarToggler"
+      tabindex="0"
       class="
         sidebar__stacked-toggler
         absolute
@@ -51,6 +53,7 @@
 </template>
 
 <script>
+import { SIDEBAR_TOGGLE_ANIMATION_TIMEOUT } from '@/constantes'
 import Icon from '../Atoms/Icon'
 
 export default {
@@ -60,6 +63,28 @@ export default {
     isLayoutStacked: {
       type: Boolean,
       default: false,
+    },
+  },
+  data() {
+    return {
+      isTogglerDisabled: false,
+    }
+  },
+  watch: {
+    /*
+      Disable the button to avoid animations misbehavior if user spamm the click, cause of the setTimeouts used
+      Disabling the button will lose the focus on it, to be able to re-focus it and have the user won't notice he lost it,
+      we must to wait at least 100ms to trigger the focus on it with the $refs. That's why there is a second setTimeout inside.
+    */
+    isLayoutStacked(newValue, oldValue) {
+      this.isTogglerDisabled = true
+      setTimeout(() => {
+        this.isTogglerDisabled = false
+
+        setTimeout(() => {
+          this.$refs.sidebarToggler.focus()
+        }, 100)
+      }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
     },
   },
   methods: {
@@ -87,6 +112,9 @@ export default {
   }
   &:hover {
     @apply text-opacity-70;
+  }
+  &:focus {
+    @apply text-dark-indigo dark:text-light-indigo;
   }
 }
 

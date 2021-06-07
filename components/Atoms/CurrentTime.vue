@@ -11,7 +11,7 @@
   >
     <transition-sidebar-content>
       <div
-        v-show="!isLayoutStacked"
+        v-show="isUnStacked"
         class="
           inline-flex
           justify-center
@@ -28,10 +28,7 @@
         <h2>
           {{ currentTime | getOnlyMinutes }}
         </h2>
-        <div
-          v-show="!is24hFormat && !isLayoutStacked"
-          class="flex-col items-center ml-3"
-        >
+        <div v-show="!is24hFormat" class="flex-col items-center ml-3">
           <p class="am-pm" :class="isAM && 'active'">AM</p>
           <p class="am-pm" :class="!isAM && 'active'">PM</p>
         </div>
@@ -40,7 +37,7 @@
 
     <transition-sidebar-content>
       <div
-        v-show="isLayoutStacked"
+        v-show="isStacked"
         class="heading-current-time__container text-center"
       >
         <h2>
@@ -49,7 +46,7 @@
         <h2>
           {{ currentTime | getOnlyMinutes }}
         </h2>
-        <div v-show="!is24hFormat && isLayoutStacked" class="text-center mt-1">
+        <div v-show="!is24hFormat" class="text-center mt-1">
           <p class="am-pm active">
             {{ currentTime | getOnlyAmPm }}
           </p>
@@ -62,6 +59,7 @@
 <script>
 import moment from 'moment-timezone'
 import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
+import { SIDEBAR_TOGGLE_ANIMATION_TIMEOUT } from '@/constantes'
 
 export default {
   name: 'CurrentTime',
@@ -102,6 +100,12 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      isUnStacked: true,
+      isStacked: false,
+    }
+  },
   computed: {
     currentTime() {
       if (this.getTimezone) {
@@ -125,6 +129,26 @@ export default {
     },
     getTimezone() {
       return this.$store.getters['settings/getUserSettingTimezone']
+    },
+  },
+  watch: {
+    /*
+      Allow the time necessary to not have both element on the same time
+      So we don't see them going down or going up during the animation process
+      all files that implement this logic on sidebar, must have always the same code/duration
+   */
+    isLayoutStacked(isStackedTrue, oldValue) {
+      if (isStackedTrue) {
+        this.isUnStacked = false
+        setTimeout(() => {
+          this.isStacked = true
+        }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
+      } else {
+        this.isStacked = false
+        setTimeout(() => {
+          this.isUnStacked = true
+        }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
+      }
     },
   },
 }

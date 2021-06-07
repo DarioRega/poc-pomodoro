@@ -29,6 +29,8 @@
       :is-expanded="isTimerScreenExpanderOpen"
       @onClose="handleCloseScreenExpander"
     />
+    <!--  Notifications -->
+    <notifications-container />
   </div>
 </template>
 
@@ -40,6 +42,7 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 
 export default {
   name: 'PageIndex',
@@ -51,6 +54,7 @@ export default {
     ModalPanelSelectRunningTask,
     ModalSettingsPanel,
     TimerScreenExpander,
+    NotificationsContainer,
   },
   data() {
     return {
@@ -72,7 +76,6 @@ export default {
     handleToggleStacked() {
       this.$store.commit('globalState/TOGGLE_STACKED_LAYOUT')
     },
-
     handleScreenExpand() {
       this.closeAnyModals()
       this.isTimerScreenExpanderOpen = true

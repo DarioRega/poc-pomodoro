@@ -4,7 +4,7 @@
     <div v-show="getTimerState.isRunning" class="timer-sidebar__controls">
       <button
         class="timer-sidebar__controls__buttons text-error"
-        @click="$emit('handlePause')"
+        @click="$emit('onPause')"
       >
         <icon icon-name="pause" />
       </button>
@@ -12,40 +12,34 @@
 
     <!--    IS PAUSED -->
     <div
-      v-show="getTimerState.isPaused"
+      v-show="
+        getTimerState.isPaused ||
+        getTimerState.isSessionStartedButPendingProcess
+      "
       class="timer-sidebar__controls"
       :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
     >
       <button
         class="timer-sidebar__controls__buttons text-error"
-        @click="$emit('handleStop')"
+        @click="$emit('onAbort')"
       >
         <icon icon-name="stop" />
       </button>
       <button
         class="timer-sidebar__controls__buttons text-success"
-        @click="$emit('handleResume')"
+        @click="handleResumeOrStart"
       >
-        <icon icon-name="play" />
-      </button>
-    </div>
-    <!--    PENDING BUT SESSION IN_PROGRESS -->
-    <div
-      v-show="getTimerState.isSessionStartedButPendingProcess"
-      class="timer-sidebar__controls"
-      :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
-    >
-      <button
-        class="timer-sidebar__controls__buttons text-error"
-        @click="$emit('handleStop')"
-      >
-        <icon icon-name="stop" />
+        <icon :icon-name="isResumeOrStart" />
       </button>
       <button
-        class="timer-sidebar__controls__buttons text-success"
-        @click="$emit('handleStart')"
+        class="
+          timer-sidebar__controls__buttons
+          text-dark-indigo
+          dark:text-light-indigo
+        "
+        @click="$emit('onSkip')"
       >
-        <icon icon-name="play" />
+        <icon icon-name="skip" />
       </button>
     </div>
   </div>
@@ -66,6 +60,18 @@ export default {
   computed: {
     getTimerState() {
       return this.$store.getters['sessions/getTimerState']
+    },
+    isResumeOrStart() {
+      return this.getTimerState.isPaused ? 'resume' : 'play'
+    },
+  },
+  methods: {
+    handleResumeOrStart() {
+      if (this.getTimerState.isPaused) {
+        this.$emit('onResume')
+      } else {
+        this.$emit('onStart')
+      }
     },
   },
 }
