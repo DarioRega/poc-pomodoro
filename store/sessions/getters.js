@@ -16,7 +16,7 @@ export default {
   },
   getCurrentSessionEndTime: (state) => {
     if (state.session.status.includes(STEPS_STATUS.PAUSED)) {
-      // TODO renato give us resting time from the session directly or i need to calculate from steps ?
+      // TODO backend give us resting time from the session directly
       // if i need to calculate set the state.session_end_time and in progress as first condition,
       // else give what i wrote already on the else
     } else if (state.session.end_time) {
