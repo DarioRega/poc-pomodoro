@@ -65,7 +65,7 @@ export default {
       return this.$store.getters['sessions/getTimerState']
     },
     getCurrentTimer() {
-      return this.$store.getters['sessions/getCurrentTimer']
+      return this.$store.getters['timer/getCurrentTimer']
     },
   },
 }
