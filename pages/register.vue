@@ -113,20 +113,20 @@ export default {
       },
     }
   },
-  // watch: {
-  //   'register.password_confirmation'(newValue, oldValue) {
-  //     this.validateConfirmPassword(newValue)
-  //   },
-  //   'register.password'(newValue, oldValue) {
-  //     this.validatePassword(newValue)
-  //   },
-  //   'register.email'(newValue, oldValue) {
-  //     this.validateEmail(newValue)
-  //   },
-  //   'register.name'(newValue, oldValue) {
-  //     this.validateFullName(newValue)
-  //   },
-  // },
+  watch: {
+    'register.password_confirmation'(newValue, oldValue) {
+      this.validateConfirmPassword(newValue)
+    },
+    'register.password'(newValue, oldValue) {
+      this.validatePassword(newValue)
+    },
+    'register.email'(newValue, oldValue) {
+      this.validateEmail(newValue)
+    },
+    'register.name'(newValue, oldValue) {
+      this.validateFullName(newValue)
+    },
+  },
   methods: {
     validateEmptyFields(property, value) {
       if (!value) {
@@ -191,14 +191,12 @@ export default {
       return true
     },
     handleDisplayFormError(errorResponse) {
-      console.log('ERRORREponse', errorResponse)
       let errorList = ``
       Object.keys(errorResponse).forEach((x) => {
         errorResponse[x].forEach((y) => {
           errorList += `<li>${y}</li>`
         })
       })
-      console.log('error list', errorList)
       this.errorResponse = {
         title: this.$t('Error'),
         errors: errorList,
@@ -206,32 +204,40 @@ export default {
       this.hasErrors = true
     },
     async handleSubmit() {
-      const { email, password } = this.register
-      // const validations = [
-      //   this.validateFullName(name),
-      //   this.validateEmail(email),
-      //   this.validatePassword(password),
-      //   this.validateConfirmPassword(password_confirmation),
-      // ]
+      const { name, email, password, password_confirmation } = this.register
+      const validations = [
+        this.validateFullName(name),
+        this.validateEmail(email),
+        this.validatePassword(password),
+        this.validateConfirmPassword(password_confirmation),
+      ]
 
-      // if (validations.every((x) => x === true)) {
-      this.isLoading = true
+      if (validations.every((x) => x === true)) {
+        this.isLoading = true
 
-      await getCorsPermission(this.$axios)
+        await getCorsPermission(this.$axios)
+        try {
+          await this.$axios.post(`/register`, this.register)
+          await this.login(email, password)
+        } catch (err) {
+          this.handleDisplayFormError(err.response.data.errors)
+          this.isLoading = false
+        }
+      }
+    },
+    async login(email, password) {
       try {
-        await this.$axios.post(`/register`, this.register)
         await this.$auth.loginWith('laravelSanctum', {
           data: { email, password },
         })
       } catch (err) {
-        this.handleDisplayFormError(err.response.data.errors)
+        this.errorResponse = {
+          title: this.$t('Error'),
+          errors: err.response.data.message,
+        }
       } finally {
         this.isLoading = false
       }
-      // console.log('REGISTER SUCCESS')
-
-      // console.log('LOGIN SUCCESS', this.$auth.user)
-      // }
     },
   },
 }
