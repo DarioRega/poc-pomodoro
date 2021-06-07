@@ -1,6 +1,7 @@
 <template>
   <container-login-page
     :is-loading="isLoading"
+    :has-loader="true"
     :loading-label="$t('Loading your environment')"
   >
     <transition-opacity>
@@ -99,7 +100,7 @@ export default {
     this.setInitialStep()
   },
   methods: {
-    handleLogin() {
+    async handleLogin() {
       if (!this.login.password) {
         this.passwordErrorText = this.$t("Field can't be empty")
       } else {
@@ -107,7 +108,8 @@ export default {
           this.passwordErrorText = ''
         }
         this.isLoading = true
-        // TODO dispatch login
+        await this.$auth.loginWith('laravelSanctum', { data: this.login })
+        this.isLoading = false
       }
     },
     handleLostClick() {
@@ -118,29 +120,29 @@ export default {
         this.$emit('onLostPassword')
       }
     },
+    validateEmptyFields(value) {
+      return value.length > 0
+    },
     handleNextStep() {
-      if (this.login.email) {
-        if (this.$regexValidate('email', this.login.email)) {
-          if (this.emailErrorText) {
-            this.emailErrorText = ''
-          }
+      if (!this.validateEmptyFields('email', this.login.email)) {
+        this.emailErrorText = this.$t("Field can't be empty")
+      }
+
+      if (this.$regexValidate('email', this.login.email)) {
+        if (this.emailErrorText) {
+          this.emailErrorText = ''
+        }
+        if (this.currentStep.name === 'password') {
+          this.handleLogin()
+        } else {
           this.currentStep = {
             name: 'password',
             stepLabel: this.$t('Enter your password to login'),
             stepLostLabel: this.$t('I lost my password'),
           }
-        } else {
-          this.emailErrorText = this.$t('Invalid email')
         }
       } else {
-        this.emailErrorText = this.$t("Field can't be empty")
-      }
-    },
-    handleIconClick() {
-      if (this.currentStep.name === 'email') {
-        this.handleNextStep()
-      } else {
-        this.handleLogin()
+        this.emailErrorText = this.$t('Invalid email')
       }
     },
     setInitialStep() {

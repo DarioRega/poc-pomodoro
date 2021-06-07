@@ -18,6 +18,7 @@
     "storybook:build": "nuxt storybook build -o public -s static"
   },
   "dependencies": {
+    "@nuxtjs/auth-next": "5.0.0-1622918202.e815752",
     "@nuxtjs/axios": "^5.13.1",
     "@storybook/theming": "^6.2.9",
     "@vue/babel-preset-app": "^4.5.13",

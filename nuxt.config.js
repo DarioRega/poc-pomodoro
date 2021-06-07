@@ -17,7 +17,11 @@ export default {
   css: ['~/assets/style/index.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
+  plugins: [
+    '~/plugins/what-input.js',
+    '~/plugins/regexHelper.js',
+    '~/plugins/axios.js',
+  ],
 
   vue: {
     config: {
@@ -42,6 +46,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
+    '@nuxtjs/auth-next',
   ],
 
   i18n: {
@@ -53,7 +58,21 @@ export default {
     },
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    axios: {
+      baseUrl: process.env.API_URL,
+      credentials: true,
+    },
+  },
+  auth: {
+    strategies: {
+      laravelSanctum: {
+        provider: 'laravel/sanctum',
+        url: process.env.BASE_URL || 'http://localhost:80',
+      },
+    },
+    plugins: [],
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
