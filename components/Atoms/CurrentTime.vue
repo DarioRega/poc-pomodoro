@@ -167,7 +167,7 @@ export default {
 .am-pm {
   @apply text-xs font-bold font-timer text-dark-gray;
   &:not(.active) {
-    //@apply transition-colors duration-200;
+    @apply transition-colors duration-200;
   }
   @screen xl {
     @apply text-base;

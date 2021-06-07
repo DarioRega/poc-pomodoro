@@ -15,7 +15,7 @@ export const TASK_STATUS_VALUES = {
 
 const statusTypes = (action) => ({
   PENDING: `${action}_PENDING`,
-  STARTED: `${action}_STARTED`,
+  IN_PROGRESS: `${action}_IN_PROGRESS`,
   PAUSED: `${action}_PAUSED`,
   DONE: `${action}_DONE`,
 })
@@ -29,7 +29,7 @@ export const POMODORO_STATUS = {
 
 export const STEPS_STATUS = {
   PENDING: 'PENDING',
-  STARTED: 'STARTED',
+  IN_PROGRESS: 'IN_PROGRESS',
   PAUSED: 'PAUSED',
   DONE: 'DONE',
 }
@@ -54,7 +54,7 @@ export const SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES = {
 // TODO MOVE ON MOCK FOLDER
 export const FAKER_TASK_STATUS_NAMES = {
   DONE: 'DONE',
-  IN_PROGRESS: 'ONGOING',
+  IN_PROGRESS: 'IN PROGRESS',
   TODO: 'TODO',
   ARCHIVED: 'ARCHIVED',
 }

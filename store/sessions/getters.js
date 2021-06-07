@@ -4,7 +4,7 @@ import { POMODORO_STATUS, STEPS_STATUS } from '@/constantes'
 export default {
   getTimerState: (state) => {
     return {
-      isRunning: state.currentStatus.includes(STEPS_STATUS.STARTED),
+      isRunning: state.currentStatus.includes(STEPS_STATUS.IN_PROGRESS),
       isPaused: state.currentStatus.includes(STEPS_STATUS.PAUSED),
       isPending: state.currentStatus.includes(STEPS_STATUS.PENDING),
       isSessionPending: state.currentStatus.includes(
