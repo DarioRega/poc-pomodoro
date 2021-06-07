@@ -43,7 +43,7 @@ const Template = (args, { argTypes }) => ({
     return {
       list: [
         { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
-        { id: 2, name: 'in progress', value: TASK_STATUS_VALUES.IN_PROGRESS },
+        { id: 2, name: 'ongoing', value: TASK_STATUS_VALUES.IN_PROGRESS },
         { id: 4, name: 'done', value: TASK_STATUS_VALUES.DONE },
         { id: 5, name: 'archived', value: TASK_STATUS_VALUES.ARCHIVED },
       ],
@@ -61,4 +61,11 @@ export const Default = Template.bind({})
 Default.args = {
   name: 'myName',
   status: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
+}
+
+export const Loading = Template.bind({})
+Loading.args = {
+  name: 'myName',
+  status: { id: 1, name: 'todo', value: TASK_STATUS_VALUES.TODO },
+  isLoading: true,
 }
