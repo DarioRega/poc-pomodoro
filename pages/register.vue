@@ -1,5 +1,5 @@
 <template>
-  <container-register-page :has-loader="false" class="relative">
+  <container-register-page class="relative">
     <error-banner
       v-if="hasErrors"
       :title="errorResponse.title"
@@ -81,6 +81,7 @@ import ContainerRegisterPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
 import { getCorsPermission } from '@/helpers/cors'
 import ErrorBanner from '@/components/Atoms/ErrorBanner'
+import { extractErrorValues } from '@/helpers'
 
 export default {
   name: 'Register',
@@ -190,13 +191,9 @@ export default {
       }
       return true
     },
-    handleDisplayFormError(errorResponse) {
-      let errorList = ``
-      Object.keys(errorResponse).forEach((x) => {
-        errorResponse[x].forEach((y) => {
-          errorList += `<li>${y}</li>`
-        })
-      })
+    handleDisplayFormError(errors) {
+      const errorList = extractErrorValues(errors)
+
       this.errorResponse = {
         title: this.$t('Error'),
         errors: errorList,
@@ -204,6 +201,8 @@ export default {
       this.hasErrors = true
     },
     async handleSubmit() {
+      this.hasErrors = false
+
       const { name, email, password, password_confirmation } = this.register
       const validations = [
         this.validateFullName(name),
@@ -235,6 +234,7 @@ export default {
           title: this.$t('Error'),
           errors: err.response.data.message,
         }
+        this.hasErrors = true
       } finally {
         this.isLoading = false
       }

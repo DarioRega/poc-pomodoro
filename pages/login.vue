@@ -1,16 +1,16 @@
 <template>
-  <container-login-page
-    :is-loading="isLoading"
-    :has-loader="true"
-    :loading-label="$t('Loading your environment')"
-  >
+  <container-login-page>
+    <error-banner
+      v-if="hasErrors"
+      :title="errorResponse.title"
+      :errors="errorResponse.errors"
+    />
     <transition-opacity>
       <container-login-card
-        v-show="!isLoading"
         :greeting="$t('Welcome back')"
         :additional-info="currentStep.stepLabel"
       >
-        <container-login-row>
+        <container-login-row class="mb-4">
           <brand-input
             name="email"
             :placeholder="$t('Enter email')"
@@ -21,7 +21,10 @@
           />
         </container-login-row>
         <transition-translate-y duration-amount="500">
-          <container-login-row v-show="currentStep.name === 'password'">
+          <container-login-row
+            v-show="currentStep.name === 'password'"
+            class="mb-4"
+          >
             <brand-input
               name="password"
               class="flex-1"
@@ -35,6 +38,8 @@
         </transition-translate-y>
         <brand-button
           class="w-full justify-center mt-6"
+          :is-loading="isLoading"
+          :is-disabled="isLoading"
           @click="handleNextStep"
         >
           {{ primaryActionLabel }}
@@ -60,6 +65,8 @@ import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsF
 import ContainerLoginCard from '@/components/Templates/Login/ContainerCard'
 import ContainerLoginPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
+import ErrorBanner from '@/components/Atoms/ErrorBanner'
+import { extractErrorValues } from '@/helpers'
 
 export default {
   name: 'Login',
@@ -72,9 +79,12 @@ export default {
     TransitionOpacity,
     TransitionTranslateY,
     ContainerLoginPage,
+    ErrorBanner,
   },
   data() {
     return {
+      hasErrors: false,
+      errorResponse: {},
       isLoading: false,
       currentStep: {
         name: 'email',
@@ -101,6 +111,7 @@ export default {
   },
   methods: {
     async handleLogin() {
+      this.hasErrors = false
       if (!this.login.password) {
         this.passwordErrorText = this.$t("Field can't be empty")
       } else {
@@ -108,9 +119,24 @@ export default {
           this.passwordErrorText = ''
         }
         this.isLoading = true
-        await this.$auth.loginWith('laravelSanctum', { data: this.login })
-        this.isLoading = false
+        try {
+          await this.$auth.loginWith('laravelSanctum', { data: this.login })
+        } catch (err) {
+          this.handleDisplayFormError(err.response.data.errors)
+          this.hasErrors = true
+        } finally {
+          this.isLoading = false
+        }
       }
+    },
+    handleDisplayFormError(errors) {
+      const errorList = extractErrorValues(errors)
+
+      this.errorResponse = {
+        title: this.$t('Error'),
+        errors: errorList,
+      }
+      this.hasErrors = true
     },
     handleLostClick() {
       if (this.currentStep.name === 'email') {
