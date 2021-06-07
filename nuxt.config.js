@@ -73,6 +73,10 @@ export default {
         url: process.env.API_URL || 'http://localhost:80',
       },
     },
+    redirect: {
+      login: '/',
+      logout: '/login',
+    },
     plugins: [],
   },
 
