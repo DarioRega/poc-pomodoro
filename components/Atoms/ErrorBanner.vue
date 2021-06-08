@@ -48,8 +48,5 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    console.log('this.errors', this.errors)
-  },
 }
 </script>
