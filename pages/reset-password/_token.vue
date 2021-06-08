@@ -84,6 +84,7 @@ export default {
     ContainerResetPasswordPage,
     ErrorBanner,
   },
+  middleware: 'auth',
   auth: 'guest',
   data() {
     return {
@@ -189,13 +190,13 @@ export default {
 
     async handleSubmit() {
       const { email, password } = this.login
-      // const validations = [
-      //   this.validateEmail(email),
-      //   this.validatePassword(password),
-      //   this.validateConfirmPassword(password_confirmation),
-      // ]
+      const validations = [
+        this.validateEmail(email),
+        this.validatePassword(password),
+        this.validateConfirmPassword(password_confirmation),
+      ]
 
-      // if (validations.every((x) => x === true)) {
+      if (validations.every((x) => x === true)) {
       this.hasErrors = false
       this.isLoading = true
       try {
@@ -217,7 +218,7 @@ export default {
         this.isLoading = false
       }
     },
-    // },
+    },
   },
 }
 </script>
