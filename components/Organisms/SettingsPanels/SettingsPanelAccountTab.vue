@@ -183,10 +183,9 @@ export default {
       const fieldProperty = 'name'
       if (this.validateEmptyFields(fieldProperty)) {
         if (this.validateChange(fieldProperty)) {
-          this.setLoadingOnProperty(fieldProperty)
-          // TODO axios call
-          // after call remove from onGoingActions
-          this.removeLoadingOnProperty(fieldProperty)
+          this.updateUserProperty(fieldProperty, {
+            name: this.localValues.name,
+          })
         }
       }
     },
@@ -197,10 +196,9 @@ export default {
           if (!this.$regexValidate('email', this.localValues.email)) {
             this.errors.email = this.$t('Invalid email')
           } else {
-            this.setLoadingOnProperty(fieldProperty)
-            // TODO axios call
-            // after call remove from onGoingActions
-            this.removeLoadingOnProperty(fieldProperty)
+            this.updateUserProperty(fieldProperty, {
+              email: this.localValues.email,
+            })
           }
         }
       }
@@ -209,23 +207,38 @@ export default {
       const fieldProperty = 'password'
       let hasError = false
       if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
-          if (this.localValues.password !== this.localValues.confirmPassword) {
-            this.errors.confirmPassword = this.$t('Passwords are different')
-            hasError = true
-          }
-          if (this.localValues.password.length < 8) {
-            this.errors.password = this.$t('Password too short')
-            hasError = true
-          }
-          if (!hasError) {
-            this.errors = { ...this.errors, password: '', confirmPassword: '' }
-            this.setLoadingOnProperty(fieldProperty)
-            // TODO axios call
-            // after call remove from onGoingActions
-            this.removeLoadingOnProperty(fieldProperty)
-          }
+        if (
+          this.localValues.password !== this.localValues.password_confirmation
+        ) {
+          this.errors.password_confirmation = this.$t('Passwords are different')
+          hasError = true
         }
+        if (this.localValues.password.length < 8) {
+          this.errors.password = this.$t('Password too short')
+          hasError = true
+        }
+        if (!hasError) {
+          this.errors = {
+            ...this.errors,
+            password: '',
+            password_confirmation: '',
+          }
+          this.setLoadingOnProperty(fieldProperty)
+          this.updateUserProperty(fieldProperty, {
+            password: this.localValues.password,
+            password_confirmation: this.localValues.password_confirmation,
+          })
+        }
+      }
+    },
+    async updateUserProperty(property, payload) {
+      this.setLoadingOnProperty(property)
+      try {
+        await this.$axios.post(`/api/user/${property}`, payload)
+      } catch (err) {
+        // TODO handle error
+      } finally {
+        this.removeLoadingOnProperty(property)
       }
     },
   },
