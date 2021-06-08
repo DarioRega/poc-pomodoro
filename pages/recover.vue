@@ -88,6 +88,7 @@ export default {
   },
   methods: {
     async handleRecover() {
+      this.hasErrors = false
       this.isLoading = true
       try {
         await getCorsPermission(this.$axios)
