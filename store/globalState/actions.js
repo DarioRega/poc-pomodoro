@@ -9,10 +9,13 @@ export default {
     await this.$auth.logout()
   },
 
-  getEnvironnement({ dispatch, commit }) {
+  async getEnvironnement({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
     // TODO uncomment when endpoint done
-    // await dispatch('sessions/getAndSetCurrentSession', null, { root: true })
+    await dispatch('sessions/getAndSetCurrentSession', null, {
+      root: true,
+    })
+    // TODO GET TASKS, SETTINGS HERE
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 
