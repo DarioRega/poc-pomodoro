@@ -1,37 +1,11 @@
-import { POMODORO_STATUS } from '@/constantes'
 import TimerSidebarControls from '../../../components/Atoms/TimerSidebarChildren/TimerSidebarControls'
 
 export default {
   title: 'Atoms/TimerSidebarChildren/TimerSidebarControls',
   component: TimerSidebarControls,
   argTypes: {
-    status: {
-      control: {
-        type: 'select',
-        options: [
-          ...Object.values(POMODORO_STATUS.SESSION),
-          ...Object.values(POMODORO_STATUS.POMODORO),
-          ...Object.values(POMODORO_STATUS.SMALL_BREAK),
-          ...Object.values(POMODORO_STATUS.BIG_BREAK),
-        ],
-      },
-    },
-    isRunning: {
-      control: { type: 'select', options: [true, false] },
-    },
-    isPaused: {
-      control: { type: 'select', options: [true, false] },
-    },
     isLayoutStacked: {
       control: { type: 'select', options: [true, false] },
-    },
-    isSessionPending: {
-      control: { type: 'select', options: [true, false] },
-    },
-    currentSessionEndTime: {
-      control: {
-        type: 'text',
-      },
     },
   },
 }
@@ -53,34 +27,25 @@ const Template = (args, { argTypes }) => ({
 })
 
 export const Running = Template.bind({})
-Running.args = {
-  isRunning: true,
-}
+Running.args = {}
 
 export const Paused = Template.bind({})
-Paused.args = {
-  isPaused: true,
-}
+Paused.args = {}
 
 export const SessionStartedButPendingProcess = Template.bind({})
-SessionStartedButPendingProcess.args = {
-  isSessionStartedButPendingProcess: true,
-}
+SessionStartedButPendingProcess.args = {}
 
 export const StackedRunning = Template.bind({})
 StackedRunning.args = {
   isLayoutStacked: true,
-  isRunning: true,
 }
 
 export const StackedPaused = Template.bind({})
 StackedPaused.args = {
   isLayoutStacked: true,
-  isPaused: true,
 }
 
 export const StackedSessionStartedButPendingProcess = Template.bind({})
 StackedSessionStartedButPendingProcess.args = {
   isLayoutStacked: true,
-  isSessionStartedButPendingProcess: true,
 }
