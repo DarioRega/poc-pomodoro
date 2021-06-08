@@ -39,6 +39,7 @@
       class="
         task-deadline__actions
         absolute
+        w-full
         top-[1.7rem]
         z-20
         bg-light-white
@@ -204,8 +205,8 @@ export default {
     &__value,
     &__icon,
     &__toggler {
-      @apply text-dark-blue  #{!important};
-      @apply dark:text-celeste #{!important};
+      @apply text-dark-blue;
+      @apply dark:text-celeste;
       &:focus {
         @apply text-dark-indigo #{!important};
         @apply dark:text-light-indigo #{!important};
