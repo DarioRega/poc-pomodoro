@@ -1,6 +1,6 @@
 export default {
   async login({ dispatch, rootState }, payload) {
-    const { data } = await this.$auth.loginWith('laravelSanctum', {
+    await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
     dispatch('getEnvironnement')
