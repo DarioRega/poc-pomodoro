@@ -13,7 +13,7 @@ export default () => ({
     created_at: '2021-06-04T09:42:48.000000Z',
     updated_at: '2021-06-04T09:42:48.000000Z',
     user_id: '9395f0a7-7a9e-46e9-bb3b-f12aaf69bcae',
-    status: 'PAUSED',
+    status: 'PENDING',
     steps: [
       {
         id: '9397c05f-563c-4735-bbfd-f1ecc657de05',
@@ -27,7 +27,7 @@ export default () => ({
         created_at: '2021-06-04T09:42:48.000000Z',
         updated_at: '2021-06-05T20:44:05.000000Z',
         pomodoro_session_id: '9397c05f-5237-4c28-9ab9-1207d1f19a51',
-        status: 'PAUSED',
+        status: 'PENDING',
         actions: [
           {
             id: '939aaab9-be0b-4cb1-8f95-7dd5be5e0821',
@@ -192,7 +192,7 @@ export default () => ({
     created_at: '2021-06-04T09:42:48.000000Z',
     updated_at: '2021-06-05T20:44:05.000000Z',
     pomodoro_session_id: '9397c05f-5237-4c28-9ab9-1207d1f19a51',
-    status: 'PAUSED',
+    status: 'PENDING',
     actions: [
       {
         id: '939aaab9-be0b-4cb1-8f95-7dd5be5e0821',

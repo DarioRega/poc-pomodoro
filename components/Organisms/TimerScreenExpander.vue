@@ -8,7 +8,7 @@
         @onResume="resumeCurrentStep"
         @onSkip="onSkipCurrentStepClick"
         @onAbort="onAbortClick"
-        @onStartSession="startSession"
+        @onStartSession="handleStartSession"
       />
     </div>
   </screen-expander>
@@ -40,8 +40,11 @@ export default {
       pauseCurrentStep: 'sessions/pauseCurrentStep',
       resumeCurrentStep: 'sessions/resumeCurrentStep',
       startCurrentStep: 'sessions/startCurrentStep',
-      startSession: 'sessions/startSession',
+      createAndStartSession: 'sessions/createAndStartSession',
     }),
+    handleStartSession() {
+      this.$store.commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', true)
+    },
   },
 }
 </script>
