@@ -1,6 +1,4 @@
-import moment from 'moment-timezone'
 import TimerSidebar from '../../components/Organisms/TimerSidebar'
-import { STEPS_STATUS } from '../../constantes'
 
 export default {
   title: 'Organisms/TimerSidebar',
