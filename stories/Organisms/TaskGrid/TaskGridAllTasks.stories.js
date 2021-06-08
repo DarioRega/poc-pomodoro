@@ -42,7 +42,7 @@ const Template = (args, { argTypes }) => ({
       <div class='app-layout'  v-if='hasSidebarExample'>
       <sidebar class='app-layout__sidebar' v-bind='$props' :is-layout-stacked='stacked' @onToggleStacked='stacked = $event'>
         <template #currentTime>
-          <current-time :is24h='false' :is-layout-stacked='stacked' />
+          <current-time :is-layout-stacked='stacked' />
         </template>
         <template #timer>
           <timer-sidebar :is-layout-stacked='stacked'  />

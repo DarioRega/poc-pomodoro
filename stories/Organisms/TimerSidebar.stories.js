@@ -1,6 +1,6 @@
 import moment from 'moment-timezone'
 import TimerSidebar from '../../components/Organisms/TimerSidebar'
-import { POMODORO_STATUS, STEPS_STATUS } from '../../constantes'
+import { STEPS_STATUS } from '../../constantes'
 
 export default {
   title: 'Organisms/TimerSidebar',
@@ -20,40 +20,7 @@ const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   data() {
     return {
-      interval: null,
-      timer: '',
-    }
-  },
-  mounted() {
-    if (args.currentStatus) {
-      if (args.currentStatus === STEPS_STATUS.IN_PROGRESS) {
-        const interval = 1000
-        this.interval = setInterval(() => {
-          const diff = moment(args.end_time).unix() - moment().unix()
-          this.timer = moment.unix(diff).format('mm:ss')
-        }, interval)
-
-        if (args.status === POMODORO_STATUS.SESSION.PENDING) {
-          this.timer = '25:00'
-        }
-        if (args.status === POMODORO_STATUS.SMALL_BREAK.PENDING) {
-          this.timer = '05:00'
-        }
-        if (args.status === POMODORO_STATUS.BIG_BREAK.PENDING) {
-          this.timer = '15:00'
-        }
-        if (args.status === POMODORO_STATUS.POMODORO.PAUSED) {
-          this.timer = '12:43'
-        }
-        if (args.status === POMODORO_STATUS.POMODORO.PENDING) {
-          this.timer = '25:00'
-        }
-      }
-    }
-  },
-  destroyed() {
-    if (this.interval) {
-      clearInterval(this.interval)
+      timer: '25',
     }
   },
   computed: {
