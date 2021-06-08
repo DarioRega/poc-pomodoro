@@ -16,4 +16,7 @@ export default {
       (x) => x.notificationId !== payload
     )
   },
+  SET_ENV_LOADING(state, payload) {
+    state.isEnvLoading = payload
+  },
 }

@@ -41,7 +41,7 @@ export default {
       // TODO HANDLE
     },
     handleLogout() {
-      // TODO HANDLE
+      this.$store.dispatch('globalState/logout')
     },
   },
 }

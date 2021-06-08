@@ -1,5 +1,10 @@
 <template>
-  <container-register-page :has-loader="false">
+  <container-register-page class="relative">
+    <error-banner
+      v-if="hasErrors"
+      :title="errorResponse.title"
+      :errors="errorResponse.errors"
+    />
     <transition-opacity>
       <container-register-card
         :greeting="$t('Welcome')"
@@ -7,12 +12,12 @@
       >
         <container-register-row class="mb-4 mt-2">
           <brand-input
-            name="fullName"
+            name="name"
             :placeholder="$t('Enter full name')"
-            :value="register.fullName"
-            :error-text="formErrors.fullName"
+            :value="register.name"
+            :error-text="formErrors.name"
             class="w-full"
-            @change.native="register.fullName = $event.target.value"
+            @change.native="register.name = $event.target.value"
           />
         </container-register-row>
         <container-register-row class="mb-4">
@@ -38,13 +43,15 @@
         </container-register-row>
         <container-register-row class="mb-4">
           <brand-input
-            name="confirmPassword"
+            name="password_confirmation"
             :placeholder="$t('Confirm password')"
-            :value="register.confirmPassword"
-            :error-text="formErrors.confirmPassword"
+            :value="register.password_confirmation"
+            :error-text="formErrors.password_confirmation"
             input-type="password"
             class="w-full"
-            @change.native="register.confirmPassword = $event.target.value"
+            @change.native="
+              register.password_confirmation = $event.target.value
+            "
           />
         </container-register-row>
         <brand-button
@@ -72,6 +79,9 @@ import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsF
 import ContainerRegisterCard from '@/components/Templates/Login/ContainerCard'
 import ContainerRegisterPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
+import { getCorsPermission } from '@/helpers/cors'
+import ErrorBanner from '@/components/Atoms/ErrorBanner'
+import { extractErrorValues } from '@/helpers'
 
 export default {
   name: 'Register',
@@ -83,26 +93,29 @@ export default {
     RedirectActionsFooter,
     TransitionOpacity,
     ContainerRegisterPage,
+    ErrorBanner,
   },
   data() {
     return {
+      hasErrors: false,
+      errorResponse: {},
       isLoading: false,
       register: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
       formErrors: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
     }
   },
   watch: {
-    'register.confirmPassword'(newValue, oldValue) {
+    'register.password_confirmation'(newValue, oldValue) {
       this.validateConfirmPassword(newValue)
     },
     'register.password'(newValue, oldValue) {
@@ -111,7 +124,7 @@ export default {
     'register.email'(newValue, oldValue) {
       this.validateEmail(newValue)
     },
-    'register.fullName'(newValue, oldValue) {
+    'register.name'(newValue, oldValue) {
       this.validateFullName(newValue)
     },
   },
@@ -150,47 +163,81 @@ export default {
       return true
     },
     validateConfirmPassword(value) {
-      if (!this.validateEmptyFields('confirmPassword', value)) {
+      if (!this.validateEmptyFields('password_confirmation', value)) {
         return false
       }
       if (this.register.password) {
         if (this.register.password !== value) {
-          this.formErrors.confirmPassword = this.$t("Passwords don't match")
+          this.formErrors.password_confirmation = this.$t(
+            "Passwords don't match"
+          )
           return false
-        } else if (this.formErrors.confirmPassword) {
-          this.formErrors.confirmPassword = ''
+        } else if (this.formErrors.password_confirmation) {
+          this.formErrors.password_confirmation = ''
         }
       }
       return true
     },
     validateFullName(value) {
-      if (!this.validateEmptyFields('fullName', value)) {
+      if (!this.validateEmptyFields('name', value)) {
         return false
       }
       if (value.length < 4) {
-        this.formErrors.fullName = this.$t("Full name can't be that short")
+        this.formErrors.name = this.$t("Full name can't be that short")
         return false
       }
-      if (this.formErrors.fullName) {
-        this.formErrors.fullName = ''
+      if (this.formErrors.name) {
+        this.formErrors.name = ''
       }
       return true
     },
-    handleSubmit() {
-      const { fullName, email, password, confirmPassword } = this.register
+    handleDisplayFormError(errors) {
+      const errorList = extractErrorValues(errors)
+
+      this.errorResponse = {
+        title: this.$t('Error'),
+        errors: errorList,
+      }
+      this.hasErrors = true
+    },
+    async handleSubmit() {
+      this.hasErrors = false
+
+      const { name, email, password, password_confirmation } = this.register
       const validations = [
-        this.validateFullName(fullName),
+        this.validateFullName(name),
         this.validateEmail(email),
         this.validatePassword(password),
-        this.validateConfirmPassword(confirmPassword),
+        this.validateConfirmPassword(password_confirmation),
       ]
 
       if (validations.every((x) => x === true)) {
-        // TODO axios call register + then login, remove setTimeout afterwards
         this.isLoading = true
-        setTimeout(() => {
+
+        await getCorsPermission(this.$axios)
+        try {
+          await this.$axios.post(`/register`, this.register)
+          await this.login(email, password)
+        } catch (err) {
+          this.handleDisplayFormError(err.response.data.errors)
           this.isLoading = false
-        }, 4000)
+        }
+      }
+    },
+    async login(email, password) {
+      try {
+        await this.$store.dispatch('globalState/login', {
+          email,
+          password,
+        })
+      } catch (err) {
+        this.errorResponse = {
+          title: this.$t('Error'),
+          errors: err.response.data.message,
+        }
+        this.hasErrors = true
+      } finally {
+        this.isLoading = false
       }
     },
   },

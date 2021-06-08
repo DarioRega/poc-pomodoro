@@ -1,5 +1,10 @@
 <template>
-  <container-recovery-page :has-loader="false">
+  <container-recovery-page>
+    <error-banner
+      v-if="hasErrors"
+      :title="errorResponse.title"
+      :errors="errorResponse.errors"
+    />
     <transition-opacity>
       <container-recovery-card
         :greeting="$t('Can\'t log in ?')"
@@ -42,6 +47,10 @@ import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsF
 import ContainerRecoveryCard from '@/components/Templates/Login/ContainerCard'
 import ContainerRecoveryPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
+import ErrorBanner from '@/components/Atoms/ErrorBanner'
+
+import { getCorsPermission } from '@/helpers/cors'
+import { extractErrorValues } from '@/helpers'
 
 export default {
   name: 'Recover',
@@ -53,13 +62,16 @@ export default {
     RedirectActionsFooter,
     TransitionOpacity,
     ContainerRecoveryPage,
+    ErrorBanner,
   },
   data() {
     return {
+      hasErrors: false,
+      errorResponse: {},
       isLoading: false,
       recoveryEmail: '',
       emailErrorText: '',
-      hasSuccessfullySentRecoveryLink: true,
+      hasSuccessfullySentRecoveryLink: false,
     }
   },
   computed: {
@@ -75,12 +87,26 @@ export default {
     },
   },
   methods: {
-    handleRecover() {
+    async handleRecover() {
+      this.hasErrors = false
       this.isLoading = true
-      // TODO remove this after axios implementation
-      setTimeout(() => {
+      try {
+        await getCorsPermission(this.$axios)
+        await this.$axios.post('/forgot-password', {
+          email: this.recoveryEmail,
+        })
+        await this.$store.dispatch('globalState/createNotification', {
+          type: 'success',
+          title: this.$t('All done !'),
+          description: this.$t('Recovery link successfully sent'),
+        })
+        this.hasSuccessfullySentRecoveryLink = true
+      } catch (err) {
+        this.handleDisplayFormError(err.response.data.errors)
+        this.hasErrors = true
+      } finally {
         this.isLoading = false
-      }, 4000)
+      }
     },
     validateRecovery() {
       if (this.recoveryEmail) {
@@ -95,6 +121,15 @@ export default {
       } else {
         this.emailErrorText = this.$t("Field can't be empty")
       }
+    },
+    handleDisplayFormError(errors) {
+      const errorList = extractErrorValues(errors)
+
+      this.errorResponse = {
+        title: this.$t('Error'),
+        errors: errorList,
+      }
+      this.hasErrors = true
     },
   },
 }
