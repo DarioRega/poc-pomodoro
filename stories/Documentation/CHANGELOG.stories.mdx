@@ -1,3 +1,51 @@
+# [0.9.0](https://gitlab.com/seelo/pomodoro/frontend/compare/0.8.1...0.9.0) (2021-06-08)
+
+
+### Fix
+
+* Add background on container for the task select status options, to optimize visibility ([9c17e3a](https://gitlab.com/seelo/pomodoro/frontend/commit/9c17e3a7b1ef8de5e5c00ff05872e3cf3e633550))
+* Add middleware and auth properties together to make the redirect works, Re-establish the frontend validation on reset password ([68d1c91](https://gitlab.com/seelo/pomodoro/frontend/commit/68d1c91fd538e842531aa988aec18a4fabfba4e1))
+* Add the dispatch callback on every notification, to launch independently. Simplify logic to create the notification in actions.js ([aa7c426](https://gitlab.com/seelo/pomodoro/frontend/commit/aa7c426b44f3ef87a49f71a7275becb46ee6088b))
+* Add the styles for the --small version of brand button, add stories for small brand button example, remove code used for testing ([2601fbd](https://gitlab.com/seelo/pomodoro/frontend/commit/2601fbd9a67dbb5167741d2e3776bee39c42486e))
+* Animation for toggle stacked layout(CurrentTime and TimerSidebar), disable button while animation process, to avoid spamming. ([03c7602](https://gitlab.com/seelo/pomodoro/frontend/commit/03c760238c85afe5ca0a679111bbe5110c6d6144))
+* BASE_URL that caused problems with csrf token, Eslint rc rule exception for camelCase (to allow mapping to laravel variable) ([b8e76d8](https://gitlab.com/seelo/pomodoro/frontend/commit/b8e76d8b6d3bcee5dd3a4faa43ef83e2d04dbe73))
+* Change all tasks status to in progress instead of ongoing ([8b09715](https://gitlab.com/seelo/pomodoro/frontend/commit/8b097156b07c8f39156a479b9199e3a91d099d2b))
+* Cleanup and remove setUser since it's fetch automatically ([234a747](https://gitlab.com/seelo/pomodoro/frontend/commit/234a7475e5713ae52e4a512adb90e3649229dbb5))
+* Eslint unused var problem ([8f9e7c9](https://gitlab.com/seelo/pomodoro/frontend/commit/8f9e7c981e5e74b5254b74f7aa37cb2166b45015))
+* Linter error ([7254272](https://gitlab.com/seelo/pomodoro/frontend/commit/7254272aa27c3c8f1639f67d146889abab888ea8))
+* Login endpoint cleanup and adapt error banner for backend erorrs to be displayed ([13581fa](https://gitlab.com/seelo/pomodoro/frontend/commit/13581fab13361b36f68bdfee699826b03eb71608))
+* Move login/logout call in store. handle app loading env with a general call that will fetch current session and all tasks ([01c56a8](https://gitlab.com/seelo/pomodoro/frontend/commit/01c56a869f794db717e7acdf6446b32b71b862a4))
+* Refactor and add todos for getter in session ([91c8629](https://gitlab.com/seelo/pomodoro/frontend/commit/91c8629623e54b5a75ecdd56735eb1041b99c767))
+* Regroup actions on timer / session in actions.js, dispatch directly action with mapActions on TimerSidebar and TimerScreenExpander, to have only one source of truth ([5378fec](https://gitlab.com/seelo/pomodoro/frontend/commit/5378fec538ea4059261d0a5ea86671947996b38e))
+* Remove axios plugin, change fullName property to name ([e53496d](https://gitlab.com/seelo/pomodoro/frontend/commit/e53496d18ed6885dae86effd7e6faa759232093c))
+* Remove console.logs ([06628f9](https://gitlab.com/seelo/pomodoro/frontend/commit/06628f9ec439c2c112310c8b7b452f86ef0983e8))
+* Remove errors on every attempt to submit if have any before re-validating ([3cfb907](https://gitlab.com/seelo/pomodoro/frontend/commit/3cfb9077f2cec535aa85cb4b471f1719c2864919))
+* Removed duplicate code for session paused or session started but process pending, handle the dynamically if must emit onResume or onStart, the icon name is dynamically changed as well ([a0b0d16](https://gitlab.com/seelo/pomodoro/frontend/commit/a0b0d16f8d5c4df7beaaa15315199662608cab22))
+* Rename onStop event to onAbort, more accurate ([ba90628](https://gitlab.com/seelo/pomodoro/frontend/commit/ba9062821db125f741e9bbba6a00779c9019dde0))
+* Separate login method to catch it's own error in case, restablish validations on front end as well. ([fa7d238](https://gitlab.com/seelo/pomodoro/frontend/commit/fa7d2389204bf0da2fcc76c6432fd817522cc002))
+* Set getters with backend payload for sessions. Create helper to calculate session end time if we don't have sesssion end_time property ([c2fb6ed](https://gitlab.com/seelo/pomodoro/frontend/commit/c2fb6ed96ea4cd511641b18a4138496314d8cb4a))
+* Set the getter computed properties for TimerScreenExpanderClock.vue and TimerSidebarClock.vue to be returned from timer/getCurrentTimer. ([d584a68](https://gitlab.com/seelo/pomodoro/frontend/commit/d584a68170fedd48051190914d8915a7dad6bf49))
+* Stories status in progress to ongoing (hard coded value example), add loading example in stories as well ([a1c8886](https://gitlab.com/seelo/pomodoro/frontend/commit/a1c888606e254488c4faa344c74055b880b0b854))
+
+### New
+
+* Add pop confirm for abort/skip process on TimerScreenExpander.vue ([ccd3c54](https://gitlab.com/seelo/pomodoro/frontend/commit/ccd3c54012bb7a1cf5a24ec0c743e1f3dc014e8f))
+* Add redirects after login/logout nuxt config ([9111ada](https://gitlab.com/seelo/pomodoro/frontend/commit/9111ada34ced8d1bddabfe5e5b9787429595dc10))
+* Add screen loader to default layout ([fbb73e4](https://gitlab.com/seelo/pomodoro/frontend/commit/fbb73e4bba79a3cbb02efef2d682c1ca1d15ecae))
+* Add Skipped status for steps, ([bc8fec2](https://gitlab.com/seelo/pomodoro/frontend/commit/bc8fec2f8f0f45046085ccad06b78d65f146b8e9))
+* Create ErrorBanner to display all errors from server when register/login/recover. Implement in recover process now ([067fa83](https://gitlab.com/seelo/pomodoro/frontend/commit/067fa833cfbfa10c10c6823e88e1162d2b7e4ecf))
+* Create LaunchSessionTimer, integrate it in default nuxt layout, create mutation and state property to know if has to be visible ([a5901f2](https://gitlab.com/seelo/pomodoro/frontend/commit/a5901f228844ff6e2ffd284fb687004ed986e827))
+* Create logic to set the interval for updating the running timer ([9c420d6](https://gitlab.com/seelo/pomodoro/frontend/commit/9c420d69c8083707e5474acd31ba177ae94228d9))
+* Create the function to parse hh:mm:ss resting_time to mm:ss. Successfully set the timer interval on state when session is not paused and vice-versa ([5653222](https://gitlab.com/seelo/pomodoro/frontend/commit/565322270ea267c102ed2a3402e810db19d821da))
+* Create timer store module to handle only current timer. ([20bcc97](https://gitlab.com/seelo/pomodoro/frontend/commit/20bcc978457580a6e5f52d3db535e92839f01654))
+* Handle axios call to change user properties ([892d2e6](https://gitlab.com/seelo/pomodoro/frontend/commit/892d2e63c64fdf0341c5e9c9ed24a5b3388622cd))
+* Handle reset password call and page. Catch token from route ([ccb1c6f](https://gitlab.com/seelo/pomodoro/frontend/commit/ccb1c6fcb2d3ccf895c07e63dc317153c930591c))
+* Handle TimerSidebar and TimerScreenExpander click to trigger mutation to display LaunchSessionTimer ([9750628](https://gitlab.com/seelo/pomodoro/frontend/commit/97506283d10401ada5ce08682fa9ee3a0b8900a2))
+* Implement call for forgot-password ([325ceec](https://gitlab.com/seelo/pomodoro/frontend/commit/325ceec3440c672e37a260eff58612319fb6edd4))
+* Install nuxt auth and config it. Login page handle call ([21f0f49](https://gitlab.com/seelo/pomodoro/frontend/commit/21f0f4986f4669ea4e3cac677149233bc5f3e1ac))
+* Notification logic in store ([6dce7ac](https://gitlab.com/seelo/pomodoro/frontend/commit/6dce7acf0da0d8c88fe92bca853da37d3ede9192))
+* Recover successfully implemented and error/success taken care of. Move notiffication container of index.vue to the default layout ([6428aa2](https://gitlab.com/seelo/pomodoro/frontend/commit/6428aa284686a6822c3fd1d5d096562a035528d8))
+
 ## [0.8.1](https://gitlab.com/seelo/pomodoro/frontend/compare/0.8.0...0.8.1) (2021-06-05)
 
 
