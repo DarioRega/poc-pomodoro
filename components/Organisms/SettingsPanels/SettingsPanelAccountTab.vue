@@ -11,15 +11,15 @@
       <div class="settings-panel__configurations">
         <brand-input
           name="full name"
-          :error-text="errors.fullName"
-          :value="localValues.fullName"
-          @change.native="localValues.fullName"
+          :error-text="errors.name"
+          :value="localValues.name"
+          @change.native="localValues.name = $event.target.value"
         />
         <div class="settings-panel__actions">
           <brand-button
-            :is-loading="onGoingActions.includes('fullName')"
-            :is-disabled="onGoingActions.includes('fullName')"
-            @click="handleChangeFullName"
+            :is-loading="onGoingActions.includes('name')"
+            :is-disabled="onGoingActions.includes('name')"
+            @click="handleChangeName"
           >
             {{ $t('Change full name') }}
           </brand-button>
@@ -72,12 +72,14 @@
         />
         <brand-input
           class="mt-10"
-          :value="localValues.confirmPassword"
+          :value="localValues.password_confirmation"
           name="password"
           :placeholder="$t('Confirm password')"
-          :error-text="errors.confirmPassword"
+          :error-text="errors.password_confirmation"
           input-type="password"
-          @change.native="localValues.confirmPassword = $event.target.value"
+          @change.native="
+            localValues.password_confirmation = $event.target.value
+          "
         />
         <div class="settings-panel__actions">
           <brand-button
@@ -110,42 +112,42 @@ export default {
     return {
       onGoingActions: [],
       localValues: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
       errors: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
     }
   },
   computed: {
     allowSave() {
       return {
-        fullName: this.values.fullName !== this.localValues.fullName,
+        name: this.values.name !== this.localValues.name,
         email: this.values.email !== this.localValues.email,
         password:
-          this.localValues.password === this.localValues.confirmPassword,
+          this.localValues.password === this.localValues.password_confirmation,
       }
     },
   },
   mounted() {
-    const { fullName, email } = this.values
+    const { name, email } = this.values
     // security, we don't display password in input
     this.localValues = {
-      fullName,
+      name,
       email,
       password: '----------',
-      confirmPassword: '',
+      password_confirmation: '',
     }
   },
   methods: {
     validateEmptyFields(fieldProperty) {
-      if (!this.localValues.fullName) {
+      if (!this.localValues.name) {
         this.errors[fieldProperty] = this.$t('Field is required')
         return false
       } else if (this.errors[fieldProperty]) {
@@ -177,8 +179,8 @@ export default {
         )
       }, 3000)
     },
-    handleChangeFullName() {
-      const fieldProperty = 'fullName'
+    handleChangeName() {
+      const fieldProperty = 'name'
       if (this.validateEmptyFields(fieldProperty)) {
         if (this.validateChange(fieldProperty)) {
           this.setLoadingOnProperty(fieldProperty)

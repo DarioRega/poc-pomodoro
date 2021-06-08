@@ -17,11 +17,7 @@ export default {
   css: ['~/assets/style/index.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '~/plugins/what-input.js',
-    '~/plugins/regexHelper.js',
-    '~/plugins/axios.js',
-  ],
+  plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
 
   vue: {
     config: {
@@ -74,7 +70,6 @@ export default {
       },
     },
     redirect: {
-      login: '/',
       logout: '/login',
     },
     plugins: [],

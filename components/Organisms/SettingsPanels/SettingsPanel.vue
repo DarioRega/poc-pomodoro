@@ -29,7 +29,7 @@
       />
       <settings-panel-account-tab
         v-if="currentActiveTab === stepsValues.ACCOUNT"
-        :values="settingsValues.accountTab"
+        :values="{ name: user.name, email: user.email }"
       />
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
@@ -89,6 +89,9 @@ export default {
     }
   },
   computed: {
+    user() {
+      return this.$auth.user
+    },
     isSaveOrResetPossible() {
       switch (this.currentActiveTab) {
         case this.stepsValues.GENERAL:
