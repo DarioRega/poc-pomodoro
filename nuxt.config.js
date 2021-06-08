@@ -42,6 +42,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
+    '@nuxtjs/auth-next',
   ],
 
   i18n: {
@@ -52,8 +53,31 @@ export default {
       silentTranslationWarn: true,
     },
   },
+  env: {
+    BASE_URL: process.env.BASE_URL,
+    API_URL: process.env.API_URL,
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseUrl: process.env.API_URL,
+    credentials: true,
+  },
+  auth: {
+    strategies: {
+      laravelSanctum: {
+        provider: 'laravel/sanctum',
+        url: process.env.API_URL || 'http://localhost:80',
+        // TODO verify when endpoint to get user information is available
+        // user: {
+        //   autoFetch: true,
+        // },
+      },
+    },
+    redirect: {
+      logout: '/login',
+    },
+    plugins: [],
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

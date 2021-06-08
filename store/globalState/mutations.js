@@ -19,4 +19,7 @@ export default {
   SET_LAUNCH_TIMER_VISIBILITY(state, payload) {
     state.isLaunchTimerVisible = payload
   },
+  SET_ENV_LOADING(state, payload) {
+    state.isEnvLoading = payload
+  },
 }

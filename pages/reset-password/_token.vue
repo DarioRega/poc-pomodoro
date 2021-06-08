@@ -1,5 +1,10 @@
 <template>
-  <container-reset-password-page :has-loader="false">
+  <container-reset-password-page>
+    <error-banner
+      v-if="hasErrors"
+      :title="errorResponse.title"
+      :errors="errorResponse.errors"
+    />
     <transition-opacity>
       <container-reset-password-card
         :greeting="$t('Reset my password')"
@@ -28,13 +33,13 @@
         </container-reset-password-row>
         <container-reset-password-row class="mb-4">
           <brand-input
-            name="confirmPassword"
+            name="password_confirmation"
             :placeholder="$t('Confirm new password')"
-            :value="login.confirmPassword"
-            :error-text="formErrors.confirmPassword"
+            :value="login.password_confirmation"
+            :error-text="formErrors.password_confirmation"
             input-type="password"
             class="w-full"
-            @change.native="login.confirmPassword = $event.target.value"
+            @change.native="login.password_confirmation = $event.target.value"
           />
         </container-reset-password-row>
         <brand-button
@@ -62,6 +67,10 @@ import RedirectActionsFooter from '@/components/Templates/Login/RedirectActionsF
 import ContainerResetPasswordCard from '@/components/Templates/Login/ContainerCard'
 import ContainerResetPasswordPage from '@/components/Templates/Login/ContainerPage'
 import BrandButton from '@/components/Atoms/BrandButton'
+import ErrorBanner from '@/components/Atoms/ErrorBanner'
+
+import { extractErrorValues } from '@/helpers'
+import { getCorsPermission } from '@/helpers/cors'
 
 export default {
   name: 'ResetPassword',
@@ -73,24 +82,30 @@ export default {
     RedirectActionsFooter,
     TransitionOpacity,
     ContainerResetPasswordPage,
+    ErrorBanner,
   },
+  middleware: 'auth',
+  auth: 'guest',
   data() {
     return {
+      hasErrors: false,
+      errorResponse: {},
       isLoading: false,
+      token: '',
       login: {
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
       formErrors: {
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
     }
   },
   watch: {
-    'login.confirmPassword'(newValue, oldValue) {
+    'login.password_confirmation'(newValue, oldValue) {
       this.validateConfirmPassword(newValue)
     },
     'login.password'(newValue, oldValue) {
@@ -99,14 +114,18 @@ export default {
     'login.email'(newValue, oldValue) {
       this.validateEmail(newValue)
     },
-    'login.fullName'(newValue, oldValue) {
+    'login.name'(newValue, oldValue) {
       this.validateFullName(newValue)
     },
   },
   mounted() {
+    const token = this.$route.params.token
     const email = this.$route.query.email
     if (email) {
       this.login.email = email
+    }
+    if (token) {
+      this.token = token
     }
   },
   methods: {
@@ -144,34 +163,60 @@ export default {
       return true
     },
     validateConfirmPassword(value) {
-      if (!this.validateEmptyFields('confirmPassword', value)) {
+      if (!this.validateEmptyFields('password_confirmation', value)) {
         return false
       }
       if (this.login.password) {
         if (this.login.password !== value) {
-          this.formErrors.confirmPassword = this.$t("Passwords don't match")
+          this.formErrors.password_confirmation = this.$t(
+            "Passwords don't match"
+          )
           return false
-        } else if (this.formErrors.confirmPassword) {
-          this.formErrors.confirmPassword = ''
+        } else if (this.formErrors.password_confirmation) {
+          this.formErrors.password_confirmation = ''
         }
       }
       return true
     },
+    handleDisplayFormError(errors) {
+      const errorList = extractErrorValues(errors)
 
-    handleSubmit() {
-      const { email, password, confirmPassword } = this.login
+      this.errorResponse = {
+        title: this.$t('Error'),
+        errors: errorList,
+      }
+      this.hasErrors = true
+    },
+
+    async handleSubmit() {
+      const { email, password, password_confirmation } = this.login
       const validations = [
         this.validateEmail(email),
         this.validatePassword(password),
-        this.validateConfirmPassword(confirmPassword),
+        this.validateConfirmPassword(password_confirmation),
       ]
 
       if (validations.every((x) => x === true)) {
-        // TODO axios call register + then login, remove setTimeout afterwards
+        this.hasErrors = false
         this.isLoading = true
-        setTimeout(() => {
+        try {
+          await getCorsPermission(this.$axios)
+          await this.$axios.post('/reset-password', {
+            ...this.login,
+            token: this.token,
+          })
+          await this.$store.dispatch('globalState/createNotification', {
+            type: 'success',
+            title: this.$t('All done !'),
+            description: this.$t('Your password has been reset'),
+          })
+          await this.$store.dispatch('globalState/login', { email, password })
+        } catch (err) {
+          this.handleDisplayFormError(err.response.data.errors)
+          this.hasErrors = true
+        } finally {
           this.isLoading = false
-        }, 4000)
+        }
       }
     },
   },

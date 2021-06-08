@@ -11,15 +11,15 @@
       <div class="settings-panel__configurations">
         <brand-input
           name="full name"
-          :error-text="errors.fullName"
-          :value="localValues.fullName"
-          @change.native="localValues.fullName"
+          :error-text="errors.name"
+          :value="localValues.name"
+          @change.native="localValues.name = $event.target.value"
         />
         <div class="settings-panel__actions">
           <brand-button
-            :is-loading="onGoingActions.includes('fullName')"
-            :is-disabled="onGoingActions.includes('fullName')"
-            @click="handleChangeFullName"
+            :is-loading="onGoingActions.includes('name')"
+            :is-disabled="onGoingActions.includes('name')"
+            @click="handleChangeName"
           >
             {{ $t('Change full name') }}
           </brand-button>
@@ -72,12 +72,14 @@
         />
         <brand-input
           class="mt-10"
-          :value="localValues.confirmPassword"
+          :value="localValues.password_confirmation"
           name="password"
           :placeholder="$t('Confirm password')"
-          :error-text="errors.confirmPassword"
+          :error-text="errors.password_confirmation"
           input-type="password"
-          @change.native="localValues.confirmPassword = $event.target.value"
+          @change.native="
+            localValues.password_confirmation = $event.target.value
+          "
         />
         <div class="settings-panel__actions">
           <brand-button
@@ -110,42 +112,42 @@ export default {
     return {
       onGoingActions: [],
       localValues: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
       errors: {
-        fullName: '',
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
       },
     }
   },
   computed: {
     allowSave() {
       return {
-        fullName: this.values.fullName !== this.localValues.fullName,
+        name: this.values.name !== this.localValues.name,
         email: this.values.email !== this.localValues.email,
         password:
-          this.localValues.password === this.localValues.confirmPassword,
+          this.localValues.password === this.localValues.password_confirmation,
       }
     },
   },
   mounted() {
-    const { fullName, email } = this.values
+    const { name, email } = this.values
     // security, we don't display password in input
     this.localValues = {
-      fullName,
+      name,
       email,
       password: '----------',
-      confirmPassword: '',
+      password_confirmation: '',
     }
   },
   methods: {
     validateEmptyFields(fieldProperty) {
-      if (!this.localValues.fullName) {
+      if (!this.localValues.name) {
         this.errors[fieldProperty] = this.$t('Field is required')
         return false
       } else if (this.errors[fieldProperty]) {
@@ -177,14 +179,13 @@ export default {
         )
       }, 3000)
     },
-    handleChangeFullName() {
-      const fieldProperty = 'fullName'
+    handleChangeName() {
+      const fieldProperty = 'name'
       if (this.validateEmptyFields(fieldProperty)) {
         if (this.validateChange(fieldProperty)) {
-          this.setLoadingOnProperty(fieldProperty)
-          // TODO axios call
-          // after call remove from onGoingActions
-          this.removeLoadingOnProperty(fieldProperty)
+          this.updateUserProperty(fieldProperty, {
+            name: this.localValues.name,
+          })
         }
       }
     },
@@ -195,10 +196,9 @@ export default {
           if (!this.$regexValidate('email', this.localValues.email)) {
             this.errors.email = this.$t('Invalid email')
           } else {
-            this.setLoadingOnProperty(fieldProperty)
-            // TODO axios call
-            // after call remove from onGoingActions
-            this.removeLoadingOnProperty(fieldProperty)
+            this.updateUserProperty(fieldProperty, {
+              email: this.localValues.email,
+            })
           }
         }
       }
@@ -207,23 +207,38 @@ export default {
       const fieldProperty = 'password'
       let hasError = false
       if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
-          if (this.localValues.password !== this.localValues.confirmPassword) {
-            this.errors.confirmPassword = this.$t('Passwords are different')
-            hasError = true
-          }
-          if (this.localValues.password.length < 8) {
-            this.errors.password = this.$t('Password too short')
-            hasError = true
-          }
-          if (!hasError) {
-            this.errors = { ...this.errors, password: '', confirmPassword: '' }
-            this.setLoadingOnProperty(fieldProperty)
-            // TODO axios call
-            // after call remove from onGoingActions
-            this.removeLoadingOnProperty(fieldProperty)
-          }
+        if (
+          this.localValues.password !== this.localValues.password_confirmation
+        ) {
+          this.errors.password_confirmation = this.$t('Passwords are different')
+          hasError = true
         }
+        if (this.localValues.password.length < 8) {
+          this.errors.password = this.$t('Password too short')
+          hasError = true
+        }
+        if (!hasError) {
+          this.errors = {
+            ...this.errors,
+            password: '',
+            password_confirmation: '',
+          }
+          this.setLoadingOnProperty(fieldProperty)
+          this.updateUserProperty(fieldProperty, {
+            password: this.localValues.password,
+            password_confirmation: this.localValues.password_confirmation,
+          })
+        }
+      }
+    },
+    async updateUserProperty(property, payload) {
+      this.setLoadingOnProperty(property)
+      try {
+        await this.$axios.post(`/api/user/${property}`, payload)
+      } catch (err) {
+        // TODO handle error
+      } finally {
+        this.removeLoadingOnProperty(property)
       }
     },
   },

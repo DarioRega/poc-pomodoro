@@ -31,8 +31,8 @@ export default {
     return state.session.steps
   },
   isSessionStarted: (state) =>
-    state.session.status === STEPS_STATUS.IN_PROGRESS ||
-    STEPS_STATUS.IN_PROGRESS,
+    state.session.status !== STEPS_STATUS.PENDING &&
+    state.session.status !== STEPS_STATUS.DONE,
 
   isSessionPaused: (state) => state.session.status === STEPS_STATUS.PAUSED,
 }

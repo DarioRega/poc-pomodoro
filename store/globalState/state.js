@@ -1,4 +1,5 @@
 export default () => ({
+  isEnvLoading: false,
   currentModalOpen: '',
   currentNotifications: [],
   modalsRefs: {

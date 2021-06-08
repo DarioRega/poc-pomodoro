@@ -47,9 +47,12 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  /*
-    Abort
-   */
+  async getAndSetCurrentSession({ commit }) {
+    const { data } = await this.$axios.get('/api/user/sessions/current')
+    if (data.id) {
+      commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
+    }
+  },
   abortSession() {
     // TODO axios call
   },

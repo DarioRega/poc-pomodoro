@@ -1,4 +1,21 @@
 export default {
+  async login({ dispatch, rootState }, payload) {
+    await this.$auth.loginWith('laravelSanctum', {
+      data: payload,
+    })
+    dispatch('getEnvironnement')
+  },
+  async logout({ dispatch, rootState }) {
+    await this.$auth.logout()
+  },
+
+  getEnvironnement({ dispatch, commit }) {
+    commit('globalState/SET_ENV_LOADING', true, { root: true })
+    // TODO uncomment when endpoint done
+    // await dispatch('sessions/getAndSetCurrentSession', null, { root: true })
+    commit('globalState/SET_ENV_LOADING', false, { root: true })
+  },
+
   createNotification({ dispatch, getters, commit, rootState }, payload) {
     const notificationKey = Math.floor(Math.random() * 9999)
     const confirmCallback =

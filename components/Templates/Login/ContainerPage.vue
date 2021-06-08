@@ -33,7 +33,7 @@
         uppercase
         tracking-wider
         text-3xl
-        mb-16
+        mb-4
       "
     >
       Pomodoro
@@ -44,10 +44,10 @@
 
 <script>
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
-
+import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 export default {
   name: 'ContainerPage',
-  components: { ScreenLoader },
+  components: { ScreenLoader, TransitionOpacity },
   props: {
     hasLoader: {
       type: Boolean,
