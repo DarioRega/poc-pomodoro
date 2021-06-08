@@ -32,9 +32,10 @@ export default {
   /*
     Session
    */
-  createAndStartSession({ dispatch, commit }) {
-    // TODO axios call create session
-    // TODO axios call start session
+  async createAndStartSession({ dispatch, commit }) {
+    const { data } = await this.$axios.post('/api/user/sessions')
+    // TODO TRY CATCH
+    await this.$axios.get(`api/user/sessions/${data.id}/start`)
     commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false, { root: true })
   },
   onAbortClick({ dispatch }) {
@@ -53,8 +54,9 @@ export default {
       commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
     }
   },
-  abortSession() {
-    // TODO axios call
+  async abortSession() {
+    // TODO TRY CATCH + dispatch notification
+    await this.$axios.get('/api/user/sessions/current/abort')
   },
 
   /*
