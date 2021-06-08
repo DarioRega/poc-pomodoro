@@ -8,7 +8,7 @@
     </button>
     <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
     <!--    <p-->
-    <!--      v-show="!isSessionPending"-->
+    <!--      v-show="isSessionCreated"-->
     <!--      class="text-sm text-dark-gray mb-6 font-bold px-2"-->
     <!--    >-->
     <!--      {{ $t('Current session will end at') }} {{ currentSessionEndTime }}-->

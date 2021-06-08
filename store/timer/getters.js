@@ -8,10 +8,8 @@ export default {
         return getOnlyHoursAndMinutes(
           rootState.sessions.currentStep.resting_time
         )
-      } else {
-        return state.currentTimer
       }
     }
-    return ''
+    return state.currentTimer
   },
 }

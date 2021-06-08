@@ -10,17 +10,16 @@ export default {
       return {
         isRunning: state.currentStep.status.includes(STEPS_STATUS.IN_PROGRESS),
         isPaused: state.currentStep.status.includes(STEPS_STATUS.PAUSED),
-        isSessionPending: state.session.status.includes(STEPS_STATUS.PENDING),
         isSessionStartedButPendingProcess:
           state.currentStep.status.includes(STEPS_STATUS.PENDING) &&
           !state.session.status.includes(STEPS_STATUS.PENDING),
         isSessionCreated: true,
       }
     }
+
     return {
       isRunning: false,
       isPaused: false,
-      isSessionPending: false,
       isSessionStartedButPendingProcess: false,
       isSessionCreated: false,
     }
