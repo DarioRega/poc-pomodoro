@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-center timer-sidebar">
-    <div v-show="!getTimerState.isSessionPending" class="text-center px-3">
+    <div v-show="getTimerState.isSessionCreated" class="text-center px-3">
       <p class="text-sm text-dark-gray mb-6 font-bold">
         {{ $t('Current session will end at') }} {{ getCurrentSessionEndTime }}
       </p>

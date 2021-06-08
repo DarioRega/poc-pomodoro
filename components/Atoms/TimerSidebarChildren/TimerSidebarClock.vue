@@ -3,8 +3,8 @@
     class="timer-sidebar__clock font-bold uppercase rounded-full"
     @click="$emit('click')"
   >
-    <!--    SESSION PENDING -->
-    <div v-if="getTimerState.isSessionPending">
+    <!--    SESSION NOT CREATED -->
+    <div v-if="!getTimerState.isSessionCreated">
       <p v-show="isLayoutStacked" class="text-base font-bold">
         {{ $t('Start') }}
       </p>

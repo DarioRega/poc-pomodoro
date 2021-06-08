@@ -4,12 +4,12 @@ export default {
    */
   onTimerClick({ dispatch, getters, commit, rootState }) {
     const {
-      isSessionPending,
+      isSessionCreated,
       isPaused,
       isRunning,
       isSessionStartedButPendingProcess,
     } = getters.getTimerState
-    if (isSessionPending) {
+    if (!isSessionCreated) {
       // in v2 we will let the user the possibility to select a task to be ran
       // the SET_LAUNCH_TIMER_VISIBILITY will have to be removed and called after the user selected a task from the modal
       // commit(

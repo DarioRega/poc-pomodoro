@@ -38,8 +38,8 @@
       </button>
     </div>
 
-    <!-- SESSION NOT STARTED -->
-    <div v-if="getTimerState.isSessionPending" class="text-center mt-8">
+    <!-- SESSION NOT CREATED -->
+    <div v-if="!getTimerState.isSessionCreated" class="text-center mt-8">
       <brand-button
         class="uppercase font-bold"
         @click="$emit('onStartSession')"

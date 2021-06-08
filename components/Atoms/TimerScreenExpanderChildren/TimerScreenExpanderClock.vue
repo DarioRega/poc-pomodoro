@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-show="!getTimerState.isSessionPending"
+      v-show="getTimerState.isSessionCreated"
       class="mb-24 transition-all duration-300"
     >
       <p class="text-lead text-dark-gray mb-6">
@@ -22,7 +22,7 @@
       :class="[
         getTimerState.isRunning && 'running',
         getTimerState.isPaused && 'paused',
-        getTimerState.isPending && 'pending',
+        !getTimerState.isSessionCreated && 'pending',
       ]"
     >
       <h2>
