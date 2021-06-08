@@ -6,7 +6,6 @@ export default {
     if (rootState.sessions.currentStep.status.includes(STEPS_STATUS.PAUSED)) {
       return getOnlyHoursAndMinutes(rootState.sessions.currentStep.resting_time)
     } else {
-      console.log('CURRENT TIMER', state.currentTimer)
       return state.currentTimer
     }
   },
