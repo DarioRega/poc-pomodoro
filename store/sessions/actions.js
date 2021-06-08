@@ -40,8 +40,8 @@ export default {
   },
   onAbortClick({ dispatch }) {
     const notification = {
-      title: 'Abort session ?',
-      description: 'Are you sure to abort the current session ?',
+      title: this.$t('Abort session ?'),
+      description: this.$t('Are you sure to abort the current session ?'),
       actionRequired: true,
       confirmCallback: () => dispatch('abortSession'),
     }
@@ -54,9 +54,14 @@ export default {
       commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
     }
   },
-  async abortSession() {
+  async abortSession({ dispatch }) {
+    const notification = {
+      title: this.$t('Session aborted !'),
+      description: this.$t('Your current session was successfully aborted'),
+    }
     // TODO TRY CATCH + dispatch notification
     await this.$axios.get('/api/user/sessions/current/abort')
+    dispatch('globalState/createNotification', notification, { root: true })
   },
 
   /*
@@ -64,8 +69,9 @@ export default {
   */
   onSkipCurrentStepClick({ dispatch }) {
     const notification = {
-      title: 'Skip process ?',
-      description: 'Are you sure to skip the current process ?',
+      title: this.$t('Skip process ?'),
+      description: this.$t('Are you sure to skip the current process ?'),
+      type: 'success',
       actionRequired: true,
       confirmCallback: () => dispatch('skipCurrentStep'),
     }
