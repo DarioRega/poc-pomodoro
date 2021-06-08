@@ -86,7 +86,6 @@ SessionPending.args = {
   status: POMODORO_STATUS.SESSION.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionPending: true,
-  isPending: true,
 }
 
 export const SessionStartedPomodoroPending = Template.bind({})
@@ -94,7 +93,6 @@ SessionStartedPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionStartedButPendingProcess: true,
-  isPending: true,
 }
 
 export const SessionPomodoroRunning = Template.bind({})
@@ -110,7 +108,6 @@ SessionSmallBreakPending.args = {
   status: POMODORO_STATUS.SMALL_BREAK.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionStartedButPendingProcess: true,
-  isPending: true,
 }
 
 export const SessionPomodoroPaused = Template.bind({})
@@ -126,7 +123,6 @@ StackedSessionPending.args = {
   status: POMODORO_STATUS.SESSION.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionPending: true,
-  isPending: true,
   isLayoutStacked: true,
 }
 
@@ -135,7 +131,6 @@ StackedSessionStartedPomodoroPending.args = {
   status: POMODORO_STATUS.POMODORO.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionStartedButPendingProcess: true,
-  isPending: true,
   isLayoutStacked: true,
 }
 
@@ -153,7 +148,6 @@ StackedSessionSmallBreakPending.args = {
   status: POMODORO_STATUS.SMALL_BREAK.PENDING,
   currentSessionEndTime: '15:35 AM',
   isSessionStartedButPendingProcess: true,
-  isPending: true,
   isLayoutStacked: true,
 }
 

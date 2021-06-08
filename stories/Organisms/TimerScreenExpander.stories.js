@@ -75,14 +75,12 @@ export const SessionPending = Template.bind({})
 SessionPending.args = {
   currentStatus: POMODORO_STATUS.SESSION.PENDING,
   isSessionPending: true,
-  isPending: true,
 }
 
 export const SessionStartedPomodoroPending = Template.bind({})
 SessionStartedPomodoroPending.args = {
   currentStatus: POMODORO_STATUS.POMODORO.PENDING,
   isSessionStartedButPendingProcess: true,
-  isPending: true,
 }
 
 export const SessionPomodoroRunning = Template.bind({})
@@ -96,7 +94,6 @@ export const SessionSmallBreakPending = Template.bind({})
 SessionSmallBreakPending.args = {
   currentStatus: POMODORO_STATUS.SMALL_BREAK.PENDING,
   isSessionStartedButPendingProcess: true,
-  isPending: true,
 }
 
 export const SessionPomodoroPaused = Template.bind({})

@@ -22,7 +22,7 @@
       :class="[
         getTimerState.isRunning && 'running',
         getTimerState.isPaused && 'paused',
-        getTimerState.isPending && 'pending',
+        getTimerState.isSessionStartedButPendingProcess && 'pending',
       ]"
     >
       <h2>

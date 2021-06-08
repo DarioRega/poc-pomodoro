@@ -22,9 +22,6 @@ export default {
     isPaused: {
       control: { type: 'select', options: [true, false] },
     },
-    isPending: {
-      control: { type: 'select', options: [true, false] },
-    },
     isLayoutStacked: {
       control: { type: 'select', options: [true, false] },
     },
