@@ -3,17 +3,6 @@ import CurrentTime from '../../components/Atoms/CurrentTime'
 export default {
   title: 'Atoms/CurrentTime',
   component: CurrentTime,
-  argTypes: {
-    timeZoneChoosen: {
-      control: {
-        type: 'select',
-        options: ['America/New_York', 'Asia/Tokyo', ''],
-      },
-    },
-    is24h: {
-      control: { type: 'select', options: [true, false] },
-    },
-  },
 }
 
 const Template = (args, { argTypes }) => ({
@@ -31,23 +20,14 @@ const Template = (args, { argTypes }) => ({
 })
 
 export const AmPmDefault = Template.bind({})
-AmPmDefault.args = {
-  is24h: false,
-  timeZoneChoosen: 'America/New_York',
-}
 
 export const AmPmDefaultEurope = Template.bind({})
-AmPmDefaultEurope.args = {
-  is24h: false,
-}
 
 export const NotAmPm = Template.bind({})
-NotAmPm.args = {}
 
 export const StackedAmPm = Template.bind({})
 StackedAmPm.args = {
   isLayoutStacked: true,
-  is24h: false,
 }
 
 export const StackedNotAmPm = Template.bind({})

@@ -1,7 +1,7 @@
 import TaskGridAllTasks from '@/components/Organisms/TaskGrid/TaskGridAllTasks'
 import {
   FAKER_TASK_STATUS_NAMES,
-  POMODORO_STATUS,
+  STEPS_STATUS,
   TASK_STATUS_VALUES,
 } from '@/constantes'
 import Sidebar from '@/components/Organisms/Sidebar'
@@ -31,7 +31,7 @@ const Template = (args, { argTypes }) => ({
   },
   computed: {
     status() {
-      return POMODORO_STATUS
+      return STEPS_STATUS
     },
     hasSidebarExample() {
       return args.withSidebar
@@ -42,10 +42,10 @@ const Template = (args, { argTypes }) => ({
       <div class='app-layout'  v-if='hasSidebarExample'>
       <sidebar class='app-layout__sidebar' v-bind='$props' :is-layout-stacked='stacked' @onToggleStacked='stacked = $event'>
         <template #currentTime>
-          <current-time :is24h='false' :is-layout-stacked='stacked' />
+          <current-time :is-layout-stacked='stacked' />
         </template>
         <template #timer>
-          <timer-sidebar :is-layout-stacked='stacked' :status='status.POMODORO.paused' :is-paused='true' current-session-end-time='15:35 AM' current-timer='23:00'  />
+          <timer-sidebar :is-layout-stacked='stacked'  />
         </template>
       </sidebar>
       <section class='app-layout__main-content' :class="stacked && 'app-layout__main-content--stacked' ">
