@@ -3,15 +3,13 @@ export default {
     const { data } = await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
-    // TODO must be there or no ?
-    this.$auth.setUser(data)
     dispatch('getEnvironnement')
   },
   async logout({ dispatch, rootState }) {
     await this.$auth.logout()
   },
 
-  getEnvironnement({ dispatch, commit, rootState }) {
+  getEnvironnement({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
     // TODO uncomment when endpoint done
     // await dispatch('sessions/getAndSetCurrentSession', null, { root: true })

@@ -74,7 +74,6 @@ export default {
       },
     },
     redirect: {
-      login: '/',
       logout: '/login',
     },
     plugins: [],
