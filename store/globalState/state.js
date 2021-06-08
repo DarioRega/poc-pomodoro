@@ -6,4 +6,5 @@ export default () => ({
     SELECT_RUNNING_TASK: 'SELECT_RUNNING_TASK',
   },
   isLayoutStacked: false,
+  isLaunchTimerVisible: false,
 })

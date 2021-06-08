@@ -16,4 +16,7 @@ export default {
       (x) => x.notificationId !== payload
     )
   },
+  SET_LAUNCH_TIMER_VISIBILITY(state, payload) {
+    state.isLaunchTimerVisible = payload
+  },
 }
