@@ -189,7 +189,7 @@ export default {
     },
 
     async handleSubmit() {
-      const { email, password } = this.login
+      const { email, password, password_confirmation } = this.login
       const validations = [
         this.validateEmail(email),
         this.validatePassword(password),
@@ -197,27 +197,27 @@ export default {
       ]
 
       if (validations.every((x) => x === true)) {
-      this.hasErrors = false
-      this.isLoading = true
-      try {
-        await getCorsPermission(this.$axios)
-        await this.$axios.post('/reset-password', {
-          ...this.login,
-          token: this.token,
-        })
-        await this.$store.dispatch('globalState/createNotification', {
-          type: 'success',
-          title: this.$t('All done !'),
-          description: this.$t('Your password has been reset'),
-        })
-        await this.$store.dispatch('globalState/login', { email, password })
-      } catch (err) {
-        this.handleDisplayFormError(err.response.data.errors)
-        this.hasErrors = true
-      } finally {
-        this.isLoading = false
+        this.hasErrors = false
+        this.isLoading = true
+        try {
+          await getCorsPermission(this.$axios)
+          await this.$axios.post('/reset-password', {
+            ...this.login,
+            token: this.token,
+          })
+          await this.$store.dispatch('globalState/createNotification', {
+            type: 'success',
+            title: this.$t('All done !'),
+            description: this.$t('Your password has been reset'),
+          })
+          await this.$store.dispatch('globalState/login', { email, password })
+        } catch (err) {
+          this.handleDisplayFormError(err.response.data.errors)
+          this.hasErrors = true
+        } finally {
+          this.isLoading = false
+        }
       }
-    },
     },
   },
 }
