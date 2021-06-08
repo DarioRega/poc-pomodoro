@@ -14,8 +14,6 @@ export default {
     return state.settingsValues.pomodoroConfigTab.noise_notification_end_process
   },
   getSettingsPanelSteps: (state) => (i18n) => {
-    // TODO try to be able to use i18n in state of getter for settings panel tabs
-
     return [
       {
         step: SETTINGS_PANEL_STEPS_VALUES.GENERAL,
