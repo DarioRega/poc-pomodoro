@@ -1,4 +1,3 @@
 export default () => ({
-  session: {},
-  currentStep: {},
+  current: {},
 })
