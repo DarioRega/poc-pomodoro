@@ -34,9 +34,15 @@ export default {
    */
   async createAndStartSession({ dispatch, commit }) {
     const { data } = await this.$axios.post('/api/user/sessions')
-    // TODO TRY CATCH
-    await this.$axios.get(`api/user/sessions/${data.id}/start`)
-    commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false, { root: true })
+    try {
+      await this.$axios.get(`api/user/sessions/${data.id}/start`)
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    } finally {
+      commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false, { root: true })
+    }
   },
   onAbortClick({ dispatch }) {
     const notification = {
@@ -50,7 +56,6 @@ export default {
 
   async getAndSetCurrentSession({ commit }) {
     const { data } = await this.$axios.get('/api/user/sessions/current')
-    console.log('DATA GETSETCUR', data)
     if (data.id) {
       commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
     }
@@ -60,9 +65,14 @@ export default {
       title: this.$t('Session aborted !'),
       description: this.$t('Your current session was successfully aborted'),
     }
-    // TODO TRY CATCH + dispatch notification
-    await this.$axios.get('/api/user/sessions/current/abort')
-    dispatch('globalState/createNotification', notification, { root: true })
+    try {
+      await this.$axios.get('/api/user/sessions/current/abort')
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
   },
 
   /*
@@ -78,8 +88,19 @@ export default {
     }
     dispatch('globalState/createNotification', notification, { root: true })
   },
-  skipCurrentStep() {
-    // TODO axios call
+  async skipCurrentStep({ dispatch }) {
+    const notification = {
+      title: this.$t('Process skipped !'),
+      description: this.$t('Your process was successfully skipped'),
+    }
+    try {
+      await this.$axios.post('/api/user/sessions/current/steps/current/skip')
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
   },
 
   /*

@@ -19,6 +19,15 @@ export default {
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 
+  handleGeneralApiError({ dispatch }, errMessage) {
+    const notification = {
+      title: this.$t('Something went wrong'),
+      description: errMessage,
+      type: 'error',
+    }
+    dispatch('createNotification', notification)
+  },
+
   createNotification({ dispatch, getters, commit, rootState }, payload) {
     const notificationKey = Math.floor(Math.random() * 9999)
     const confirmCallback =
