@@ -33,6 +33,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import moment from 'moment-timezone'
+import _ from 'lodash'
+
 import IndexTopHeader from '@/components/Templates/IndexPageComponentsGroup/IndexTopHeader'
 import CurrentTabHeader from '@/components/Templates/IndexPageComponentsGroup/CurrentTabHeader'
 import IndexSidebar from '@/components/Templates/IndexPageComponentsGroup/IndexSidebar'
@@ -40,8 +44,6 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
-import { mapGetters } from 'vuex'
-import moment from 'moment-timezone'
 
 export default {
   name: 'Index',
@@ -66,9 +68,13 @@ export default {
       isSessionPaused: 'sessions/isSessionPaused',
       isSessionStarted: 'sessions/isSessionStarted',
       getCurrentTimer: 'timer/getCurrentTimer',
+      hasCurrentSession: 'sessions/hasCurrentSession',
     }),
     currentStepEndTime() {
-      return this.$store.state.sessions.current.current_step.end_time
+      if (this.hasCurrentSession) {
+        return this.$store.state.sessions.current.current_step.end_time
+      }
+      return ''
     },
     isLayoutStacked() {
       return this.$store.state.globalState.isLayoutStacked
@@ -92,8 +98,12 @@ export default {
       }
     },
   },
-  mounted() {
-    // await this.$store.dispatch('sessions/getAndSetCurrentSession')
+  beforeMount() {},
+  async mounted() {
+    if (_.isEmpty(this.$store.state.sessions.current)) {
+      await this.$store.dispatch('sessions/getAndSetCurrentSession')
+      this.$store.commit('globalState/SET_ENV_LOADING', false)
+    }
     if (this.isSessionStarted && !this.isSessionPaused) {
       this.startInterval()
     }
@@ -107,7 +117,13 @@ export default {
     },
     startInterval() {
       const interval = 1000
-      this.interval = setInterval(() => {
+      this.interval = setInterval(async () => {
+        if (!this.currentStepEndTime) {
+          // session doesn't exist, bug happened if it made it through here, we need to kill interval and reset state
+          this.killInterval()
+          // retry to set env from scratch
+          await this.$store.dispatch('globalState/getEnvironment')
+        }
         const diff = moment(this.currentStepEndTime).unix() - moment().unix()
         const timer = moment.unix(diff).format('mm:ss')
         this.$store.commit('timer/SET_TIMER', timer)
