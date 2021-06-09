@@ -50,6 +50,7 @@ export default {
 
   async getAndSetCurrentSession({ commit }) {
     const { data } = await this.$axios.get('/api/user/sessions/current')
+    console.log('DATA GETSETCUR', data)
     if (data.id) {
       commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
     }

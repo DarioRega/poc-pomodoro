@@ -8,11 +8,11 @@ export default {
   getTimerState: (state, getters) => {
     if (getters.hasCurrentSession) {
       return {
-        isRunning: state.currentStep.status.includes(STEPS_STATUS.IN_PROGRESS),
-        isPaused: state.currentStep.status.includes(STEPS_STATUS.PAUSED),
+        isRunning: state.current.status.includes(STEPS_STATUS.IN_PROGRESS),
+        isPaused: state.current.status.includes(STEPS_STATUS.PAUSED),
         isSessionStartedButPendingProcess:
-          state.currentStep.status.includes(STEPS_STATUS.PENDING) &&
-          !state.session.status.includes(STEPS_STATUS.PENDING),
+          state.current.current_step.status.includes(STEPS_STATUS.PENDING) &&
+          !state.current.status.includes(STEPS_STATUS.PENDING),
         isSessionCreated: true,
       }
     }
@@ -26,14 +26,14 @@ export default {
   },
   getCurrentSessionEndTime: (state, getters) => {
     if (getters.hasCurrentSession) {
-      if (state.session.status.includes(STEPS_STATUS.PAUSED)) {
+      if (state.current.status.includes(STEPS_STATUS.PAUSED)) {
         // TODO backend give us resting time from the session directly
-        // if i need to calculate set the state.session_end_time and in progress as first condition,
+        // if i need to calculate set the state.current_end_time and in progress as first condition,
         // else give what i wrote already on the else
-      } else if (state.session.end_time) {
-        return moment(state.session).format('hh:mm A')
+      } else if (state.current.end_time) {
+        return moment(state.current).format('hh:mm A')
       } else {
-        const calculatedEndTime = calculateSessionEndTime(state.session.steps)
+        const calculatedEndTime = calculateSessionEndTime(state.current.steps)
         // TODO format depending user settings
         return moment(calculatedEndTime).format('hh:mm A')
       }
@@ -42,15 +42,15 @@ export default {
   },
   getSessionSteps: (state, getters) => {
     if (getters.hasCurrentSession) {
-      return state.session.steps
+      return state.current.steps
     }
     return []
   },
   isSessionStarted: (state, getters) => {
     if (getters.hasCurrentSession) {
       return (
-        state.session.status !== STEPS_STATUS.PENDING &&
-        state.session.status !== STEPS_STATUS.DONE
+        state.current.status !== STEPS_STATUS.PENDING &&
+        state.current.status !== STEPS_STATUS.DONE
       )
     }
     return false
@@ -58,7 +58,7 @@ export default {
 
   isSessionPaused: (state, getters) => {
     if (getters.hasCurrentSession) {
-      return state.session.status === STEPS_STATUS.PAUSED
+      return state.current.status === STEPS_STATUS.PAUSED
     }
     return false
   },

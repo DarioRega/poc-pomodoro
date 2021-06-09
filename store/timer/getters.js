@@ -4,9 +4,13 @@ import { getOnlyHoursAndMinutes } from '@/helpers/sessions'
 export default {
   getCurrentTimer: (state, getters, rootState, rootGetters) => {
     if (rootGetters['sessions/hasCurrentSession']) {
-      if (rootState.sessions.currentStep.status.includes(STEPS_STATUS.PAUSED)) {
+      if (
+        rootState.sessions.current.current_step.status.includes(
+          STEPS_STATUS.PAUSED
+        )
+      ) {
         return getOnlyHoursAndMinutes(
-          rootState.sessions.currentStep.resting_time
+          rootState.sessions.current.current_step.resting_time
         )
       }
     }

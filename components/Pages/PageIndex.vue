@@ -71,7 +71,7 @@ export default {
       getCurrentTimer: 'timer/getCurrentTimer',
     }),
     currentStepEndTime() {
-      return this.$store.state.sessions.currentStep.end_time
+      return this.$store.state.sessions.current.current_step.end_time
     },
     isLayoutStacked() {
       return this.$store.state.globalState.isLayoutStacked
