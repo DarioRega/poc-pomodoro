@@ -6,7 +6,7 @@ import { calculateSessionEndTime } from '@/helpers/sessions'
 
 export default {
   getTimerState: (state, getters) => {
-    if (getters.isSessionAndCurrentStepExist) {
+    if (getters.hasCurrentSession) {
       return {
         isRunning: state.currentStep.status.includes(STEPS_STATUS.IN_PROGRESS),
         isPaused: state.currentStep.status.includes(STEPS_STATUS.PAUSED),
@@ -25,7 +25,7 @@ export default {
     }
   },
   getCurrentSessionEndTime: (state, getters) => {
-    if (getters.isSessionAndCurrentStepExist) {
+    if (getters.hasCurrentSession) {
       if (state.session.status.includes(STEPS_STATUS.PAUSED)) {
         // TODO backend give us resting time from the session directly
         // if i need to calculate set the state.session_end_time and in progress as first condition,
@@ -41,13 +41,13 @@ export default {
     return ''
   },
   getSessionSteps: (state, getters) => {
-    if (getters.isSessionAndCurrentStepExist) {
+    if (getters.hasCurrentSession) {
       return state.session.steps
     }
     return []
   },
   isSessionStarted: (state, getters) => {
-    if (getters.isSessionAndCurrentStepExist) {
+    if (getters.hasCurrentSession) {
       return (
         state.session.status !== STEPS_STATUS.PENDING &&
         state.session.status !== STEPS_STATUS.DONE
@@ -57,12 +57,12 @@ export default {
   },
 
   isSessionPaused: (state, getters) => {
-    if (getters.isSessionAndCurrentStepExist) {
+    if (getters.hasCurrentSession) {
       return state.session.status === STEPS_STATUS.PAUSED
     }
     return false
   },
-  isSessionAndCurrentStepExist: (state) => {
-    return !_.isEmpty(state.session) && !_.isEmpty(state.currentStep)
+  hasCurrentSession: (state) => {
+    return !_.isEmpty(state.current)
   },
 }
