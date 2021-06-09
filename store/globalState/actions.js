@@ -3,13 +3,13 @@ export default {
     await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
-    dispatch('getEnvironnement')
+    dispatch('getEnvironment')
   },
   async logout({ dispatch, rootState }) {
     await this.$auth.logout()
   },
 
-  getEnvironnement({ dispatch, commit }) {
+  getEnvironment({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
     // TODO uncomment when endpoint done
     // await dispatch('sessions/getAndSetCurrentSession', null, { root: true })
