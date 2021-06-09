@@ -14,7 +14,7 @@
     <!--      {{ $t('Current session will end at') }} {{ currentSessionEndTime }}-->
     <!--    </p>-->
     <button
-      v-show="getTimerState.isSessionStartedButPendingProcess"
+      v-show="sessionState.isSessionStartedButHasPendingProcess"
       class="timer-sidebar__expander__button"
       @mouseenter="isInformationTooltipVisible = true"
       @onmouseleave="isInformationTooltipVisible = false"
@@ -36,8 +36,8 @@ export default {
     }
   },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
+    sessionState() {
+      return this.$store.getters['sessions/getSessionState']
     },
   },
 }

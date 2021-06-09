@@ -4,7 +4,7 @@
     @click="$emit('click')"
   >
     <!--    SESSION NOT CREATED -->
-    <div v-if="!getTimerState.isSessionCreated">
+    <div v-if="!sessionState.isSessionCreated">
       <p v-show="isLayoutStacked" class="text-base font-bold">
         {{ $t('Start') }}
       </p>
@@ -27,17 +27,19 @@
       :class="isLayoutStacked ? 'flex-col' : 'flex-row'"
     >
       <h2>
-        {{ getCurrentTimer | getOnlyHours }}
+        {{ currentStepTimer | getOnlyHours }}
       </h2>
       <h2 v-if="!isLayoutStacked" class="mx-0.5">:</h2>
       <h2>
-        {{ getCurrentTimer | getOnlyMinutes }}
+        {{ currentStepTimer | getOnlyMinutes }}
       </h2>
     </div>
   </button>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'TimerSidebarClock',
   filters: {
@@ -61,12 +63,10 @@ export default {
     },
   },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
-    },
-    getCurrentTimer() {
-      return this.$store.getters['timer/getCurrentTimer']
-    },
+    ...mapGetters({
+      sessionState: 'sessions/getSessionState',
+      currentStepTimer: 'timers/getCurrentStepTimer',
+    }),
   },
 }
 </script>

@@ -34,6 +34,13 @@ export const STEPS_STATUS = {
   DONE: 'DONE',
   SKIPPED: 'SKIPPED',
 }
+export const ACTION_TYPES = {
+  START: 'START',
+  RESUME: 'RESUME',
+  PAUSE: 'PAUSE',
+  FINISH: 'FINISH',
+  SKIP: 'SKIP',
+}
 
 export const SETTINGS_PANEL_STEPS_VALUES = {
   GENERAL: 'GENERAL',

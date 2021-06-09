@@ -66,9 +66,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isSessionPaused: 'sessions/isSessionPaused',
-      isSessionStarted: 'sessions/isSessionStarted',
-      getCurrentTimer: 'timer/getCurrentTimer',
+      sessionState: 'sessions/getSessionState',
+      currentStepTimer: 'timers/getCurrentStepTimer',
       hasCurrentSession: 'sessions/hasCurrentSession',
     }),
     currentStepEndTime() {
@@ -88,32 +87,48 @@ export default {
     },
   },
   watch: {
-    isSessionPaused(newValue, oldValue) {
-      if (this.isSessionStarted && newValue) {
+    currentStepTimer(newValue, oldValue) {
+      if (newValue === '00:00') {
+        this.killInterval()
+        this.dispatchFinishCurrentStep()
+      }
+    },
+    'sessionState.isSessionPaused'(newValue, oldValue) {
+      if (this.sessionState.isSessionStarted && newValue) {
         if (this.timerInterval) {
           this.killInterval()
         }
       }
-      if (this.isSessionStarted && !newValue) {
+      if (this.sessionState.isSessionStarted && !newValue) {
         this.startInterval()
       }
     },
   },
-  beforeMount() {},
+  // TODO MOVE TO MAIN LAYOUT
   async mounted() {
     if (_.isEmpty(this.$store.state.sessions.current)) {
       await this.$store.dispatch('sessions/getAndSetCurrentSession')
-      this.$store.commit('globalState/SET_ENV_LOADING', false)
+      // because the timer isn't sync yet we wait 1 more seconds after everything is commited to validate the ui
+      setTimeout(() => {
+        this.$store.commit('globalState/SET_ENV_LOADING', false)
+      }, 1000)
     }
-    console.log('canSkip', this.$store.getters['sessions/canSkip'])
-    if (this.isSessionStarted && !this.isSessionPaused) {
+    if (
+      this.sessionState.isSessionStarted &&
+      !this.sessionState.isSessionPaused &&
+      this.sessionState.isRunning
+    ) {
       this.startInterval()
     }
   },
-  beforeDestroy() {
+  async beforeDestroy() {
     this.killInterval()
+    await this.$store.dispatch('sessions/beforeLeavingApplication')
   },
   methods: {
+    async dispatchFinishCurrentStep() {
+      await this.$store.dispatch('sessions/finishCurrentStep')
+    },
     killInterval() {
       clearInterval(this.interval)
     },
@@ -126,9 +141,19 @@ export default {
           // retry to set env from scratch
           await this.$store.dispatch('globalState/getEnvironment')
         }
-        const diff = moment(this.currentStepEndTime).unix() - moment().unix()
-        const timer = moment.unix(diff).format('mm:ss')
-        this.$store.commit('timer/SET_TIMER', timer)
+
+        const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
+          moment.now(),
+          'seconds'
+        )
+        const currentStepTime = moment.utc(endTimeSecondsAmount * 1000)
+        const currentStepTimer = currentStepTime.format('mm:ss')
+        const currentStepRestingTime = currentStepTime.format('HH:mm:ss')
+
+        this.$store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
+          currentStepTimer,
+          currentStepRestingTime,
+        })
       }, interval)
     },
     handleToggleStacked() {

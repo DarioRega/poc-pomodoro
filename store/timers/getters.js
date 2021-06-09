@@ -2,7 +2,7 @@ import { STEPS_STATUS } from '@/constantes'
 import { getOnlyHoursAndMinutes } from '@/helpers/sessions'
 
 export default {
-  getCurrentTimer: (state, getters, rootState, rootGetters) => {
+  getCurrentStepTimer: (state, getters, rootState, rootGetters) => {
     if (rootGetters['sessions/hasCurrentSession']) {
       if (
         rootState.sessions.current.current_step.status.includes(
@@ -14,6 +14,12 @@ export default {
         )
       }
     }
-    return state.currentTimer
+    return state.currentStepTimer
+  },
+  getSessionTimer: (state, getters, rootState, rootGetters) => {
+    if (rootGetters['sessions/getSessionState'].isRunning) {
+      return rootGetters['sessions/getCurrentRunningSessionEndTime']
+    }
+    return state.currentSessionTimer
   },
 }

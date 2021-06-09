@@ -15,7 +15,8 @@ export default {
     await dispatch('sessions/getAndSetCurrentSession', null, {
       root: true,
     })
-    // TODO GET TASKS, SETTINGS HERE
+    // TODO GET TASKS, SETTINGS HER
+
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 

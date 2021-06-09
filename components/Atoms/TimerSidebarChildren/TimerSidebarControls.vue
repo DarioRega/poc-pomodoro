@@ -1,7 +1,7 @@
 <template>
   <div class="timer-sidebar__controls">
     <!--  IS RUNNING -->
-    <div v-show="getTimerState.isRunning" class="timer-sidebar__controls">
+    <div v-show="getSessionState.isRunning" class="timer-sidebar__controls">
       <button
         class="timer-sidebar__controls__buttons text-error"
         @click="$emit('onPause')"
@@ -13,8 +13,8 @@
     <!--    IS PAUSED -->
     <div
       v-show="
-        getTimerState.isPaused ||
-        getTimerState.isSessionStartedButPendingProcess
+        getSessionState.isPaused ||
+        getSessionState.isSessionStartedButHasPendingProcess
       "
       class="timer-sidebar__controls"
       :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
@@ -58,16 +58,16 @@ export default {
     },
   },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
+    getSessionState() {
+      return this.$store.getters['sessions/getSessionState']
     },
     isResumeOrStart() {
-      return this.getTimerState.isPaused ? 'resume' : 'play'
+      return this.getSessionState.isPaused ? 'resume' : 'play'
     },
   },
   methods: {
     handleResumeOrStart() {
-      if (this.getTimerState.isPaused) {
+      if (this.getSessionState.isPaused) {
         this.$emit('onResume')
       } else {
         this.$emit('onStart')

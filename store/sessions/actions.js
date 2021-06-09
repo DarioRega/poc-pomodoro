@@ -1,3 +1,11 @@
+import { ACTION_TYPES, STEPS_STATUS } from '@/constantes'
+import {
+  CURRENT_STEP_ACTION_URL,
+  CURRENT_USER_SESSION_URL,
+  START_SESSION_URL,
+  USER_SESSION_URL,
+} from '@/constantes/api'
+
 export default {
   /*
   Global
@@ -7,8 +15,8 @@ export default {
       isSessionCreated,
       isPaused,
       isRunning,
-      isSessionStartedButPendingProcess,
-    } = getters.getTimerState
+      isSessionStartedButHasPendingProcess,
+    } = getters.getSessionState
     if (!isSessionCreated) {
       // in v2 we will let the user the possibility to select a task to be ran
       // the SET_LAUNCH_TIMER_VISIBILITY will have to be removed and called after the user selected a task from the modal
@@ -18,7 +26,7 @@ export default {
       //   { root: true }
       // )
       commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', true, { root: true })
-    } else if (isSessionStartedButPendingProcess) {
+    } else if (isSessionStartedButHasPendingProcess) {
       dispatch('startCurrentStep')
     } else if (isPaused) {
       dispatch('resumeCurrentStep')
@@ -29,20 +37,26 @@ export default {
     }
   },
 
+  beforeLeavingApplication({ dispatch, getters }) {
+    if (getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS) {
+      dispatch('pauseCurrentStep', false)
+    }
+  },
+
   /*
     Session
    */
   async getAndSetCurrentSession({ commit }) {
-    const { data } = await this.$axios.get('/api/user/sessions/current')
+    const { data } = await this.$axios.get(`${CURRENT_USER_SESSION_URL}`)
     if (data.id) {
       commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
     }
   },
 
   async createAndStartSession({ dispatch, commit }) {
-    const { data } = await this.$axios.post('/api/user/sessions')
+    const { data } = await this.$axios.post(`${USER_SESSION_URL}`)
     try {
-      await this.$axios.get(`api/user/sessions/${data.id}/start`)
+      await this.$axios.get(`${START_SESSION_URL(data.id)}`)
     } catch (err) {
       dispatch('globalState/handleGeneralApiError', err.response.data.message, {
         root: true,
@@ -71,7 +85,7 @@ export default {
   async abortSession({ dispatch }) {
     const notification = {
       title: this.$t('Session aborted !'),
-      description: this.$t('Your current session was successfully aborted'),
+      type: 'success',
     }
     try {
       await this.$axios.get('/api/user/sessions/current/abort')
@@ -99,7 +113,6 @@ export default {
   async skipCurrentStep({ dispatch }) {
     const notification = {
       title: this.$t('Process skipped !'),
-      description: this.$t('Your process was successfully skipped'),
     }
     try {
       await this.$axios.post('/api/user/sessions/current/steps/current/skip')
@@ -114,13 +127,17 @@ export default {
   /*
     Pause
   */
-  async pauseCurrentStep({ dispatch }, payload) {
+  async pauseCurrentStep({ dispatch, rootState }) {
     const notification = {
-      title: this.$t('Session paused !'),
-      description: this.$t('Your session was successfully paused'),
+      title: this.$t('Session paused!'),
+      type: 'success',
     }
+
     try {
-      await this.$axios.post('/api/user/sessions/current/steps/current/pause')
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.PAUSE,
+        resting_time: rootState.timer.currentRestingTime,
+      })
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
       dispatch('globalState/handleGeneralApiError', err.response.data.message, {
@@ -132,14 +149,30 @@ export default {
   /*
     Resume
   */
-  async resumeCurrentStep({ dispatch }) {
+  async resumeCurrentStep({ dispatch, rootState }) {
     const notification = {
       title: this.$t('Session resumed !'),
-      description: this.$t('Your session was successfully resumed'),
+      type: 'success',
     }
     try {
-      await this.$axios.post('/api/user/sessions/current/steps/current/resume')
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.RESUME,
+      })
       dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
+  },
+  /*
+     Finish current step
+  */
+  async finishCurrentStep({ dispatch, rootState }) {
+    try {
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.FINISH,
+      })
     } catch (err) {
       dispatch('globalState/handleGeneralApiError', err.response.data.message, {
         root: true,
@@ -150,7 +183,20 @@ export default {
   /*
     Start current step
  */
-  startCurrentStep() {
-    // TODO axios call
+  async startCurrentStep({ dispatch, rootState }) {
+    const notification = {
+      title: this.$t('Session started !'),
+      type: 'success',
+    }
+    try {
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.START,
+      })
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
   },
 }
