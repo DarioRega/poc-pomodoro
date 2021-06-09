@@ -11,7 +11,7 @@ export default {
         isRunning: state.current.status.includes(STEPS_STATUS.IN_PROGRESS),
         isPaused: state.current.status.includes(STEPS_STATUS.PAUSED),
         isSessionStartedButPendingProcess:
-          state.current.current_step.status.includes(STEPS_STATUS.PENDING) &&
+          getters.getCurrentStepStatus.includes(STEPS_STATUS.PENDING) &&
           !state.current.status.includes(STEPS_STATUS.PENDING),
         isSessionCreated: true,
       }
@@ -64,5 +64,38 @@ export default {
   },
   hasCurrentSession: (state) => {
     return !_.isEmpty(state.current)
+  },
+
+  /*
+    Action validations getters
+   */
+  canResume: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return getters.getCurrentStepStatus === STEPS_STATUS.PAUSED
+    }
+    return false
+  },
+  canPause: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS
+    }
+    return false
+  },
+  canSkip: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return (
+        getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS ||
+        getters.getCurrentStepStatus === STEPS_STATUS.PENDING
+      )
+    }
+    return false
+  },
+  getCurrentStepStatus: (state) => {
+    const {
+      current: {
+        current_step: { status: statusValue },
+      },
+    } = state
+    return statusValue
   },
 }

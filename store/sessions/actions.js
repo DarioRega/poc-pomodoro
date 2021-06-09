@@ -32,6 +32,13 @@ export default {
   /*
     Session
    */
+  async getAndSetCurrentSession({ commit }) {
+    const { data } = await this.$axios.get('/api/user/sessions/current')
+    if (data.id) {
+      commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
+    }
+  },
+
   async createAndStartSession({ dispatch, commit }) {
     const { data } = await this.$axios.post('/api/user/sessions')
     try {
@@ -44,6 +51,10 @@ export default {
       commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false, { root: true })
     }
   },
+
+  /*
+   Session actions
+   */
   onAbortClick({ dispatch }) {
     const notification = {
       title: this.$t('Abort session ?'),
@@ -54,12 +65,9 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  async getAndSetCurrentSession({ commit }) {
-    const { data } = await this.$axios.get('/api/user/sessions/current')
-    if (data.id) {
-      commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
-    }
-  },
+  /*
+    Abort
+   */
   async abortSession({ dispatch }) {
     const notification = {
       title: this.$t('Session aborted !'),
@@ -106,15 +114,37 @@ export default {
   /*
     Pause
   */
-  pauseCurrentStep({ dispatch }, payload) {
-    // TODO axios call with resting time
+  async pauseCurrentStep({ dispatch }, payload) {
+    const notification = {
+      title: this.$t('Session paused !'),
+      description: this.$t('Your session was successfully paused'),
+    }
+    try {
+      await this.$axios.post('/api/user/sessions/current/steps/current/pause')
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
   },
 
   /*
     Resume
   */
-  resumeCurrentStep() {
-    // TODO axios call
+  async resumeCurrentStep({ dispatch }) {
+    const notification = {
+      title: this.$t('Session resumed !'),
+      description: this.$t('Your session was successfully resumed'),
+    }
+    try {
+      await this.$axios.post('/api/user/sessions/current/steps/current/resume')
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
+        root: true,
+      })
+    }
   },
 
   /*

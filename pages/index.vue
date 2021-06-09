@@ -56,6 +56,7 @@ export default {
     ModalSettingsPanel,
     TimerScreenExpander,
   },
+  layout: 'main',
   middleware: 'auth',
   data() {
     return {
@@ -104,6 +105,7 @@ export default {
       await this.$store.dispatch('sessions/getAndSetCurrentSession')
       this.$store.commit('globalState/SET_ENV_LOADING', false)
     }
+    console.log('canSkip', this.$store.getters['sessions/canSkip'])
     if (this.isSessionStarted && !this.isSessionPaused) {
       this.startInterval()
     }
