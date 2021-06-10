@@ -1,7 +1,10 @@
 <template>
   <div class="screen_expander__controls">
     <!--    RUNNING -->
-    <div v-show="getSessionState.isRunning" class="text-center">
+    <div
+      v-show="getSessionState.isRunning"
+      class="text-center flex justify-center"
+    >
       <button
         class="screen-expander__control bg-error"
         @click="$emit('onPause')"

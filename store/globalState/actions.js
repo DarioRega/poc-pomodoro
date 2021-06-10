@@ -14,14 +14,16 @@ export default {
     await dispatch('sessions/getAndSetCurrentSession', null, {
       root: true,
     })
-    // TODO GET TASKS, SETTINGS HER
+    // TODO GET TASKS, SETTINGS HERE
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 
-  handleGeneralApiError({ dispatch, $i18n }, errMessage) {
+  handleSessionActionsServerError({ dispatch }, errMessage) {
     const notification = {
-      title: $i18n.t('Something went wrong'),
-      description: errMessage,
+      title: this.$i18n.t('Sorry but... something went wrong'),
+      description: this.$i18n.t(
+        'If the error persist, try to abort the current session and restart with a fresh one, or contact our team.'
+      ),
       type: 'error',
     }
     dispatch('createNotification', notification)

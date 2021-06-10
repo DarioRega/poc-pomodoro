@@ -22,6 +22,7 @@
       @onPause="$emit('onPause')"
       @onResume="$emit('onResume')"
       @onAbort="$emit('onAbort')"
+      @onSkip="$emit('onSkip')"
     />
   </div>
 </template>

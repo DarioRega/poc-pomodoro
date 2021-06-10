@@ -106,7 +106,10 @@ export default {
     if (!this.sessionState.isSessionCreated) {
       await this.getAndSetCurrentSession()
       this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
-      this.$store.commit('globalState/SET_ENV_LOADING', false)
+      // without the timeout, ui is not fully sync yet
+      setTimeout(() => {
+        this.$store.commit('globalState/SET_ENV_LOADING', false)
+      }, 1000)
     }
     if (
       this.sessionState.isSessionStarted &&

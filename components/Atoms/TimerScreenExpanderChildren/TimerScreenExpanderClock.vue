@@ -4,9 +4,11 @@
       v-show="sessionState.isSessionCreated"
       class="mb-24 transition-all duration-300"
     >
-      <p class="text-lead text-dark-gray mb-6">
-        {{ $t('Current session will end at') }} {{ currentSessionTimer }}
-      </p>
+      <div class="text-center">
+        <p class="text-lead text-dark-gray mb-6">
+          {{ $t('Current session will end at') }} {{ currentSessionTimer }}
+        </p>
+      </div>
       <div class="flex items-center justify-center">
         <pomodoro-counter
           v-for="(item, index) in sessionSteps"

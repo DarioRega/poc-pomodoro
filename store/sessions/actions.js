@@ -1,8 +1,9 @@
 import { ACTION_TYPES, STEPS_STATUS } from '@/constantes'
 import {
+  ABORT_USER_CURRENT_SESSION_URL,
   CURRENT_STEP_ACTION_URL,
   CURRENT_USER_SESSION_URL,
-  START_SESSION_URL,
+  START_SESSION_ID_URL,
   USER_SESSION_URL,
 } from '@/constantes/api'
 import { formatDuration } from '@/helpers/sessions'
@@ -67,11 +68,15 @@ export default {
   async createAndStartSession({ dispatch, commit }) {
     const { data } = await this.$axios.post(`${USER_SESSION_URL}`)
     try {
-      await this.$axios.get(`${START_SESSION_URL(data.id)}`)
+      await this.$axios.get(`${START_SESSION_ID_URL(data.id)}`)
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     } finally {
       commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false, { root: true })
     }
@@ -99,12 +104,16 @@ export default {
       type: 'success',
     }
     try {
-      await this.$axios.get('/api/user/sessions/current/abort')
+      await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
 
@@ -115,23 +124,30 @@ export default {
     const notification = {
       title: this.$i18n.t('Skip process ?'),
       description: this.$i18n.t('Are you sure to skip the current process ?'),
-      type: 'success',
+      type: 'info',
       actionRequired: true,
       confirmCallback: () => dispatch('skipCurrentStep'),
     }
     dispatch('globalState/createNotification', notification, { root: true })
   },
+
   async skipCurrentStep({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Process skipped !'),
     }
     try {
-      await this.$axios.post('/api/user/sessions/current/steps/current/skip')
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.SKIP,
+      })
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
 
@@ -151,9 +167,13 @@ export default {
       })
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
 
@@ -171,9 +191,13 @@ export default {
       })
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
   /*
@@ -185,9 +209,13 @@ export default {
         type: ACTION_TYPES.FINISH,
       })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
 
@@ -205,9 +233,13 @@ export default {
       })
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch('globalState/handleGeneralApiError', err.response.data.message, {
-        root: true,
-      })
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
     }
   },
 }
