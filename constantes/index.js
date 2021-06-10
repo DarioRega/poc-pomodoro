@@ -5,6 +5,8 @@ export const UP_ARROW_KEY_CODE = 38
 export const ESCAPE_KEY_CODE = 27
 
 export const SIDEBAR_TOGGLE_ANIMATION_TIMEOUT = 500
+export const aMinuteInMilliseconds = 60000
+export const aSecondInMilliseconds = 1000
 
 export const TASK_STATUS_VALUES = {
   DONE: 'DONE',
