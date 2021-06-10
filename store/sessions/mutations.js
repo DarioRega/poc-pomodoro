@@ -29,7 +29,7 @@ export default {
     // }
     state.current = {
       ...state.current,
-      payload
+      payload,
     }
   },
 }
