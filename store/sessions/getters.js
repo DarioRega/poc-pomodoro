@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
 import _ from 'lodash'
 
-import { STEPS_STATUS } from '@/constantes'
+import { STEPS_STATUS, STEPS_TYPES } from '@/constantes'
 
 export default {
   getSessionState: (state, getters) => {
@@ -61,6 +61,14 @@ export default {
     return []
   },
 
+  getSessionStepsOnlyPomodoro: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.steps.filter(
+        (step) => step.type === STEPS_TYPES.POMODORO
+      )
+    }
+    return []
+  },
   hasCurrentSession: (state) => {
     return !_.isEmpty(state.current)
   },

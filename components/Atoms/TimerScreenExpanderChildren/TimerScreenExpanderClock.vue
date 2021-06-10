@@ -11,10 +11,10 @@
       </div>
       <div class="flex items-center justify-center">
         <pomodoro-counter
-          v-for="(item, index) in sessionSteps"
+          v-for="(item, index) in sessionStepsOnlyPomodoro"
           :key="`pomodoro-counter-${index}`"
           class="w-12 h-12"
-          :class="index < sessionSteps.length && 'mr-6'"
+          :class="index < sessionStepsOnlyPomodoro.length && 'mr-6'"
           :status="item.status"
         />
       </div>
@@ -63,7 +63,7 @@ export default {
     ...mapGetters({
       currentStepTimer: 'timers/getCurrentStepTimer',
       sessionState: 'sessions/getSessionState',
-      sessionSteps: 'sessions/getSessionSteps',
+      sessionStepsOnlyPomodoro: 'sessions/getSessionStepsOnlyPomodoro',
       currentSessionTimer: 'timers/getSessionTimer',
     }),
   },

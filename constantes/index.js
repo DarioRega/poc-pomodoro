@@ -8,25 +8,14 @@ export const SIDEBAR_TOGGLE_ANIMATION_TIMEOUT = 500
 export const aMinuteInMilliseconds = 60000
 export const aSecondInMilliseconds = 1000
 
+/*
+  Status
+*/
 export const TASK_STATUS_VALUES = {
   DONE: 'DONE',
   IN_PROGRESS: 'ONGOING',
   TODO: 'TODO',
   ARCHIVED: 'ARCHIVED',
-}
-
-const statusTypes = (action) => ({
-  PENDING: `${action}_PENDING`,
-  IN_PROGRESS: `${action}_IN_PROGRESS`,
-  PAUSED: `${action}_PAUSED`,
-  DONE: `${action}_DONE`,
-})
-
-export const POMODORO_STATUS = {
-  SESSION: statusTypes(`SESSION`),
-  POMODORO: statusTypes(`POMODORO`),
-  SMALL_BREAK: statusTypes(`SMALL_BREAK`),
-  BIG_BREAK: statusTypes(`BIG_BREAK`),
 }
 
 export const STEPS_STATUS = {
@@ -36,6 +25,10 @@ export const STEPS_STATUS = {
   DONE: 'DONE',
   SKIPPED: 'SKIPPED',
 }
+
+/*
+  Types
+*/
 export const ACTION_TYPES = {
   START: 'START',
   RESUME: 'RESUME',
@@ -44,6 +37,15 @@ export const ACTION_TYPES = {
   SKIP: 'SKIP',
 }
 
+export const STEPS_TYPES = {
+  POMODORO: `POMODORO`,
+  SMALL_BREAK: `SMALL_BREAK`,
+  BIG_BREAK: `BIG_BREAK`,
+}
+
+/*
+  Settings panel tabs values
+*/
 export const SETTINGS_PANEL_STEPS_VALUES = {
   GENERAL: 'GENERAL',
   ACCOUNT: 'ACCOUNT',
