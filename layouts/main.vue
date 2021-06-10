@@ -3,9 +3,13 @@
     <Nuxt />
     <!--  Notifications -->
     <notifications-container />
-    <screen-loader v-if="isEnvLoading">
+    <screen-loader v-if="isEnvLoading || isRefreshLoading">
       <h5 class="font-body tracking-wider text-dark-blue dark:text-celeste">
-        {{ $t('Loading your environment') }}
+        {{
+          isEnvLoading
+            ? $t('Loading your environment...')
+            : $t('Synchronizing channels...')
+        }}
       </h5>
     </screen-loader>
     <transition-translate-y
@@ -54,6 +58,7 @@ export default {
       sessionRunningEndTime: 'sessions/getCurrentRunningSessionEndTime',
       currentStepEndTime: 'sessions/getCurrentStepEndTime',
       getNextStep: 'sessions/getNextStep',
+      hasCurrentSession: 'sessions/hasCurrentSession',
       sessionEndTimeTimer: 'timers/getSessionTimer',
     }),
     isLaunchTimerVisible() {
@@ -61,6 +66,9 @@ export default {
     },
     isEnvLoading() {
       return this.$store.state.globalState.isEnvLoading
+    },
+    isRefreshLoading() {
+      return this.$store.state.globalState.isRefreshLoading
     },
   },
 
@@ -103,12 +111,16 @@ export default {
     Lifecycles
   */
   async mounted() {
+    if (this.hasCurrentSession) {
+      this.setCurrentSessionEndTime()
+    }
+
     if (!this.sessionState.isSessionCreated) {
       await this.getAndSetCurrentSession()
       this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
       // without the timeout, ui is not fully sync yet
       setTimeout(() => {
-        this.$store.commit('globalState/SET_ENV_LOADING', false)
+        this.$store.commit('globalState/SET_REFRESH_LOADING', false)
       }, 1000)
     }
     if (
@@ -131,8 +143,6 @@ export default {
       getAndSetCurrentSession: 'sessions/getAndSetCurrentSession',
       finishCurrentStep: 'sessions/finishCurrentStep',
       getEnvironment: 'globalState/getEnvironment',
-      setCurrentStepTimerMatchNextStepDuration:
-        'timers/setCurrentStepTimerMatchNextStepDuration',
     }),
     killIntervals() {
       clearInterval(this.intervalSessionTimer)
