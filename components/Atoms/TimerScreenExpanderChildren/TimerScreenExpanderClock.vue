@@ -16,6 +16,7 @@
           class="w-12 h-12"
           :class="index < sessionStepsOnlyPomodoro.length && 'mr-6'"
           :status="item.status"
+          :is-current="currentStep.id === item.id"
         />
       </div>
     </div>
@@ -24,7 +25,9 @@
       :class="[
         sessionState.isRunning && 'running',
         sessionState.isPaused && 'paused',
-        !sessionState.isSessionCreated && 'pending',
+        (!sessionState.isSessionCreated ||
+          sessionState.isSessionStartedButHasPendingProcess) &&
+          'pending',
       ]"
     >
       <h2>
@@ -61,9 +64,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentStepTimer: 'timers/getCurrentStepTimer',
       sessionState: 'sessions/getSessionState',
       sessionStepsOnlyPomodoro: 'sessions/getSessionStepsOnlyPomodoro',
+      currentStep: 'sessions/getCurrentStep',
+      currentStepTimer: 'timers/getCurrentStepTimer',
       currentSessionTimer: 'timers/getSessionTimer',
     }),
   },

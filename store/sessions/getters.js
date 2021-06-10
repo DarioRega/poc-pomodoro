@@ -93,6 +93,12 @@ export default {
       return status
     }
   },
+  getCurrentStep: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.current_step
+    }
+    return {}
+  },
 
   /*
    Next step
