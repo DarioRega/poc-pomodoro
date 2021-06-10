@@ -154,19 +154,21 @@ export default {
   /*
     Pause
   */
-  async pauseCurrentStep({ dispatch, rootState }) {
+  async pauseCurrentStep({ dispatch, rootState, commit }) {
     const notification = {
       title: this.$i18n.t('Session paused!'),
       type: 'success',
     }
-
+    commit('SET_TEMPORARY_SESSION_PAUSE_TO_STOP_TIMER')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.PAUSE,
         resting_time: rootState.timers.currentStepRestingTime,
       })
+
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
+      commit('REVERT_TEMPORARY_SESSION_PAUSE')
       dispatch(
         'globalState/handleSessionActionsServerError',
         err.response.data.message,
