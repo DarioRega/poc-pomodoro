@@ -93,7 +93,7 @@ export default {
       pauseCurrentStep: 'sessions/pauseCurrentStep',
       resumeCurrentStep: 'sessions/resumeCurrentStep',
       startCurrentStep: 'sessions/startCurrentStep',
-      startSession: 'sessions/startSession',
+      startSession: 'sessions/createAndStartSession',
     }),
   },
 }

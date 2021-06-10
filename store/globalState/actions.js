@@ -18,9 +18,9 @@ export default {
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 
-  handleGeneralApiError({ dispatch }, errMessage) {
+  handleGeneralApiError({ dispatch, $i18n }, errMessage) {
     const notification = {
-      title: this.$t('Something went wrong'),
+      title: $i18n.t('Something went wrong'),
       description: errMessage,
       type: 'error',
     }

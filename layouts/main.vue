@@ -79,7 +79,7 @@ export default {
     'sessionState.isSessionPaused'(newValue, oldValue) {
       if (this.sessionState.isSessionStarted && newValue) {
         if (this.intervalCurrentStepTimer) {
-          this.killInterval()
+          clearInterval(this.intervalCurrentStepTimer)
         }
       }
       if (this.sessionState.isSessionStarted && !newValue) {

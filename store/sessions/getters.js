@@ -9,13 +9,16 @@ export default {
       const {
         current: { status },
       } = state
+
+      const currentStepStatus = getters.getCurrentStepStatus
       return {
-        isRunning: getters.getCurrentStepStatus.includes(
-          STEPS_STATUS.IN_PROGRESS
-        ),
-        isPaused: status.includes(STEPS_STATUS.PAUSED),
+        isRunning: currentStepStatus.includes(STEPS_STATUS.IN_PROGRESS),
+        isPaused:
+          status.includes(STEPS_STATUS.PAUSED) ||
+          currentStepStatus.includes(STEPS_STATUS.PAUSED),
+
         isSessionStartedButHasPendingProcess:
-          getters.getCurrentStepStatus.includes(STEPS_STATUS.PENDING) &&
+          currentStepStatus.includes(STEPS_STATUS.PENDING) &&
           !status.includes(STEPS_STATUS.PENDING),
         isSessionStarted:
           !status.includes(STEPS_STATUS.PENDING) &&
@@ -23,7 +26,6 @@ export default {
         isSessionCreated: true,
       }
     }
-
     return {
       isRunning: false,
       isPaused: false,
@@ -77,10 +79,10 @@ export default {
     if (getters.hasCurrentSession) {
       const {
         current: {
-          current_step: { status: statusValue },
+          current_step: { status },
         },
       } = state
-      return statusValue
+      return status
     }
   },
 
