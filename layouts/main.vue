@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import LaunchSessionTimer from '@/components/Atoms/LaunchSessionTimer'
 import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
@@ -25,22 +25,36 @@ import NotificationsContainer from '@/components/Templates/NotificationsContaine
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
 import moment from 'moment-timezone'
 import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+import { formatDuration } from '@/helpers/sessions'
 
 export default {
   name: 'Main',
+
   components: {
     NotificationsContainer,
     ScreenLoader,
     LaunchSessionTimer,
     TransitionTranslateY,
   },
+
+  data() {
+    return {
+      intervalSessionTimer: null,
+      intervalCurrentStepTimer: null,
+    }
+  },
+
+  /*
+    Computed
+  */
   computed: {
     ...mapGetters({
       sessionState: 'sessions/getSessionState',
-      sessionEndTimeTimer: 'timers/getSessionTimer',
       sessionRestingTime: 'sessions/getSessionRestingTime',
       sessionRunningEndTime: 'sessions/getCurrentRunningSessionEndTime',
       currentStepEndTime: 'sessions/getCurrentStepEndTime',
+      getNextStep: 'sessions/getNextStep',
+      sessionEndTimeTimer: 'timers/getSessionTimer',
     }),
     isLaunchTimerVisible() {
       return this.$store.state.globalState.isLaunchTimerVisible
@@ -49,6 +63,10 @@ export default {
       return this.$store.state.globalState.isEnvLoading
     },
   },
+
+  /*
+    Watchers
+  */
   watch: {
     'sessionState.isRunning'(newValue, oldValue) {
       // TODO verify when websocket active if this works
@@ -71,35 +89,48 @@ export default {
     currentStepTimer(newValue, oldValue) {
       if (newValue === '00:00') {
         clearInterval(this.intervalCurrentStepTimer)
-        this.dispatchFinishCurrentStep()
-        // SET CURRENT STEP TIMER TO NEXT STEP
+        // TODO NEED TO LIVE TESTING IF THE FINISH FIRE AND THE COMMIT WORKS
+        this.$store.commit(
+          'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
+          formatDuration(this.getNextStep.duration)
+        )
+        this.finishCurrentStep()
       }
     },
   },
+
+  /*
+    Lifecycles
+  */
   async mounted() {
     if (!this.sessionState.isSessionCreated) {
-      await this.$store.dispatch('sessions/getAndSetCurrentSession')
+      await this.getAndSetCurrentSession()
       this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
       this.$store.commit('globalState/SET_ENV_LOADING', false)
     }
     if (
       this.sessionState.isSessionStarted &&
-      !this.sessionState.isSessionPaused &&
-      this.sessionState.isRunning
+      this.sessionState.isRunning &&
+      !this.sessionState.isPaused
     ) {
-      this.startInterval()
-    }
-  },
-  data() {
-    return {
-      intervalSessionTimer: null,
-      intervalCurrentStepTimer: null,
+      this.setIntervalCurrentStep()
     }
   },
   beforeDestroy() {
     this.killIntervals()
   },
+
+  /*
+    Methods
+  */
   methods: {
+    ...mapActions({
+      getAndSetCurrentSession: 'sessions/getAndSetCurrentSession',
+      finishCurrentStep: 'sessions/finishCurrentStep',
+      getEnvironment: 'globalState/getEnvironment',
+      setCurrentStepTimerMatchNextStepDuration:
+        'timers/setCurrentStepTimerMatchNextStepDuration',
+    }),
     killIntervals() {
       clearInterval(this.intervalSessionTimer)
       clearInterval(this.intervalCurrentStepTimer)
@@ -108,17 +139,13 @@ export default {
     /*
       Current step
     */
-    async dispatchFinishCurrentStep() {
-      await this.$store.dispatch('sessions/finishCurrentStep')
-    },
-
     setIntervalCurrentStep() {
       this.interval = setInterval(async () => {
         if (!this.currentStepEndTime) {
           // session doesn't exist, bug happened if it made it through here, we need to kill interval and reset state
-          this.killInterval()
+          clearInterval(this.intervalCurrentStepTimer)
           // retry to set env from scratch
-          await this.$store.dispatch('globalState/getEnvironment')
+          await this.getEnvironment()
         }
 
         const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(

@@ -6,4 +6,7 @@ export default {
   SET_CURRENT_SESSION_TIMER(state, payload) {
     state.currentSessionTimer = payload
   },
+  SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION(state, payload) {
+    state.currentStepTimer = payload
+  },
 }

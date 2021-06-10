@@ -11,12 +11,10 @@ export default {
 
   async getEnvironment({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
-    // TODO uncomment when endpoint done
     await dispatch('sessions/getAndSetCurrentSession', null, {
       root: true,
     })
     // TODO GET TASKS, SETTINGS HER
-
     commit('globalState/SET_ENV_LOADING', false, { root: true })
   },
 

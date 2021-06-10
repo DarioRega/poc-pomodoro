@@ -1,17 +1,18 @@
 import { STEPS_STATUS } from '@/constantes'
-import { getOnlyHoursAndMinutes } from '@/helpers/sessions'
+import { formatDuration } from '@/helpers/sessions'
 
 export default {
   getCurrentStepTimer: (state, getters, rootState, rootGetters) => {
     if (rootGetters['sessions/hasCurrentSession']) {
-      if (
-        rootState.sessions.current.current_step.status.includes(
-          STEPS_STATUS.PAUSED
-        )
-      ) {
-        return getOnlyHoursAndMinutes(
-          rootState.sessions.current.current_step.resting_time
-        )
+      const {
+        sessions: {
+          current: {
+            current_step: { status, resting_time },
+          },
+        },
+      } = rootState
+      if (status.includes(STEPS_STATUS.PAUSED)) {
+        return formatDuration(resting_time)
       }
     }
     return state.currentStepTimer

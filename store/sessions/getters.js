@@ -6,17 +6,20 @@ import { STEPS_STATUS } from '@/constantes'
 export default {
   getSessionState: (state, getters) => {
     if (getters.hasCurrentSession) {
+      const {
+        current: { status },
+      } = state
       return {
         isRunning: getters.getCurrentStepStatus.includes(
           STEPS_STATUS.IN_PROGRESS
         ),
-        isPaused: state.current.status.includes(STEPS_STATUS.PAUSED),
+        isPaused: status.includes(STEPS_STATUS.PAUSED),
         isSessionStartedButHasPendingProcess:
           getters.getCurrentStepStatus.includes(STEPS_STATUS.PENDING) &&
-          !state.current.status.includes(STEPS_STATUS.PENDING),
+          !status.includes(STEPS_STATUS.PENDING),
         isSessionStarted:
-          !state.current.status.includes(STEPS_STATUS.PENDING) &&
-          !state.current.status.includes(STEPS_STATUS.DONE),
+          !status.includes(STEPS_STATUS.PENDING) &&
+          !status.includes(STEPS_STATUS.DONE),
         isSessionCreated: true,
       }
     }
@@ -29,6 +32,7 @@ export default {
       isSessionCreated: false,
     }
   },
+
   getCurrentRunningSessionEndTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       const {
@@ -40,17 +44,12 @@ export default {
       }
     }
   },
+
   getSessionRestingTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       return state.current.resting_time
     }
     return '00:00:00'
-  },
-  getCurrentStepEndTime: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return state.current.current_step.end_time
-    }
-    return ''
   },
 
   getSessionSteps: (state, getters) => {
@@ -65,6 +64,42 @@ export default {
   },
 
   /*
+    Current step
+   */
+  getCurrentStepEndTime: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.current_step.end_time
+    }
+    return null
+  },
+
+  getCurrentStepStatus: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      const {
+        current: {
+          current_step: { status: statusValue },
+        },
+      } = state
+      return statusValue
+    }
+  },
+
+  /*
+   Next step
+   */
+  getNextStep: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      const {
+        current: { current_step, steps },
+      } = state
+      const currentStepId = current_step.id
+      const currentStepIndex = steps.findIndex((x) => x.id === currentStepId)
+      return steps[currentStepIndex + 1]
+    }
+    return []
+  },
+
+  /*
     Action validations getters
    */
   canResume: (state, getters) => {
@@ -73,6 +108,7 @@ export default {
     }
     return false
   },
+
   canPause: (state, getters) => {
     if (getters.hasCurrentSession) {
       return getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS
@@ -82,18 +118,10 @@ export default {
   canSkip: (state, getters) => {
     if (getters.hasCurrentSession) {
       return (
-        getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS ||
+        getters.getCurrentStepStatus === STEPS_STATUS.PAUSED ||
         getters.getCurrentStepStatus === STEPS_STATUS.PENDING
       )
     }
     return false
-  },
-  getCurrentStepStatus: (state) => {
-    const {
-      current: {
-        current_step: { status: statusValue },
-      },
-    } = state
-    return statusValue
   },
 }
