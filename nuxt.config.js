@@ -21,6 +21,7 @@ export default {
     '~/plugins/what-input.js',
     '~/plugins/regexHelper.js',
     { src: '~/plugins/echo/config.js', mode: 'client' },
+    { src: '~/plugins/echo/channels.js', mode: 'client' },
   ],
 
   vue: {
@@ -39,13 +40,6 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    // [
-    //   '@nuxtjs/laravel-echo',
-    //   {
-    //     broadcaster: 'pusher',
-    //     key: 'local',
-    //   },
-    // ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

@@ -1,8 +1,6 @@
 <template>
   <div>
     <Nuxt />
-    <h1>ENV LOADING => {{ isEnvLoading }}</h1>
-    <h1>REFRESH LOADING => {{ isRefreshLoading }}</h1>
     <!--  Notifications -->
     <notifications-container />
     <screen-loader v-if="isEnvLoading || isRefreshLoading">
@@ -62,6 +60,7 @@ export default {
       getNextStep: 'sessions/getNextStep',
       hasCurrentSession: 'sessions/hasCurrentSession',
       sessionEndTimeTimer: 'timers/getSessionTimer',
+      currentStepTimer: 'timers/getCurrentStepTimer',
     }),
     isLaunchTimerVisible() {
       return this.$store.state.globalState.isLaunchTimerVisible
@@ -80,33 +79,24 @@ export default {
   watch: {
     'sessionState.isRunning'(newValue, oldValue) {
       // TODO verify when websocket active if this works
-      console.log('SESSION RUNNING WATCHER', newValue)
       if (newValue) {
-        console.log('SESSION RUNNING INSIDE NEWVALUE')
-        this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
-      } else {
-        clearInterval(this.intervalSessionTimer)
-      }
-    },
-    'sessionState.isSessionPaused'(newValue, oldValue) {
-      if (this.sessionState.isSessionStarted && newValue) {
-        if (this.intervalCurrentStepTimer) {
-          clearInterval(this.intervalCurrentStepTimer)
-        }
-      }
-      if (this.sessionState.isSessionStarted && !newValue) {
+        this.setCurrentSessionEndTimeWhenRunning()
         this.setIntervalCurrentStep()
+      } else {
+        clearInterval(this.intervalCurrentStepTimer)
+        this.setIntervalSessionEndTimeWhenNotRunning()
       }
     },
+
     currentStepTimer(newValue, oldValue) {
       if (newValue === '00:00') {
         clearInterval(this.intervalCurrentStepTimer)
         // TODO NEED TO LIVE TESTING IF THE FINISH FIRE AND THE COMMIT WORKS
+        this.finishCurrentStep()
         this.$store.commit(
           'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
           formatDuration(this.getNextStep.duration)
         )
-        this.finishCurrentStep()
       }
     },
   },
@@ -126,25 +116,21 @@ export default {
         )
       }
     )
-
-    if (this.hasCurrentSession) {
-      this.setCurrentSessionEndTime()
-    }
-
     if (!this.sessionState.isSessionCreated) {
       await this.getAndSetCurrentSession()
-      this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
+      // this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
       // without the timeout, ui is not fully sync yet
       setTimeout(() => {
         this.$store.commit('globalState/SET_REFRESH_LOADING', false)
       }, 1000)
     }
-    if (
-      this.sessionState.isSessionStarted &&
-      this.sessionState.isRunning &&
-      !this.sessionState.isPaused
-    ) {
-      this.setIntervalCurrentStep()
+    if (this.sessionState.isSessionCreated) {
+      if (this.sessionState.isRunning) {
+        this.setIntervalCurrentStep()
+        this.setCurrentSessionEndTimeWhenRunning()
+      } else if (!this.intervalSessionTimer) {
+        this.setIntervalSessionEndTimeWhenNotRunning()
+      }
     }
   },
   beforeDestroy() {
@@ -170,12 +156,6 @@ export default {
     */
     setIntervalCurrentStep() {
       this.interval = setInterval(() => {
-        // if (!this.currentStepEndTime) {
-        //   // session doesn't exist, bug happened if it made it through here, we need to kill interval and reset state
-        //   clearInterval(this.intervalCurrentStepTimer)
-        //   // retry to set env from scratch
-        // }
-
         const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
           moment.now(),
           'seconds'
@@ -194,27 +174,25 @@ export default {
     /*
       Session end time
      */
-    setIntervalSessionEndTimeTimerIfSessionNotRunning() {
-      if (!this.sessionState.isRunning) {
-        this.setCurrentSessionEndTime()
-        // to synchronize with the current clock
-        const secondsRemainingToTheCurrentMinute =
-          (60 - moment().seconds()) * 1000
+    setIntervalSessionEndTimeWhenNotRunning() {
+      this.setCurrentSessionEndTimeWhenNotRunning()
+      // to synchronize with the current clock
+      const secondsRemainingToTheCurrentMinute =
+        (60 - moment().seconds()) * 1000
 
-        setTimeout(() => {
-          this.intervalSessionTimer = setInterval(() => {
-            this.setCurrentSessionEndTime()
-          }, aMinuteInMilliseconds)
-        }, secondsRemainingToTheCurrentMinute)
-      } else {
-        this.$store.commit(
-          'timers/SET_CURRENT_SESSION_TIMER',
-          this.sessionRunningEndTime
-        )
-      }
+      setTimeout(() => {
+        this.intervalSessionTimer = setInterval(() => {
+          this.setCurrentSessionEndTimeWhenNotRunning()
+        }, aMinuteInMilliseconds)
+      }, secondsRemainingToTheCurrentMinute)
     },
-
-    setCurrentSessionEndTime() {
+    setCurrentSessionEndTimeWhenRunning() {
+      this.$store.commit(
+        'timers/SET_CURRENT_SESSION_TIMER',
+        this.sessionRunningEndTime
+      )
+    },
+    setCurrentSessionEndTimeWhenNotRunning() {
       const restingTimeAsSeconds = moment
         .duration(this.sessionRestingTime)
         .asSeconds()
