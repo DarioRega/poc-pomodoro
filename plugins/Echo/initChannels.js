@@ -1,11 +1,11 @@
-// import { onCurrentSessionEvent } from '@/helpers/echo-events-callbacks/sessions'
+import { onCurrentSessionEvent } from '@/EchoEventsHandlers/sessions'
 
 export default ({ store }, inject) => {
   const initUserPrivateChannel = (userId) => {
     const userChannel = `user.${userId}`
     window.Echo.private(`${userChannel}`).listen(
       `.current.session`,
-      (payload) => '' // onCurrentSessionEvent(payload, store)
+      (payload) => onCurrentSessionEvent(payload, store)
     )
   }
 
