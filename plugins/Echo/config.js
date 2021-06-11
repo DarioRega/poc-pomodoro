@@ -5,9 +5,8 @@ window.Pusher = require('pusher-js')
 export default ({ $axios }) => {
   window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'local', // .env
-    wsHost: 'localhost',
-    wsPort: 6001,
+    key: 'd12580436f5dcceca407',
+    cluster: 'eu',
     authorizer: (channel, options) => {
       return {
         authorize: (socketId, callback) => {
@@ -27,7 +26,5 @@ export default ({ $axios }) => {
         },
       }
     },
-    forceTLS: false,
-    disableStats: true,
   })
 }
