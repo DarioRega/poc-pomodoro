@@ -80,8 +80,10 @@ export default {
     'sessionState.isRunning'(newValue, oldValue) {
       if (newValue) {
         this.setCurrentSessionEndTimeWhenRunning()
+        console.log('isrunning set INterval')
         this.setIntervalCurrentStep()
       } else {
+        console.log('isrunning clearInterval')
         clearInterval(this.intervalCurrentStepTimer)
         this.setIntervalSessionEndTimeWhenNotRunning()
       }
@@ -90,7 +92,6 @@ export default {
     currentStepTimer(newValue, oldValue) {
       if (newValue === '00:00') {
         clearInterval(this.intervalCurrentStepTimer)
-        // TODO NEED TO LIVE TESTING IF THE FINISH FIRE AND THE COMMIT WORKS
         this.finishCurrentStep()
         this.$store.commit(
           'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
@@ -116,7 +117,6 @@ export default {
     )
     if (!this.sessionState.isSessionCreated) {
       await this.getAndSetCurrentSession()
-      // this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
       // without the timeout, ui is not fully sync yet
       setTimeout(() => {
         this.$store.commit('globalState/SET_REFRESH_LOADING', false)
@@ -129,7 +129,8 @@ export default {
     }
   },
   beforeDestroy() {
-    this.killIntervals()
+    clearInterval(this.intervalSessionTimer)
+    clearInterval(this.intervalCurrentStepTimer)
   },
 
   /*
@@ -141,16 +142,12 @@ export default {
       finishCurrentStep: 'sessions/finishCurrentStep',
       getEnvironment: 'globalState/getEnvironment',
     }),
-    killIntervals() {
-      clearInterval(this.intervalSessionTimer)
-      clearInterval(this.intervalCurrentStepTimer)
-    },
 
     /*
       Current step
     */
     setIntervalCurrentStep() {
-      this.interval = setInterval(() => {
+      this.intervalCurrentStepTimer = setInterval(() => {
         const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
           moment.now(),
           'seconds'
