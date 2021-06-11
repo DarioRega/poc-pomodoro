@@ -31,7 +31,7 @@ import moment from 'moment-timezone'
 import {
   aMinuteInMilliseconds,
   aSecondInMilliseconds,
-  STEPS_STATUS,
+  SESSION_STATUS,
 } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
@@ -122,16 +122,37 @@ export default {
     window.Echo.private(`${userChannel}`).listen(
       `.current.session`,
       (payload) => {
-        const defaultSessionState = { current: {} }
-        let session
-        console.log('PAYLOAD => ', payload)
+        const defaultSessionState = {}
+        const notification = {
+          title: 'Session aborted!',
+          type: 'success',
+          description: 'The current session was successfully aborted',
+        }
 
+        let session
         if (payload) {
-          if (payload.status === STEPS_STATUS.DONE) {
-            // notification session done
-            session = defaultSessionState
-          } else {
-            session = payload
+          switch (payload.status) {
+            case SESSION_STATUS.DONE: {
+              notification.title = 'Session done'
+              notification.description =
+                "Well done ! You've finished the whole session"
+              this.$store.dispatch(
+                'globalState/createNotification',
+                notification
+              )
+              session = defaultSessionState
+              break
+            }
+            case SESSION_STATUS.ABORTED: {
+              session = defaultSessionState
+              this.$store.dispatch(
+                'globalState/createNotification',
+                notification
+              )
+              break
+            }
+            default:
+              session = payload
           }
         } else {
           session = defaultSessionState

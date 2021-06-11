@@ -26,6 +26,14 @@ export const STEPS_STATUS = {
   SKIPPED: 'SKIPPED',
 }
 
+export const SESSION_STATUS = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  PAUSED: 'PAUSED',
+  DONE: 'DONE',
+  ABORTED: 'ABORTED',
+}
+
 /*
   Types
 */

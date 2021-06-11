@@ -70,9 +70,10 @@ export default {
     return []
   },
   hasCurrentSession: (state) => {
+    console.log('HAS CURRENT => ', state.current)
+    console.log('IS EMPTy ? => ', _.isEmpty(state.current))
     return !_.isEmpty(state.current)
   },
-
   /*
     Current step
    */
