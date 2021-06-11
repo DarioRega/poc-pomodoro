@@ -20,7 +20,7 @@ export default {
   plugins: [
     '~/plugins/what-input.js',
     '~/plugins/regexHelper.js',
-    { src: '~/plugins/echo', mode: 'client' },
+    { src: '~/plugins/echo/config.js', mode: 'client' },
   ],
 
   vue: {
@@ -78,10 +78,6 @@ export default {
       laravelSanctum: {
         provider: 'laravel/sanctum',
         url: process.env.API_URL || 'http://localhost:80',
-        // TODO verify when endpoint to get user information is available
-        // user: {
-        //   autoFetch: true,
-        // },
       },
     },
     redirect: {

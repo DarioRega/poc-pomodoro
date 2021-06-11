@@ -1,6 +1,8 @@
 <template>
   <div>
     <Nuxt />
+    <h1>ENV LOADING => {{ isEnvLoading }}</h1>
+    <h1>REFRESH LOADING => {{ isRefreshLoading }}</h1>
     <!--  Notifications -->
     <notifications-container />
     <screen-loader v-if="isEnvLoading || isRefreshLoading">
@@ -78,10 +80,12 @@ export default {
   watch: {
     'sessionState.isRunning'(newValue, oldValue) {
       // TODO verify when websocket active if this works
+      console.log('SESSION RUNNING WATCHER', newValue)
       if (newValue) {
-        clearInterval(this.intervalSessionTimer)
-      } else {
+        console.log('SESSION RUNNING INSIDE NEWVALUE')
         this.setIntervalSessionEndTimeTimerIfSessionNotRunning()
+      } else {
+        clearInterval(this.intervalSessionTimer)
       }
     },
     'sessionState.isSessionPaused'(newValue, oldValue) {
@@ -111,6 +115,18 @@ export default {
     Lifecycles
   */
   async mounted() {
+    const userChannel = `user.${this.$auth.user.id}`
+    window.Echo.private(`${userChannel}`).listen(
+      `.current.session`,
+      (session) => {
+        console.log('WEBSOCKET EVENT  => ', session)
+        this.$store.commit(
+          'sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP',
+          session
+        )
+      }
+    )
+
     if (this.hasCurrentSession) {
       this.setCurrentSessionEndTime()
     }
@@ -153,13 +169,12 @@ export default {
       Current step
     */
     setIntervalCurrentStep() {
-      this.interval = setInterval(async () => {
-        if (!this.currentStepEndTime) {
-          // session doesn't exist, bug happened if it made it through here, we need to kill interval and reset state
-          clearInterval(this.intervalCurrentStepTimer)
-          // retry to set env from scratch
-          await this.getEnvironment()
-        }
+      this.interval = setInterval(() => {
+        // if (!this.currentStepEndTime) {
+        //   // session doesn't exist, bug happened if it made it through here, we need to kill interval and reset state
+        //   clearInterval(this.intervalCurrentStepTimer)
+        //   // retry to set env from scratch
+        // }
 
         const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
           moment.now(),
