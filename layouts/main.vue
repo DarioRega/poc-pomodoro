@@ -31,7 +31,7 @@ import moment from 'moment-timezone'
 import {
   aMinuteInMilliseconds,
   aSecondInMilliseconds,
-  SESSION_STATUS,
+  // SESSION_STATUS,
 } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
@@ -118,57 +118,11 @@ export default {
     Lifecycles
   */
   async mounted() {
-    const userChannel = `user.${this.$auth.user.id}`
-    window.Echo.private(`${userChannel}`).listen(
-      `.current.session`,
-      (payload) => {
-        const defaultSessionState = {}
-        const notification = {
-          title: 'Session aborted!',
-          type: 'success',
-          description: 'The current session was successfully aborted',
-        }
+    this.$initWebSocketChannel('userPrivateChannel', this.$auth.user.id)
 
-        let session
-        if (payload) {
-          switch (payload.status) {
-            case SESSION_STATUS.DONE: {
-              notification.title = 'Session done'
-              notification.description =
-                "Well done ! You've finished the whole session"
-              this.$store.dispatch(
-                'globalState/createNotification',
-                notification
-              )
-              session = defaultSessionState
-              break
-            }
-            case SESSION_STATUS.ABORTED: {
-              session = defaultSessionState
-              this.$store.dispatch(
-                'globalState/createNotification',
-                notification
-              )
-              break
-            }
-            default:
-              session = payload
-          }
-        } else {
-          session = defaultSessionState
-        }
-        this.$store.commit(
-          'sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP',
-          session
-        )
-      }
-    )
     if (!this.sessionState.isSessionCreated) {
       await this.getAndSetCurrentSession()
-      // without the timeout, ui is not fully sync yet
-      setTimeout(() => {
-        this.$store.commit('globalState/SET_REFRESH_LOADING', false)
-      }, 1000)
+      this.$store.commit('globalState/SET_REFRESH_LOADING', false)
     }
     if (this.sessionState.isSessionCreated) {
       if (!this.sessionState.isRunning) {

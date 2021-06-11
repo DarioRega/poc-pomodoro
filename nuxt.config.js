@@ -20,8 +20,8 @@ export default {
   plugins: [
     '~/plugins/what-input.js',
     '~/plugins/regexHelper.js',
-    { src: '~/plugins/echo/config.js', mode: 'client' },
-    { src: '~/plugins/echo/channels.js', mode: 'client' },
+    { src: '~/plugins/Echo/config.js', mode: 'client' },
+    { src: '~/plugins/Echo/initChannels.js', mode: 'client' },
   ],
 
   vue: {
@@ -77,7 +77,6 @@ export default {
     redirect: {
       logout: '/login',
     },
-    plugins: [],
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
