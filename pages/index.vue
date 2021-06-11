@@ -40,8 +40,9 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
-import { getCorsPermission } from '@/helpers/cors'
-// import Echo from 'laravel-echo'
+// import { getCorsPermission } from '@/helpers/cors'
+import Echo from 'laravel-echo'
+import { ECHO_BROADCAST_URL } from '@/constantes/api'
 
 export default {
   name: 'Index',
@@ -72,22 +73,58 @@ export default {
       return this.$store.state.globalState.modalsRefs
     },
   },
-  async mounted() {
-    const corsPermissionRespose = await getCorsPermission(this.$axios)
-    const xsrfToken = corsPermissionRespose.config.headers['X-XSRF-TOKEN']
-    this.$echo.connector.pusher.config.auth.headers['X-CSRF-TOKEN'] = xsrfToken
+  mounted() {
+    window.Pusher = require('pusher-js')
     const userChannel = `user.${this.$auth.user.id}`
-    await this.$echo.connector.pusher.connect()
 
-    this.$echo
-      .private(`${userChannel}`)
-      .listen(`.current.session`, (session) => {
-        this.payload = session.status
-        console.log('WEBSOCKET EVENT => ', session.status)
-      })
-    console.log('CONNECTION => ', this.$echo.connector.pusher.connection)
+    const echo = new Echo({
+      broadcaster: 'pusher',
+      key: 'local', // .env
+      wsHost: 'localhost',
+      wsPort: 6001,
+      // cluster: 'mt1',
+      // authEndpoint: 'http://localhost:80/broadcasting/auth',
+      authorizer: (channel, options) => {
+        console.log('CHANNEL => ', channel)
+        console.log('options => ', options)
+        return {
+          authorize: (socketId, callback) => {
+            console.log('SOCKED ID', socketId)
+            console.log('CALLBACK', callback)
+            this.$axios
+              .post(`${ECHO_BROADCAST_URL}`, {
+                socket_id: socketId,
+                channel_name: channel.name,
+              })
+              .then((response) => {
+                // eslint-disable-next-line node/no-callback-literal
+                callback(false, response.data)
+              })
+              .catch((error) => {
+                // eslint-disable-next-line node/no-callback-literal
+                callback(true, error)
+              })
+          },
+        }
+      },
+      forceTLS: false,
+      disableStats: true,
+    })
+    window.Echo = echo
 
-    // console.log('this echo', echo)
+    // const corsPermissionRespose = await getCorsPermission(this.$axios)
+    // const xsrfToken = corsPermissionRespose.config.headers['X-XSRF-TOKEN']
+    // window.Echo.connector.pusher.config.auth.headers['X-XSRF-TOKEN'] = xsrfToken
+
+    // await window.Echo.connector.pusher.connect()
+    //
+
+    window.Echo.private(`${userChannel}`).listen(
+      `.current.session`,
+      (session) => {
+        console.log('WEBSOCKET EVENT  => ', session.status)
+      }
+    )
   },
   methods: {
     handleToggleStacked() {
