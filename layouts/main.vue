@@ -78,7 +78,6 @@ export default {
   */
   watch: {
     'sessionState.isRunning'(newValue, oldValue) {
-      // TODO verify when websocket active if this works
       if (newValue) {
         this.setCurrentSessionEndTimeWhenRunning()
         this.setIntervalCurrentStep()
@@ -109,7 +108,6 @@ export default {
     window.Echo.private(`${userChannel}`).listen(
       `.current.session`,
       (session) => {
-        console.log('WEBSOCKET EVENT  => ', session)
         this.$store.commit(
           'sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP',
           session
@@ -125,10 +123,7 @@ export default {
       }, 1000)
     }
     if (this.sessionState.isSessionCreated) {
-      if (this.sessionState.isRunning) {
-        this.setIntervalCurrentStep()
-        this.setCurrentSessionEndTimeWhenRunning()
-      } else if (!this.intervalSessionTimer) {
+      if (!this.sessionState.isRunning) {
         this.setIntervalSessionEndTimeWhenNotRunning()
       }
     }
