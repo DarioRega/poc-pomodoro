@@ -17,7 +17,11 @@ export default {
   css: ['~/assets/style/index.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
+  plugins: [
+    '~/plugins/what-input.js',
+    '~/plugins/regexHelper.js',
+    { src: '~/plugins/echo', mode: 'client' },
+  ],
 
   vue: {
     config: {
@@ -35,6 +39,13 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    // [
+    //   '@nuxtjs/laravel-echo',
+    //   {
+    //     broadcaster: 'pusher',
+    //     key: 'local',
+    //   },
+    // ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

@@ -12,10 +12,12 @@
 </template>
 <script>
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
+import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
 
 export default {
   name: 'Default',
   components: {
+    ScreenLoader,
     NotificationsContainer,
   },
   computed: {

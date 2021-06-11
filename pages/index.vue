@@ -40,6 +40,8 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+import { getCorsPermission } from '@/helpers/cors'
+// import Echo from 'laravel-echo'
 
 export default {
   name: 'Index',
@@ -69,6 +71,23 @@ export default {
     modalsRefs() {
       return this.$store.state.globalState.modalsRefs
     },
+  },
+  async mounted() {
+    const corsPermissionRespose = await getCorsPermission(this.$axios)
+    const xsrfToken = corsPermissionRespose.config.headers['X-XSRF-TOKEN']
+    this.$echo.connector.pusher.config.auth.headers['X-CSRF-TOKEN'] = xsrfToken
+    const userChannel = `user.${this.$auth.user.id}`
+    await this.$echo.connector.pusher.connect()
+
+    this.$echo
+      .private(`${userChannel}`)
+      .listen(`.current.session`, (session) => {
+        this.payload = session.status
+        console.log('WEBSOCKET EVENT => ', session.status)
+      })
+    console.log('CONNECTION => ', this.$echo.connector.pusher.connection)
+
+    // console.log('this echo', echo)
   },
   methods: {
     handleToggleStacked() {
