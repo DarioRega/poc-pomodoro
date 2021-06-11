@@ -112,7 +112,7 @@ export default {
       const currentStepIndex = steps.findIndex((x) => x.id === currentStepId)
       return steps[currentStepIndex + 1]
     }
-    return []
+    return {}
   },
 
   /*
