@@ -114,6 +114,22 @@ export default {
     }
     return {}
   },
+  isNextStepLastStep(state, getters) {
+    if (getters.hasCurrentSession) {
+      const indexCurrentStep = state.current.steps.findIndex(
+        (step) => step.id === state.current.current_step.id
+      )
+      return indexCurrentStep === state.current.steps.length - 1
+    }
+    return false
+  },
+
+  getFirstStep: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.steps[0]
+    }
+    return {}
+  },
 
   /*
     Action validations getters

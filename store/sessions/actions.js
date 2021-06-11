@@ -131,16 +131,36 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  async skipCurrentStep({ dispatch }) {
+  async skipCurrentStep({ dispatch, getters, commit }) {
     const notification = {
       title: this.$i18n.t('Process skipped !'),
     }
+    const nextStepDuration = getters.isNextStepLastStep
+      ? getters.getFirstStep.duration
+      : getters.getNextStep.duration
+
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.SKIP,
       })
+      console.log('ACTION DONE')
+      commit('globalState/SET_HAS_SKIPPED_ACTION', true, {
+        root: true,
+      })
+
+      console.log('NEXT STEP DURATIOn', nextStepDuration)
+      commit(
+        'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+        {
+          currentStepTimer: formatDuration(nextStepDuration),
+          currentStepRestingTime: nextStepDuration,
+        },
+        { root: true }
+      )
+
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
+      console.log('ERRR SKIP', err)
       dispatch(
         'globalState/handleSessionActionsServerError',
         err.response.data.message,

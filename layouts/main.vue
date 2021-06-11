@@ -28,7 +28,11 @@ import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTrans
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
 import moment from 'moment-timezone'
-import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+import {
+  aMinuteInMilliseconds,
+  aSecondInMilliseconds,
+  STEPS_STATUS,
+} from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
 export default {
@@ -71,19 +75,26 @@ export default {
     isRefreshLoading() {
       return this.$store.state.globalState.isRefreshLoading
     },
+    hasSkippedAction() {
+      return this.$store.state.globalState.hasSkippedAction
+    },
   },
 
   /*
     Watchers
   */
   watch: {
+    hasSkippedAction(newValue, oldValue) {
+      if (newValue) {
+        clearInterval(this.intervalCurrentStepTimer)
+        this.$store.commit('globalState/SET_HAS_SKIPPED_ACTION', false)
+      }
+    },
     'sessionState.isRunning'(newValue, oldValue) {
       if (newValue) {
         this.setCurrentSessionEndTimeWhenRunning()
-        console.log('isrunning set INterval')
         this.setIntervalCurrentStep()
       } else {
-        console.log('isrunning clearInterval')
         clearInterval(this.intervalCurrentStepTimer)
         this.setIntervalSessionEndTimeWhenNotRunning()
       }
@@ -93,10 +104,12 @@ export default {
       if (newValue === '00:00') {
         clearInterval(this.intervalCurrentStepTimer)
         this.finishCurrentStep()
-        this.$store.commit(
-          'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
-          formatDuration(this.getNextStep.duration)
-        )
+        if (!this.$store.getters['sessions/isNextStepLastStep']) {
+          this.$store.commit(
+            'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
+            formatDuration(this.getNextStep.duration)
+          )
+        }
       }
     },
   },
@@ -108,7 +121,21 @@ export default {
     const userChannel = `user.${this.$auth.user.id}`
     window.Echo.private(`${userChannel}`).listen(
       `.current.session`,
-      (session) => {
+      (payload) => {
+        const defaultSessionState = { current: {} }
+        let session
+        console.log('PAYLOAD => ', payload)
+
+        if (payload) {
+          if (payload.status === STEPS_STATUS.DONE) {
+            // notification session done
+            session = defaultSessionState
+          } else {
+            session = payload
+          }
+        } else {
+          session = defaultSessionState
+        }
         this.$store.commit(
           'sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP',
           session
