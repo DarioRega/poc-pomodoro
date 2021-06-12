@@ -16,6 +16,14 @@ export default {
   PUSH_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
     state.allCurrentProject.push(task)
   },
+  UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
+    state.allCurrentProject = state.allCurrentProject.map((stateTask) => {
+      if (stateTask.id === task.id) {
+        return task
+      }
+      return stateTask
+    })
+  },
 
   /*
   Tasks CRUD
