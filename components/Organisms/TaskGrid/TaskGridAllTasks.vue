@@ -27,6 +27,7 @@
           <add-task-input
             :placeholder="$t('Add a task...')"
             name="add task"
+            :is-loading="isAddTaskLoading"
             @onAddTask="addTask"
           />
         </div>
@@ -116,6 +117,7 @@ export default {
       isArchiveEnabled: false,
       showCompletedTasks: false,
       amountOfTasksToDisplays: 0,
+      isAddTaskLoading: false,
     }
   },
   computed: {
@@ -150,8 +152,11 @@ export default {
   },
 
   methods: {
-    addTask(taskName) {
-      console.log('add task => ', taskName)
+    async addTask(name) {
+      this.isAddTaskLoading = true
+      const payload = await this.$store.dispatch('tasks/addTask', { name })
+      console.log('payload add task => ', payload)
+      this.isAddTaskLoading = false
     },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
