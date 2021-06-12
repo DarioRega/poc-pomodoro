@@ -12,6 +12,7 @@ export default {
   SET_CURRENT_SELECTED_PROJECT(state, projectId) {
     // TODO v2
   },
+
   PUSH_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
     state.allCurrentProject.push(task)
   },
@@ -21,5 +22,14 @@ export default {
    */
   ADD_SINGLE_TASK(state, task) {
     state.allSingles.push(task)
+  },
+
+  UPDATE_SINGLE_TASK(state, task) {
+    state.allSingles = state.allSingles.map((stateTask) => {
+      if (stateTask.id === task.id) {
+        return task
+      }
+      return stateTask
+    })
   },
 }
