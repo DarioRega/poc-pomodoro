@@ -1,5 +1,5 @@
 import Echo from 'laravel-echo'
-import { ECHO_BROADCAST_URL } from '@/constantes/api'
+import { ECHO_AUTH_BROADCAST_URL } from '@/constantes/api'
 window.Pusher = require('pusher-js')
 
 export default ({ $axios }) => {
@@ -11,7 +11,7 @@ export default ({ $axios }) => {
       return {
         authorize: (socketId, callback) => {
           $axios
-            .post(`${ECHO_BROADCAST_URL}`, {
+            .post(`${ECHO_AUTH_BROADCAST_URL}`, {
               socket_id: socketId,
               channel_name: channel.name,
             })
