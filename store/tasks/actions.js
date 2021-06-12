@@ -72,4 +72,15 @@ export default {
       return err.response.data
     }
   },
+
+  updateSingleTask({ dispatch, commit, getters }, payload) {
+    if (getters.isTaskIncludedInCurrentProjectSelected(payload)) {
+      commit('UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED', payload)
+    }
+    if (getters.getCurrentTaskSelected.id === payload.id) {
+      commit('UPDATE_CURRENT_TASK_SELECTED', payload)
+    }
+
+    commit('UPDATE_SINGLE_TASK', payload)
+  },
 }

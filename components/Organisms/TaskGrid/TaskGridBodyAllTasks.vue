@@ -4,12 +4,13 @@
       class="header flex items-center"
       :class="isLayoutStacked && 'header--stacked'"
     >
-      <div class="header__col task-name">
+      <div class="header__col task-name relative">
         <task-target
           :is-selected="isSelected"
           :is-completed="isCompleted"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
+          :is-loading="isRowLoading"
           @click="$emit('onTargetClick', task.id)"
           @dblclick="$emit('onChangeRunningTask', task.id)"
         />
@@ -34,7 +35,6 @@
           :name="$t('Task status')"
           :status="task.task_status"
           :options="taskStatuses"
-          :is-loading="isTaskStatusLoading"
           @change="handleTaskStatusChange"
         />
       </div>
@@ -134,16 +134,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    shouldRowLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       taskName: '',
-      isTaskStatusLoading: false,
-      isTaskDeadlineLoading: false,
-      isTaskNameLoading: false,
+      isLoading: false,
     }
   },
   computed: {
+    isRowLoading() {
+      return this.shouldRowLoading || this.isLoading
+    },
     taskStatuses() {
       return this.$store.state.tasks.statuses
     },
@@ -157,18 +162,30 @@ export default {
       updateTaskStatus: 'tasks/updateTaskStatus',
       updateTaskDeadline: 'tasks/updateTaskDeadline',
     }),
-    handleTaskNameChange(value) {
+    async handleTaskNameChange(value) {
+      this.isLoading = true
       this.taskName = value
-      this.updateTaskName({ id: this.task.id, name: value })
+
+      await this.updateTaskName({ id: this.task.id, name: value })
+      this.isLoading = false
     },
-    handleTaskStatusChange(status) {
-      this.updateTaskStatus({ id: this.task.id, task_status_id: status.id })
+    async handleTaskStatusChange(status) {
+      this.isLoading = true
+
+      await this.updateTaskStatus({
+        id: this.task.id,
+        task_status_id: status.id,
+      })
+      this.isLoading = false
     },
-    handleTaskDeadlineChange(dateTime, dateString) {
-      this.updateTaskDeadline({
+    async handleTaskDeadlineChange(dateTime, dateString) {
+      this.isLoading = true
+
+      await this.updateTaskDeadline({
         id: this.task.id,
         deadline: dateString,
       })
+      this.isLoading = false
     },
   },
 }

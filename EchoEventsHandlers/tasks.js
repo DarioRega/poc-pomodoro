@@ -23,11 +23,6 @@ export const onUpdateTaskEvent = (payload, store, i18n) => {
       description: i18n.t('Your task was successfully edited'),
     }
     store.dispatch('globalState/createNotification', notification)
-    if (
-      store.getters['tasks/isTaskIncludedInCurrentProjectSelected'](payload)
-    ) {
-      store.commit('tasks/UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED', payload)
-    }
-    store.commit('tasks/UPDATE_SINGLE_TASK', payload)
+    store.dispatch('tasks/updateSingleTask', payload)
   }
 }

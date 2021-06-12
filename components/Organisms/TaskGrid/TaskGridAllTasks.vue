@@ -40,6 +40,7 @@
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
+          :should-row-loading="currentTaskDescriptionLoading === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
@@ -75,6 +76,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
@@ -122,6 +125,7 @@ export default {
       addTaskErrors: {
         name: '',
       },
+      currentTaskDescriptionLoading: '',
     }
   },
   computed: {

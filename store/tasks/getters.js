@@ -6,4 +6,7 @@ export default {
   isTaskIncludedInCurrentProjectSelected: (state) => (task) => {
     return state.currentProjectSelected.id === task.project_id
   },
+  getCurrentTaskSelected: (state) => {
+    return state.currentTaskSelected
+  },
 }

@@ -24,6 +24,9 @@ export default {
     )
     Vue.set(state.allCurrentProject, taskToUpdateIndex, task)
   },
+  UPDATE_CURRENT_TASK_SELECTED(state, task) {
+    state.currentTaskSelected = { ...state.currentTaskSelected, task }
+  },
 
   /*
   Tasks CRUD
