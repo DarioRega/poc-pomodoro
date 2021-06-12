@@ -46,7 +46,7 @@ export default {
   async updateTaskStatus({ dispatch, commit }, payload) {
     try {
       await this.$axios.post(TASK_UPDATE_ID_URL(payload.id), {
-        status_id: payload.status_id,
+        task_status_id: payload.task_status_id,
       })
     } catch (err) {
       return err.response.data
