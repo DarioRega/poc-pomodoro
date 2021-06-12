@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Nuxt />
+    <Nuxt v-if="!isEnvLoading && !isRefreshLoading" />
     <!--  Notifications -->
     <notifications-container />
     <screen-loader v-if="isEnvLoading || isRefreshLoading">
