@@ -1,12 +1,14 @@
 import { onCurrentSessionEvent } from '@/EchoEventsHandlers/sessions'
+import { onCreateTaskEvent } from '@/EchoEventsHandlers/tasks'
 
 export default ({ store }, inject) => {
   const initUserPrivateChannel = (userId) => {
     const userChannel = `user.${userId}`
-    window.Echo.private(`${userChannel}`).listen(
-      `.current.session`,
-      (payload) => onCurrentSessionEvent(payload, store)
-    )
+    window.Echo.private(`${userChannel}`)
+      .listen(`.current.session`, (payload) =>
+        onCurrentSessionEvent(payload, store)
+      )
+      .listen(`.task.create`, (payload) => onCreateTaskEvent(payload, store))
   }
 
   /*
