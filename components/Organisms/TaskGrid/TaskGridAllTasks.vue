@@ -29,7 +29,7 @@
             name="add task"
             :is-loading="isAddTaskLoading"
             :error-text="addTaskErrors.name"
-            @onAddTask="addTask"
+            @onAddTask="handleAddTask"
           />
         </div>
         <task-grid-body-all-tasks
@@ -145,27 +145,30 @@ export default {
       }
     },
     tasksListNoComplete() {
-      return this.tasks.filter(
-        (task) => task.task_status.name !== TASK_STATUS_VALUES.DONE
-      )
+      return this.tasks.length > 0
+        ? this.tasks.filter(
+            (task) => task.task_status.name !== TASK_STATUS_VALUES.DONE
+          )
+        : []
     },
     TASK_STATUS_VALUES() {
       return TASK_STATUS_VALUES
     },
   },
   mounted() {
-    console.log('TASKS => ', this.tasks)
-    setTimeout(() => {
-      console.log(' TIMEOUT TASKS => ', this.tasks)
-    }, 5000)
-    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasks[0])
+    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasksList[0])
   },
 
   methods: {
-    async addTask(name) {
+    ...mapActions({
+      updateTaskDescription: 'tasks/updateTaskDescription',
+      addTask: 'tasks/addTask',
+      createNotification: 'globalState/createNotification',
+    }),
+    async handleAddTask(name) {
       this.setAddTaskErrorProperty('name', '')
       this.isAddTaskLoading = true
-      const errorRequest = await this.$store.dispatch('tasks/addTask', { name })
+      const errorRequest = await this.addTask({ name })
       if (errorRequest) {
         this.setAddTaskErrorProperty(
           'name',
@@ -195,13 +198,10 @@ export default {
           type: 'info',
           confirmCallback: () => this.deleteTask(taskId),
         }
-        this.$store.dispatch(
-          'globalState/createNotification',
-          deleteNotification
-        )
+        this.createNotification(deleteNotification)
       }
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
-        const selectedTask = this.$store.getters['tasks/getTaskById'](taskId)
+        const selectedTask = this.findTask(taskId)
         this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
       }
       // check if isArchiveEnabled or isDeleteEnabled to handle custom event
@@ -213,8 +213,11 @@ export default {
       // then if running, change the currentTaskRunning in state and send call api to notify
     },
     handleChangeTaskDescription(value) {
-      // TODO dispatch action (with current select task id)
-      // /!\ add in handler these params  => (this.currentTaskSelected.id, value)
+      this.currentTaskDescriptionLoading = this.currentTaskSelected.id
+      this.updateTaskDescription({
+        id: this.currentTaskSelected.id,
+        description: value,
+      })
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
@@ -236,6 +239,9 @@ export default {
     },
     deleteTask(taskId) {
       // TODO dispatch action to delete
+    },
+    findTask(taskId) {
+      return this.tasks.find((x) => x.id === taskId)
     },
   },
 }

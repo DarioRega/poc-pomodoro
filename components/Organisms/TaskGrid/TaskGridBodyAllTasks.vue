@@ -26,7 +26,7 @@
           class="w-full"
           :class="[isRunning ? 'pr-0' : 'pl-3']"
           :value="taskName"
-          @change.native="taskName = $event.target.value"
+          @change.native="handleTaskNameChange($event.target.value)"
         />
       </div>
       <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
@@ -146,20 +148,27 @@ export default {
       return this.$store.state.tasks.statuses
     },
   },
-  watch: {
-    taskName(newValue, oldValue) {
-      // TODO + validation dispatch action
-    },
-  },
   mounted() {
     this.taskName = this.task.name
   },
   methods: {
+    ...mapActions({
+      updateTaskName: 'tasks/updateTaskName',
+      updateTaskStatus: 'tasks/updateTaskStatus',
+      updateTaskDeadline: 'tasks/updateTaskDeadline',
+    }),
+    handleTaskNameChange(value) {
+      this.taskName = value
+      this.updateTaskName({ id: this.task.id, name: value })
+    },
     handleTaskStatusChange(status) {
-      // TODO dispatch action with task id
+      this.updateTaskStatus({ id: this.task.id, task_status_id: status.id })
     },
     handleTaskDeadlineChange(dateTime, dateString) {
-      // TODO dispatch action with task id
+      this.updateTaskDeadline({
+        id: this.task.id,
+        deadline: dateString,
+      })
     },
   },
 }
