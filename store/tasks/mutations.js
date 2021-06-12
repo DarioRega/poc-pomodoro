@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
   /*
     Current task selected
@@ -17,12 +19,10 @@ export default {
     state.allCurrentProject.push(task)
   },
   UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
-    state.allCurrentProject = state.allCurrentProject.map((stateTask) => {
-      if (stateTask.id === task.id) {
-        return task
-      }
-      return stateTask
-    })
+    const taskToUpdateIndex = state.allCurrentProject.findIndex(
+      (x) => x.id === task.id
+    )
+    Vue.set(state.allCurrentProject, taskToUpdateIndex, task)
   },
 
   /*
@@ -33,12 +33,10 @@ export default {
   },
 
   UPDATE_SINGLE_TASK(state, task) {
-    state.allSingles = state.allSingles.map((stateTask) => {
-      if (stateTask.id === task.id) {
-        return task
-      }
-      return stateTask
-    })
+    const taskToUpdateIndex = state.allSingles.findIndex(
+      (x) => x.id === task.id
+    )
+    Vue.set(state.allSingles, taskToUpdateIndex, task)
   },
 
   SET_ALL_SINGLES_TASKS(state, payload) {
