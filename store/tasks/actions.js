@@ -1,6 +1,30 @@
-import { TASK_UPDATE_ID_URL, TASK_URL } from '@/constantes/api'
+import {
+  TASK_STATUSES_URL,
+  TASK_UPDATE_ID_URL,
+  TASK_URL,
+} from '@/constantes/api'
 
 export default {
+  async getAndSetAllSingleTasks({ commit }) {
+    try {
+      const { data } = await this.$axios.get(TASK_URL)
+      commit('SET_ALL_SINGLES_TASKS', data)
+      return data
+    } catch (err) {
+      return err.response.data
+    }
+  },
+
+  async getAndSetAllTaskStatuses({ commit }) {
+    try {
+      const { data } = await this.$axios.get(TASK_STATUSES_URL)
+      commit('SET_ALL_TASKS_STATUSES', data)
+      return data
+    } catch (err) {
+      return err.response.data
+    }
+  },
+
   async addTask({ dispatch, commit }, payload) {
     try {
       await this.$axios.post(TASK_URL, payload)

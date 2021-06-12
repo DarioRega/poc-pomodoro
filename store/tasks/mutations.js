@@ -40,4 +40,12 @@ export default {
       return stateTask
     })
   },
+
+  SET_ALL_SINGLES_TASKS(state, payload) {
+    state.allSingles = payload
+  },
+
+  SET_ALL_TASKS_STATUSES(state, payload) {
+    state.statuses = payload
+  },
 }

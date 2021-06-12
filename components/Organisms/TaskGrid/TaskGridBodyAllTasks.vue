@@ -33,7 +33,7 @@
         <task-select-status
           :name="$t('Task status')"
           :status="task.task_status"
-          :options="TASK_STATES"
+          :options="taskStatuses"
           :is-loading="isTaskStatusLoading"
           @change="handleTaskStatusChange"
         />
@@ -71,7 +71,6 @@
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
-import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
 import Icon from '@/components/Atoms/Icon'
 
@@ -143,18 +142,8 @@ export default {
     }
   },
   computed: {
-    // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
-    TASK_STATUS_VALUES() {
-      return TASK_STATUS_VALUES
-    },
-    // TODO Should come from the backend with an api call, should come as props here
-    TASK_STATES() {
-      return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
-        return {
-          id: i + 1,
-          name: TASK_STATUS_VALUES[x],
-        }
-      })
+    taskStatuses() {
+      return this.$store.state.tasks.statuses
     },
   },
   watch: {

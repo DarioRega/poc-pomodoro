@@ -13,6 +13,7 @@ export const START_SESSION_ID_URL = (sessionId) =>
 /*
   Tasks
  */
+export const TASK_STATUSES_URL = `api/tasks/status`
 export const TASK_URL = `${API_USER_URL}/tasks`
 export const TASK_DELETE_ID_URL = (taskId) => `${TASK_URL}/${taskId}`
 export const TASK_UPDATE_ID_URL = (taskId) => `${TASK_URL}/${taskId}/update`
