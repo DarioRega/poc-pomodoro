@@ -9,10 +9,14 @@ export default ({ store, i18n }, inject) => {
     const userChannel = `user.${userId}`
     window.Echo.private(`${userChannel}`)
       .listen(`.current.session`, (payload) =>
-        onCurrentSessionEvent(payload, store)
+        onCurrentSessionEvent(payload, store, i18n)
       )
-      .listen(`.task.create`, (payload) => onCreateTaskEvent(payload, store))
-      .listen(`.task.update`, (payload) => onUpdateTaskEvent(payload, store))
+      .listen(`.task.create`, (payload) =>
+        onCreateTaskEvent(payload, store, i18n)
+      )
+      .listen(`.task.update`, (payload) =>
+        onUpdateTaskEvent(payload, store, i18n)
+      )
   }
 
   /*

@@ -1,9 +1,9 @@
-export const onCreateTaskEvent = (payload, store) => {
+export const onCreateTaskEvent = (payload, store, i18n) => {
   if (payload) {
     const notification = {
-      title: 'Task created!',
+      title: i18n.t('Task created!'),
       type: 'success',
-      description: 'A new task was added to your list',
+      description: i18n.t('A new task was added to your list'),
     }
     store.dispatch('globalState/createNotification', notification)
     if (
@@ -15,12 +15,12 @@ export const onCreateTaskEvent = (payload, store) => {
   }
 }
 
-export const onUpdateTaskEvent = (payload, store) => {
+export const onUpdateTaskEvent = (payload, store, i18n) => {
   if (payload) {
     const notification = {
-      title: 'Task edited!',
+      title: i18n.t('Task edited!'),
       type: 'success',
-      description: 'Your task was successfully edited',
+      description: i18n.t('Your task was successfully edited'),
     }
     store.dispatch('globalState/createNotification', notification)
     if (
