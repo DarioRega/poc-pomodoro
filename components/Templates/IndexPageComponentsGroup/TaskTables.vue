@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     allCurrentTabTasks() {
-      return this.$store.state.tasks.currentProjectAllTasks
+      return this.$store.state.tasks.allCurrentProject
     },
     currentTaskRunning() {
       return this.$store.state.tasks.currentTaskRunning
