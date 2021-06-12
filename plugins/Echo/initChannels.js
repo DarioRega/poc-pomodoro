@@ -4,7 +4,7 @@ import {
   onUpdateTaskEvent,
 } from '@/EchoEventsHandlers/tasks'
 
-export default ({ store }, inject) => {
+export default ({ store, i18n }, inject) => {
   const initUserPrivateChannel = (userId) => {
     const userChannel = `user.${userId}`
     window.Echo.private(`${userChannel}`)

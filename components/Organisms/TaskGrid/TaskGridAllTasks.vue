@@ -159,11 +159,11 @@ export default {
     async addTask(name) {
       this.setAddTaskErrorProperty('name', '')
       this.isAddTaskLoading = true
-      const data = await this.$store.dispatch('tasks/addTask', { name })
-      if (data.errors) {
+      const errorRequest = await this.$store.dispatch('tasks/addTask', { name })
+      if (errorRequest) {
         this.setAddTaskErrorProperty(
           'name',
-          data.errors.name[0] || data.message
+          errorRequest.errors.name[0] || errorRequest.message
         )
       }
       this.isAddTaskLoading = false

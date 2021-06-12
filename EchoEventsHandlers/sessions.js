@@ -1,21 +1,22 @@
 import { SESSION_STATUS } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
-export const onCurrentSessionEvent = (payload, store) => {
+export const onCurrentSessionEvent = (payload, store, i18n) => {
   const defaultSessionState = {}
   let session = defaultSessionState
 
   const notification = {
-    title: 'Session aborted!',
+    title: i18n.t('Session aborted!'),
     type: 'success',
-    description: 'The current session was successfully aborted',
+    description: i18n.t('The current session was successfully aborted'),
   }
   if (payload) {
     switch (payload.status) {
       case SESSION_STATUS.DONE: {
-        notification.title = 'Session done'
-        notification.description =
+        notification.title = i18n.t('Session done')
+        notification.description = i18n.t(
           "Well done ! You've finished the whole session"
+        )
         store.dispatch('globalState/createNotification', notification)
         break
       }
