@@ -106,10 +106,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    label: {
-      type: String,
-      default: '',
-    },
     name: {
       type: String,
       required: true,
