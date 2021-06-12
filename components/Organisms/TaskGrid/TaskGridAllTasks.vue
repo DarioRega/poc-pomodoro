@@ -23,6 +23,13 @@
     />
     <transition-opacity duration-amount="200">
       <div v-show="isToggled" class="min-h-[30rem]">
+        <div class="mb-4">
+          <add-task-input
+            :placeholder="$t('Add a task...')"
+            name="add task"
+            @onAddTask="addTask"
+          />
+        </div>
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -72,6 +79,7 @@ import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
+import AddTaskInput from '@/components/Atoms/Task/AddTaskInput'
 
 export default {
   name: 'TaskGridAllTasks',
@@ -80,6 +88,7 @@ export default {
     TaskGridBodyAllTasks,
     TaskGridPagination,
     BrandTextarea,
+    AddTaskInput,
     TransitionOpacity,
   },
   props: {
@@ -141,6 +150,9 @@ export default {
   },
 
   methods: {
+    addTask(taskName) {
+      console.log('add task => ', taskName)
+    },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },

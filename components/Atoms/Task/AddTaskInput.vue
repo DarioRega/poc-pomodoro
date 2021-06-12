@@ -3,18 +3,18 @@
     <div
       class="
         relative
-        pb-1
         border-b
+        pb-0.5
         transition-colors
         duration-300
         add-task-container
         border-dark-gray
         text-dark-gray
       "
-      :class="[value.length > 0 && 'active', errorText && 'has-error']"
+      :class="[value.length > 0 && 'active', inputError && 'has-error']"
     >
       <input
-        v-model="value"
+        v-model.trim="value"
         type="text"
         :name="name"
         :placeholder="placeholder"
@@ -27,23 +27,27 @@
           duration-300
           focus:outline-none
         "
-        :class="[errorText && 'has-error', value.length > 0 && 'active']"
+        :class="[inputError && 'has-error', value.length > 0 && 'active']"
         @keydown="handleKeyDown"
-        @click="$emit('click')"
       />
 
       <button
         ref="addTaskIcon"
         :aria-label="placeholder"
-        class="absolute right-0 focus:outline-none"
-        :class="[errorText && 'has-error', value.length > 0 && 'active']"
-        @click="$emit('onAddTask', value)"
+        :disabled="isLoading"
+        class="add-task-btn w-4 absolute right-0 h-4 focus:outline-none"
+        :class="[
+          inputError && 'has-error',
+          value.length > 0 && 'active',
+          isLoading && 'loading',
+        ]"
+        @click="validateTask"
       >
-        <icon icon-name="plus" class="w-5 h-5" />
+        <icon v-show="!isLoading" icon-name="plus" class="w-full h-full" />
       </button>
     </div>
-    <p v-show="errorText" class="mt-1 text-xs italic text-right text-error">
-      {{ errorText }}
+    <p v-show="inputError" class="mt-1 text-xs italic text-right text-error">
+      {{ inputError }}
     </p>
   </div>
 </template>
@@ -59,22 +63,47 @@ export default {
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
     errorText: {
       type: String,
       default: '',
+    },
+    isLoading: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
     return {
       value: '',
+      error: '',
     }
+  },
+  computed: {
+    inputError() {
+      return this.errorText ? this.errorText : this.error
+    },
   },
   methods: {
     handleKeyDown(evt) {
-      if (evt.keyCode === 13) {
-        this.$refs.addTaskIcon.focus()
-        this.$emit('onAddTask', this.value)
+      if (!this.isLoading) {
+        if (evt.keyCode === 13) {
+          this.$refs.addTaskIcon.focus()
+          this.validateTask()
+        }
       }
+    },
+    validateTask() {
+      if (!this.value) {
+        return (this.error = this.$t('Field required'))
+      } else if (this.value.length < 3) {
+        return (this.error = this.$t("Name's too short"))
+      }
+      this.error = ''
+      this.$emit('onAddTask', this.value)
     },
   },
 }
@@ -105,5 +134,18 @@ button:focus {
     @apply text-dark-indigo #{!important};
     @apply dark:text-light-indigo #{!important};
   }
+}
+
+button.loading {
+  &::after {
+    @apply w-4 h-4 absolute inset-0 m-auto border-4 border-transparent rounded-[50%] text-current fill-current;
+
+    content: '';
+    animation: small-loading-spinner 1s ease infinite;
+    border-top-color: #182532;
+  }
+}
+.dark button.loading::after {
+  border-top-color: white;
 }
 </style>
