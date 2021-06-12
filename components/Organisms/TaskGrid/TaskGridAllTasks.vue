@@ -28,6 +28,7 @@
             :placeholder="$t('Add a task...')"
             name="add task"
             :is-loading="isAddTaskLoading"
+            :error-text="addTaskErrors.name"
             @onAddTask="addTask"
           />
         </div>
@@ -118,6 +119,9 @@ export default {
       showCompletedTasks: false,
       amountOfTasksToDisplays: 0,
       isAddTaskLoading: false,
+      addTaskErrors: {
+        name: '',
+      },
     }
   },
   computed: {
@@ -153,10 +157,19 @@ export default {
 
   methods: {
     async addTask(name) {
+      this.setAddTaskErrorProperty('name', '')
       this.isAddTaskLoading = true
-      const payload = await this.$store.dispatch('tasks/addTask', { name })
-      console.log('payload add task => ', payload)
+      const data = await this.$store.dispatch('tasks/addTask', { name })
+      if (data.errors) {
+        this.setAddTaskErrorProperty(
+          'name',
+          data.errors.name[0] || data.message
+        )
+      }
       this.isAddTaskLoading = false
+    },
+    setAddTaskErrorProperty(property, value) {
+      this.addTaskErrors[property] = value
     },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)

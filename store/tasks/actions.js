@@ -6,7 +6,7 @@ export default {
       const { data } = await this.$axios.post(TASK_URL, payload)
       return data
     } catch (err) {
-      return err
+      return err.response.data
     }
   },
 }
