@@ -22,16 +22,7 @@
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
-      <div v-show="isToggled" class="min-h-[30rem]">
-        <div class="mb-4">
-          <add-task-input
-            :placeholder="$t('Add a task...')"
-            name="add task"
-            :is-loading="isAddTaskLoading"
-            :error-text="addTaskErrors.name"
-            @onAddTask="handleAddTask"
-          />
-        </div>
+      <div v-show="isToggled" class="min-h-[22rem]">
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -65,11 +56,21 @@
     </transition-opacity>
     <transition-opacity duration-amount="200">
       <div v-show="isToggled">
-        <task-grid-pagination
-          class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
-          :label="$t('Tasks to display')"
-          @onPaginationChange="amountOfTasksToDisplays = $event"
-        />
+        <div class="flex justify-between items-center pt-6">
+          <add-task-input
+            :placeholder="$t('Add a task...')"
+            name="add task"
+            :is-loading="isAddTaskLoading"
+            :error-text="addTaskErrors.name"
+            class="mb-3"
+            @onAddTask="handleAddTask"
+          />
+          <task-grid-pagination
+            class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
+            :label="$t('Tasks to display')"
+            @onPaginationChange="amountOfTasksToDisplays = $event"
+          />
+        </div>
       </div>
     </transition-opacity>
   </section>
@@ -212,16 +213,16 @@ export default {
       // if both of them are false, just fire the select task event
     },
     handleChangeRunningTask(taskId) {
-      // TODO handle
-      // verify if pomodoro is running, if not show notification warning
-      // then if running, change the currentTaskRunning in state and send call api to notify
+      // TODO v2
     },
-    handleChangeTaskDescription(value) {
+    async handleChangeTaskDescription(value) {
       this.currentTaskDescriptionLoading = this.currentTaskSelected.id
-      this.updateTaskDescription({
+
+      await this.updateTaskDescription({
         id: this.currentTaskSelected.id,
         description: value,
       })
+      this.currentTaskDescriptionLoading = ''
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
