@@ -10,9 +10,8 @@
             aria-haspopup="listbox"
             :aria-expanded="isOpen"
             aria-labelledby="listbox-label"
-            :current-status="status.value"
+            :current-status="status.name"
             :is-loading="isLoading"
-            :status-text="status.name"
             @click="toggleVisibility($event, true)"
             @keydown="toggleVisibility"
           />
@@ -70,8 +69,7 @@
               <task-current-status
                 class="mx-auto"
                 :should-focus="currentFocusedElementId === item.id"
-                :current-status="item.value"
-                :status-text="item.name"
+                :current-status="item.name"
                 @focusin="currentFocusedElementId = item.id"
                 @keydown="handleListKeyDown($event, item)"
                 @mouseenter="highlightedItemId = item.id"
@@ -166,7 +164,7 @@ export default {
     selectOption(item) {
       this.$emit('change', item)
       // TODO ensure loading while action doing, then it
-      // this.isOpen = false
+      this.isOpen = false
     },
     handleListKeyDown(evt, item) {
       let spaceBarCodeKey

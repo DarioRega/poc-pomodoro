@@ -32,7 +32,7 @@
       <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
         <task-select-status
           :name="$t('Task status')"
-          :status="task.status"
+          :status="task.task_status"
           :options="TASK_STATES"
           :is-loading="isTaskStatusLoading"
           @change="handleTaskStatusChange"
@@ -71,7 +71,7 @@
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
-import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
+import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
 import Icon from '@/components/Atoms/Icon'
 
@@ -152,8 +152,7 @@ export default {
       return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
         return {
           id: i + 1,
-          value: TASK_STATUS_VALUES[x],
-          name: FAKER_TASK_STATUS_NAMES[x],
+          name: TASK_STATUS_VALUES[x],
         }
       })
     },

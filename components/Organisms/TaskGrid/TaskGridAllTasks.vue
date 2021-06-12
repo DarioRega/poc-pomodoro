@@ -38,7 +38,7 @@
           :task="task"
           :is-layout-stacked="isLayoutStacked"
           :is-selected="currentTaskSelected.id === task.id"
-          :is-completed="task.status.value === TASK_STATUS_VALUES.DONE"
+          :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
@@ -126,8 +126,10 @@ export default {
   },
   computed: {
     isCompletedDescription() {
-      if (this.currentTaskSelected.status) {
-        return this.currentTaskSelected.status.value === TASK_STATUS_VALUES.DONE
+      if (this.currentTaskSelected.task_status) {
+        return (
+          this.currentTaskSelected.task_status.name === TASK_STATUS_VALUES.DONE
+        )
       }
       return false
     },
@@ -144,7 +146,7 @@ export default {
     },
     tasksListNoComplete() {
       return this.tasks.filter(
-        (task) => task.status.value !== TASK_STATUS_VALUES.DONE
+        (task) => task.task_status.name !== TASK_STATUS_VALUES.DONE
       )
     },
     TASK_STATUS_VALUES() {
@@ -152,6 +154,10 @@ export default {
     },
   },
   mounted() {
+    console.log('TASKS => ', this.tasks)
+    setTimeout(() => {
+      console.log(' TIMEOUT TASKS => ', this.tasks)
+    }, 5000)
     this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasks[0])
   },
 
