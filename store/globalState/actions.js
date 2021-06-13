@@ -47,12 +47,21 @@ export default {
     }, 1000)
   },
 
-  handleSessionActionsServerError({ dispatch }, errMessage) {
+  handleSessionActionsServerError({ dispatch }) {
     const notification = {
-      title: this.$i18n.t('Sorry but... something went wrong'),
+      title: this.$i18n.t('Something went wrong'),
       description: this.$i18n.t(
         'If the error persist, try to abort the current session and restart with a fresh one, or contact our team.'
       ),
+      type: 'error',
+    }
+    dispatch('createNotification', notification)
+  },
+
+  handleTaskUpdateServerError({ dispatch }, errMessage) {
+    const notification = {
+      title: this.$i18n.t('Something went wrong'),
+      description: errMessage,
       type: 'error',
     }
     dispatch('createNotification', notification)
