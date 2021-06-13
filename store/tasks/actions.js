@@ -42,44 +42,53 @@ export default {
     }
   },
 
-  async updateTaskName({ dispatch, commit }, payload) {
+  async updateTaskGeneric({ dispatch, commit }, payload) {
     try {
-      await this.$axios.post(TASK_UPDATE_ID_URL(payload.id), {
-        name: payload.name,
-      })
+      await this.$axios.post(payload.url, payload.data)
+      const notification = {
+        title: this.$i18n.t('Task edited!'),
+        type: 'success',
+        description: this.$i18n.t('Your task was successfully edited'),
+      }
+      dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
+      dispatch(
+        'globalState/handleTaskActionServerError',
+        err.response.data.message,
+        { root: true }
+      )
+      commit('globalState/FORCE_RERENDER_TASK_TABLES', null, { root: true })
+
       return err.response.data
     }
+  },
+
+  async updateTaskName({ dispatch, commit }, payload) {
+    return await dispatch('updateTaskGeneric', {
+      url: TASK_UPDATE_ID_URL(payload.id),
+      data: { name: payload.name },
+    })
   },
 
   async updateTaskStatus({ dispatch, commit }, payload) {
-    try {
-      await this.$axios.post(TASK_UPDATE_ID_URL(payload.id), {
-        task_status_id: payload.task_status_id,
-      })
-    } catch (err) {
-      return err.response.data
-    }
+    return await dispatch('updateTaskGeneric', {
+      url: TASK_UPDATE_ID_URL(payload.id),
+      data: { task_status_id: payload.task_status_id },
+    })
   },
 
   async updateTaskDeadline({ dispatch, commit }, payload) {
-    try {
-      await this.$axios.post(TASK_UPDATE_ID_URL(payload.id), {
-        deadline: payload.deadline,
-      })
-    } catch (err) {
-      return err.response.data
-    }
+    return await dispatch('updateTaskGeneric', {
+      url: TASK_UPDATE_ID_URL(payload.id),
+      data: { deadline: payload.deadline },
+    })
   },
 
   async updateTaskDescription({ dispatch, commit }, payload) {
-    try {
-      await this.$axios.post(TASK_UPDATE_ID_URL(payload.id), {
-        description: payload.description,
-      })
-    } catch (err) {
-      return err.response.data
-    }
+    return await dispatch('updateTaskGeneric', {
+      url: TASK_UPDATE_ID_URL(payload.id),
+      data: { description: payload.description },
+    })
   },
 
   /*
