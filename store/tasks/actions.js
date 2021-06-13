@@ -1,20 +1,11 @@
 import {
+  TASK_DELETE_ID_URL,
   TASK_STATUSES_URL,
   TASK_UPDATE_ID_URL,
   TASK_URL,
 } from '@/constantes/api'
 
 export default {
-  async getAndSetAllSingleTasks({ commit }) {
-    try {
-      const { data } = await this.$axios.get(TASK_URL)
-      commit('SET_ALL_SINGLES_TASKS', data)
-      return data
-    } catch (err) {
-      return err.response.data
-    }
-  },
-
   async getAndSetAllTaskStatuses({ commit }) {
     try {
       const { data } = await this.$axios.get(TASK_STATUSES_URL)
@@ -29,6 +20,15 @@ export default {
     try {
       await this.$axios.post(TASK_URL, payload)
     } catch (err) {
+      return err.response.data
+    }
+  },
+
+  async deleteTask({ dispatch, commit }, id) {
+    try {
+      await this.$axios.delete(TASK_DELETE_ID_URL(id))
+    } catch (err) {
+      // TODO notification
       return err.response.data
     }
   },
@@ -73,14 +73,40 @@ export default {
     }
   },
 
-  updateSingleTask({ dispatch, commit, getters }, payload) {
-    if (getters.isTaskIncludedInCurrentProjectSelected(payload)) {
-      commit('UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED', payload)
+  /*
+    Single tasks
+   */
+  async getAndSetAllSingleTasks({ commit }) {
+    try {
+      const { data } = await this.$axios.get(TASK_URL)
+      commit('SET_ALL_SINGLES_TASKS', data)
+      return data
+    } catch (err) {
+      return err.response.data
     }
-    if (getters.getCurrentTaskSelected.id === payload.id) {
+  },
+
+  updateSingleTask({ dispatch, commit, getters }, payload) {
+    if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
       commit('UPDATE_CURRENT_TASK_SELECTED', payload)
+    } else if (
+      getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
+    ) {
+      commit('UPDATE_CURRENT_ARCHIVED_TASK_SELECTED', payload)
     }
 
     commit('UPDATE_SINGLE_TASK', payload)
+  },
+
+  deleteSingleTask({ dispatch, commit, getters }, payload) {
+    if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
+      commit('RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED')
+    } else if (
+      getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
+    ) {
+      commit('RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED')
+    }
+
+    commit('DELETE_SINGLE_TASK', payload.id)
   },
 }
