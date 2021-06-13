@@ -166,17 +166,26 @@ export default {
   /*
     Pause
   */
-  async pauseCurrentStep({ dispatch, rootState }) {
+  async pauseCurrentStep({ dispatch, rootState, commit, getters }) {
     const notification = {
       title: this.$i18n.t('Session paused!'),
       type: 'success',
     }
+    const currentStepTimer = rootState.timers.currentStepTimer
+    const currentStepRestingTime = rootState.timers.currentStepRestingTime
+
+    // Manually trigger pause
+    dispatch('triggerLocalPausedSessionState', {
+      currentStepTimer,
+      currentStepRestingTime,
+    })
 
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.PAUSE,
-        resting_time: rootState.timers.currentStepRestingTime,
+        resting_time: currentStepRestingTime,
       })
+
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
       dispatch(
@@ -187,6 +196,26 @@ export default {
         }
       )
     }
+  },
+  triggerLocalPausedSessionState({ commit, getters }, payload) {
+    const { currentStepTimer, currentStepRestingTime } = payload
+
+    // Calculated resting time session
+    const totalSessionRestingTime =
+      getters.getTotalRestingTimeSessionWithCurrentPausedStep
+
+    // set timer value
+    commit(
+      'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+      { currentStepTimer, currentStepRestingTime },
+      { root: true }
+    )
+
+    // edit session,current step status, set resting time current step and session
+    commit('MANUALLY_TRIGGER_PAUSE_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE', {
+      totalSessionRestingTime,
+      currentStepRestingTime,
+    })
   },
 
   /*
