@@ -3,7 +3,7 @@
     <p class="mr-3 text-dark-gray">{{ label }}</p>
     <brand-select
       :options="options"
-      :value="options[0]"
+      :value="value"
       name="select numbers of tasks to display"
       size="small"
       :should-show-selected="false"
@@ -23,6 +23,10 @@ export default {
       type: String,
       required: true,
     },
+    amount: {
+      type: [Number, String],
+      required: true,
+    },
   },
   data() {
     return {
@@ -34,12 +38,14 @@ export default {
       ],
     }
   },
-  mounted() {
-    this.$emit('onPaginationChange', this.options[0].id)
+  computed: {
+    value() {
+      return this.options.find((x) => x.id === this.amount)
+    },
   },
   methods: {
     handleChange(item) {
-      this.$emit('onPaginationChange', item)
+      this.$emit('onPaginationChange', item.id)
     },
   },
 }

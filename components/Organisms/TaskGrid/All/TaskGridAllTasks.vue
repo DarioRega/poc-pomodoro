@@ -68,6 +68,7 @@
           <task-grid-pagination
             class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
             :label="$t('Tasks to display')"
+            :amount="amountOfTasksToDisplays"
             @onPaginationChange="amountOfTasksToDisplays = $event"
           />
         </div>
@@ -121,7 +122,7 @@ export default {
       isDeleteEnabled: false,
       isArchiveEnabled: false,
       showCompletedTasks: false,
-      amountOfTasksToDisplays: 0,
+      amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
       addTaskErrors: {
         name: '',
