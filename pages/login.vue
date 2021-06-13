@@ -81,6 +81,8 @@ export default {
     ContainerLoginPage,
     ErrorBanner,
   },
+  middleware: 'auth',
+  auth: 'guest',
   data() {
     return {
       hasErrors: false,

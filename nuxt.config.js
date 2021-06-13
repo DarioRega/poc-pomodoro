@@ -17,7 +17,12 @@ export default {
   css: ['~/assets/style/index.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/what-input.js', '~/plugins/regexHelper.js'],
+  plugins: [
+    '~/plugins/what-input.js',
+    '~/plugins/regexHelper.js',
+    { src: '~/plugins/Echo/config.js', mode: 'client' },
+    { src: '~/plugins/Echo/initChannels.js', mode: 'client' },
+  ],
 
   vue: {
     config: {
@@ -67,16 +72,11 @@ export default {
       laravelSanctum: {
         provider: 'laravel/sanctum',
         url: process.env.API_URL || 'http://localhost:80',
-        // TODO verify when endpoint to get user information is available
-        // user: {
-        //   autoFetch: true,
-        // },
       },
     },
     redirect: {
       logout: '/login',
     },
-    plugins: [],
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

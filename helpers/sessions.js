@@ -29,9 +29,6 @@ export const calculateTimeInSeconds = (stringNumber) => {
   return seconds
 }
 
-export const getOnlyHoursAndMinutes = (timeString) => {
-  if (timeString && timeString.length === 8) {
-    const arrayValuesSplitted = timeString.split(':')
-    return `${arrayValuesSplitted[1]}:${arrayValuesSplitted[2]}`
-  }
+export const formatDuration = (timeString, format = 'mm:ss') => {
+  return moment.utc(moment.duration(timeString).asMilliseconds()).format(format)
 }

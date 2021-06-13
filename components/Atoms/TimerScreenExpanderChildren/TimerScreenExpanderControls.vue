@@ -1,7 +1,10 @@
 <template>
   <div class="screen_expander__controls">
     <!--    RUNNING -->
-    <div v-show="getTimerState.isRunning" class="text-center">
+    <div
+      v-show="sessionState.isRunning"
+      class="text-center flex justify-center"
+    >
       <button
         class="screen-expander__control bg-error"
         @click="$emit('onPause')"
@@ -13,8 +16,8 @@
     <!--    PAUSED -->
     <div
       v-show="
-        getTimerState.isPaused ||
-        getTimerState.isSessionStartedButPendingProcess
+        sessionState.isPaused ||
+        sessionState.isSessionStartedButHasPendingProcess
       "
       class="flex justify-center gap-x-12"
     >
@@ -38,8 +41,8 @@
       </button>
     </div>
 
-    <!-- SESSION NOT STARTED -->
-    <div v-if="getTimerState.isSessionPending" class="text-center mt-8">
+    <!-- SESSION NOT CREATED -->
+    <div v-if="!sessionState.isSessionCreated" class="text-center mt-8">
       <brand-button
         class="uppercase font-bold"
         @click="$emit('onStartSession')"
@@ -58,16 +61,16 @@ export default {
   name: 'TimerScreenExpanderControls',
   components: { Icon, BrandButton },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
+    sessionState() {
+      return this.$store.getters['sessions/getSessionState']
     },
     isResumeOrStart() {
-      return this.getTimerState.isPaused ? 'resume' : 'play'
+      return this.sessionState.isPaused ? 'resume' : 'play'
     },
   },
   methods: {
     handleResumeOrStart() {
-      if (this.getTimerState.isPaused) {
+      if (this.sessionState.isPaused) {
         this.$emit('onResume')
       } else {
         this.$emit('onStart')

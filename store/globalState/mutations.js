@@ -22,4 +22,10 @@ export default {
   SET_ENV_LOADING(state, payload) {
     state.isEnvLoading = payload
   },
+  SET_REFRESH_LOADING(state, payload) {
+    state.isRefreshLoading = payload
+  },
+  SET_HAS_SKIPPED_ACTION(state, payload) {
+    state.hasSkippedAction = payload
+  },
 }

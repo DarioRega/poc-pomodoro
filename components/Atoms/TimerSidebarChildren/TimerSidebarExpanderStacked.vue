@@ -8,13 +8,13 @@
     </button>
     <!-- TODO trigger tooltip here on mouse hover and display slot currentSessionInformations  -->
     <!--    <p-->
-    <!--      v-show="!isSessionPending"-->
+    <!--      v-show="isSessionCreated"-->
     <!--      class="text-sm text-dark-gray mb-6 font-bold px-2"-->
     <!--    >-->
     <!--      {{ $t('Current session will end at') }} {{ currentSessionEndTime }}-->
     <!--    </p>-->
     <button
-      v-show="getTimerState.isSessionStartedButPendingProcess"
+      v-show="sessionState.isSessionStartedButHasPendingProcess"
       class="timer-sidebar__expander__button"
       @mouseenter="isInformationTooltipVisible = true"
       @onmouseleave="isInformationTooltipVisible = false"
@@ -36,8 +36,8 @@ export default {
     }
   },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
+    sessionState() {
+      return this.$store.getters['sessions/getSessionState']
     },
   },
 }

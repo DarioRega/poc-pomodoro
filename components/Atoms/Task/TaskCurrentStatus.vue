@@ -39,10 +39,6 @@ export default {
       type: String,
       required: true,
     },
-    statusText: {
-      type: String,
-      required: true,
-    },
     shouldFocus: {
       type: Boolean,
       default: false,
@@ -60,6 +56,20 @@ export default {
         'bg-dark-indigo dark:bg-light-indigo':
           this.currentStatus === TASK_STATUS_VALUES.IN_PROGRESS ||
           this.currentStatus === TASK_STATUS_VALUES.TODO,
+      }
+    },
+    statusText() {
+      switch (this.currentStatus) {
+        case TASK_STATUS_VALUES.TODO:
+          return this.$t('TODO')
+        case TASK_STATUS_VALUES.IN_PROGRESS:
+          return this.$t('IN PROGRESS')
+        case TASK_STATUS_VALUES.DONE:
+          return this.$t('DONE')
+        case TASK_STATUS_VALUES.ARCHIVED:
+          return this.$t('ARCHIVED')
+        default:
+          return this.$t('TODO')
       }
     },
   },

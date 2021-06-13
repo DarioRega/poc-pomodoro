@@ -19,7 +19,7 @@ export default {
   name: 'CurrentTabHeader',
   computed: {
     currentProjectName() {
-      return this.$store.state.tasks.currentProjectName
+      return this.$store.state.tasks.currentProjectSelected.name
     },
   },
 }

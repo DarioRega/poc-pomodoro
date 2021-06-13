@@ -14,6 +14,7 @@
       @onStart="$emit('onStart')"
       @onPause="$emit('onPause')"
       @onResume="$emit('onResume')"
+      @onSkip="$emit('onSkip')"
       @onAbort="$emit('onAbort')"
     />
   </div>
