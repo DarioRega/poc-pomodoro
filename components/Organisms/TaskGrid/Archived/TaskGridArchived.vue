@@ -194,9 +194,7 @@ export default {
       // TODO dispatch action to delete
     },
     findTask(taskId) {
-      const prout = this.tasks.find((x) => x.id === taskId)
-      console.log('prout')
-      return prout
+      return this.tasks.find((x) => x.id === taskId)
     },
   },
 }
