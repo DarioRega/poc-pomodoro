@@ -2,6 +2,7 @@ import moment from 'moment-timezone'
 import _ from 'lodash'
 
 import { STEPS_STATUS, STEPS_TYPES } from '@/constantes'
+import { getDurationInMilliseconds } from '@/helpers/sessions'
 
 export default {
   getSessionState: (state, getters) => {
@@ -59,6 +60,21 @@ export default {
       return state.current.steps
     }
     return []
+  },
+
+  getRestingTimeAllPendingStepsInMilliseconds: (state) => {
+    let restingTime = 0
+    state.current.steps.forEach((step) => {
+      if (step.status === STEPS_STATUS.PENDING) {
+        restingTime += getDurationInMilliseconds(step.duration)
+      }
+    })
+    return restingTime
+  },
+
+  getRestingTimeAllPendingSteps: (state, getters) => {
+    const restingTime = getters.getRestingTimeAllPendingStepsInMilliseconds
+    return moment.utc(restingTime).format('HH:mm:ss')
   },
 
   getSessionStepsOnlyPomodoro: (state, getters) => {
