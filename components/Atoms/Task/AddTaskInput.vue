@@ -97,12 +97,12 @@ export default {
       }
     },
     validateTask() {
-      // if (!this.value) {
-      //   return (this.error = this.$t('Field required'))
-      // } else if (this.value.length < 3) {
-      //   return (this.error = this.$t("Name's too short"))
-      // }
-      // this.error = ''
+      if (!this.value) {
+        return (this.error = this.$t('Field required'))
+      } else if (this.value.length < 3) {
+        return (this.error = this.$t("Name's too short"))
+      }
+      this.error = ''
       this.$emit('onAddTask', this.value)
     },
   },
