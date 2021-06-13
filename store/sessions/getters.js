@@ -72,7 +72,6 @@ export default {
   hasCurrentSession: (state) => {
     return !_.isEmpty(state.current)
   },
-
   /*
     Current step
    */
@@ -112,7 +111,23 @@ export default {
       const currentStepIndex = steps.findIndex((x) => x.id === currentStepId)
       return steps[currentStepIndex + 1]
     }
-    return []
+    return {}
+  },
+  isNextStepLastStep(state, getters) {
+    if (getters.hasCurrentSession) {
+      const indexCurrentStep = state.current.steps.findIndex(
+        (step) => step.id === state.current.current_step.id
+      )
+      return indexCurrentStep === state.current.steps.length - 1
+    }
+    return false
+  },
+
+  getFirstStep: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.steps[0]
+    }
+    return {}
   },
 
   /*

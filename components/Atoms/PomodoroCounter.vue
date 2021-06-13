@@ -28,7 +28,8 @@ export default {
           this.status === STEPS_STATUS.SKIPPED,
         'text-success':
           (this.status === STEPS_STATUS.IN_PROGRESS ||
-            this.status === STEPS_STATUS.PENDING) &&
+            this.status === STEPS_STATUS.PENDING ||
+            this.status === STEPS_STATUS.PAUSED) &&
           this.isCurrent,
         'text-dark-gray':
           this.status === STEPS_STATUS.PENDING && !this.isCurrent,

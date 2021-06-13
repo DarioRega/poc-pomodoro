@@ -13,7 +13,7 @@ export const aSecondInMilliseconds = 1000
 */
 export const TASK_STATUS_VALUES = {
   DONE: 'DONE',
-  IN_PROGRESS: 'ONGOING',
+  IN_PROGRESS: 'IN_PROGRESS',
   TODO: 'TODO',
   ARCHIVED: 'ARCHIVED',
 }
@@ -24,6 +24,14 @@ export const STEPS_STATUS = {
   PAUSED: 'PAUSED',
   DONE: 'DONE',
   SKIPPED: 'SKIPPED',
+}
+
+export const SESSION_STATUS = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  PAUSED: 'PAUSED',
+  DONE: 'DONE',
+  ABORTED: 'ABORTED',
 }
 
 /*
