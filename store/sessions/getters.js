@@ -36,6 +36,13 @@ export default {
     }
   },
 
+  getSessionSteps: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.steps
+    }
+    return []
+  },
+
   getCurrentRunningSessionEndTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       const {
@@ -48,18 +55,14 @@ export default {
     }
   },
 
+  /*
+    Resting times
+   */
   getSessionRestingTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       return state.current.resting_time
     }
     return '00:00:00'
-  },
-
-  getSessionSteps: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return state.current.steps
-    }
-    return []
   },
 
   getRestingTimeAllPendingStepsInMilliseconds: (state) => {
@@ -77,6 +80,23 @@ export default {
     return moment.utc(restingTime).format('HH:mm:ss')
   },
 
+  getTotalRestingTimeSessionWithCurrentPausedStep: (
+    state,
+    getters,
+    rootState
+  ) => {
+    const stepRestingTimesInMilliseconds =
+      getters.getRestingTimeAllPendingStepsInMilliseconds
+    const currentPausedStepRestingTimeInMilliseconds =
+      getDurationInMilliseconds(rootState.timers.currentStepRestingTime)
+
+    const totalRestingTimeInMilliseconds =
+      stepRestingTimesInMilliseconds +
+      currentPausedStepRestingTimeInMilliseconds
+
+    return moment.utc(totalRestingTimeInMilliseconds).format('HH:mm:ss')
+  },
+
   getSessionStepsOnlyPomodoro: (state, getters) => {
     if (getters.hasCurrentSession) {
       return state.current.steps.filter(
@@ -88,6 +108,8 @@ export default {
   hasCurrentSession: (state) => {
     return !_.isEmpty(state.current)
   },
+
+
   /*
     Current step
    */
