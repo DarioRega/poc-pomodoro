@@ -16,14 +16,30 @@ export default {
     }
   },
 
+  /*
+     Create generic
+    */
   async addTask({ dispatch, commit }, payload) {
     try {
+      const notification = {
+        title: this.$i18n.t('Task created!'),
+        type: 'success',
+        description: this.$i18n.t('A new task was added to your list'),
+      }
+      dispatch('globalState/createNotification', notification)
       await this.$axios.post(TASK_URL, payload)
     } catch (err) {
+      dispatch(
+        'globalState/handleTaskActionServerError',
+        err.response.data.message,
+        { root: true }
+      )
       return err.response.data
     }
   },
-
+  /*
+     Delete generic
+    */
   async deleteTask({ dispatch, commit }, id) {
     try {
       await this.$axios.delete(TASK_DELETE_ID_URL(id))
@@ -42,6 +58,9 @@ export default {
     }
   },
 
+  /*
+    Update generic
+   */
   async updateTaskGeneric({ dispatch, commit }, payload) {
     try {
       await this.$axios.post(payload.url, payload.data)
@@ -92,7 +111,7 @@ export default {
   },
 
   /*
-    Single tasks
+    Single tasks related
    */
   async getAndSetAllSingleTasks({ commit }) {
     try {
