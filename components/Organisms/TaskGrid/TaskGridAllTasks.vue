@@ -22,7 +22,9 @@
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
-      <div v-show="isToggled" class="min-h-[22rem]">
+      <div v-show="isToggled" class="min-h-[22rem] h-px relative">
+        <task-grid-empty-list v-show="tasksList.length < 1" />
+
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -86,6 +88,7 @@ import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 import AddTaskInput from '@/components/Atoms/Task/AddTaskInput'
+import TaskGridEmptyList from '@/components/Atoms/Task/TaskGridEmptyList'
 
 export default {
   name: 'TaskGridAllTasks',
@@ -95,6 +98,7 @@ export default {
     TaskGridPagination,
     BrandTextarea,
     AddTaskInput,
+    TaskGridEmptyList,
     TransitionOpacity,
   },
   props: {
