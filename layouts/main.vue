@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Nuxt />
+    <Nuxt v-if="!isEnvLoading && !isRefreshLoading" />
     <!--  Notifications -->
     <notifications-container />
     <screen-loader v-if="isEnvLoading || isRefreshLoading">
@@ -121,7 +121,13 @@ export default {
     this.$initWebSocketChannel('userPrivateChannel', this.$auth.user.id)
 
     if (!this.sessionState.isSessionCreated) {
-      await this.getAndSetCurrentSession()
+      const promises = [
+        await this.getAndSetCurrentSession(),
+        await this.getAndSetAllTasks(),
+        await this.getAndSetAllTaskStatuses(),
+      ]
+      await Promise.allSettled(promises)
+
       this.$store.commit('globalState/SET_REFRESH_LOADING', false)
     }
     if (this.sessionState.isSessionCreated) {
@@ -143,6 +149,8 @@ export default {
       getAndSetCurrentSession: 'sessions/getAndSetCurrentSession',
       finishCurrentStep: 'sessions/finishCurrentStep',
       getEnvironment: 'globalState/getEnvironment',
+      getAndSetAllTasks: 'tasks/getAndSetAllSingleTasks',
+      getAndSetAllTaskStatuses: 'tasks/getAndSetAllTaskStatuses',
     }),
 
     /*

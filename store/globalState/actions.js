@@ -15,9 +15,31 @@ export default {
 
   async getEnvironment({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
-    await dispatch('sessions/getAndSetCurrentSession', null, {
-      root: true,
+
+    const currentSessionPromise = new Promise((resolve, reject) => {
+      dispatch('sessions/getAndSetCurrentSession', null, {
+        root: true,
+      }).then(() => resolve())
     })
+    const tasksPromise = new Promise((resolve, reject) => {
+      dispatch('tasks/getAndSetAllSingleTasks', null, {
+        root: true,
+      }).then(() => resolve())
+    })
+    const taskStatusesPromise = new Promise((resolve, reject) => {
+      dispatch('tasks/getAndSetAllTaskStatuses', null, {
+        root: true,
+      }).then(() => resolve())
+    })
+
+    await Promise.all([
+      currentSessionPromise,
+      tasksPromise,
+      taskStatusesPromise,
+    ])
+
+    console.log('NOW ITS GOOD')
+
     // TODO GET TASKS, SETTINGS HERE
     // to allow ui to sync correctly after gathering all data
     setTimeout(() => {

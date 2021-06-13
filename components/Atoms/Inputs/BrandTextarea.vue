@@ -7,6 +7,7 @@
         :aria-label="name"
         :rows="type === 'task' ? 13 : 4"
         class="resize-none brand-input__textarea"
+        :placeholder="type === 'task' ? $t('Describe your task') : ''"
         :class="[
           `brand-input__textarea--${type}`,
           isSelected && 'selected',
