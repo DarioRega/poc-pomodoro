@@ -50,7 +50,7 @@ button:focus {
 
 // APP SKELETTON LAYOUT
 .app-layout {
-  @apply flex items-stretch relative bg-lighter-white dark:bg-darker-blue w-full;
+  @apply flex  relative bg-lighter-white dark:bg-darker-blue w-full;
 
   &__sidebar {
    @apply flex flex-none max-h-screen min-h-screen bg-lighter-white dark:bg-darker-blue;
@@ -58,7 +58,7 @@ button:focus {
   }
 
   &__main-content {
-    @apply flex justify-center mx-auto absolute right-[0rem] pr-8  py-4;
+    @apply flex justify-center mx-auto absolute right-[0rem] pr-8  pt-4;
 
     width: calc(100vw - 15rem);
     transition: width 500ms ease-in-out;

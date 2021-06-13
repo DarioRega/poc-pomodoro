@@ -8,7 +8,10 @@
       <div class="w-full">
         <index-top-header class="pb-32" />
         <current-tab-header class="flex justify-between" />
-        <task-tables class="w-full pt-5" :is-layout-stacked="isLayoutStacked" />
+        <task-tables
+          class="w-full pt-5 pb-12"
+          :is-layout-stacked="isLayoutStacked"
+        />
       </div>
     </section>
 
