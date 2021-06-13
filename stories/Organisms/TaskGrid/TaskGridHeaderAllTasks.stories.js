@@ -1,4 +1,4 @@
-import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
+import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridHeaderAllTasks'
 
 export default {
   title: 'Organisms/TaskGrid/Header',

@@ -1,4 +1,4 @@
-import TaskGridAllTasks from '@/components/Organisms/TaskGrid/TaskGridAllTasks'
+import TaskGridAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridAllTasks'
 import {
   FAKER_TASK_STATUS_NAMES,
   STEPS_STATUS,

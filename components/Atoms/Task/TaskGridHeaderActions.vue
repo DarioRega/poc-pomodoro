@@ -1,7 +1,10 @@
 <template>
   <div class="h-full flex items-center justify-end mr-1 xl:mr-0">
     <ul class="flex flex-row justify-end items-center">
-      <li class="flex h-full justify-center items-center">
+      <li
+        v-show="withArchiveFunctionality"
+        class="flex h-full justify-center items-center"
+      >
         <span
           class="task-grid-header-actions w-4 xl:w-5"
           tabindex="0"
@@ -63,6 +66,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    withArchiveFunctionality: {
+      type: Boolean,
+      default: true,
     },
   },
 }
