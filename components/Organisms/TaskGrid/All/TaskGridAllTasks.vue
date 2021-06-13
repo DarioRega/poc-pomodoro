@@ -31,7 +31,7 @@
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
-          :should-row-loading="currentTaskDescriptionLoading === task.id"
+          :should-row-loading="currentTaskIdRowLoading === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
@@ -127,7 +127,7 @@ export default {
       addTaskErrors: {
         name: '',
       },
-      currentTaskDescriptionLoading: '',
+      currentTaskIdRowLoading: '',
     }
   },
   computed: {
@@ -172,6 +172,7 @@ export default {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
       addTask: 'tasks/addTask',
+      archiveTask: 'tasks/updateTaskStatus',
       createNotification: 'globalState/createNotification',
     }),
     async handleAddTask(name) {
@@ -193,9 +194,8 @@ export default {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
     handleClickTaskTarget(taskId) {
-      // TODO handle
       if (this.isArchiveEnabled) {
-        this.archiveTask(taskId)
+        this.handleArchiveTask(taskId)
       }
       if (this.isDeleteEnabled) {
         const deleteNotification = {
@@ -223,13 +223,13 @@ export default {
       // TODO v2
     },
     async handleChangeTaskDescription(value) {
-      this.currentTaskDescriptionLoading = this.currentTaskSelected.id
+      this.currentTaskIdRowLoading = this.currentTaskSelected.id
 
       await this.updateTaskDescription({
         id: this.currentTaskSelected.id,
         description: value,
       })
-      this.currentTaskDescriptionLoading = ''
+      this.currentTaskIdRowLoading = ''
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
@@ -246,8 +246,14 @@ export default {
       }
       this.isDeleteEnabled = !this.isDeleteEnabled
     },
-    archiveTask(taskId) {
-      // TODO dispatch action to delete
+    async handleArchiveTask(taskId) {
+      const archivedStatus = this.$store.state.tasks.statuses.find(
+        (x) => x.name === TASK_STATUS_VALUES.ARCHIVED
+      )
+      const payload = { id: taskId, task_status_id: archivedStatus.id }
+      this.currentTaskIdRowLoading = taskId
+      await this.archiveTask(payload)
+      this.currentTaskIdRowLoading = ''
     },
     deleteTask(taskId) {
       // TODO dispatch action to delete

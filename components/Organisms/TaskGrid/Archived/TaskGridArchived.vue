@@ -29,7 +29,7 @@
           :is-layout-stacked="isLayoutStacked"
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
-          :should-row-loading="currentTaskDescriptionLoading === task.id"
+          :should-row-loading="currentTaskIdRowLoading === task.id"
           :current-task-selected="currentTaskSelected"
           :is-delete-enabled="isDeleteEnabled"
           class="mb-3"
@@ -105,7 +105,7 @@ export default {
       showCompletedTasks: false,
       amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
-      currentTaskDescriptionLoading: '',
+      currentTaskIdRowLoading: '',
     }
   },
   computed: {
@@ -176,13 +176,13 @@ export default {
       }
     },
     async handleChangeTaskDescription(value) {
-      this.currentTaskDescriptionLoading = this.currentTaskSelected.id
+      this.currentTaskIdRowLoading = this.currentTaskSelected.id
 
       await this.updateTaskDescription({
         id: this.currentTaskSelected.id,
         description: value,
       })
-      this.currentTaskDescriptionLoading = ''
+      this.currentTaskIdRowLoading = ''
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
