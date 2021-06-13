@@ -58,7 +58,7 @@ export default {
     dispatch('createNotification', notification)
   },
 
-  handleTaskUpdateServerError({ dispatch }, errMessage) {
+  handleTaskActionServerError({ dispatch }, errMessage) {
     const notification = {
       title: this.$i18n.t('Something went wrong'),
       description: errMessage,
