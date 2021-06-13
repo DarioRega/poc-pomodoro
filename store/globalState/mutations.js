@@ -25,4 +25,7 @@ export default {
   SET_REFRESH_LOADING(state, payload) {
     state.isRefreshLoading = payload
   },
+  SET_HAS_SKIPPED_ACTION(state, payload) {
+    state.hasSkippedAction = payload
+  },
 }

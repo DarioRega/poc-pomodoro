@@ -4,12 +4,13 @@
       class="header flex items-center"
       :class="isLayoutStacked && 'header--stacked'"
     >
-      <div class="header__col task-name">
+      <div class="header__col task-name relative">
         <task-target
           :is-selected="isSelected"
           :is-completed="isCompleted"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
+          :is-loading="isRowLoading"
           @click="$emit('onTargetClick', task.id)"
           @dblclick="$emit('onChangeRunningTask', task.id)"
         />
@@ -26,15 +27,14 @@
           class="w-full"
           :class="[isRunning ? 'pr-0' : 'pl-3']"
           :value="taskName"
-          @change.native="taskName = $event.target.value"
+          @change.native="handleTaskNameChange($event.target.value)"
         />
       </div>
       <div class="w-32 3xl:w-56 px-4 header__col header__col--center">
         <task-select-status
           :name="$t('Task status')"
-          :status="task.status"
-          :options="TASK_STATES"
-          :is-loading="isTaskStatusLoading"
+          :status="task.task_status"
+          :options="taskStatuses"
           @change="handleTaskStatusChange"
         />
       </div>
@@ -68,10 +68,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
-import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
 import Icon from '@/components/Atoms/Icon'
 
@@ -133,45 +134,58 @@ export default {
       type: Boolean,
       default: false,
     },
+    shouldRowLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       taskName: '',
-      isTaskStatusLoading: false,
-      isTaskDeadlineLoading: false,
-      isTaskNameLoading: false,
+      isLoading: false,
     }
   },
   computed: {
-    // TODO Should come from the backend with an api call,mapped with the name aswell, depending on localization
-    TASK_STATUS_VALUES() {
-      return TASK_STATUS_VALUES
+    isRowLoading() {
+      return this.shouldRowLoading || this.isLoading
     },
-    // TODO Should come from the backend with an api call, should come as props here
-    TASK_STATES() {
-      return Object.keys(TASK_STATUS_VALUES).map((x, i) => {
-        return {
-          id: i + 1,
-          value: TASK_STATUS_VALUES[x],
-          name: FAKER_TASK_STATUS_NAMES[x],
-        }
-      })
-    },
-  },
-  watch: {
-    taskName(newValue, oldValue) {
-      // TODO + validation dispatch action
+    taskStatuses() {
+      return this.$store.state.tasks.statuses
     },
   },
   mounted() {
     this.taskName = this.task.name
   },
   methods: {
-    handleTaskStatusChange(status) {
-      // TODO dispatch action with task id
+    ...mapActions({
+      updateTaskName: 'tasks/updateTaskName',
+      updateTaskStatus: 'tasks/updateTaskStatus',
+      updateTaskDeadline: 'tasks/updateTaskDeadline',
+    }),
+    async handleTaskNameChange(value) {
+      this.isLoading = true
+      this.taskName = value
+
+      await this.updateTaskName({ id: this.task.id, name: value })
+      this.isLoading = false
     },
-    handleTaskDeadlineChange(dateTime, dateString) {
-      // TODO dispatch action with task id
+    async handleTaskStatusChange(status) {
+      this.isLoading = true
+
+      await this.updateTaskStatus({
+        id: this.task.id,
+        task_status_id: status.id,
+      })
+      this.isLoading = false
+    },
+    async handleTaskDeadlineChange(dateTime, dateString) {
+      this.isLoading = true
+
+      await this.updateTaskDeadline({
+        id: this.task.id,
+        deadline: dateString,
+      })
+      this.isLoading = false
     },
   },
 }
