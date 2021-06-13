@@ -87,6 +87,15 @@ export default {
       return this.errorText ? this.errorText : this.error
     },
   },
+  watch: {
+    isLoading(newValue, oldValue) {
+      if (!newValue) {
+        // reset value once the api call has been done
+        this.value = ''
+        this.error = ''
+      }
+    },
+  },
   methods: {
     handleKeyDown(evt) {
       if (!this.isLoading) {
@@ -97,12 +106,12 @@ export default {
       }
     },
     validateTask() {
-      // if (!this.value) {
-      //   return (this.error = this.$t('Field required'))
-      // } else if (this.value.length < 3) {
-      //   return (this.error = this.$t("Name's too short"))
-      // }
-      // this.error = ''
+      if (!this.value) {
+        return (this.error = this.$t('Field required'))
+      } else if (this.value.length < 3) {
+        return (this.error = this.$t("Name's too short"))
+      }
+      this.error = ''
       this.$emit('onAddTask', this.value)
     },
   },

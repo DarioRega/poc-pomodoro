@@ -61,7 +61,7 @@
             :placeholder="$t('Add a task...')"
             name="add task"
             :is-loading="isAddTaskLoading"
-            :error-text="addTaskErrors.name"
+            :error-text="addTaskError"
             class="mb-3"
             @onAddTask="handleAddTask"
           />
@@ -123,9 +123,7 @@ export default {
       showCompletedTasks: false,
       amountOfTasksToDisplays: 0,
       isAddTaskLoading: false,
-      addTaskErrors: {
-        name: '',
-      },
+      addTaskError: '',
       currentTaskDescriptionLoading: '',
     }
   },
@@ -171,19 +169,12 @@ export default {
       createNotification: 'globalState/createNotification',
     }),
     async handleAddTask(name) {
-      this.setAddTaskErrorProperty('name', '')
       this.isAddTaskLoading = true
       const errorRequest = await this.addTask({ name })
       if (errorRequest) {
-        this.setAddTaskErrorProperty(
-          'name',
-          errorRequest.errors.name[0] || errorRequest.message
-        )
+        this.addTaskError = errorRequest.errors.name[0] || errorRequest.message
       }
       this.isAddTaskLoading = false
-    },
-    setAddTaskErrorProperty(property, value) {
-      this.addTaskErrors[property] = value
     },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
