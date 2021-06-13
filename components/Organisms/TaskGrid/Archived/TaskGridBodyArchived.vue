@@ -8,11 +8,10 @@
         <task-target
           :is-selected="isSelected"
           :is-completed="isCompleted"
-          :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
           :is-loading="isRowLoading"
           @click="$emit('onTargetClick', task.id)"
-          @dblclick="$emit('onChangeRunningTask', task.id)"
+          @dblclick="notifyUserCantRunArchivedTask"
         />
         <icon
           v-show="isRunning"
@@ -121,13 +120,6 @@ export default {
       default: false,
     },
     /*
-      If the user enabled the archive task mode on header
-    */
-    isArchiveEnabled: {
-      type: Boolean,
-      default: false,
-    },
-    /*
       If the user enabled the delete task mode on header
     */
     isDeleteEnabled: {
@@ -162,6 +154,9 @@ export default {
       updateTaskStatus: 'tasks/updateTaskStatus',
       updateTaskDeadline: 'tasks/updateTaskDeadline',
     }),
+    /*
+      Update task properties methods
+    */
     async handleTaskNameChange(value) {
       this.isLoading = true
       this.taskName = value
@@ -186,6 +181,10 @@ export default {
         deadline: dateString,
       })
       this.isLoading = false
+    },
+
+    notifyUserCantRunArchivedTask() {
+      // TODO v2
     },
   },
 }

@@ -6,6 +6,7 @@
       :current-task-selected="currentTaskSelected"
       :tasks="allCurrentTabTasks"
       :is-layout-stacked="isLayoutStacked"
+      class="mb-12"
     />
 
     <!--     ARCHIVED TASKS -->
@@ -34,15 +35,16 @@ export default {
   },
   computed: {
     allCurrentTabTasks() {
-      console.log('store', this.$store.state.tasks.allSingles)
       return this.$store.state.tasks.allSingles.filter(
         (x) => x.task_status.name !== TASK_STATUS_VALUES.ARCHIVED
       )
     },
     allCurrentTabTasksArchived() {
-      return this.$store.state.tasks.allSingles.filter(
+      const archiveds = this.$store.state.tasks.allSingles.filter(
         (x) => x.task_status.name === TASK_STATUS_VALUES.ARCHIVED
       )
+      console.log('ARCHIVEDS', archiveds)
+      return archiveds
     },
     currentTaskRunning() {
       return this.$store.state.tasks.currentTaskRunning

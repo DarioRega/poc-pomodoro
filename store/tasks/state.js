@@ -5,7 +5,7 @@ export default () => ({
   statuses: [],
   currentProjectSelected: {
     id: '4ewfds-sdfsdf-sdfsdf',
-    name: 'All tasks',
+    name: 'All singles tasks',
   },
   currentTaskSelected: {},
   currentTaskRunning: {},

@@ -17,8 +17,7 @@
       :should-show-completed-task="showCompletedTasks"
       class="mb-4"
       @onToggle="isToggled = !isToggled"
-      @onArchiveBoxClick="handleEnableArchiveBox"
-      @onTrashClick="handleEnableTrash"
+      @onTrashClick="isDeleteEnabled = !isDeleteEnabled"
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
@@ -33,7 +32,6 @@
           :is-running="currentTaskRunning.id === task.id"
           :should-row-loading="currentTaskDescriptionLoading === task.id"
           :current-task-selected="currentTaskSelected"
-          :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
           class="mb-3"
           @onTargetClick="handleClickTaskTarget"
@@ -56,15 +54,7 @@
     </transition-opacity>
     <transition-opacity duration-amount="200">
       <div v-show="isToggled">
-        <div class="flex justify-between items-center pt-6">
-          <add-task-input
-            :placeholder="$t('Add a task...')"
-            name="add task"
-            :is-loading="isAddTaskLoading"
-            :error-text="addTaskErrors.name"
-            class="mb-3"
-            @onAddTask="handleAddTask"
-          />
+        <div class="flex justify-end items-center pt-6">
           <task-grid-pagination
             class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
             :label="$t('Tasks to display')"
@@ -83,7 +73,6 @@ import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
-import AddTaskInput from '@/components/Atoms/Task/AddTaskInput'
 import TaskGridHeaderArchived from '@/components/Organisms/TaskGrid/Archived/TaskGridHeaderArchived'
 import TaskGridBodyArchived from '@/components/Organisms/TaskGrid/Archived/TaskGridBodyArchived'
 
@@ -94,7 +83,6 @@ export default {
     TaskGridBodyArchived,
     TaskGridPagination,
     BrandTextarea,
-    AddTaskInput,
     TransitionOpacity,
   },
   props: {
@@ -117,15 +105,11 @@ export default {
   },
   data() {
     return {
-      isToggled: true,
+      isToggled: false,
       isDeleteEnabled: false,
-      isArchiveEnabled: false,
       showCompletedTasks: false,
       amountOfTasksToDisplays: 0,
       isAddTaskLoading: false,
-      addTaskErrors: {
-        name: '',
-      },
       currentTaskDescriptionLoading: '',
     }
   },
@@ -160,39 +144,16 @@ export default {
       return TASK_STATUS_VALUES
     },
   },
-  mounted() {
-    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasksList[0])
-  },
-
   methods: {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
       addTask: 'tasks/addTask',
       createNotification: 'globalState/createNotification',
     }),
-    async handleAddTask(name) {
-      this.setAddTaskErrorProperty('name', '')
-      this.isAddTaskLoading = true
-      const errorRequest = await this.addTask({ name })
-      if (errorRequest) {
-        this.setAddTaskErrorProperty(
-          'name',
-          errorRequest.errors.name[0] || errorRequest.message
-        )
-      }
-      this.isAddTaskLoading = false
-    },
-    setAddTaskErrorProperty(property, value) {
-      this.addTaskErrors[property] = value
-    },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
     handleClickTaskTarget(taskId) {
-      // TODO handle
-      if (this.isArchiveEnabled) {
-        this.archiveTask(taskId)
-      }
       if (this.isDeleteEnabled) {
         const deleteNotification = {
           title: this.$t('Delete task ?'),
@@ -205,12 +166,10 @@ export default {
         }
         this.createNotification(deleteNotification)
       }
-      if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
+      if (!this.isDeleteEnabled) {
         const selectedTask = this.findTask(taskId)
         this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
       }
-      // check if isArchiveEnabled or isDeleteEnabled to handle custom event
-      // if both of them are false, just fire the select task event
     },
     handleChangeRunningTask(taskId) {
       // TODO v2
@@ -227,20 +186,8 @@ export default {
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
     },
-    handleEnableArchiveBox() {
-      if (this.isDeleteEnabled) {
-        this.isDeleteEnabled = false
-      }
-      this.isArchiveEnabled = !this.isArchiveEnabled
-    },
     handleEnableTrash() {
-      if (this.isArchiveEnabled) {
-        this.isArchiveEnabled = false
-      }
       this.isDeleteEnabled = !this.isDeleteEnabled
-    },
-    archiveTask(taskId) {
-      // TODO dispatch action to delete
     },
     deleteTask(taskId) {
       // TODO dispatch action to delete
