@@ -109,7 +109,6 @@ export default {
     return !_.isEmpty(state.current)
   },
 
-
   /*
     Current step
    */
