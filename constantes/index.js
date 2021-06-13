@@ -13,7 +13,7 @@ export const aSecondInMilliseconds = 1000
 */
 export const TASK_STATUS_VALUES = {
   DONE: 'DONE',
-  IN_PROGRESS: 'ONGOING',
+  IN_PROGRESS: 'IN_PROGRESS',
   TODO: 'TODO',
   ARCHIVED: 'ARCHIVED',
 }
