@@ -29,13 +29,11 @@
           :is-layout-stacked="isLayoutStacked"
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
-          :is-running="currentTaskRunning.id === task.id"
           :should-row-loading="currentTaskDescriptionLoading === task.id"
           :current-task-selected="currentTaskSelected"
           :is-delete-enabled="isDeleteEnabled"
           class="mb-3"
           @onTargetClick="handleClickTaskTarget"
-          @onChangeRunningTask="handleChangeRunningTask"
         >
           <div class="absolute w-full -mt-4 right-0 pl-4 mr-0">
             <brand-textarea
@@ -90,10 +88,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    currentTaskRunning: {
-      type: Object,
-      default: () => ({}),
-    },
     tasks: {
       type: Array,
       required: true,
@@ -144,6 +138,12 @@ export default {
       return TASK_STATUS_VALUES
     },
   },
+  mounted() {
+    this.$store.commit(
+      'tasks/SET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED',
+      this.tasksList[0]
+    )
+  },
   methods: {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
@@ -168,11 +168,11 @@ export default {
       }
       if (!this.isDeleteEnabled) {
         const selectedTask = this.findTask(taskId)
-        this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
+        this.$store.commit(
+          'tasks/SET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED',
+          selectedTask
+        )
       }
-    },
-    handleChangeRunningTask(taskId) {
-      // TODO v2
     },
     async handleChangeTaskDescription(value) {
       this.currentTaskDescriptionLoading = this.currentTaskSelected.id
@@ -193,7 +193,9 @@ export default {
       // TODO dispatch action to delete
     },
     findTask(taskId) {
-      return this.tasks.find((x) => x.id === taskId)
+      const prout = this.tasks.find((x) => x.id === taskId)
+      console.log('prout')
+      return prout
     },
   },
 }

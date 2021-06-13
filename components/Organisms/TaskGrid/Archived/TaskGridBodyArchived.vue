@@ -13,18 +13,12 @@
           @click="$emit('onTargetClick', task.id)"
           @dblclick="notifyUserCantRunArchivedTask"
         />
-        <icon
-          v-show="isRunning"
-          icon-name="clock"
-          class="w-5 text-dark-indigo dark:text-light-indigo ml-2 mr-2"
-        />
         <brand-input
           :name="$t('Task name')"
           :is-selected="isSelected"
           :is-completed="isCompleted"
           type="task"
           class="w-full"
-          :class="[isRunning ? 'pr-0' : 'pl-3']"
           :value="taskName"
           @change.native="handleTaskNameChange($event.target.value)"
         />
@@ -73,13 +67,11 @@ import TaskTarget from '@/components/Atoms/Task/TaskTarget'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import TaskSelectStatus from '@/components/Atoms/Task/TaskSelectStatus'
 import TaskDeadline from '@/components/Atoms/Task/TaskDeadline'
-import Icon from '@/components/Atoms/Icon'
 
 export default {
   name: 'TaskGridBodyArchived',
   components: {
     TaskTarget,
-    Icon,
     BrandInput,
     TaskSelectStatus,
     TaskDeadline,
@@ -109,13 +101,6 @@ export default {
       If the sidebar is stacked or normal width
     */
     isLayoutStacked: {
-      type: Boolean,
-      default: false,
-    },
-    /*
-      If the is the current task running
-    */
-    isRunning: {
       type: Boolean,
       default: false,
     },

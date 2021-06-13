@@ -161,7 +161,10 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasksList[0])
+    this.$store.commit(
+      'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
+      this.tasksList[0]
+    )
   },
 
   methods: {
@@ -207,7 +210,10 @@ export default {
       }
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
         const selectedTask = this.findTask(taskId)
-        this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
+        this.$store.commit(
+          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
+          selectedTask
+        )
       }
       // check if isArchiveEnabled or isDeleteEnabled to handle custom event
       // if both of them are false, just fire the select task event

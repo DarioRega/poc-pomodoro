@@ -11,8 +11,7 @@
 
     <!--     ARCHIVED TASKS -->
     <task-grid-archived
-      :current-task-running="currentTaskRunning"
-      :current-task-selected="currentTaskSelected"
+      :current-task-selected="currentArchivedTaskSelected"
       :tasks="allCurrentTabTasksArchived"
       :is-layout-stacked="isLayoutStacked"
     />
@@ -34,23 +33,32 @@ export default {
     },
   },
   computed: {
+    /*
+    Default
+    */
+    currentTaskSelected() {
+      return this.$store.state.tasks.singles.currentTaskSelected
+    },
     allCurrentTabTasks() {
-      return this.$store.state.tasks.allSingles.filter(
+      return this.$store.state.tasks.singles.all.filter(
         (x) => x.task_status.name !== TASK_STATUS_VALUES.ARCHIVED
       )
     },
+    /*
+     Archived
+     */
+    currentArchivedTaskSelected() {
+      return this.$store.state.tasks.singles.currentArchivedTaskSelected
+    },
     allCurrentTabTasksArchived() {
-      const archiveds = this.$store.state.tasks.allSingles.filter(
+      return this.$store.state.tasks.singles.all.filter(
         (x) => x.task_status.name === TASK_STATUS_VALUES.ARCHIVED
       )
-      console.log('ARCHIVEDS', archiveds)
-      return archiveds
     },
+
     currentTaskRunning() {
+      // v2
       return this.$store.state.tasks.currentTaskRunning
-    },
-    currentTaskSelected() {
-      return this.$store.state.tasks.currentTaskSelected
     },
   },
 }

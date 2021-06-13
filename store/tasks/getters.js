@@ -7,6 +7,6 @@ export default {
     return state.currentProjectSelected.id === task.project_id
   },
   getCurrentTaskSelected: (state) => {
-    return state.currentTaskSelected
+    return state.singles.currentTaskSelected
   },
 }
