@@ -2,7 +2,7 @@
   <div class="app-layout">
     <index-sidebar @onScreenExpand="handleScreenExpand" />
     <section
-      class="app-layout__main-content"
+      class="app-layout__main-content overflow-y-auto max-h-screen"
       :class="isLayoutStacked && 'app-layout__main-content--stacked'"
     >
       <div class="w-full">
