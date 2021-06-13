@@ -1,5 +1,5 @@
 import TimerSidebar from '@/components/Organisms/TimerSidebar'
-import { POMODORO_STATUS } from '@/constantes'
+import { STEPS_STATUS } from '@/constantes'
 import Sidebar from '../../components/Organisms/Sidebar'
 import CurrentTime from '../../components/Atoms/CurrentTime'
 
@@ -23,7 +23,7 @@ const Template = (args, { argTypes }) => ({
   },
   computed: {
     status() {
-      return POMODORO_STATUS
+      return STEPS_STATUS
     },
   },
   mounted() {
@@ -32,10 +32,10 @@ const Template = (args, { argTypes }) => ({
   template: `
     <sidebar v-bind='$props' :is-layout-stacked='stacked' @onToggleStacked='stacked = $event'>
     <template #currentTime>
-      <current-time :is24h='false' :is-layout-stacked='stacked' />
+      <current-time :is-layout-stacked='stacked' />
     </template>
     <template #timer>
-      <timer-sidebar :is-layout-stacked='stacked' :status='status.POMODORO.paused' :is-paused='true' current-session-end-time='15:35 AM' current-timer='23:00'  />
+      <timer-sidebar :is-layout-stacked='stacked' />
     </template>
     </sidebar>
   `,

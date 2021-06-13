@@ -16,7 +16,7 @@
     ]"
   >
     <p v-if="value" class="text-sm border-0 task-deadline__value">
-      {{ value }}
+      {{ dateFormattedMatchUserTimezone }}
     </p>
     <button
       v-if="!value"
@@ -39,6 +39,7 @@
       class="
         task-deadline__actions
         absolute
+        w-full
         top-[1.7rem]
         z-20
         bg-light-white
@@ -88,6 +89,7 @@
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { fr } from '@/constantes/calendarLocales/fr'
+import moment from 'moment-timezone'
 import Icon from '../Icon'
 import BrandButton from '../BrandButton'
 
@@ -129,12 +131,17 @@ export default {
       config: {
         inline: true,
         locale: this.$i18n.locale || this.$i18n.fallbackLocale,
+        minDate: 'today',
       },
     }
   },
   computed: {
     uniqueKey() {
       return Math.floor(Math.random() * 99999)
+    },
+    dateFormattedMatchUserTimezone() {
+      // TODO adapt with timezone user display format mm-dd-yyy or dd-mm-yyyy, ect..
+      return moment(this.value).format('DD.MM.YYYY')
     },
   },
   mounted() {
@@ -204,8 +211,8 @@ export default {
     &__value,
     &__icon,
     &__toggler {
-      @apply text-dark-blue  #{!important};
-      @apply dark:text-celeste #{!important};
+      @apply text-dark-blue;
+      @apply dark:text-celeste;
       &:focus {
         @apply text-dark-indigo #{!important};
         @apply dark:text-light-indigo #{!important};

@@ -3,13 +3,7 @@ import IndexSidebar from '@/components/Templates/IndexPageComponentsGroup/IndexS
 export default {
   title: 'Templates/IndexPage/Sidebar',
   component: IndexSidebar,
-  argType: {
-    currentTabName: {
-      control: {
-        type: 'text',
-      },
-    },
-  },
+  argType: {},
 }
 
 const Template = (args, { argTypes }) => ({

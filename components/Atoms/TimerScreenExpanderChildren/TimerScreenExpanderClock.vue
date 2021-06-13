@@ -1,36 +1,41 @@
 <template>
   <div>
     <div
-      v-show="!getTimerState.isSessionPending"
+      v-show="sessionState.isSessionCreated"
       class="mb-24 transition-all duration-300"
     >
-      <p class="text-lead text-dark-gray mb-6">
-        {{ $t('Current session will end at') }} {{ getCurrentSessionEndTime }}
-      </p>
+      <div class="text-center">
+        <p class="text-lead text-dark-gray mb-6">
+          {{ $t('Current session will end at') }} {{ currentSessionTimer }}
+        </p>
+      </div>
       <div class="flex items-center justify-center">
         <pomodoro-counter
-          v-for="(item, index) in getSessionSteps"
+          v-for="(item, index) in sessionStepsOnlyPomodoro"
           :key="`pomodoro-counter-${index}`"
           class="w-12 h-12"
-          :class="index < getSessionSteps.length && 'mr-6'"
+          :class="index < sessionStepsOnlyPomodoro.length && 'mr-6'"
           :status="item.status"
+          :is-current="currentStep.id === item.id"
         />
       </div>
     </div>
     <div
       class="flex justify-center items-center flex-row clock"
       :class="[
-        getTimerState.isRunning && 'running',
-        getTimerState.isPaused && 'paused',
-        getTimerState.isPending && 'pending',
+        sessionState.isRunning && 'running',
+        sessionState.isPaused && 'paused',
+        (!sessionState.isSessionCreated ||
+          sessionState.isSessionStartedButHasPendingProcess) &&
+          'pending',
       ]"
     >
       <h2>
-        {{ getCurrentTimer | getOnlyHours }}
+        {{ currentStepTimer | getOnlyHours }}
       </h2>
       <h2 class="mx-1 font-bold">:</h2>
       <h2>
-        {{ getCurrentTimer | getOnlyMinutes }}
+        {{ currentStepTimer | getOnlyMinutes }}
       </h2>
     </div>
   </div>
@@ -38,6 +43,7 @@
 
 <script>
 import PomodoroCounter from '@/components/Atoms/PomodoroCounter'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TimerScreenExpanderClock',
@@ -57,18 +63,13 @@ export default {
     },
   },
   computed: {
-    getCurrentTimer() {
-      return this.$store.getters['timer/getCurrentTimer']
-    },
-    getCurrentSessionEndTime() {
-      return this.$store.getters['sessions/getCurrentSessionEndTime']
-    },
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
-    },
-    getSessionSteps() {
-      return this.$store.getters['sessions/getSessionSteps']
-    },
+    ...mapGetters({
+      sessionState: 'sessions/getSessionState',
+      sessionStepsOnlyPomodoro: 'sessions/getSessionStepsOnlyPomodoro',
+      currentStep: 'sessions/getCurrentStep',
+      currentStepTimer: 'timers/getCurrentStepTimer',
+      currentSessionTimer: 'timers/getSessionTimer',
+    }),
   },
 }
 </script>

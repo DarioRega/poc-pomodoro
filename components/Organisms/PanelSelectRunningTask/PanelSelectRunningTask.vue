@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     tasks() {
-      return this.$store.state.tasks.allProjectsTasks
+      return this.$store.state.tasks.all
     },
     previousTask() {
       return this.$store.state.tasks.previousTask

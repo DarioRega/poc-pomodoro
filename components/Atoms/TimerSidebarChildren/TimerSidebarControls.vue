@@ -1,7 +1,7 @@
 <template>
   <div class="timer-sidebar__controls">
     <!--  IS RUNNING -->
-    <div v-show="getTimerState.isRunning" class="timer-sidebar__controls">
+    <div v-show="sessionState.isRunning" class="timer-sidebar__controls">
       <button
         class="timer-sidebar__controls__buttons text-error"
         @click="$emit('onPause')"
@@ -10,11 +10,11 @@
       </button>
     </div>
 
-    <!--    IS PAUSED -->
+    <!--    IS PAUSED oR PENDING -->
     <div
       v-show="
-        getTimerState.isPaused ||
-        getTimerState.isSessionStartedButPendingProcess
+        sessionState.isPaused ||
+        sessionState.isSessionStartedButHasPendingProcess
       "
       class="timer-sidebar__controls"
       :class="isLayoutStacked ? 'flex-col-reverse gap-y-4' : 'gap-x-6'"
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Icon from '../Icon'
 
 export default {
@@ -58,16 +59,16 @@ export default {
     },
   },
   computed: {
-    getTimerState() {
-      return this.$store.getters['sessions/getTimerState']
-    },
+    ...mapGetters({
+      sessionState: 'sessions/getSessionState',
+    }),
     isResumeOrStart() {
-      return this.getTimerState.isPaused ? 'resume' : 'play'
+      return this.sessionState.isPaused ? 'resume' : 'play'
     },
   },
   methods: {
     handleResumeOrStart() {
-      if (this.getTimerState.isPaused) {
+      if (this.sessionState.isPaused) {
         this.$emit('onResume')
       } else {
         this.$emit('onStart')
