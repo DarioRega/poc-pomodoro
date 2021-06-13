@@ -149,6 +149,7 @@ export default {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
       addTask: 'tasks/addTask',
+      deleteTask: 'tasks/deleteTask',
       createNotification: 'globalState/createNotification',
     }),
     taskListOnlyAmountToDisplay(list) {
@@ -163,7 +164,7 @@ export default {
           ),
           actionRequired: true,
           type: 'info',
-          confirmCallback: () => this.deleteTask(taskId),
+          confirmCallback: () => this.handleDeleteTask(taskId),
         }
         this.createNotification(deleteNotification)
       }
@@ -190,13 +191,13 @@ export default {
     handleEnableTrash() {
       this.isDeleteEnabled = !this.isDeleteEnabled
     },
-    deleteTask(taskId) {
-      // TODO dispatch action to delete
+    async handleDeleteTask(taskId) {
+      this.currentTaskIdRowLoading = taskId
+      await this.deleteTask(taskId)
+      this.currentTaskIdRowLoading = ''
     },
     findTask(taskId) {
-      const prout = this.tasks.find((x) => x.id === taskId)
-      console.log('prout')
-      return prout
+      return this.tasks.find((x) => x.id === taskId)
     },
   },
 }

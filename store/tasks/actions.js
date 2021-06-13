@@ -24,11 +24,16 @@ export default {
     }
   },
 
-  async deleteTask({ dispatch, commit }, id) {
+  async deleteTask({ dispatch, commit, store }, id) {
     try {
       await this.$axios.delete(TASK_DELETE_ID_URL(id))
     } catch (err) {
-      // TODO notification
+      const notification = {
+        title: this.$i18n.t('Something went wrong!'),
+        type: 'error',
+        description: err.response.data.message,
+      }
+      store.dispatch('globalState/createNotification', notification)
       return err.response.data
     }
   },

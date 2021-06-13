@@ -258,7 +258,6 @@ export default {
     },
     async handleDeleteTask(taskId) {
       this.currentTaskIdRowLoading = taskId
-      // TODO dispatch action to delete
       await this.deleteTask(taskId)
       this.currentTaskIdRowLoading = ''
     },

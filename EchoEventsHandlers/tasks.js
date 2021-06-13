@@ -25,12 +25,6 @@ export const onUpdateTaskEvent = (payload, store, i18n) => {
 
 export const onDeleteTaskEvent = (payload, store, i18n) => {
   if (payload) {
-    // const notification = {
-    //   title: i18n.t('Task edited!'),
-    //   type: 'success',
-    //   description: i18n.t('Your task was successfully edited'),
-    // }
-    // store.dispatch('globalState/createNotification', notification)
     store.dispatch('tasks/deleteSingleTask', payload)
   }
 }
