@@ -99,13 +99,8 @@ export default {
     Abort
    */
   async abortSession({ dispatch }) {
-    const notification = {
-      title: this.$i18n.t('Session aborted !'),
-      type: 'success',
-    }
     try {
       await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
-      dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
       dispatch(
         'globalState/handleSessionActionsServerError',
@@ -131,14 +126,31 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  async skipCurrentStep({ dispatch }) {
+  async skipCurrentStep({ dispatch, getters, commit }) {
     const notification = {
       title: this.$i18n.t('Process skipped !'),
     }
+    const nextStepDuration = getters.isNextStepLastStep
+      ? getters.getFirstStep.duration
+      : getters.getNextStep.duration
+
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.SKIP,
       })
+      commit('globalState/SET_HAS_SKIPPED_ACTION', true, {
+        root: true,
+      })
+
+      commit(
+        'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+        {
+          currentStepTimer: formatDuration(nextStepDuration),
+          currentStepRestingTime: nextStepDuration,
+        },
+        { root: true }
+      )
+
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
       dispatch(

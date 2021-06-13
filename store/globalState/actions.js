@@ -1,8 +1,12 @@
 export default {
-  async login({ dispatch, rootState }, payload) {
+  async login({ dispatch, rootState, commit }, payload) {
+    commit('globalState/SET_REFRESH_LOADING', false, { root: true })
+
     await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
+    // by default is the isRefreshLoading to true, since we logged in, we need to use isEnvLoading instead
+
     dispatch('getEnvironment')
   },
   async logout({ dispatch, rootState }) {
@@ -11,11 +15,36 @@ export default {
 
   async getEnvironment({ dispatch, commit }) {
     commit('globalState/SET_ENV_LOADING', true, { root: true })
-    await dispatch('sessions/getAndSetCurrentSession', null, {
-      root: true,
+
+    const currentSessionPromise = new Promise((resolve, reject) => {
+      dispatch('sessions/getAndSetCurrentSession', null, {
+        root: true,
+      }).then(() => resolve())
     })
+    const tasksPromise = new Promise((resolve, reject) => {
+      dispatch('tasks/getAndSetAllSingleTasks', null, {
+        root: true,
+      }).then(() => resolve())
+    })
+    const taskStatusesPromise = new Promise((resolve, reject) => {
+      dispatch('tasks/getAndSetAllTaskStatuses', null, {
+        root: true,
+      }).then(() => resolve())
+    })
+
+    await Promise.all([
+      currentSessionPromise,
+      tasksPromise,
+      taskStatusesPromise,
+    ])
+
+    console.log('NOW ITS GOOD')
+
     // TODO GET TASKS, SETTINGS HERE
-    commit('globalState/SET_ENV_LOADING', false, { root: true })
+    // to allow ui to sync correctly after gathering all data
+    setTimeout(() => {
+      commit('globalState/SET_ENV_LOADING', false, { root: true })
+    }, 1000)
   },
 
   handleSessionActionsServerError({ dispatch }, errMessage) {
