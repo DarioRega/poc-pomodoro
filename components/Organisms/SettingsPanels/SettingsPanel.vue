@@ -35,7 +35,7 @@
         v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
         :values="settingsValues.pomodoroConfigTab"
         @onPomodoroDurationChange="handlePomodoroDurationChange"
-        @onSmallBreakDurationChange="handleBigBreakDurationChange"
+        @onSmallBreakDurationChange="handleSmallBreakDurationChange"
         @onBigBreakDurationChange="handleBigBreakDurationChange"
         @onPomodoroQuantityChange="handlePomodoroQuantityChange"
         @onNoiseNotificationChange="handleNoiseNotificationChange"
@@ -157,8 +157,11 @@ export default {
     handlePomodoroDurationChange(value) {
       this.settingsValues.pomodoroConfigTab.pomodoro_duration = value
     },
-    handleBigBreakDurationChange(value) {
+    handleSmallBreakDurationChange(value) {
       this.settingsValues.pomodoroConfigTab.small_break_duration = value
+    },
+    handleBigBreakDurationChange(value) {
+      this.settingsValues.pomodoroConfigTab.big_break_duration = value
     },
     handlePomodoroQuantityChange(value) {
       this.settingsValues.pomodoroConfigTab.pomodoro_quantity = value
