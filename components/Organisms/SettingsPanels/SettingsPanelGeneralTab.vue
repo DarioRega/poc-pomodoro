@@ -64,6 +64,28 @@
       </div>
     </div>
 
+    <!--    SETTINGS CHOICES -->
+    <div class="settings-panel__container">
+      <div class="settings-panel__labels">
+        <h6>{{ $t('Pomodoro settings') }}</h6>
+        <p>
+          {{
+            $t(
+              'Select the pomodoro configuration you wish to run the sessions with'
+            )
+          }}
+        </p>
+      </div>
+      <div class="settings-panel__configurations">
+        <brand-select
+          :value="values.settingChoice"
+          :options="options.settingChoices"
+          name="settings choice"
+          @change="$emit('onSettingChoiceChange', $event)"
+        />
+      </div>
+    </div>
+
     <!--  BUG REPORTS  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
@@ -85,6 +107,7 @@
       </div>
     </div>
 
+    <!--  ANALYTICS  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
         <h6>{{ $t('Analytics') }}</h6>

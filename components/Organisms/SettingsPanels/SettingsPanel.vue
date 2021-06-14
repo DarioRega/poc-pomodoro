@@ -48,15 +48,18 @@
         :values="settingsValues.subscriptionTab"
       />
     </div>
-    <settings-panel-save-or-reset-settings
-      v-show="isSaveOrResetPossible"
-      :has-reset="isDefaultSettingsConfiguration"
-      :is-loading="isLoading"
-      :save-changes-label="$t('Save changes')"
-      :reset-default-label="$t('Reset to defaults')"
-      @onSave="handleSave"
-      @onReset="handleResetDefault"
-    />
+
+    <div v-show="canSave" class="mt-6 w-72 w-full mx-auto">
+      <brand-button
+        name="save changes"
+        class="w-full"
+        :is-loading="isLoading"
+        :is-disabled="isLoading"
+        @click="handleSave"
+      >
+        {{ $t('Save changes') }}
+      </brand-button>
+    </div>
   </section>
 </template>
 
@@ -69,8 +72,10 @@ import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanel
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
 
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import SettingsPanelSaveOrResetSettings from '@/components/Organisms/SettingsPanels/SettingsPanelSaveOrResetSettings'
+import { mapActions, mapGetters } from 'vuex'
 
+const NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS =
+  'settingsPanelNotificationWarningDefaultEdit'
 export default {
   name: 'SettingsPanel',
   components: {
@@ -89,6 +94,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      getSpecificNotification: 'globalState/getSpecificNotification',
+      areStoreSettingsEmpty: 'settings/areSettingsEmpty',
+    }),
     user() {
       return this.$auth.user
     },
@@ -108,6 +117,11 @@ export default {
     stepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
+    isWarningCannotEditDefaultSettingsNotificationExisting() {
+      return this.getSpecificNotification(
+        NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS
+      )
+    },
     isDefaultSettingsConfiguration() {
       // TODO verify how to know if it's the default config or user one
       return true
@@ -119,6 +133,23 @@ export default {
     this.currentActiveTab = this.stepsValues.GENERAL
   },
   methods: {
+    ...mapActions({
+      createNotification: 'globalState/createNotification',
+    }),
+    createWarningNotificationCantChangeDefaultSettings() {
+      const notification = {
+        notificationId: NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS,
+        title: this.$t('Hold up...'),
+        description: this.$t(
+          "Your changes won't be saved, because you're editing the default settings."
+        ),
+        actionRequired: true,
+        actionText: this.$t('Create custom settings'),
+        confirmCallback: this.createCustomSettings,
+        closeCallback: this.restoreEditedValues,
+      }
+      this.createNotification(notification)
+    },
     /*
       Global events
     */
@@ -139,7 +170,7 @@ export default {
       this.settingsValues.generalTab.timezone = value
     },
     handleTimeDisplayFormatChange(value) {
-      this.settingsValues.generalTab.displayLanguage = value
+      this.settingsValues.generalTab.timeDisplayFormat = value
     },
     handleThemeChange(value) {
       this.settingsValues.generalTab.theme = value
