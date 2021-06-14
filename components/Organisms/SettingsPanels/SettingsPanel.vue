@@ -49,7 +49,7 @@
       />
     </div>
 
-    <div v-show="canSave" class="mt-6 w-72 w-full mx-auto">
+    <div v-show="canSave" class="mt-6 w-64 w-full mx-auto text-center">
       <brand-button
         name="save changes"
         class="w-full"
@@ -73,6 +73,7 @@ import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/Settings
 
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
 import { mapActions, mapGetters } from 'vuex'
+import BrandButton from '@/components/Atoms/BrandButton'
 
 const NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS =
   'settingsPanelNotificationWarningDefaultEdit'
@@ -84,19 +85,21 @@ export default {
     SettingsPanelAccountTab,
     SettingsPanelPomodoroConfigTab,
     SettingsPanelCurrentSubscriptionTab,
+    BrandButton,
   },
   data() {
     return {
       currentActiveTab: '',
       settingsValues: {},
       isLoading: false,
-      areSettingsAlreadySet: false,
+      shouldWatchChange: false,
     }
   },
   computed: {
     ...mapGetters({
       getSpecificNotification: 'globalState/getSpecificNotification',
       areStoreSettingsEmpty: 'settings/areSettingsEmpty',
+      userSettingsValues: 'settings/getUserSettingsValues',
     }),
     user() {
       return this.$auth.user
@@ -152,13 +155,11 @@ export default {
   mounted() {
     this.currentActiveTab = this.stepsValues.GENERAL
     if (!this.areStoreSettingsEmpty) {
-      this.settingsValues = _.cloneDeep(
-        this.$store.state.settings.settingsValues
-      )
+      this.settingsValues = _.cloneDeep(this.userSettingsValues)
 
       // to avoid fire the watcher on mounted state, when no settings has been modified by user
       setTimeout(() => {
-        this.areSettingsAlreadySet = true
+        this.shouldWatchChange = true
       }, 1000)
     }
   },

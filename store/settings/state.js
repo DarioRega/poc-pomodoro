@@ -14,13 +14,18 @@ export default () => ({
       },
       timeDisplayFormat: {
         id: 123,
-        value: 'am/pm',
-        name: 'AM/PM',
+        value: '12',
+        name: '12H',
       },
       theme: {
         id: 2354,
         value: 'dusk',
         name: 'Dusk',
+      },
+      settingChoice: {
+        id: '123',
+        value: 'settingId',
+        name: 'Default preferences',
       },
       bugReports: false,
       analytics: true,
@@ -83,7 +88,7 @@ export default () => ({
       {
         id: 123,
         value: '12',
-        name: 'AM/PM',
+        name: '12H',
       },
       {
         id: 4123,
@@ -101,6 +106,23 @@ export default () => ({
         id: 235454,
         value: 'light',
         name: 'Light',
+      },
+    ],
+    settingChoices: [
+      {
+        id: '123',
+        value: '123',
+        name: 'Default preferences',
+      },
+      {
+        id: '124343',
+        value: '124343',
+        name: 'Dario ui preferences',
+      },
+      {
+        id: '545345',
+        value: '545345',
+        name: 'Josh preferences',
       },
     ],
   },

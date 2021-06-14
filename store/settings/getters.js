@@ -12,6 +12,9 @@ export default {
   getUserSettingTimezone: (state) => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
   },
+  getUserSettingsValues: (state) => {
+    return state.settingsValues
+  },
   areSettingsEmpty: (state) => {
     return _.isEmpty(state.settingsValues)
   },
