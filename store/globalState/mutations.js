@@ -28,4 +28,7 @@ export default {
   SET_HAS_SKIPPED_ACTION(state, payload) {
     state.hasSkippedAction = payload
   },
+  FORCE_RERENDER_TASK_TABLES(state) {
+    state.taskTablesKey += 1
+  },
 }

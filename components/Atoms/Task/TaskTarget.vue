@@ -47,7 +47,6 @@
       v-show="!isArchiveEnabled && !isDeleteEnabled && !isCompleted"
       icon-name="target"
       class="w-5 h-5"
-      :class="isLoading && 'invisible'"
     />
   </button>
 </template>
@@ -88,12 +87,18 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.task-target--loading::after {
-  @apply w-5 h-5 absolute left-0 m-auto border-4 border-transparent rounded-[50%] text-current fill-current;
+.task-target--loading {
+  & > svg {
+    @apply invisible;
+  }
 
-  content: '';
-  animation: small-loading-spinner 1s ease infinite;
-  border-top-color: #182532;
+  &::after {
+    @apply w-5 h-5 absolute left-0 m-auto border-4 border-transparent rounded-[50%] text-current fill-current;
+
+    content: '';
+    animation: small-loading-spinner 1s ease infinite;
+    border-top-color: #182532;
+  }
 }
 .dark .task-target--loading::after {
   border-top-color: white;
