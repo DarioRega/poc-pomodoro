@@ -1,13 +1,16 @@
 export default () => ({
   all: [],
-  allCurrentProject: [],
-  allSingles: [],
-  statuses: [],
+  singles: {
+    currentTaskSelected: {},
+    currentArchivedTaskSelected: {},
+    all: [],
+  },
   currentProjectSelected: {
     id: '4ewfds-sdfsdf-sdfsdf',
-    name: 'All tasks',
+    name: 'All singles tasks',
+    all: [],
   },
-  currentTaskSelected: {},
   currentTaskRunning: {},
   previousTask: {},
+  statuses: [],
 })

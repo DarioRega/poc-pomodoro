@@ -2,13 +2,17 @@
   <div class="app-layout">
     <index-sidebar @onScreenExpand="handleScreenExpand" />
     <section
-      class="app-layout__main-content"
+      class="app-layout__main-content overflow-y-auto max-h-screen"
       :class="isLayoutStacked && 'app-layout__main-content--stacked'"
     >
       <div class="w-full">
         <index-top-header class="pb-32" />
         <current-tab-header class="flex justify-between" />
-        <task-tables class="w-full pt-5" :is-layout-stacked="isLayoutStacked" />
+        <task-tables
+          :key="taskTablesKey"
+          class="w-full pt-5 pb-12"
+          :is-layout-stacked="isLayoutStacked"
+        />
       </div>
     </section>
 
@@ -60,6 +64,9 @@ export default {
     }
   },
   computed: {
+    taskTablesKey() {
+      return this.$store.state.globalState.taskTablesKey
+    },
     isLayoutStacked() {
       return this.$store.state.globalState.isLayoutStacked
     },

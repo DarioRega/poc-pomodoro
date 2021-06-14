@@ -33,7 +33,7 @@
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
-          :should-row-loading="currentTaskDescriptionLoading === task.id"
+          :should-row-loading="currentTaskIdRowLoading === task.id"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
@@ -70,6 +70,7 @@
           <task-grid-pagination
             class="justify-end absolute bottom-[1.5rem] right-[1.5rem]"
             :label="$t('Tasks to display')"
+            :amount="amountOfTasksToDisplays"
             @onPaginationChange="amountOfTasksToDisplays = $event"
           />
         </div>
@@ -81,8 +82,8 @@
 <script>
 import { mapActions } from 'vuex'
 
-import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
-import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/TaskGridHeaderAllTasks'
+import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridBodyAllTasks'
+import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
@@ -125,10 +126,10 @@ export default {
       isDeleteEnabled: false,
       isArchiveEnabled: false,
       showCompletedTasks: false,
-      amountOfTasksToDisplays: 0,
+      amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
       addTaskError: '',
-      currentTaskDescriptionLoading: '',
+      currentTaskIdRowLoading: '',
     }
   },
   computed: {
@@ -163,13 +164,18 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', this.tasksList[0])
+    this.$store.commit(
+      'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
+      this.tasksList[0]
+    )
   },
 
   methods: {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
       addTask: 'tasks/addTask',
+      archiveTask: 'tasks/updateTaskStatus',
+      deleteTask: 'tasks/deleteTask',
       createNotification: 'globalState/createNotification',
     }),
     async handleAddTask(name) {
@@ -184,9 +190,8 @@ export default {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
     handleClickTaskTarget(taskId) {
-      // TODO handle
       if (this.isArchiveEnabled) {
-        this.archiveTask(taskId)
+        this.handleArchiveTask(taskId)
       }
       if (this.isDeleteEnabled) {
         const deleteNotification = {
@@ -196,13 +201,16 @@ export default {
           ),
           actionRequired: true,
           type: 'info',
-          confirmCallback: () => this.deleteTask(taskId),
+          confirmCallback: () => this.handleDeleteTask(taskId),
         }
         this.createNotification(deleteNotification)
       }
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
         const selectedTask = this.findTask(taskId)
-        this.$store.commit('tasks/SET_CURRENT_SELECTED_TASK', selectedTask)
+        this.$store.commit(
+          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
+          selectedTask
+        )
       }
       // check if isArchiveEnabled or isDeleteEnabled to handle custom event
       // if both of them are false, just fire the select task event
@@ -211,13 +219,13 @@ export default {
       // TODO v2
     },
     async handleChangeTaskDescription(value) {
-      this.currentTaskDescriptionLoading = this.currentTaskSelected.id
+      this.currentTaskIdRowLoading = this.currentTaskSelected.id
 
       await this.updateTaskDescription({
         id: this.currentTaskSelected.id,
         description: value,
       })
-      this.currentTaskDescriptionLoading = ''
+      this.currentTaskIdRowLoading = ''
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
@@ -234,11 +242,19 @@ export default {
       }
       this.isDeleteEnabled = !this.isDeleteEnabled
     },
-    archiveTask(taskId) {
-      // TODO dispatch action to delete
+    async handleArchiveTask(taskId) {
+      const archivedStatus = this.$store.state.tasks.statuses.find(
+        (x) => x.name === TASK_STATUS_VALUES.ARCHIVED
+      )
+      const payload = { id: taskId, task_status_id: archivedStatus.id }
+      this.currentTaskIdRowLoading = taskId
+      await this.archiveTask(payload)
+      this.currentTaskIdRowLoading = ''
     },
-    deleteTask(taskId) {
-      // TODO dispatch action to delete
+    async handleDeleteTask(taskId) {
+      this.currentTaskIdRowLoading = taskId
+      await this.deleteTask(taskId)
+      this.currentTaskIdRowLoading = ''
     },
     findTask(taskId) {
       return this.tasks.find((x) => x.id === taskId)

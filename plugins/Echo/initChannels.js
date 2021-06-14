@@ -1,6 +1,7 @@
 import { onCurrentSessionEvent } from '@/EchoEventsHandlers/sessions'
 import {
   onCreateTaskEvent,
+  onDeleteTaskEvent,
   onUpdateTaskEvent,
 } from '@/EchoEventsHandlers/tasks'
 
@@ -16,6 +17,9 @@ export default ({ store, i18n }, inject) => {
       )
       .listen(`.task.update`, (payload) =>
         onUpdateTaskEvent(payload, store, i18n)
+      )
+      .listen(`.task.delete`, (payload) =>
+        onDeleteTaskEvent(payload, store, i18n)
       )
   }
 

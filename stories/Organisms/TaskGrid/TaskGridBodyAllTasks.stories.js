@@ -1,4 +1,4 @@
-import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/TaskGridBodyAllTasks'
+import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridBodyAllTasks'
 import { FAKER_TASK_STATUS_NAMES, TASK_STATUS_VALUES } from '@/constantes'
 
 export default {
