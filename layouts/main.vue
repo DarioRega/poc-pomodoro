@@ -118,18 +118,13 @@ export default {
     Lifecycles
   */
   async mounted() {
-    this.$initWebSocketChannel('userPrivateChannel', this.$auth.user.id)
-
+    /*
+      Verify if user refresh page, we get the env data
+     */
     if (!this.sessionState.isSessionCreated) {
-      const promises = [
-        await this.getAndSetCurrentSession(),
-        await this.getAndSetAllTasks(),
-        await this.getAndSetAllTaskStatuses(),
-      ]
-      await Promise.allSettled(promises)
-
-      this.$store.commit('globalState/SET_REFRESH_LOADING', false)
+      await this.getEnvironment(false)
     }
+
     if (this.sessionState.isSessionCreated) {
       if (!this.sessionState.isRunning) {
         this.setIntervalSessionEndTimeWhenNotRunning()

@@ -22,7 +22,9 @@
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
-      <div v-show="isToggled" class="min-h-[22rem]">
+      <div v-show="isToggled" class="min-h-[22rem] h-px relative">
+        <task-grid-empty-list v-show="tasksList.length < 1" />
+
         <task-grid-body-all-tasks
           v-for="(task, index) in tasksList"
           :key="task.id"
@@ -61,7 +63,7 @@
             :placeholder="$t('Add a task...')"
             name="add task"
             :is-loading="isAddTaskLoading"
-            :error-text="addTaskErrors.name"
+            :error-text="addTaskError"
             class="mb-3"
             @onAddTask="handleAddTask"
           />
@@ -86,6 +88,7 @@ import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 import AddTaskInput from '@/components/Atoms/Task/AddTaskInput'
+import TaskGridEmptyList from '@/components/Atoms/Task/TaskGridEmptyList'
 
 export default {
   name: 'TaskGridAllTasks',
@@ -95,6 +98,7 @@ export default {
     TaskGridPagination,
     BrandTextarea,
     AddTaskInput,
+    TaskGridEmptyList,
     TransitionOpacity,
   },
   props: {
@@ -123,9 +127,7 @@ export default {
       showCompletedTasks: false,
       amountOfTasksToDisplays: 0,
       isAddTaskLoading: false,
-      addTaskErrors: {
-        name: '',
-      },
+      addTaskError: '',
       currentTaskDescriptionLoading: '',
     }
   },
@@ -171,19 +173,12 @@ export default {
       createNotification: 'globalState/createNotification',
     }),
     async handleAddTask(name) {
-      this.setAddTaskErrorProperty('name', '')
       this.isAddTaskLoading = true
       const errorRequest = await this.addTask({ name })
       if (errorRequest) {
-        this.setAddTaskErrorProperty(
-          'name',
-          errorRequest.errors.name[0] || errorRequest.message
-        )
+        this.addTaskError = errorRequest.errors.name[0] || errorRequest.message
       }
       this.isAddTaskLoading = false
-    },
-    setAddTaskErrorProperty(property, value) {
-      this.addTaskErrors[property] = value
     },
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
