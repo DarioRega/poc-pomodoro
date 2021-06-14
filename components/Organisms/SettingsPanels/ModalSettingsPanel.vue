@@ -4,7 +4,10 @@
       <h5 class="text-dark-blue dark:text-celeste">{{ $t('Settings') }}</h5>
     </template>
     <template #body>
-      <settings-panel />
+      <settings-panel
+        :key="settingsPanelKey"
+        @onReRenderComponent="settingsPanelKey += 1"
+      />
     </template>
     <template #footer>
       <div class="flex justify-end">
@@ -30,6 +33,10 @@ export default {
       default: true,
     },
   },
-  mounted() {},
+  data() {
+    return {
+      settingsPanelKey: 0,
+    }
+  },
 }
 </script>

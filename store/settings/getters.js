@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import {
   SETTINGS_PANEL_STEPS_VALUES,
   SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES,
@@ -9,6 +11,9 @@ export default {
   },
   getUserSettingTimezone: (state) => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
+  },
+  areSettingsEmpty: (state) => {
+    return _.isEmpty(state.settingsValues)
   },
   isAppMuted: (state) => {
     return state.settingsValues.pomodoroConfigTab.noise_notification_end_process

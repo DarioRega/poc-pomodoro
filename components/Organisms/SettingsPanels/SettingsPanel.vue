@@ -84,13 +84,13 @@ export default {
     SettingsPanelAccountTab,
     SettingsPanelPomodoroConfigTab,
     SettingsPanelCurrentSubscriptionTab,
-    SettingsPanelSaveOrResetSettings,
   },
   data() {
     return {
       currentActiveTab: '',
       settingsValues: {},
       isLoading: false,
+      areSettingsAlreadySet: false,
     }
   },
   computed: {
@@ -101,7 +101,7 @@ export default {
     user() {
       return this.$auth.user
     },
-    isSaveOrResetPossible() {
+    canSave() {
       switch (this.currentActiveTab) {
         case this.stepsValues.GENERAL:
           return true
@@ -127,10 +127,40 @@ export default {
       return true
     },
   },
+  watch: {
+    areStoreSettingsEmpty(newValue, oldValue) {
+      if (!newValue && !this.areSettingsAlreadySet)
+        this.areSettingsAlreadySet = true
+    },
+    settingsValues: {
+      deep: true,
+      handler() {
+        if (this.isDefaultSettingsConfiguration && this.areSettingsAlreadySet) {
+          if (!this.isWarningCannotEditDefaultSettingsNotificationExisting) {
+            this.createWarningNotificationCantChangeDefaultSettings()
+          }
+        } else {
+          this.$store.commit(
+            'globalState/REMOVE_NOTIFICATION',
+            NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS
+          )
+        }
+      },
+    },
+  },
 
   mounted() {
-    this.settingsValues = _.cloneDeep(this.$store.state.settings.settingsValues)
     this.currentActiveTab = this.stepsValues.GENERAL
+    if (!this.areStoreSettingsEmpty) {
+      this.settingsValues = _.cloneDeep(
+        this.$store.state.settings.settingsValues
+      )
+
+      // to avoid fire the watcher on mounted state, when no settings has been modified by user
+      setTimeout(() => {
+        this.areSettingsAlreadySet = true
+      }, 1000)
+    }
   },
   methods: {
     ...mapActions({
@@ -149,6 +179,12 @@ export default {
         closeCallback: this.restoreEditedValues,
       }
       this.createNotification(notification)
+    },
+    restoreEditedValues() {
+      this.$emit('onReRenderComponent')
+    },
+    createCustomSettings() {
+      console.log('CREATE CUSTOM SETTINGS FIRED')
     },
     /*
       Global events
