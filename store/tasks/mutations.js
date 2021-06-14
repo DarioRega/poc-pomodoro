@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default {
   /*
-    Current task selected
+    Singles current task selected
    */
   SET_SINGLES_TASKS_CURRENT_TASK_SELECTED(state, task) {
     state.singles.currentTaskSelected = task
@@ -10,32 +10,28 @@ export default {
   SET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED(state, task) {
     state.singles.currentArchivedTaskSelected = task
   },
-
-  /*
-    Current project selected
-   */
-  SET_CURRENT_SELECTED_PROJECT(state, projectId) {
-    // TODO v2
+  RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED(state) {
+    state.singles.currentTaskSelected = {}
+  },
+  RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED(state) {
+    state.singles.currentArchivedTaskSelected = {}
   },
 
-  PUSH_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
-    state.allCurrentProject.push(task)
-  },
-  UPDATE_TASK_IN_CURRENT_PROJECT_SELECTED(state, task) {
-    const taskToUpdateIndex = state.currentProjectSelected.all.findIndex(
-      (x) => x.id === task.id
-    )
-    Vue.set(state.currentProjectSelected.all, taskToUpdateIndex, task)
-  },
   UPDATE_CURRENT_TASK_SELECTED(state, task) {
     state.singles.currentTaskSelected = {
       ...state.singles.currentTaskSelected,
       task,
     }
   },
+  UPDATE_CURRENT_ARCHIVED_TASK_SELECTED(state, task) {
+    state.singles.currentArchivedTaskSelected = {
+      ...state.singles.currentArchivedTaskSelected,
+      task,
+    }
+  },
 
   /*
-  Tasks CRUD
+  Singles Tasks CRUD
    */
   ADD_SINGLE_TASK(state, task) {
     state.singles.all.push(task)
@@ -48,6 +44,14 @@ export default {
     Vue.set(state.singles.all, taskToUpdateIndex, task)
   },
 
+  DELETE_SINGLE_TASK(state, id) {
+    const taskToUpdateIndex = state.singles.all.findIndex((x) => x.id === id)
+    state.singles.all.splice(taskToUpdateIndex, 1)
+  },
+
+  /*
+    Global
+   */
   SET_ALL_SINGLES_TASKS(state, payload) {
     state.singles.all = payload
   },

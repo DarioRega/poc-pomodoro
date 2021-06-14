@@ -9,6 +9,7 @@
         <index-top-header class="pb-32" />
         <current-tab-header class="flex justify-between" />
         <task-tables
+          :key="taskTablesKey"
           class="w-full pt-5 pb-12"
           :is-layout-stacked="isLayoutStacked"
         />
@@ -63,6 +64,9 @@ export default {
     }
   },
   computed: {
+    taskTablesKey() {
+      return this.$store.state.globalState.taskTablesKey
+    },
     isLayoutStacked() {
       return this.$store.state.globalState.isLayoutStacked
     },

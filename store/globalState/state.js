@@ -10,4 +10,5 @@ export default () => ({
   },
   isLayoutStacked: false,
   isLaunchTimerVisible: false,
+  taskTablesKey: 0,
 })

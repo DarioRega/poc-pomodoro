@@ -175,6 +175,7 @@ export default {
       updateTaskDescription: 'tasks/updateTaskDescription',
       addTask: 'tasks/addTask',
       archiveTask: 'tasks/updateTaskStatus',
+      deleteTask: 'tasks/deleteTask',
       createNotification: 'globalState/createNotification',
     }),
     async handleAddTask(name) {
@@ -200,7 +201,7 @@ export default {
           ),
           actionRequired: true,
           type: 'info',
-          confirmCallback: () => this.deleteTask(taskId),
+          confirmCallback: () => this.handleDeleteTask(taskId),
         }
         this.createNotification(deleteNotification)
       }
@@ -250,8 +251,10 @@ export default {
       await this.archiveTask(payload)
       this.currentTaskIdRowLoading = ''
     },
-    deleteTask(taskId) {
-      // TODO dispatch action to delete
+    async handleDeleteTask(taskId) {
+      this.currentTaskIdRowLoading = taskId
+      await this.deleteTask(taskId)
+      this.currentTaskIdRowLoading = ''
     },
     findTask(taskId) {
       return this.tasks.find((x) => x.id === taskId)
