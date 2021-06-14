@@ -59,7 +59,10 @@
 <script>
 import moment from 'moment-timezone'
 import TransitionSidebarContent from '@/components/Atoms/Transitions/Sidebar/TransitionSidebarContent'
-import { SIDEBAR_TOGGLE_ANIMATION_TIMEOUT } from '@/constantes'
+import {
+  aMinuteInMilliseconds,
+  SIDEBAR_TOGGLE_ANIMATION_TIMEOUT,
+} from '@/constantes'
 
 export default {
   name: 'CurrentTime',
@@ -104,16 +107,12 @@ export default {
     return {
       isUnStacked: true,
       isStacked: false,
+      currentTime: '',
+      format: 'hh:mm A',
+      intervalCurrentTime: null,
     }
   },
   computed: {
-    currentTime() {
-      if (this.getTimezone) {
-        const format = this.is24hFormat ? 'HH:mm' : 'hh:mm A'
-        return moment().tz(this.getTimezone).format(format)
-      }
-      return ''
-    },
     isAM() {
       if (this.currentTime) {
         if (this.currentTime.includes('AM')) {
@@ -149,6 +148,30 @@ export default {
           this.isUnStacked = true
         }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
       }
+    },
+  },
+  mounted() {
+    this.format = this.is24hFormat ? 'HH:mm' : 'hh:mm A'
+
+    const secondsRemainingToTheCurrentMinute = (60 - moment().seconds()) * 1000
+    this.setTime()
+
+    setTimeout(() => {
+      this.setTime()
+      this.intervalCurrentTime = setInterval(() => {
+        if (this.getTimezone) {
+          this.setTime()
+        }
+      }, aMinuteInMilliseconds)
+    }, secondsRemainingToTheCurrentMinute)
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalCurrentTime)
+  },
+  methods: {
+    setTime() {
+      console.log('in settime')
+      this.currentTime = moment().tz(this.getTimezone).format(this.format)
     },
   },
 }

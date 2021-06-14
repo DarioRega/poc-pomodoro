@@ -178,6 +178,8 @@ export default {
         (60 - moment().seconds()) * 1000
 
       setTimeout(() => {
+        this.setCurrentSessionEndTimeWhenNotRunning()
+
         this.intervalSessionTimer = setInterval(() => {
           this.setCurrentSessionEndTimeWhenNotRunning()
         }, aMinuteInMilliseconds)
