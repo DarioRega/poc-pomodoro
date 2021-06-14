@@ -91,6 +91,11 @@ export default {
     return {
       currentActiveTab: '',
       settingsValues: {},
+      hasUserTriggeredCreationCustomSettings: false,
+      newSettingsPomodoro: {
+        name: this.$t('My custom configuration'),
+        values: {},
+      },
       isLoading: false,
       shouldWatchChange: false,
     }
@@ -132,13 +137,12 @@ export default {
   },
   watch: {
     areStoreSettingsEmpty(newValue, oldValue) {
-      if (!newValue && !this.areSettingsAlreadySet)
-        this.areSettingsAlreadySet = true
+      if (!newValue && !this.shouldWatchChange) this.shouldWatchChange = true
     },
     settingsValues: {
       deep: true,
       handler() {
-        if (this.isDefaultSettingsConfiguration && this.areSettingsAlreadySet) {
+        if (this.isDefaultSettingsConfiguration && this.shouldWatchChange) {
           if (!this.isWarningCannotEditDefaultSettingsNotificationExisting) {
             this.createWarningNotificationCantChangeDefaultSettings()
           }
@@ -182,10 +186,18 @@ export default {
       this.createNotification(notification)
     },
     restoreEditedValues() {
-      this.$emit('onReRenderComponent')
+      this.shouldWatchChange = false
+      this.settingsValues.pomodoroConfigTab = _.cloneDeep(
+        this.userSettingsValues.pomodoroConfigTab
+      )
+      // to avoid fire the watcher on when we reset the data manually
+      setTimeout(() => {
+        this.shouldWatchChange = true
+      }, 1000)
     },
     createCustomSettings() {
-      console.log('CREATE CUSTOM SETTINGS FIRED')
+      this.hasUserTriggeredCreationCustomSettings = true
+      this.newSettingsPomodoro.values = this.settingsValues.pomodoroConfigTab
     },
     /*
       Global events
