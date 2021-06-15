@@ -1,5 +1,26 @@
 <template>
   <section class="settings-panel w-full h-full">
+    <div class="settings-panel__container">
+      <brand-input
+        class="max-w-xs"
+        name="pomodoro setting choice"
+        :is-disabled="isDefaultConfiguration"
+        :label="$t('Configuration name')"
+        :placeholder="$t('Enter your configuration name')"
+        :value="values.name"
+        error-text=""
+        @change.native="handleEmitValue($event.target.value, 'name')"
+      />
+      <div class="settings-panel__button-create">
+        <brand-button
+          type="naked"
+          class="w-full"
+          @click="$emit('onCreateCustomSettings')"
+        >
+          {{ $t('Create new') }}
+        </brand-button>
+      </div>
+    </div>
     <!--    TIME PER POMODORO -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
