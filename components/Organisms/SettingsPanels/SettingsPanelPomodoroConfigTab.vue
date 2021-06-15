@@ -8,13 +8,17 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="values.pomodoro_duration"
+          :value="valuesWithDurationsInNumber.pomodoro_duration"
           :max="60"
           :min="15"
-          @change="$emit('onPomodoroDurationChange', $event)"
+          @change="handleEmitValue($event, 'pomodoro_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${values.pomodoro_duration} ${$t('minutes')}` }}
+            {{
+              `${valuesWithDurationsInNumber.pomodoro_duration} ${$t(
+                'minutes'
+              )}`
+            }}
           </p>
         </input-slider>
       </div>
@@ -28,14 +32,16 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="values.small_break_duration"
+          :value="valuesWithDurationsInNumber.small_break_duration"
           :max="15"
           :min="1"
           :interval="1"
-          @change="$emit('onSmallBreakDurationChange', $event)"
+          @change="handleEmitValue($event, 'small_break_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${values.small_break_duration} ${minuteOrMinutes}` }}
+            {{
+              `${valuesWithDurationsInNumber.small_break_duration} ${minuteOrMinutes}`
+            }}
           </p>
         </input-slider>
       </div>
@@ -49,14 +55,18 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="values.big_break_duration"
+          :value="valuesWithDurationsInNumber.big_break_duration"
           :max="30"
           :min="10"
           :interval="1"
-          @change="$emit('onBigBreakDurationChange', $event)"
+          @change="handleEmitValue($event, 'big_break_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${values.big_break_duration} ${$t('minute')}` }}
+            {{
+              `${valuesWithDurationsInNumber.big_break_duration} ${$t(
+                'minute'
+              )}`
+            }}
           </p>
         </input-slider>
       </div>
@@ -70,14 +80,18 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="values.pomodoro_quantity"
+          :value="valuesWithDurationsInNumber.pomodoro_quantity"
           :max="10"
           :min="2"
           :interval="1"
-          @change="$emit('onPomodoroQuantityChange', $event)"
+          @change="handleEmitValue($event, 'pomodoro_quantity')"
         >
           <p class="settings-panel__sliderInput">
-            {{ `${values.pomodoro_quantity} ${$t('pomodoros')}` }}
+            {{
+              `${valuesWithDurationsInNumber.pomodoro_quantity} ${$t(
+                'pomodoros'
+              )}`
+            }}
           </p>
         </input-slider>
       </div>
@@ -170,6 +184,12 @@
 <script>
 import Toggle from '@/components/Atoms/Inputs/Toggle'
 import InputSlider from '@/components/Atoms/Inputs/InputSlider'
+import BrandInput from '@/components/Atoms/Inputs/BrandInput'
+import BrandButton from '@/components/Atoms/BrandButton'
+import {
+  convertNumberInDuration,
+  getTimeValuesInNumber,
+} from '@/helpers/settings'
 
 export default {
   name: 'SettingsPanelPomodoroConfigTab',
@@ -198,14 +218,31 @@ export default {
     }
   },
   computed: {
+    valuesWithDurationsInNumber() {
+      const valuesConverted = _.cloneDeep(this.values)
+      Object.keys(valuesConverted).forEach((x) => {
+        if (x.includes('duration')) {
+          valuesConverted[x] = getTimeValuesInNumber(valuesConverted[x])
+        }
+      })
+      return valuesConverted
+    },
     minuteOrMinutes() {
       return this.localValues.pomodoro_quantity < 2
         ? this.$t('minute')
         : this.$t('minutes')
     },
   },
-  mounted() {
-    this.localValues = this.values
+  methods: {
+    handleEmitValue(newValue, property) {
+      console.log('VALUE NEW', newValue)
+      let value = newValue
+      if (property.includes('duration')) {
+        value = convertNumberInDuration(newValue)
+      }
+      console.log('VALUE FORMATED => ', value)
+      this.$emit('onPomodoroConfigTabValueChange', value, property)
+    },
   },
 }
 </script>

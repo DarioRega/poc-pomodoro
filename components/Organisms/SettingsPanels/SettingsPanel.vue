@@ -28,19 +28,11 @@
       />
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
-        :values="{}"
+        :values="pomodoroSessionSettingsValues"
         :configuration-name="configurationName"
         :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
         @change="configurationName = $event"
-        @onCreateCustomSettings="createCustomSettings"
-        @onPomodoroDurationChange="handlePomodoroDurationChange"
-        @onSmallBreakDurationChange="handleSmallBreakDurationChange"
-        @onBigBreakDurationChange="handleBigBreakDurationChange"
-        @onPomodoroQuantityChange="handlePomodoroQuantityChange"
-        @onNoiseNotificationChange="handleNoiseNotificationChange"
-        @onStartPomodoroAutoChange="handleStartPomodoroAutoChange"
-        @onStartSmallBreakAutoChange="handleStartSmallBreakAutoCharge"
-        @onStartBigBreakAutoChange="handleStartBigBreakAutoChange"
+        @onPomodoroConfigTabValueChange="onPomodoroConfigTabValueChange"
       />
       <settings-panel-current-subscription-tab
         v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
@@ -208,27 +200,12 @@ export default {
     /*
       Pomodoro config events
      */
-    handlePomodoroDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.pomodoro_duration = value
-    },
-    handleBigBreakDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.small_break_duration = value
-    },
-    handlePomodoroQuantityChange(value) {
-      this.settingsValues.pomodoroConfigTab.pomodoro_quantity = value
-    },
-    handleNoiseNotificationChange(value) {
-      this.settingsValues.pomodoroConfigTab.noise_notification_end_process =
-        value
-    },
-    handleStartPomodoroAutoChange(value) {
-      this.settingsValues.pomodoroConfigTab.start_pomodoro_auto = value
-    },
-    handleStartSmallBreakAutoCharge(value) {
-      this.settingsValues.pomodoroConfigTab.start_small_break_auto = value
-    },
-    handleStartBigBreakAutoChange(value) {
-      this.settingsValues.pomodoroConfigTab.start_big_break_auto = value
+    onPomodoroConfigTabValueChange(value, property) {
+      if (typeof value === 'object') {
+        this.pomodoroSessionSettingsValues[property] = value.id
+      } else {
+        this.pomodoroSessionSettingsValues[property] = value
+      }
     },
   },
 }
