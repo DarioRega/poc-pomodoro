@@ -239,7 +239,7 @@ export default {
       return valuesConverted
     },
     minuteOrMinutes() {
-      return this.localValues.pomodoro_quantity < 2
+      return this.values.pomodoro_quantity < 2
         ? this.$t('minute')
         : this.$t('minutes')
     },

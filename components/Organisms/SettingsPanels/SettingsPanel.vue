@@ -68,6 +68,7 @@ import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
 import {
   DEFAULT_POMODORO_SETTINGS_OPTION,
   DEFAULT_POMODORO_SETTINGS_OPTION_ID,
+  POMODORO_DEFAULT_SETTINGS,
 } from '@/constantes/settings'
 
 export default {
@@ -157,9 +158,10 @@ export default {
     if (!this.arePomodoroSettingsEmpty) {
       this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
     } else {
-      this.pomodoroSessionSettingsValues = DEFAULT_POMODORO_SETTINGS_OPTION(
-        this.$i18n
-      )
+      this.pomodoroSessionSettingsValues = {
+        ...POMODORO_DEFAULT_SETTINGS,
+        ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+      }
     }
     setTimeout(() => {
       this.shouldWatchChange = true
