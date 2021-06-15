@@ -17,17 +17,17 @@
       "
     >
       <settings-panel-general-tab
-        v-if="currentActiveTab === stepsValues.GENERAL"
+        v-if="currentActiveTab === settingPanelStepsValues.GENERAL"
         :values="userSettingsValues"
         :selected-pomodoro-configuration="getSelectedPomodoroConfiguration"
         @onGeneralTabValueChange="onGeneralTabValueChange"
       />
       <settings-panel-account-tab
-        v-if="currentActiveTab === stepsValues.ACCOUNT"
+        v-if="currentActiveTab === settingPanelStepsValues.ACCOUNT"
         :values="{ name: user.name, email: user.email }"
       />
       <settings-panel-pomodoro-config-tab
-        v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
+        v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
         :values="{}"
         :configuration-name="configurationName"
         :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
@@ -43,7 +43,7 @@
         @onStartBigBreakAutoChange="handleStartBigBreakAutoChange"
       />
       <settings-panel-current-subscription-tab
-        v-if="currentActiveTab === stepsValues.SUBSCRIPTION"
+        v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
         :values="{}"
       />
     </div>
@@ -129,7 +129,7 @@ export default {
           return false
       }
     },
-    stepsValues() {
+    settingPanelStepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
 
@@ -139,7 +139,7 @@ export default {
   },
 
   mounted() {
-    this.currentActiveTab = this.stepsValues.GENERAL
+    this.currentActiveTab = this.settingPanelStepsValues.GENERAL
     if (!this.areUserSettingsEmpty) {
       this.userSettingsValues = _.cloneDeep(this.userSettings)
     }
