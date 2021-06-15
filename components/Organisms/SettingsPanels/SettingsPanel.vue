@@ -301,7 +301,7 @@ export default {
     async handleUpdateUserSettings() {
       this.isLoading = true
       const payload = this.userSettingsValues
-      if (this.isDefaultPomodoroSettingsConfiguration) {
+      if (this.hasUserSelectedLocalDefaultPomodoroConfigurationOption) {
         payload.pomodoro_session_setting_id = null
       }
       await this.updateUserSettings(this.userSettingsValues)
@@ -328,18 +328,18 @@ export default {
       this.isLoading = false
     },
 
-    /*
-     Pomodoro config methods
-     */
     createCustomSettings() {
       // TODO kill notificatin if exist
+      const customSettingDefaultName = `${this.$t(
+        'My custom configuration'
+      )} #${this.getUserNextConfigurationNumber}`
+
       this.hasUserTriggeredCreationCustomSettings = true
+
       this.draftPomodoroSessionSettingsValues = {
         ...POMODORO_DEFAULT_SETTINGS,
         id: getRandomNumber(),
-        name: `${this.$t('My custom configuration')} #${
-          this.getUserNextConfigurationNumber
-        }`,
+        name: customSettingDefaultName,
       }
     },
 
