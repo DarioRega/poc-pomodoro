@@ -73,7 +73,7 @@ import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanel
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
 import BrandButton from '@/components/Atoms/BrandButton'
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import { getRandomNumber } from '@/helpers'
+import { DEFAULT_POMODORO_SETTINGS_OPTION } from '@/constantes/settings'
 
 export default {
   name: 'SettingsPanel',
@@ -110,10 +110,7 @@ export default {
         this.arePomodoroSettingsEmpty &&
         _.isEmpty(this.pomodoroSessionSettingsValues)
       ) {
-        return {
-          id: getRandomNumber(),
-          name: this.$t('Default configuration'),
-        }
+        return DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n)
       } else {
         const { id, name } = this.pomodoroSessionSettingsValues
         return { id, name }
