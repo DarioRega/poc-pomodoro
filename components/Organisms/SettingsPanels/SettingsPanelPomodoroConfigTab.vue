@@ -97,92 +97,102 @@
       </div>
     </div>
 
+    <!-- TODO REMOVE BEFORE GIVING TO TEACHER, CODE FOR v2  -->
     <!--  NOISE NOTIFICATION END PROCESS  -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Noise notification notice') }}</h6>
-        <p>
-          {{
-            $t('Play a sound when a pomodoro, small break or long break ends')
-          }}
-        </p>
-      </div>
-      <div class="settings-panel__configurations">
-        <toggle
-          :toggled="values.noise_notification_end_process"
-          class="justify-end"
-          @toggle="$emit('onNoiseNotificationChange', $event)"
-        />
-      </div>
-    </div>
+    <!--    <div class="settings-panel__container">-->
+    <!--      <div class="settings-panel__labels">-->
+    <!--        <h6>{{ $t('Noise notification notice') }}</h6>-->
+    <!--        <p>-->
+    <!--          {{-->
+    <!--            $t('Play a sound when a pomodoro, small break or long break ends')-->
+    <!--          }}-->
+    <!--        </p>-->
+    <!--      </div>-->
+    <!--      <div class="settings-panel__configurations">-->
+    <!--        <toggle-->
+    <!--          :toggled="valuesWithDurationsInNumber.noise_notification_end_process"-->
+    <!--          class="justify-end"-->
+    <!--          @toggle="-->
+    <!--            $emit('onPomodoroConfigTabValueChange', $event, 'pomodoro_duration')-->
+    <!--          "-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <!--  START POMODORO AUTO  -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Automatically start a pomodoro') }}</h6>
-        <p>
-          {{
-            $t(
-              'Skip the pending validation on pomodoro and start them automatically after your break ends'
-            )
-          }}
-        </p>
-      </div>
-      <div class="settings-panel__configurations">
-        <toggle
-          :toggled="values.start_pomodoro_auto"
-          class="justify-end"
-          @toggle="$emit('onStartPomodoroAutoChange', $event)"
-        />
-      </div>
-    </div>
+    <!--    <div class="settings-panel__container">-->
+    <!--      <div class="settings-panel__labels">-->
+    <!--        <h6>{{ $t('Automatically start a pomodoro') }}</h6>-->
+    <!--        <p>-->
+    <!--          {{-->
+    <!--            $t(-->
+    <!--              'Skip the pending validation on pomodoro and start them automatically after your break ends'-->
+    <!--            )-->
+    <!--          }}-->
+    <!--        </p>-->
+    <!--      </div>-->
+    <!--      <div class="settings-panel__configurations">-->
+    <!--        <toggle-->
+    <!--          :toggled="valuesWithDurationsInNumber.start_pomodoro_auto"-->
+    <!--          class="justify-end"-->
+    <!--          @toggle="-->
+    <!--            handleEmitValue($event, 'pomodoro_duration')-->
+    <!--          "-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <!--  START SMALL BREAK AUTO AUTO  -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Automatically start small break') }}</h6>
-        <p>
-          {{
-            $t(
-              'Skip the pending validation on small break and start them automatically after your pomodoro ends'
-            )
-          }}
-        </p>
-      </div>
-      <div class="settings-panel__configurations">
-        <toggle
-          :toggled="values.start_small_break_auto"
-          class="justify-end"
-          @toggle="$emit('onStartSmallBreakAutoChange', $event)"
-        />
-      </div>
-    </div>
+    <!--    <div class="settings-panel__container">-->
+    <!--      <div class="settings-panel__labels">-->
+    <!--        <h6>{{ $t('Automatically start small break') }}</h6>-->
+    <!--        <p>-->
+    <!--          {{-->
+    <!--            $t(-->
+    <!--              'Skip the pending validation on small break and start them automatically after your pomodoro ends'-->
+    <!--            )-->
+    <!--          }}-->
+    <!--        </p>-->
+    <!--      </div>-->
+    <!--      <div class="settings-panel__configurations">-->
+    <!--        <toggle-->
+    <!--          :toggled="valuesWithDurationsInNumber.start_small_break_auto"-->
+    <!--          class="justify-end"-->
+    <!--          @toggle="-->
+    <!--           handleEmitValue($event, 'pomodoro_duration')-->
+    <!--          "-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <!--  START LONG BREAK AUTO AUTO  -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Automatically start long break') }}</h6>
-        <p>
-          {{
-            $t(
-              'Skip the pending validation on long breaks and start them automatically after your pomodoro ends'
-            )
-          }}
-        </p>
-      </div>
-      <div class="settings-panel__configurations">
-        <toggle
-          :toggled="values.start_big_break_auto"
-          class="justify-end"
-          @toggle="$emit('onStartBigBreakAutoChange', $event)"
-        />
-      </div>
-    </div>
+    <!--    <div class="settings-panel__container">-->
+    <!--      <div class="settings-panel__labels">-->
+    <!--        <h6>{{ $t('Automatically start long break') }}</h6>-->
+    <!--        <p>-->
+    <!--          {{-->
+    <!--            $t(-->
+    <!--              'Skip the pending validation on long breaks and start them automatically after your pomodoro ends'-->
+    <!--            )-->
+    <!--          }}-->
+    <!--        </p>-->
+    <!--      </div>-->
+    <!--      <div class="settings-panel__configurations">-->
+    <!--        <toggle-->
+    <!--          :toggled="valuesWithDurationsInNumber.start_big_break_auto"-->
+    <!--          class="justify-end"-->
+    <!--          @toggle="-->
+    <!--           handleEmitValue($event, 'pomodoro_duration')-->
+    <!--          "-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </div>-->
   </section>
 </template>
 
 <script>
-import Toggle from '@/components/Atoms/Inputs/Toggle'
+import _ from 'lodash'
+
 import InputSlider from '@/components/Atoms/Inputs/InputSlider'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import BrandButton from '@/components/Atoms/BrandButton'
@@ -194,8 +204,9 @@ import {
 export default {
   name: 'SettingsPanelPomodoroConfigTab',
   components: {
-    Toggle,
     InputSlider,
+    BrandInput,
+    BrandButton,
   },
   props: {
     values: {
