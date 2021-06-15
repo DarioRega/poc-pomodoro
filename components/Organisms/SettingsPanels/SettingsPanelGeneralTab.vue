@@ -9,7 +9,7 @@
       <div class="settings-panel__configurations">
         <brand-select
           :value="timeDisplayFormatValue"
-          :options="[]"
+          :options="timeDisplayFormatOptions"
           name="time-display-format"
           @change="$emit('onTimeDisplayFormatChange', $event)"
         />
@@ -25,7 +25,7 @@
       <div class="settings-panel__configurations">
         <brand-select
           :value="themeValue"
-          :options="options.themes"
+          :options="themeOptions"
           :should-capitalize="true"
           name="theme"
           @change="$emit('onThemeChange', $event)"
@@ -48,7 +48,7 @@
       <div class="settings-panel__configurations">
         <brand-select
           :value="selectedPomodoroConfiguration"
-          :options="options.settingChoices"
+          :options="pomodoroSettingsOptions"
           name="settings choice"
           @change="$emit('onSettingChoiceChange', $event)"
         />
@@ -133,6 +133,11 @@
 
 <script>
 import BrandSelect from '@/components/Atoms/Inputs/BrandSelect'
+import {
+  DEFAULT_POMODORO_SETTINGS_OPTION,
+  THEME_OPTIONS,
+  TIME_DISPLAY_FORMATS_OPTIONS,
+} from '@/constantes/settings'
 
 export default {
   name: 'SettingsPanelGeneralTab',
@@ -146,12 +151,11 @@ export default {
       type: Object,
       required: true,
     },
-    options: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
+    /*
+      Values
+     */
     themeValue() {
       const { theme } = this.values
       return { id: theme, name: theme.toLowerCase() }
@@ -159,6 +163,22 @@ export default {
     timeDisplayFormatValue() {
       const { time_display_format } = this.values
       return { id: time_display_format, name: time_display_format }
+    },
+
+    /*
+      Options
+     */
+    pomodoroSettingsOptions() {
+      return [
+        DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+        ...this.$store.getters['user/getUserAllPomodoroSettingsValues'],
+      ]
+    },
+    themeOptions() {
+      return THEME_OPTIONS
+    },
+    timeDisplayFormatOptions() {
+      return TIME_DISPLAY_FORMATS_OPTIONS
     },
   },
 }

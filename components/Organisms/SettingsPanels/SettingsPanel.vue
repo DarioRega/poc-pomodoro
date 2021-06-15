@@ -19,7 +19,6 @@
       <settings-panel-general-tab
         v-if="currentActiveTab === stepsValues.GENERAL"
         :values="userSettingsValues"
-        :options="settingsOptions"
         :selected-pomodoro-configuration="getSelectedPomodoroConfiguration"
         @onDisplayLanguageChange="handleDisplayLanguageChange"
         @onTimezoneChange="handleTimezoneChange"
