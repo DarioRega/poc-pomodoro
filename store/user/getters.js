@@ -49,7 +49,7 @@ export default {
   },
 
   isUserUsingPomodoroCustomSettings: (state, getters) => {
-    if (getters.getUser.pomodoro_session_setting_id) {
+    if (getters.getUser.user_settings.pomodoro_session_setting_id) {
       return true
     }
     return false
