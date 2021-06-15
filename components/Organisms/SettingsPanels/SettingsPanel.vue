@@ -112,7 +112,18 @@ export default {
       isUserUsingPomodoroCustomSettings:
         'user/isUserUsingPomodoroCustomSettings',
     }),
-
+    isPomodoroConfigTabAndDefaultConfig() {
+      if (this.currentActiveTab === SETTINGS_PANEL_STEPS_VALUES.GENERAL) {
+        return false
+      }
+      if (this.isDefaultPomodoroSettingsConfiguration) {
+        return true
+      }
+      return false
+    },
+    /*
+      Pomodoro session settings related
+    */
     // When user create a config we must feed the pomodoro config tab with the draft object , else the settingsValues
     getPomodoroSettingsValues() {
       if (this.hasUserTriggeredCreationCustomSettings) {
