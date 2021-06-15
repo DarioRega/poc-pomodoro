@@ -145,8 +145,9 @@ export default {
   watch: {
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
       if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
-        this.pomodoroSessionSettingsValues =
+        this.pomodoroSessionSettingsValues = _.cloneDeep(
           this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
+        )
       } else {
         this.pomodoroSessionSettingsValues = {
           ...this.pomodoroSessionSettingsValues,
