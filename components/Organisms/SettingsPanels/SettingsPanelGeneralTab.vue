@@ -1,37 +1,5 @@
 <template>
   <section class="settings-panel w-full h-full">
-    <!--    LANGUAGE -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Display language') }}</h6>
-        <p>{{ $t('Set the language displayed in the application') }}</p>
-      </div>
-      <div class="settings-panel__configurations">
-        <brand-select
-          :value="values.displayLanguage"
-          :options="options.displayLanguages"
-          name="display-language"
-          @change="$emit('onDisplayLanguageChange', $event)"
-        />
-      </div>
-    </div>
-
-    <!--  TIMEZONE  -->
-    <div class="settings-panel__container">
-      <div class="settings-panel__labels">
-        <h6>{{ $t('Time zone') }}</h6>
-        <p>{{ $t('Select your current time zone') }}</p>
-      </div>
-      <div class="settings-panel__configurations">
-        <brand-select
-          :value="values.timezone"
-          :options="options.timezones"
-          name="timezone"
-          @change="$emit('onTimezoneChange', $event)"
-        />
-      </div>
-    </div>
-
     <!--  TIME DISPLAY FORMAT  -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
@@ -40,8 +8,8 @@
       </div>
       <div class="settings-panel__configurations">
         <brand-select
-          :value="values.timeDisplayFormat"
-          :options="options.timeDisplayFormats"
+          :value="timeDisplayFormatValue"
+          :options="[]"
           name="time-display-format"
           @change="$emit('onTimeDisplayFormatChange', $event)"
         />
@@ -56,8 +24,9 @@
       </div>
       <div class="settings-panel__configurations">
         <brand-select
-          :value="values.theme"
+          :value="themeValue"
           :options="options.themes"
+          :should-capitalize="true"
           name="theme"
           @change="$emit('onThemeChange', $event)"
         />
@@ -78,7 +47,7 @@
       </div>
       <div class="settings-panel__configurations">
         <brand-select
-          :value="values.settingChoice"
+          :value="selectedPomodoroConfiguration"
           :options="options.settingChoices"
           name="settings choice"
           @change="$emit('onSettingChoiceChange', $event)"
@@ -142,18 +111,24 @@ export default {
       type: Object,
       required: true,
     },
+    selectedPomodoroConfiguration: {
+      type: Object,
+      required: true,
+    },
     options: {
       type: Object,
       required: true,
     },
   },
-  data() {
-    return {
-      localValues: {},
-    }
-  },
-  mounted() {
-    this.localValues = this.values
+  computed: {
+    themeValue() {
+      const { theme } = this.values
+      return { id: theme, name: theme.toLowerCase() }
+    },
+    timeDisplayFormatValue() {
+      const { time_display_format } = this.values
+      return { id: time_display_format, name: time_display_format }
+    },
   },
 }
 </script>

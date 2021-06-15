@@ -18,8 +18,9 @@
     >
       <settings-panel-general-tab
         v-if="currentActiveTab === stepsValues.GENERAL"
-        :values="settingsValues.generalTab"
+        :values="userSettingsValues"
         :options="settingsOptions"
+        :selected-pomodoro-configuration="getSelectedPomodoroConfiguration"
         @onDisplayLanguageChange="handleDisplayLanguageChange"
         @onTimezoneChange="handleTimezoneChange"
         @onTimeDisplayFormatChange="handleTimeDisplayFormatChange"
@@ -65,15 +66,16 @@
 
 <script>
 import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
+
 import SettingsPanelMainTabs from '@/components/Organisms/SettingsPanels/SettingsPanelMainTabs'
 import SettingsPanelGeneralTab from '@/components/Organisms/SettingsPanels/SettingsPanelGeneralTab'
 import SettingsPanelAccountTab from '@/components/Organisms/SettingsPanels/SettingsPanelAccountTab'
 import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanels/SettingsPanelPomodoroConfigTab'
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
-
-import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import { mapActions, mapGetters } from 'vuex'
 import BrandButton from '@/components/Atoms/BrandButton'
+import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
+import { getRandomNumber } from '@/helpers'
 
 const NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS =
   'settingsPanelNotificationWarningDefaultEdit'
@@ -90,12 +92,11 @@ export default {
   data() {
     return {
       currentActiveTab: '',
-      settingsValues: {},
+      configurationName: '',
+      userSettingsValues: {},
+      pomodoroSessionSettingsValues: {},
       hasUserTriggeredCreationCustomSettings: false,
-      newSettingsPomodoro: {
-        name: this.$t('My custom configuration'),
-        values: {},
-      },
+      newSettingsPomodoroValues: {},
       isLoading: false,
       shouldWatchChange: false,
     }
@@ -103,9 +104,25 @@ export default {
   computed: {
     ...mapGetters({
       getSpecificNotification: 'globalState/getSpecificNotification',
-      areStoreSettingsEmpty: 'settings/areSettingsEmpty',
-      userSettingsValues: 'settings/getUserSettingsValues',
+      areUserSettingsEmpty: 'user/areUserSettingsEmpty',
+      arePomodoroSettingsEmpty: 'user/arePomodoroSettingsEmpty',
+      userSettings: 'user/getUserSettingsValues',
+      pomodoroSettings: 'user/getUserPomodoroSettingsValues',
     }),
+    getSelectedPomodoroConfiguration() {
+      if (
+        this.arePomodoroSettingsEmpty &&
+        _.isEmpty(this.pomodoroSessionSettingsValues)
+      ) {
+        return {
+          id: getRandomNumber(),
+          name: this.$t('Default configuration'),
+        }
+      } else {
+        const { id, name } = this.pomodoroSessionSettingsValues
+        return { id, name }
+      }
+    },
     user() {
       return this.$auth.user
     },
@@ -120,7 +137,8 @@ export default {
       }
     },
     settingsOptions() {
-      return this.$store.state.settings.settingsOptions
+      // TODO constantes with enums values for settings
+      return []
     },
     stepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
@@ -158,18 +176,24 @@ export default {
 
   mounted() {
     this.currentActiveTab = this.stepsValues.GENERAL
-    if (!this.areStoreSettingsEmpty) {
-      this.settingsValues = _.cloneDeep(this.userSettingsValues)
-
-      // to avoid fire the watcher on mounted state, when no settings has been modified by user
-      setTimeout(() => {
-        this.shouldWatchChange = true
-      }, 1000)
+    if (!this.areUserSettingsEmpty) {
+      this.userSettingsValues = _.cloneDeep(this.userSettings)
     }
+    if (!this.arePomodoroSettingsEmpty) {
+      this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
+    }
+    setTimeout(() => {
+      this.shouldWatchChange = true
+    }, 1000)
   },
   methods: {
     ...mapActions({
       createNotification: 'globalState/createNotification',
+      createPomodoroSettings: 'user/createPomodoroSettings',
+      updateUserSettingsWithCustomPomodoroConfig:
+        'user/updateUserSettingsWithCustomPomodoroConfig',
+      updateUserSettingsWithDefaultPomodoroConfig:
+        'user/updateUserSettingsWithDefaultPomodoroConfig',
     }),
     createWarningNotificationCantChangeDefaultSettings() {
       const notification = {
