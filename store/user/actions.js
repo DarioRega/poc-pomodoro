@@ -16,5 +16,4 @@ export default {
       dispatch('globalState/createNotification', notification, { root: true })
     }
   },
-
 }
