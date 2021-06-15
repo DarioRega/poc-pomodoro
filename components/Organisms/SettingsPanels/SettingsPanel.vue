@@ -33,9 +33,12 @@
         :values="{ name: user.name, email: user.email }"
       />
       <settings-panel-pomodoro-config-tab
-        :values="{}"
         v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
-        :values="settingsValues.pomodoroConfigTab"
+        :values="{}"
+        :configuration-name="configurationName"
+        :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
+        @change="configurationName = $event"
+        @onCreateCustomSettings="createCustomSettings"
         @onPomodoroDurationChange="handlePomodoroDurationChange"
         @onSmallBreakDurationChange="handleSmallBreakDurationChange"
         @onBigBreakDurationChange="handleBigBreakDurationChange"
@@ -78,8 +81,6 @@ import BrandButton from '@/components/Atoms/BrandButton'
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
 import { getRandomNumber } from '@/helpers'
 
-const NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS =
-  'settingsPanelNotificationWarningDefaultEdit'
 export default {
   name: 'SettingsPanel',
   components: {
@@ -144,34 +145,9 @@ export default {
     stepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
-    isWarningCannotEditDefaultSettingsNotificationExisting() {
-      return this.getSpecificNotification(
-        NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS
-      )
-    },
-    isDefaultSettingsConfiguration() {
-      // TODO verify how to know if it's the default config or user one
-      return true
-    },
-  },
-  watch: {
-    areStoreSettingsEmpty(newValue, oldValue) {
-      if (!newValue && !this.shouldWatchChange) this.shouldWatchChange = true
-    },
-    settingsValues: {
-      deep: true,
-      handler() {
-        if (this.isDefaultSettingsConfiguration && this.shouldWatchChange) {
-          if (!this.isWarningCannotEditDefaultSettingsNotificationExisting) {
-            this.createWarningNotificationCantChangeDefaultSettings()
-          }
-        } else {
-          this.$store.commit(
-            'globalState/REMOVE_NOTIFICATION',
-            NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS
-          )
-        }
-      },
+
+    isDefaultPomodoroSettingsConfiguration() {
+      return this.userSettingsValues.pomodoro_session_setting_id === null
     },
   },
 
@@ -196,43 +172,12 @@ export default {
       updateUserSettingsWithDefaultPomodoroConfig:
         'user/updateUserSettingsWithDefaultPomodoroConfig',
     }),
-    createWarningNotificationCantChangeDefaultSettings() {
-      const notification = {
-        notificationId: NOTIFICATION_ID_WARNING_CANNOT_EDIT_DEFAULT_SETTINGS,
-        title: this.$t('Hold up...'),
-        description: this.$t(
-          "Your changes won't be saved, because you're editing the default settings."
-        ),
-        actionRequired: true,
-        actionText: this.$t('Create custom settings'),
-        confirmCallback: this.createCustomSettings,
-        closeCallback: this.restoreEditedValues,
-      }
-      this.createNotification(notification)
-    },
-    restoreEditedValues() {
-      this.shouldWatchChange = false
-      this.settingsValues.pomodoroConfigTab = _.cloneDeep(
-        this.userSettingsValues.pomodoroConfigTab
-      )
-      // to avoid fire the watcher on when we reset the data manually
-      setTimeout(() => {
-        this.shouldWatchChange = true
-      }, 1000)
-    },
-    createCustomSettings() {
-      this.hasUserTriggeredCreationCustomSettings = true
-      this.newSettingsPomodoro.values = this.settingsValues.pomodoroConfigTab
-    },
+
     /*
       Global events
     */
     handleSave() {
       // TODO action vuex
-    },
-    handleResetDefault() {
-      // TODO pop confirm
-      // reset to default general settings to show only on default configuration not user config
     },
     /*
       General tab events
@@ -244,7 +189,7 @@ export default {
       this.settingsValues.generalTab.timezone = value
     },
     handleTimeDisplayFormatChange(value) {
-      this.settingsValues.generalTab.timeDisplayFormat = value
+      this.settingsValues.generalTab.displayLanguage = value
     },
     handleThemeChange(value) {
       this.settingsValues.generalTab.theme = value
@@ -262,11 +207,8 @@ export default {
     handlePomodoroDurationChange(value) {
       this.settingsValues.pomodoroConfigTab.pomodoro_duration = value
     },
-    handleSmallBreakDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.small_break_duration = value
-    },
     handleBigBreakDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.big_break_duration = value
+      this.settingsValues.pomodoroConfigTab.small_break_duration = value
     },
     handlePomodoroQuantityChange(value) {
       this.settingsValues.pomodoroConfigTab.pomodoro_quantity = value
