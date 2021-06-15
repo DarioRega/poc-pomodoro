@@ -39,12 +39,15 @@
       />
     </div>
 
-    <div v-show="canSave" class="mt-6 w-64 w-full mx-auto text-center">
+    <div
+      v-show="shouldShowSaveButton"
+      class="mt-6 w-64 w-full mx-auto text-center"
+    >
       <brand-button
         name="save changes"
         class="w-full"
         :is-loading="isLoading"
-        :is-disabled="isLoading"
+        :is-disabled="isLoading || isPomodoroConfigTabAndDefaultConfig"
         @click="handleSave"
       >
         {{ $t('Save changes') }}
