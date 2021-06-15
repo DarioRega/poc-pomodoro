@@ -12,11 +12,13 @@ export default {
     try {
       await this.$axios.post(USER_SETTINGS_URL, payload)
     } catch (err) {
-      notification.title = this.$t('Oups...')
+      notification.title = this.$i18n.t('Oups...')
       notification.type = 'error'
       notification.description = err.response.data.message
     } finally {
-      dispatch('globalState/createNotification', notification, { root: true })
+      dispatch('globalState/createNotification', notification, {
+        root: true,
+      })
     }
   },
 
