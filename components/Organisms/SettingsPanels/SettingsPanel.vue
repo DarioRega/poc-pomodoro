@@ -258,6 +258,11 @@ export default {
       }
     },
 
+    resetCreationProcess() {
+      this.hasUserTriggeredCreationCustomSettings = false
+      this.draftPomodoroSessionSettingsValues = {}
+    },
+
     setLocalUserSettingsWithStoreValues() {
       this.userSettingsValues = _.cloneDeep(this.userSettings)
       this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()

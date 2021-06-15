@@ -4,7 +4,7 @@
       <brand-input
         class="max-w-xs"
         name="pomodoro setting choice"
-        :is-disabled="isDefaultConfiguration"
+        :is-disabled="!isPomodoroSettingNameEditable"
         :label="$t('Configuration name')"
         :placeholder="$t('Enter your configuration name')"
         :value="values.name"
@@ -214,9 +214,9 @@ export default {
       type: Object,
       required: true,
     },
-    isDefaultConfiguration: {
+    isPomodoroSettingNameEditable: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
   computed: {
