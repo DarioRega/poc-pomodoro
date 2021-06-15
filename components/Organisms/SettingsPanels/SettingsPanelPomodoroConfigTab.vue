@@ -219,6 +219,13 @@ export default {
       required: true,
     },
   },
+  computed: {
+    minuteOrMinutes() {
+      return this.values.pomodoro_quantity < 2
+        ? this.$t('minute')
+        : this.$t('minutes')
+    },
+  },
   methods: {
     handleEmitValue(value, property) {
       this.$emit('onPomodoroConfigTabValueChange', value, property)
