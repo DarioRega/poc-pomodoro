@@ -31,6 +31,7 @@
         :values="getPomodoroSettingsValues"
         :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
         @onPomodoroConfigTabValueChange="onPomodoroConfigTabValueChange"
+        @onCreateCustomSettings="createCustomSettings"
       />
       <settings-panel-current-subscription-tab
         v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
@@ -204,7 +205,11 @@ export default {
       if (
         this.currentActiveTab === this.settingPanelStepsValues.POMODORO_CONFIG
       ) {
-        this.handleUpdatePomodoroSettings()
+        if (this.hasUserTriggeredCreationCustomSettings) {
+          this.handleCreatePomodoroSettings()
+        } else {
+          this.handleUpdatePomodoroSettings()
+        }
       }
     },
     /*
@@ -229,10 +234,14 @@ export default {
       Pomodoro config events
      */
     onPomodoroConfigTabValueChange(value, property) {
+      let settingsTarget = 'pomodoroSessionSettingsValues'
+      if (this.hasUserTriggeredCreationCustomSettings) {
+        settingsTarget = 'draftPomodoroSessionSettingsValues'
+      }
       if (typeof value === 'object') {
-        this.pomodoroSessionSettingsValues[property] = value.id
+        this[settingsTarget][property] = value.id
       } else {
-        this.pomodoroSessionSettingsValues[property] = value
+        this[settingsTarget][property] = value
       }
     },
     async handleUpdatePomodoroSettings() {
