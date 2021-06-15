@@ -51,11 +51,7 @@ export default {
     }
     delete payload.id
     try {
-      const { data } = await this.$axios.post(
-        USER_CREATE_POMODORO_SETTINGS_URL,
-        payload
-      )
-      await dispatch('updateUserPomodoroSettingsChoice', data.id)
+      await this.$axios.post(USER_CREATE_POMODORO_SETTINGS_URL, payload)
     } catch (err) {
       notification.title = this.$i18n.t('Oups...')
       notification.type = 'error'
