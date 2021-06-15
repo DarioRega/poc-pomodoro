@@ -198,16 +198,17 @@ export default {
     */
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
       // to avoid triggering on mounted lifecycle, we make sure was had a value before
-      if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID && newValue) {
+      if (newValue && newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
         this.findCustomPomodoroSettingAndSetAsValue(newValue)
       } else {
         this.setPomodoroSettingsWithDefaultValue()
       }
+    },
 
-      // once the user change the select value, we reset the variable to be able to update again,
-      // otherwise it will post everytime, see fn handleSave for detail
-      if (this.hasUserTriggeredCreationCustomSettings) {
-        this.hasUserTriggeredCreationCustomSettings = false
+    // if user create a pomodoro setting and then switch without saving, we erase it
+    currentActiveTab() {
+      if (this.draftPomodoroSessionSettingsValues.id) {
+        this.resetCreationProcess()
       }
     },
   },
