@@ -29,3 +29,5 @@ export const ECHO_AUTH_BROADCAST_URL = `${ECHO_BROADCAST_URL}/auth`
  */
 
 export const USER_SETTINGS_URL = `${API_USER_URL}/settings`
+export const USER_UPDATE_POMODORO_SETTINGS_ID_URL = (id) =>
+  `${API_USER_URL}/pomodoro-settings/${id}/update`
