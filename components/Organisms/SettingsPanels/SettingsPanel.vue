@@ -176,17 +176,16 @@ export default {
     ...mapActions({
       createNotification: 'globalState/createNotification',
       createPomodoroSettings: 'user/createPomodoroSettings',
-      updateUserSettingsWithCustomPomodoroConfig:
-        'user/updateUserSettingsWithCustomPomodoroConfig',
-      updateUserSettingsWithDefaultPomodoroConfig:
-        'user/updateUserSettingsWithDefaultPomodoroConfig',
+      updateUserSettings: 'user/updateSettings',
     }),
 
     /*
       Global events
     */
     handleSave() {
-      // TODO action vuex
+      if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
+        this.handleUpdateUserSettings()
+      }
     },
     /*
       General tab events
@@ -195,6 +194,15 @@ export default {
       if (typeof value === 'object') {
         this.userSettingsValues[property] = value.id
       }
+    },
+    async handleUpdateUserSettings() {
+      this.isLoading = true
+      const payload = this.userSettingsValues
+      if (this.isDefaultPomodoroSettingsConfiguration) {
+        payload.pomodoro_session_setting_id = null
+      }
+      await this.updateUserSettings(this.userSettingsValues)
+      this.isLoading = false
     },
     /*
       Pomodoro config events
