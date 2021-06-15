@@ -29,7 +29,7 @@
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
         :values="getPomodoroSettingsValues"
-        :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
+        :is-pomodoro-setting-name-editable="isPomodoroSettingNameEditable"
         @onPomodoroConfigTabValueChange="onPomodoroConfigTabValueChange"
         @onCreateCustomSettings="createCustomSettings"
       />
@@ -47,7 +47,7 @@
         name="save changes"
         class="w-full"
         :is-loading="isLoading"
-        :is-disabled="isLoading || isPomodoroConfigTabAndDefaultConfig"
+        :is-disabled="isLoading || isButtonSaveShouldBeDisabled"
         @click="handleSave"
       >
         {{ $t('Save changes') }}
@@ -132,12 +132,10 @@ export default {
         return this.pomodoroSessionSettingsValues
       }
     },
-
-    isDefaultPomodoroSettingsConfiguration() {
+    hasUserSelectedLocalDefaultPomodoroConfigurationOption() {
       return (
-        !this.userSettingsValues.pomodoro_session_setting_id ||
         this.userSettingsValues.pomodoro_session_setting_id ===
-          DEFAULT_POMODORO_SETTINGS_OPTION_ID
+        DEFAULT_POMODORO_SETTINGS_OPTION_ID
       )
     },
 
@@ -161,6 +159,23 @@ export default {
         default:
           return false
       }
+    },
+
+    isButtonSaveShouldBeDisabled() {
+      if (this.currentActiveTab === SETTINGS_PANEL_STEPS_VALUES.GENERAL) {
+        return false
+      }
+      if (this.draftPomodoroSessionSettingsValues.id) {
+        return false
+      }
+      return this.hasUserSelectedLocalDefaultPomodoroConfigurationOption
+    },
+
+    isPomodoroSettingNameEditable() {
+      return (
+        !this.hasUserSelectedLocalDefaultPomodoroConfigurationOption ||
+        this.hasUserTriggeredCreationCustomSettings
+      )
     },
 
     /*
