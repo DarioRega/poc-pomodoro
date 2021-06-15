@@ -105,8 +105,10 @@ export default {
       getSpecificNotification: 'globalState/getSpecificNotification',
       areUserSettingsEmpty: 'user/areUserSettingsEmpty',
       arePomodoroSettingsEmpty: 'user/arePomodoroSettingsEmpty',
+      isPomodoroSettingsIdNull: 'user/isPomodoroSettingsIdNull',
       userSettings: 'user/getUserSettingsValues',
       pomodoroSettings: 'user/getUserPomodoroSettingsValues',
+      getUserAllPomodoroSettingsValues: 'user/getUserAllPomodoroSettingsValues',
     }),
     getSelectedPomodoroConfiguration() {
       if (this.userSettingsValues.pomodoro_session_setting_id) {
@@ -140,6 +142,19 @@ export default {
       )
     },
   },
+  watch: {
+    'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
+      if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
+        this.pomodoroSessionSettingsValues =
+          this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
+      } else {
+        this.pomodoroSessionSettingsValues = {
+          ...this.pomodoroSessionSettingsValues,
+          ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+        }
+      }
+    },
+  },
 
   mounted() {
     this.currentActiveTab = this.settingPanelStepsValues.GENERAL
@@ -148,6 +163,10 @@ export default {
     }
     if (!this.arePomodoroSettingsEmpty) {
       this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
+    } else {
+      this.pomodoroSessionSettingsValues = DEFAULT_POMODORO_SETTINGS_OPTION(
+        this.$i18n
+      )
     }
     setTimeout(() => {
       this.shouldWatchChange = true
