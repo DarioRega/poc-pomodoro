@@ -72,6 +72,7 @@ import {
   DEFAULT_POMODORO_SETTINGS_OPTION_ID,
   POMODORO_DEFAULT_SETTINGS,
 } from '@/constantes/settings'
+import { getRandomNumber } from '@/helpers'
 
 export default {
   name: 'SettingsPanel',
@@ -322,6 +323,17 @@ export default {
         this[settingsTarget][property] = value
       }
     },
+
+    async handleCreatePomodoroSettings() {
+      this.isLoading = true
+
+      await this.createPomodoroSettings(this.draftPomodoroSessionSettingsValues)
+      await this.$auth.fetchUser()
+
+      this.resetCreationProcess()
+      this.isLoading = false
+    },
+
     async handleUpdatePomodoroSettings() {
       this.isLoading = true
       await this.updatePomodoroSettings(this.pomodoroSessionSettingsValues)
