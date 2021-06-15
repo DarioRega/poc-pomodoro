@@ -246,12 +246,10 @@ export default {
   },
   methods: {
     handleEmitValue(newValue, property) {
-      console.log('VALUE NEW', newValue)
       let value = newValue
       if (property.includes('duration')) {
         value = convertNumberInDuration(newValue)
       }
-      console.log('VALUE FORMATED => ', value)
       this.$emit('onPomodoroConfigTabValueChange', value, property)
     },
   },

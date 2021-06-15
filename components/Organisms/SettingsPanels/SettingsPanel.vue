@@ -172,6 +172,7 @@ export default {
       createNotification: 'globalState/createNotification',
       createPomodoroSettings: 'user/createPomodoroSettings',
       updateUserSettings: 'user/updateSettings',
+      updatePomodoroSettings: 'user/updatePomodoroSettings',
     }),
 
     /*
@@ -180,6 +181,11 @@ export default {
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
         this.handleUpdateUserSettings()
+      }
+      if (
+        this.currentActiveTab === this.settingPanelStepsValues.POMODORO_CONFIG
+      ) {
+        this.handleUpdatePomodoroSettings()
       }
     },
     /*
@@ -199,6 +205,7 @@ export default {
       await this.updateUserSettings(this.userSettingsValues)
       this.isLoading = false
     },
+
     /*
       Pomodoro config events
      */
@@ -208,6 +215,11 @@ export default {
       } else {
         this.pomodoroSessionSettingsValues[property] = value
       }
+    },
+    async handleUpdatePomodoroSettings() {
+      this.isLoading = true
+      await this.updatePomodoroSettings(this.pomodoroSessionSettingsValues)
+      this.isLoading = false
     },
   },
 }
