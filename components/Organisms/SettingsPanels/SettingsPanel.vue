@@ -33,6 +33,7 @@
         :values="{ name: user.name, email: user.email }"
       />
       <settings-panel-pomodoro-config-tab
+        :values="{}"
         v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
         :values="settingsValues.pomodoroConfigTab"
         @onPomodoroDurationChange="handlePomodoroDurationChange"
@@ -46,7 +47,7 @@
       />
       <settings-panel-current-subscription-tab
         v-if="currentActiveTab === stepsValues.SUBSCRIPTION"
-        :values="settingsValues.subscriptionTab"
+        :values="{}"
       />
     </div>
 

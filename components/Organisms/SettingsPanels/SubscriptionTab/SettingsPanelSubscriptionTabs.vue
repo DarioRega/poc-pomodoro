@@ -16,6 +16,7 @@
 
 <script>
 import TabLink from '@/components/Atoms/TabLink'
+import { getSubscriptionsSettingsPanelSteps } from '@/helpers/settings'
 
 export default {
   name: 'SettingsPanelSubscriptionTabs',
@@ -28,9 +29,7 @@ export default {
   },
   computed: {
     tabs() {
-      return this.$store.getters['settings/getSubscriptionsSettingsPanelSteps'](
-        this.$i18n
-      )
+      return getSubscriptionsSettingsPanelSteps(this.$i18n)
     },
   },
 }
