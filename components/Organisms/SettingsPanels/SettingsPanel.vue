@@ -73,7 +73,10 @@ import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanel
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
 import BrandButton from '@/components/Atoms/BrandButton'
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import { DEFAULT_POMODORO_SETTINGS_OPTION } from '@/constantes/settings'
+import {
+  DEFAULT_POMODORO_SETTINGS_OPTION,
+  DEFAULT_POMODORO_SETTINGS_OPTION_ID,
+} from '@/constantes/settings'
 
 export default {
   name: 'SettingsPanel',
@@ -106,24 +109,20 @@ export default {
       pomodoroSettings: 'user/getUserPomodoroSettingsValues',
     }),
     getSelectedPomodoroConfiguration() {
-      if (
-        this.arePomodoroSettingsEmpty &&
-        _.isEmpty(this.pomodoroSessionSettingsValues)
-      ) {
-        return DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n)
-      } else {
+      if (this.userSettingsValues.pomodoro_session_setting_id) {
         const { id, name } = this.pomodoroSessionSettingsValues
         return { id, name }
       }
+      return DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n)
     },
     user() {
       return this.$auth.user
     },
     canSave() {
       switch (this.currentActiveTab) {
-        case this.stepsValues.GENERAL:
+        case this.settingPanelStepsValues.GENERAL:
           return true
-        case this.stepsValues.POMODORO_CONFIG:
+        case this.settingPanelStepsValues.POMODORO_CONFIG:
           return true
         default:
           return false
@@ -134,7 +133,11 @@ export default {
     },
 
     isDefaultPomodoroSettingsConfiguration() {
-      return this.userSettingsValues.pomodoro_session_setting_id === null
+      return (
+        !this.userSettingsValues.pomodoro_session_setting_id ||
+        this.userSettingsValues.pomodoro_session_setting_id ===
+          DEFAULT_POMODORO_SETTINGS_OPTION_ID
+      )
     },
   },
 
