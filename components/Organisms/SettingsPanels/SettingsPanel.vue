@@ -219,6 +219,7 @@ export default {
       this.setLocalUserSettingsWithStoreValues()
     }
 
+    this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()
     this.initPomodoroSettingsValues()
   },
   methods: {
@@ -247,8 +248,40 @@ export default {
       }
     },
 
+    /*
+      Global methods related
+    */
+    verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault() {
+      if (!this.isUserUsingPomodoroCustomSettings) {
+        this.userSettingsValues.pomodoro_session_setting_id =
+          DEFAULT_POMODORO_SETTINGS_OPTION_ID
+      }
+    },
+
     setLocalUserSettingsWithStoreValues() {
       this.userSettingsValues = _.cloneDeep(this.userSettings)
+      this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()
+    },
+
+    initPomodoroSettingsValues() {
+      if (this.isUserUsingPomodoroCustomSettings) {
+        this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
+      } else {
+        this.setPomodoroSettingsWithDefaultValue()
+      }
+    },
+
+    setPomodoroSettingsWithDefaultValue() {
+      this.pomodoroSessionSettingsValues = {
+        ...POMODORO_DEFAULT_SETTINGS,
+        ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+      }
+    },
+
+    findCustomPomodoroSettingAndSetAsValue(id) {
+      this.pomodoroSessionSettingsValues = _.cloneDeep(
+        this.getUserAllPomodoroSettingsValues.find((x) => x.id === id)
+      )
     },
 
     /*
