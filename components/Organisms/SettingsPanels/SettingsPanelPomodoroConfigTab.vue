@@ -1,16 +1,5 @@
 <template>
   <section class="settings-panel w-full h-full">
-    <div class="settings-panel__container">
-      <brand-input
-        class="max-w-xs"
-        :label="$t('Configuration name')"
-        name="pomodoro setting choice"
-        :placeholder="$t('Enter your configuration name')"
-        :value="configurationName"
-        error-text=""
-        @change.native="configurationName = $event.target.value"
-      />
-    </div>
     <!--    TIME PER POMODORO -->
     <div class="settings-panel__container">
       <div class="settings-panel__labels">
@@ -181,14 +170,12 @@
 <script>
 import Toggle from '@/components/Atoms/Inputs/Toggle'
 import InputSlider from '@/components/Atoms/Inputs/InputSlider'
-import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 
 export default {
   name: 'SettingsPanelPomodoroConfigTab',
   components: {
     Toggle,
     InputSlider,
-    BrandInput,
   },
   props: {
     values: {
@@ -198,7 +185,6 @@ export default {
   },
   data() {
     return {
-      configurationName: '',
       localValues: {
         pomodoro_duration: 0,
         small_break_duration: 0,
