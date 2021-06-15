@@ -122,9 +122,7 @@ export default {
       return false
     },
     is24hFormat() {
-      return this.$store.getters[
-        'settings/getIsUserSettings24hTimeFormatDisplay'
-      ]
+      return this.$store.getters['user/isUserUsing24HTimeFormat']
     },
     getTimezone() {
       return this.$store.getters['user/getUserSettingTimezone']
