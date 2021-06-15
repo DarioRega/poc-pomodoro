@@ -4,38 +4,38 @@ export default {
   getUser: (state, getters, rootState) => {
     return rootState.auth.user
   },
-  getIsUserSettings24hTimeFormatDisplay: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings.time_display_format === '24H'
+  getIsUserSettings24hTimeFormatDisplay: (state, getters) => {
+    return getters.getUser.user_settings.time_display_format === '24H'
   },
   getUserSettingTimezone: (state) => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
   },
-  getUserSettingsValues: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings
+  getUserSettingsValues: (state, getters) => {
+    return getters.getUser.user_settings
   },
-  getUserAllPomodoroSettingsValues: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_settings.length > 0) {
-      return rootState.auth.user.pomodoro_session_settings
+  getUserAllPomodoroSettingsValues: (state, getters) => {
+    if (getters.getUser.pomodoro_session_settings.length > 0) {
+      return getters.getUser.pomodoro_session_settings
     }
     return []
   },
   getUserPomodoroSettingsValues: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings.pomodoro_session_setting
+    return getters.getUser.user_settings.pomodoro_session_setting
   },
-  areUserSettingsEmpty: (state, getters, rootState) => {
-    if (rootState.auth.user.user_settings) {
-      return _.isEmpty(rootState.auth.user.user_settings)
+  areUserSettingsEmpty: (state, getters) => {
+    if (getters.getUser.user_settings) {
+      return _.isEmpty(getters.getUser.user_settings)
     }
     return true
   },
-  arePomodoroSettingsEmpty: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_setting) {
+  arePomodoroSettingsEmpty: (state, getters) => {
+    if (getters.getUser.pomodoro_session_setting) {
       return false
     }
     return true
   },
-  isPomodoroSettingsIdNull: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_setting_id) {
+  isPomodoroSettingsIdNull: (state, getters) => {
+    if (getters.getUser.pomodoro_session_setting_id) {
       return false
     }
     return true
