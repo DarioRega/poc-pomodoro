@@ -28,10 +28,8 @@
       />
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
-        :values="pomodoroSessionSettingsValues"
-        :configuration-name="configurationName"
+        :values="getPomodoroSettingsValues"
         :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
-        @change="configurationName = $event"
         @onPomodoroConfigTabValueChange="onPomodoroConfigTabValueChange"
       />
       <settings-panel-current-subscription-tab
@@ -88,6 +86,7 @@ export default {
       userSettingsValues: {},
       pomodoroSessionSettingsValues: {},
       hasUserTriggeredCreationCustomSettings: false,
+      draftPomodoroSessionSettingsValues: {},
       newSettingsPomodoroValues: {},
       isLoading: false,
       shouldWatchChange: false,
@@ -102,7 +101,18 @@ export default {
       userSettings: 'user/getUserSettingsValues',
       pomodoroSettings: 'user/getUserPomodoroSettingsValues',
       getUserAllPomodoroSettingsValues: 'user/getUserAllPomodoroSettingsValues',
+      getUserNextConfigurationNumber: 'user/getUserNextConfigurationNumber',
     }),
+
+    // When user create a config we must feed the pomodoro config tab with the draft object , else the settingsValues
+    getPomodoroSettingsValues() {
+      if (this.hasUserTriggeredCreationCustomSettings) {
+        return this.draftPomodoroSessionSettingsValues
+      } else {
+        return this.pomodoroSessionSettingsValues
+      }
+    },
+
     getSelectedPomodoroConfiguration() {
       if (this.userSettingsValues.pomodoro_session_setting_id) {
         const { id, name } = this.pomodoroSessionSettingsValues
@@ -137,14 +147,23 @@ export default {
   },
   watch: {
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
-      if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
-        this.pomodoroSessionSettingsValues = _.cloneDeep(
-          this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
-        )
-      } else {
-        this.pomodoroSessionSettingsValues = {
-          ...this.pomodoroSessionSettingsValues,
-          ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+      // to avoid triggering on mounted lifecycle, we make sure was had a value before
+      if (oldValue) {
+        if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
+          this.pomodoroSessionSettingsValues = _.cloneDeep(
+            this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
+          )
+        } else {
+          this.pomodoroSessionSettingsValues = {
+            ...this.pomodoroSessionSettingsValues,
+            ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+          }
+        }
+
+        // once the user change the select value, we reset the variable to be able to update again,
+        // otherwise it will post everytime, see fn handleSave for detail
+        if (this.hasUserTriggeredCreationCustomSettings) {
+          this.hasUserTriggeredCreationCustomSettings = false
         }
       }
     },
@@ -220,6 +239,17 @@ export default {
       this.isLoading = true
       await this.updatePomodoroSettings(this.pomodoroSessionSettingsValues)
       this.isLoading = false
+    },
+    createCustomSettings() {
+      // TODO kill notificatin if exist
+      this.hasUserTriggeredCreationCustomSettings = true
+      this.draftPomodoroSessionSettingsValues = {
+        ...POMODORO_DEFAULT_SETTINGS,
+        id: getRandomNumber(),
+        name: `${this.$t('My custom configuration')} #${
+          this.getUserNextConfigurationNumber
+        }`,
+      }
     },
   },
 }
