@@ -14,7 +14,10 @@ export default {
     return rootState.auth.user.user_settings
   },
   getUserAllPomodoroSettingsValues: (state, getters, rootState) => {
-    return rootState.auth.user.pomodoro_session_settings
+    if (rootState.auth.user.pomodoro_session_settings.length > 0) {
+      return rootState.auth.user.pomodoro_session_settings
+    }
+    return []
   },
   getUserPomodoroSettingsValues: (state, getters, rootState) => {
     return rootState.auth.user.user_settings.pomodoro_session_setting
@@ -26,7 +29,16 @@ export default {
     return true
   },
   arePomodoroSettingsEmpty: (state, getters, rootState) => {
-    return rootState.auth.user.pomodoro_session_setting === null
+    if (rootState.auth.user.pomodoro_session_setting) {
+      return false
+    }
+    return true
+  },
+  isPomodoroSettingsIdNull: (state, getters, rootState) => {
+    if (rootState.auth.user.pomodoro_session_setting_id) {
+      return false
+    }
+    return true
   },
   isAppMuted(state, getters, rootState) {
     return false
