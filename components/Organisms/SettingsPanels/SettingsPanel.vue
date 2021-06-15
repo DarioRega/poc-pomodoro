@@ -76,6 +76,7 @@ import { getRandomNumber } from '@/helpers'
 
 export default {
   name: 'SettingsPanel',
+
   components: {
     SettingsPanelMainTabs,
     SettingsPanelGeneralTab,
@@ -84,6 +85,7 @@ export default {
     SettingsPanelCurrentSubscriptionTab,
     BrandButton,
   },
+
   data() {
     return {
       currentActiveTab: '',
@@ -97,6 +99,7 @@ export default {
       hasUserTriggeredCreationCustomSettings: false,
     }
   },
+
   computed: {
     ...mapGetters({
       // store property
@@ -113,15 +116,7 @@ export default {
       isUserUsingPomodoroCustomSettings:
         'user/isUserUsingPomodoroCustomSettings',
     }),
-    isPomodoroConfigTabAndDefaultConfig() {
-      if (this.currentActiveTab === SETTINGS_PANEL_STEPS_VALUES.GENERAL) {
-        return false
-      }
-      if (this.isDefaultPomodoroSettingsConfiguration) {
-        return true
-      }
-      return false
-    },
+
     /*
       Pomodoro session settings related
     */
@@ -149,7 +144,7 @@ export default {
     },
 
     /*
-      Conditional render
+      Template conditional render
     */
     shouldShowSaveButton() {
       switch (this.currentActiveTab) {
@@ -186,16 +181,18 @@ export default {
       return SETTINGS_PANEL_STEPS_VALUES
     },
   },
+
   watch: {
     /*
-     Store user settings value, when it get updated, refresh the userSettingsValues as did in mounted lifecycle (readonly)
+      Store user settings value
+      when it get updated, refresh the local userSettingsValues as did in mounted lifecycle (readonly)
      */
     'userSettings.pomodoro_session_setting_id'(newValue, oldValue) {
       this.setLocalUserSettingsWithStoreValues()
     },
 
     /*
-    Local user settings value (editable)
+      Local user settings value (editable)
     */
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
       // to avoid triggering on mounted lifecycle, we make sure was had a value before
@@ -233,7 +230,7 @@ export default {
     }),
 
     /*
-      Global events
+      Global events related
     */
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
@@ -292,25 +289,29 @@ export default {
     },
 
     /*
-      General tab events
+      General tab related
     */
     onGeneralTabValueChange(value, property) {
       if (typeof value === 'object') {
         this.userSettingsValues[property] = value.id
       }
     },
+
     async handleUpdateUserSettings() {
       this.isLoading = true
       const payload = this.userSettingsValues
       if (this.hasUserSelectedLocalDefaultPomodoroConfigurationOption) {
         payload.pomodoro_session_setting_id = null
       }
+
       await this.updateUserSettings(this.userSettingsValues)
+      await this.$auth.fetchUser()
+
       this.isLoading = false
     },
 
     /*
-      Pomodoro config events
+      Pomodoro config related
      */
     onPomodoroConfigTabValueChange(value, property) {
       let settingsTarget = 'pomodoroSessionSettingsValues'
@@ -336,7 +337,10 @@ export default {
 
     async handleUpdatePomodoroSettings() {
       this.isLoading = true
+
       await this.updatePomodoroSettings(this.pomodoroSessionSettingsValues)
+      await this.$auth.fetchUser()
+
       this.isLoading = false
     },
 
@@ -352,27 +356,6 @@ export default {
         ...POMODORO_DEFAULT_SETTINGS,
         id: getRandomNumber(),
         name: customSettingDefaultName,
-      }
-    },
-
-    initPomodoroSettingsValues() {
-      if (this.isUserUsingPomodoroCustomSettings) {
-        this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
-      } else {
-        this.setPomodoroSettingsWithDefaultValue()
-      }
-    },
-
-    findCustomPomodoroSettingAndSetAsValue(id) {
-      this.pomodoroSessionSettingsValues = _.cloneDeep(
-        this.getUserAllPomodoroSettingsValues.find((x) => x.id === id)
-      )
-    },
-
-    setPomodoroSettingsWithDefaultValue() {
-      this.pomodoroSessionSettingsValues = {
-        ...POMODORO_DEFAULT_SETTINGS,
-        ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
       }
     },
   },
