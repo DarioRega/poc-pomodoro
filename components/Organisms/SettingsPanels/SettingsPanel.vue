@@ -20,12 +20,7 @@
         v-if="currentActiveTab === stepsValues.GENERAL"
         :values="userSettingsValues"
         :selected-pomodoro-configuration="getSelectedPomodoroConfiguration"
-        @onDisplayLanguageChange="handleDisplayLanguageChange"
-        @onTimezoneChange="handleTimezoneChange"
-        @onTimeDisplayFormatChange="handleTimeDisplayFormatChange"
-        @onThemeChange="handleThemeChange"
-        @onBugReportsChange="handleBugReportChange"
-        @onAnalyticsChange="handleAnalyticsChange"
+        @onGeneralTabValueChange="onGeneralTabValueChange"
       />
       <settings-panel-account-tab
         v-if="currentActiveTab === stepsValues.ACCOUNT"
@@ -137,10 +132,6 @@ export default {
           return false
       }
     },
-    settingsOptions() {
-      // TODO constantes with enums values for settings
-      return []
-    },
     stepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
@@ -181,25 +172,11 @@ export default {
     /*
       General tab events
     */
-    handleDisplayLanguageChange(value) {
-      this.settingsValues.generalTab.displayLanguage = value
+    onGeneralTabValueChange(value, property) {
+      if (typeof value === 'object') {
+        this.userSettingsValues[property] = value.id
+      }
     },
-    handleTimezoneChange(value) {
-      this.settingsValues.generalTab.timezone = value
-    },
-    handleTimeDisplayFormatChange(value) {
-      this.settingsValues.generalTab.displayLanguage = value
-    },
-    handleThemeChange(value) {
-      this.settingsValues.generalTab.theme = value
-    },
-    handleBugReportChange(value) {
-      this.settingsValues.generalTab.bugReports = value
-    },
-    handleAnalyticsChange(value) {
-      this.settingsValues.generalTab.analytics = value
-    },
-
     /*
       Pomodoro config events
      */

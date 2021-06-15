@@ -11,7 +11,9 @@
           :value="timeDisplayFormatValue"
           :options="timeDisplayFormatOptions"
           name="time-display-format"
-          @change="$emit('onTimeDisplayFormatChange', $event)"
+          @change="
+            $emit('onGeneralTabValueChange', $event, 'time_display_format')
+          "
         />
       </div>
     </div>
@@ -28,7 +30,7 @@
           :options="themeOptions"
           :should-capitalize="true"
           name="theme"
-          @change="$emit('onThemeChange', $event)"
+          @change="$emit('onGeneralTabValueChange', $event, 'theme')"
         />
       </div>
     </div>
@@ -50,7 +52,13 @@
           :value="selectedPomodoroConfiguration"
           :options="pomodoroSettingsOptions"
           name="settings choice"
-          @change="$emit('onSettingChoiceChange', $event)"
+          @change="
+            $emit(
+              'onGeneralTabValueChange',
+              $event,
+              'pomodoro_session_setting_id'
+            )
+          "
         />
       </div>
     </div>
@@ -66,7 +74,7 @@
     <!--          :value="values.displayLanguage"-->
     <!--          :options="options.displayLanguages"-->
     <!--          name="display-language"-->
-    <!--          @change="$emit('onDisplayLanguageChange', $event)"-->
+    <!--          @change="$emit('onGeneralTabValueChange', $event, 'language')"-->
     <!--        />-->
     <!--      </div>-->
     <!--    </div>-->
@@ -82,7 +90,7 @@
     <!--          :value="values.timezone"-->
     <!--          :options="options.timezones"-->
     <!--          name="timezone"-->
-    <!--          @change="$emit('onTimezoneChange', $event)"-->
+    <!--          @change="$emit('onGeneralTabValueChange', $event, 'timezone')"-->
     <!--        />-->
     <!--      </div>-->
     <!--    </div>-->
@@ -103,7 +111,7 @@
     <!--        <toggle-->
     <!--          :toggled="values.bugReports"-->
     <!--          class="justify-end"-->
-    <!--          @toggle="$emit('onBugReportsChange', $event)"-->
+    <!--          @toggle="$emit('onGeneralTabValueChange', $event, 'bug_reports')"-->
     <!--        />-->
     <!--      </div>-->
     <!--    </div>-->
@@ -124,7 +132,7 @@
     <!--        <toggle-->
     <!--          :toggled="values.analytics"-->
     <!--          class="justify-end"-->
-    <!--          @toggle="$emit('onAnalyticsChange', $event)"-->
+    <!--          @toggle="$emit('onGeneralTabValueChange', $event, 'analytics')"-->
     <!--        />-->
     <!--      </div>-->
     <!--    </div>-->
