@@ -29,17 +29,13 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="valuesWithDurationsInNumber.pomodoro_duration"
+          :value="values.pomodoro_duration"
           :max="60"
           :min="15"
           @change="handleEmitValue($event, 'pomodoro_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{
-              `${valuesWithDurationsInNumber.pomodoro_duration} ${$t(
-                'minutes'
-              )}`
-            }}
+            {{ `${values.pomodoro_duration} ${$t('minutes')}` }}
           </p>
         </input-slider>
       </div>
@@ -53,16 +49,14 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="valuesWithDurationsInNumber.small_break_duration"
+          :value="values.small_break_duration"
           :max="15"
           :min="1"
           :interval="1"
           @change="handleEmitValue($event, 'small_break_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{
-              `${valuesWithDurationsInNumber.small_break_duration} ${minuteOrMinutes}`
-            }}
+            {{ `${values.small_break_duration} ${minuteOrMinutes}` }}
           </p>
         </input-slider>
       </div>
@@ -76,18 +70,14 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="valuesWithDurationsInNumber.big_break_duration"
+          :value="values.big_break_duration"
           :max="30"
           :min="10"
           :interval="1"
           @change="handleEmitValue($event, 'big_break_duration')"
         >
           <p class="settings-panel__sliderInput">
-            {{
-              `${valuesWithDurationsInNumber.big_break_duration} ${$t(
-                'minute'
-              )}`
-            }}
+            {{ `${values.big_break_duration} ${$t('minute')}` }}
           </p>
         </input-slider>
       </div>
@@ -101,18 +91,14 @@
       </div>
       <div class="settings-panel__configurations">
         <input-slider
-          :value="valuesWithDurationsInNumber.pomodoro_quantity"
+          :value="values.pomodoro_quantity"
           :max="10"
           :min="2"
           :interval="1"
           @change="handleEmitValue($event, 'pomodoro_quantity')"
         >
           <p class="settings-panel__sliderInput">
-            {{
-              `${valuesWithDurationsInNumber.pomodoro_quantity} ${$t(
-                'pomodoros'
-              )}`
-            }}
+            {{ `${values.pomodoro_quantity} ${$t('pomodoros')}` }}
           </p>
         </input-slider>
       </div>
@@ -131,7 +117,7 @@
     <!--      </div>-->
     <!--      <div class="settings-panel__configurations">-->
     <!--        <toggle-->
-    <!--          :toggled="valuesWithDurationsInNumber.noise_notification_end_process"-->
+    <!--          :toggled="values.noise_notification_end_process"-->
     <!--          class="justify-end"-->
     <!--          @toggle="-->
     <!--            $emit('onPomodoroConfigTabValueChange', $event, 'pomodoro_duration')-->
@@ -154,7 +140,7 @@
     <!--      </div>-->
     <!--      <div class="settings-panel__configurations">-->
     <!--        <toggle-->
-    <!--          :toggled="valuesWithDurationsInNumber.start_pomodoro_auto"-->
+    <!--          :toggled="values.start_pomodoro_auto"-->
     <!--          class="justify-end"-->
     <!--          @toggle="-->
     <!--            handleEmitValue($event, 'pomodoro_duration')-->
@@ -177,7 +163,7 @@
     <!--      </div>-->
     <!--      <div class="settings-panel__configurations">-->
     <!--        <toggle-->
-    <!--          :toggled="valuesWithDurationsInNumber.start_small_break_auto"-->
+    <!--          :toggled="values.start_small_break_auto"-->
     <!--          class="justify-end"-->
     <!--          @toggle="-->
     <!--           handleEmitValue($event, 'pomodoro_duration')-->
@@ -200,7 +186,7 @@
     <!--      </div>-->
     <!--      <div class="settings-panel__configurations">-->
     <!--        <toggle-->
-    <!--          :toggled="valuesWithDurationsInNumber.start_big_break_auto"-->
+    <!--          :toggled="values.start_big_break_auto"-->
     <!--          class="justify-end"-->
     <!--          @toggle="-->
     <!--           handleEmitValue($event, 'pomodoro_duration')-->
@@ -212,15 +198,9 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 import InputSlider from '@/components/Atoms/Inputs/InputSlider'
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import BrandButton from '@/components/Atoms/BrandButton'
-import {
-  convertNumberInDuration,
-  getTimeValuesInNumber,
-} from '@/helpers/settings'
 
 export default {
   name: 'SettingsPanelPomodoroConfigTab',
@@ -234,43 +214,13 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  data() {
-    return {
-      localValues: {
-        pomodoro_duration: 0,
-        small_break_duration: 0,
-        big_break_duration: 0,
-        pomodoro_quantity: 0,
-        noise_notification_end_process: true,
-        start_pomodoro_auto: false,
-        start_small_break_auto: false,
-        start_big_break_auto: false,
-      },
-    }
-  },
-  computed: {
-    valuesWithDurationsInNumber() {
-      const valuesConverted = _.cloneDeep(this.values)
-      Object.keys(valuesConverted).forEach((x) => {
-        if (x.includes('duration')) {
-          valuesConverted[x] = getTimeValuesInNumber(valuesConverted[x])
-        }
-      })
-      return valuesConverted
-    },
-    minuteOrMinutes() {
-      return this.values.pomodoro_quantity < 2
-        ? this.$t('minute')
-        : this.$t('minutes')
+    isDefaultConfiguration: {
+      type: Boolean,
+      required: true,
     },
   },
   methods: {
-    handleEmitValue(newValue, property) {
-      let value = newValue
-      if (property.includes('duration')) {
-        value = convertNumberInDuration(newValue)
-      }
+    handleEmitValue(value, property) {
       this.$emit('onPomodoroConfigTabValueChange', value, property)
     },
   },

@@ -40,6 +40,14 @@ export default {
     }
     return true
   },
+
+  getUserNextConfigurationNumber(state, getters) {
+    if (getters.getUser.pomodoro_session_settings) {
+      return getters.getUser.pomodoro_session_settings.length + 1
+    }
+    return 1
+  },
+
   isAppMuted(state, getters, rootState) {
     return false
   },
