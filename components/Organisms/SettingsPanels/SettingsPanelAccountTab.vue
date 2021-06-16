@@ -194,16 +194,20 @@ export default {
         }
       }
     },
-    handleChangeEmail() {
-      const fieldProperty = 'email'
-      if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
+    async handleChangeEmail() {
+      const targetProperty = 'email'
+      if (this.validateEmptyFields(targetProperty)) {
+        if (this.validateChange(targetProperty)) {
           if (!this.$regexValidate('email', this.localValues.email)) {
             this.errors.email = this.$t('Invalid email')
           } else {
-            this.updateUserProperty(fieldProperty, {
-              email: this.localValues.email,
-            })
+            const error = await this.handleUpdateUserProfileInformation(
+              targetProperty
+            )
+
+            if (error) {
+              this.errors.email = error.email[0]
+            }
           }
         }
       }
