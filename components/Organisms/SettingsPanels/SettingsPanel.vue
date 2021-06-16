@@ -73,7 +73,6 @@ import {
   POMODORO_DEFAULT_SETTINGS,
 } from '@/constantes/settings'
 import { getRandomNumber } from '@/helpers'
-import { setItemsInLocalStorage } from '@/helpers/localStorage'
 
 export default {
   name: 'SettingsPanel',
@@ -307,9 +306,6 @@ export default {
 
       await this.updateUserSettings(this.userSettingsValues)
       await this.$auth.fetchUser()
-
-      // TODO and retrieve values on nuxt mount
-      setItemsInLocalStorage(this.userSettings)
 
       this.isLoading = false
     },
