@@ -17,25 +17,24 @@
       "
     >
       <settings-panel-general-tab
-        v-if="currentActiveTab === stepsValues.GENERAL"
-        :values="settingsValues.generalTab"
-        :options="settingsOptions"
-        @onDisplayLanguageChange="handleDisplayLanguageChange"
-        @onTimezoneChange="handleTimezoneChange"
-        @onTimeDisplayFormatChange="handleTimeDisplayFormatChange"
-        @onThemeChange="handleThemeChange"
-        @onBugReportsChange="handleBugReportChange"
-        @onAnalyticsChange="handleAnalyticsChange"
+        v-if="currentActiveTab === settingPanelStepsValues.GENERAL"
+        :values="userSettingsValues"
+        :selected-pomodoro-configuration="getSelectedPomodoroConfiguration"
+        @onGeneralTabValueChange="onGeneralTabValueChange"
       />
       <settings-panel-account-tab
-        v-if="currentActiveTab === stepsValues.ACCOUNT"
+        v-if="currentActiveTab === settingPanelStepsValues.ACCOUNT"
         :values="{ name: user.name, email: user.email }"
       />
       <settings-panel-pomodoro-config-tab
-        v-if="currentActiveTab === stepsValues.POMODORO_CONFIG"
-        :values="settingsValues.pomodoroConfigTab"
+        v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
+        :values="{}"
+        :configuration-name="configurationName"
+        :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
+        @change="configurationName = $event"
+        @onCreateCustomSettings="createCustomSettings"
         @onPomodoroDurationChange="handlePomodoroDurationChange"
-        @onSmallBreakDurationChange="handleBigBreakDurationChange"
+        @onSmallBreakDurationChange="handleSmallBreakDurationChange"
         @onBigBreakDurationChange="handleBigBreakDurationChange"
         @onPomodoroQuantityChange="handlePomodoroQuantityChange"
         @onNoiseNotificationChange="handleNoiseNotificationChange"
@@ -44,32 +43,40 @@
         @onStartBigBreakAutoChange="handleStartBigBreakAutoChange"
       />
       <settings-panel-current-subscription-tab
-        v-if="currentActiveTab === stepsValues.SUBSCRIPTION"
-        :values="settingsValues.subscriptionTab"
+        v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
+        :values="{}"
       />
     </div>
-    <settings-panel-save-or-reset-settings
-      v-show="isSaveOrResetPossible"
-      :has-reset="isDefaultSettingsConfiguration"
-      :is-loading="isLoading"
-      :save-changes-label="$t('Save changes')"
-      :reset-default-label="$t('Reset to defaults')"
-      @onSave="handleSave"
-      @onReset="handleResetDefault"
-    />
+
+    <div v-show="canSave" class="mt-6 w-64 w-full mx-auto text-center">
+      <brand-button
+        name="save changes"
+        class="w-full"
+        :is-loading="isLoading"
+        :is-disabled="isLoading"
+        @click="handleSave"
+      >
+        {{ $t('Save changes') }}
+      </brand-button>
+    </div>
   </section>
 </template>
 
 <script>
 import _ from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
+
 import SettingsPanelMainTabs from '@/components/Organisms/SettingsPanels/SettingsPanelMainTabs'
 import SettingsPanelGeneralTab from '@/components/Organisms/SettingsPanels/SettingsPanelGeneralTab'
 import SettingsPanelAccountTab from '@/components/Organisms/SettingsPanels/SettingsPanelAccountTab'
 import SettingsPanelPomodoroConfigTab from '@/components/Organisms/SettingsPanels/SettingsPanelPomodoroConfigTab'
 import SettingsPanelCurrentSubscriptionTab from '@/components/Organisms/SettingsPanels/SettingsPanelCurrentSubscriptionTab'
-
+import BrandButton from '@/components/Atoms/BrandButton'
 import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
-import SettingsPanelSaveOrResetSettings from '@/components/Organisms/SettingsPanels/SettingsPanelSaveOrResetSettings'
+import {
+  DEFAULT_POMODORO_SETTINGS_OPTION,
+  DEFAULT_POMODORO_SETTINGS_OPTION_ID,
+} from '@/constantes/settings'
 
 export default {
   name: 'SettingsPanel',
@@ -79,78 +86,124 @@ export default {
     SettingsPanelAccountTab,
     SettingsPanelPomodoroConfigTab,
     SettingsPanelCurrentSubscriptionTab,
-    SettingsPanelSaveOrResetSettings,
+    BrandButton,
   },
   data() {
     return {
       currentActiveTab: '',
-      settingsValues: {},
+      configurationName: '',
+      userSettingsValues: {},
+      pomodoroSessionSettingsValues: {},
+      hasUserTriggeredCreationCustomSettings: false,
+      newSettingsPomodoroValues: {},
       isLoading: false,
+      shouldWatchChange: false,
     }
   },
   computed: {
+    ...mapGetters({
+      getSpecificNotification: 'globalState/getSpecificNotification',
+      areUserSettingsEmpty: 'user/areUserSettingsEmpty',
+      arePomodoroSettingsEmpty: 'user/arePomodoroSettingsEmpty',
+      isPomodoroSettingsIdNull: 'user/isPomodoroSettingsIdNull',
+      userSettings: 'user/getUserSettingsValues',
+      pomodoroSettings: 'user/getUserPomodoroSettingsValues',
+      getUserAllPomodoroSettingsValues: 'user/getUserAllPomodoroSettingsValues',
+    }),
+    getSelectedPomodoroConfiguration() {
+      if (this.userSettingsValues.pomodoro_session_setting_id) {
+        const { id, name } = this.pomodoroSessionSettingsValues
+        return { id, name }
+      }
+      return DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n)
+    },
     user() {
       return this.$auth.user
     },
-    isSaveOrResetPossible() {
+    canSave() {
       switch (this.currentActiveTab) {
-        case this.stepsValues.GENERAL:
+        case this.settingPanelStepsValues.GENERAL:
           return true
-        case this.stepsValues.POMODORO_CONFIG:
+        case this.settingPanelStepsValues.POMODORO_CONFIG:
           return true
         default:
           return false
       }
     },
-    settingsOptions() {
-      return this.$store.state.settings.settingsOptions
-    },
-    stepsValues() {
+    settingPanelStepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
-    isDefaultSettingsConfiguration() {
-      // TODO verify how to know if it's the default config or user one
-      return true
+
+    isDefaultPomodoroSettingsConfiguration() {
+      return (
+        !this.userSettingsValues.pomodoro_session_setting_id ||
+        this.userSettingsValues.pomodoro_session_setting_id ===
+          DEFAULT_POMODORO_SETTINGS_OPTION_ID
+      )
+    },
+  },
+  watch: {
+    'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
+      if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
+        this.pomodoroSessionSettingsValues =
+          this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
+      } else {
+        this.pomodoroSessionSettingsValues = {
+          ...this.pomodoroSessionSettingsValues,
+          ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+        }
+      }
     },
   },
 
   mounted() {
-    this.settingsValues = _.cloneDeep(this.$store.state.settings.settingsValues)
-    this.currentActiveTab = this.stepsValues.GENERAL
+    this.currentActiveTab = this.settingPanelStepsValues.GENERAL
+    if (!this.areUserSettingsEmpty) {
+      this.userSettingsValues = _.cloneDeep(this.userSettings)
+    }
+    if (!this.arePomodoroSettingsEmpty) {
+      this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
+    } else {
+      this.pomodoroSessionSettingsValues = DEFAULT_POMODORO_SETTINGS_OPTION(
+        this.$i18n
+      )
+    }
+    setTimeout(() => {
+      this.shouldWatchChange = true
+    }, 1000)
   },
   methods: {
+    ...mapActions({
+      createNotification: 'globalState/createNotification',
+      createPomodoroSettings: 'user/createPomodoroSettings',
+      updateUserSettings: 'user/updateSettings',
+    }),
+
     /*
       Global events
     */
     handleSave() {
-      // TODO action vuex
-    },
-    handleResetDefault() {
-      // TODO pop confirm
-      // reset to default general settings to show only on default configuration not user config
+      if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
+        this.handleUpdateUserSettings()
+      }
     },
     /*
       General tab events
     */
-    handleDisplayLanguageChange(value) {
-      this.settingsValues.generalTab.displayLanguage = value
+    onGeneralTabValueChange(value, property) {
+      if (typeof value === 'object') {
+        this.userSettingsValues[property] = value.id
+      }
     },
-    handleTimezoneChange(value) {
-      this.settingsValues.generalTab.timezone = value
+    async handleUpdateUserSettings() {
+      this.isLoading = true
+      const payload = this.userSettingsValues
+      if (this.isDefaultPomodoroSettingsConfiguration) {
+        payload.pomodoro_session_setting_id = null
+      }
+      await this.updateUserSettings(this.userSettingsValues)
+      this.isLoading = false
     },
-    handleTimeDisplayFormatChange(value) {
-      this.settingsValues.generalTab.displayLanguage = value
-    },
-    handleThemeChange(value) {
-      this.settingsValues.generalTab.theme = value
-    },
-    handleBugReportChange(value) {
-      this.settingsValues.generalTab.bugReports = value
-    },
-    handleAnalyticsChange(value) {
-      this.settingsValues.generalTab.analytics = value
-    },
-
     /*
       Pomodoro config events
      */

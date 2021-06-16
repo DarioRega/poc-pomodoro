@@ -12,6 +12,7 @@
       :title="notification.title"
       :description="notification.description"
       :action-required="notification.actionRequired"
+      :action-text="notification.actionText"
       :self-close-dispatch="notification.selfCloseDispatch"
       :should-show="true"
       :class="index < currentNotifications.length - 1 && ' mb-6'"

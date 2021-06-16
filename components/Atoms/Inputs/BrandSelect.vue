@@ -25,6 +25,7 @@
             `brand-input__select--size-${size}`,
             `brand-input__select--${type}`,
             size === 'small' ? ' pr-6' : 'pr-10',
+            shouldCapitalize && 'capitalize',
           ]"
           aria-labelledby="listbox-label"
           @click="toggleVisibility"
@@ -118,6 +119,7 @@
                 :is-highlighted="isHighlighted(item.id)"
                 :is-selected="value.id === item.id"
                 :should-show-selected="shouldShowSelected"
+                :should-capitalize="shouldCapitalize"
                 :name="item.name"
               />
             </li>
@@ -197,6 +199,10 @@ export default {
     shouldShowSelected: {
       type: Boolean,
       default: true,
+    },
+    shouldCapitalize: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

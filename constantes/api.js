@@ -23,3 +23,9 @@ export const TASK_UPDATE_ID_URL = (taskId) => `${TASK_URL}/${taskId}/update`
  */
 export const ECHO_BROADCAST_URL = `/api/broadcasting`
 export const ECHO_AUTH_BROADCAST_URL = `${ECHO_BROADCAST_URL}/auth`
+
+/*
+  Settings
+ */
+
+export const USER_SETTINGS_URL = `${API_USER_URL}/settings`

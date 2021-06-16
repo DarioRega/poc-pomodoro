@@ -2,7 +2,10 @@
   <div>
     <p
       class="block font-semibold truncate option-name mb-0"
-      :class="isSelected && 'text-dark-blue dark:text-celeste'"
+      :class="[
+        isSelected && 'text-dark-blue dark:text-celeste',
+        shouldCapitalize && 'capitalize',
+      ]"
     >
       {{ name }}
     </p>
@@ -47,6 +50,10 @@ export default {
     },
     name: {
       type: String,
+      required: true,
+    },
+    shouldCapitalize: {
+      type: Boolean,
       required: true,
     },
   },

@@ -21,7 +21,7 @@ export default {
   components: { IconGridActions },
   computed: {
     isAppMuted() {
-      return this.$store.getters['settings/isAppMuted']
+      return this.$store.getters['user/isAppMuted']
     },
     modalsRefs() {
       return this.$store.state.globalState.modalsRefs
