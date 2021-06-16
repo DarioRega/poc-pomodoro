@@ -235,14 +235,19 @@ export default {
         }
       }
     },
-    async updateUserProperty(property, payload) {
-      this.setLoadingOnProperty(property)
-      try {
-        await this.$axios.post(`/api/user/${property}`, payload)
-      } catch (err) {
-        // TODO handle error
-      } finally {
-        this.removeLoadingOnProperty(property)
+
+    async handleUpdateUserProfileInformation(targetProperty) {
+      this.setLoadingOnProperty(targetProperty)
+
+      const { name, email } = this.localValues
+      const response = await this.updateUserProfileInformation({
+        name,
+        email,
+      })
+
+      this.removeLoadingOnProperty(targetProperty)
+      if (response) {
+        if (response.data) return response.data.errors
       }
     },
   },
