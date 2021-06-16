@@ -5,7 +5,7 @@ window.Pusher = require('pusher-js')
 export default ({ $axios }) => {
   window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'd12580436f5dcceca407',
+    key: process.env.pusherKey || 'd12580436f5dcceca407',
     cluster: 'eu',
     authorizer: (channel, options) => {
       return {
