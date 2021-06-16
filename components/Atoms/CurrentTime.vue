@@ -147,6 +147,10 @@ export default {
         }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
       }
     },
+    is24hFormat(newValue, oldValue) {
+      this.format = newValue ? 'HH:mm' : 'hh:mm A'
+      this.setTime()
+    },
   },
   mounted() {
     this.format = this.is24hFormat ? 'HH:mm' : 'hh:mm A'

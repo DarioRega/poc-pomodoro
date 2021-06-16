@@ -64,11 +64,10 @@ export default {
     return false
   },
 
-  isAppMuted(state, getters, rootState) {
-    return false
-  },
-
   isUserUsing24HTimeFormat: (state, getters) => {
-    return getters.getUser.user_settings.time_display_format === '24H'
+    if (getters.getUser) {
+      return getters.getUser.user_settings.time_display_format === '24H'
+    }
+    return true
   },
 }
