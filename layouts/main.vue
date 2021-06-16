@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="theme">
     <Nuxt v-if="!isEnvLoading && !isRefreshLoading" />
     <!--  Notifications -->
     <notifications-container />
@@ -65,7 +65,16 @@ export default {
       hasCurrentSession: 'sessions/hasCurrentSession',
       sessionEndTimeTimer: 'timers/getSessionTimer',
       currentStepTimer: 'timers/getCurrentStepTimer',
+      userTheme: 'user/getUserTheme',
     }),
+    theme() {
+      const userStorage = this.$auth.$storage.getState('user')
+      if (userStorage) {
+        return userStorage.user_settings.theme.toLowerCase()
+        // return getters.getUser.user_settings.theme.toLowerCase()
+      }
+      return ''
+    },
     isLaunchTimerVisible() {
       return this.$store.state.globalState.isLaunchTimerVisible
     },
