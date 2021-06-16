@@ -1,7 +1,36 @@
+import moment from 'moment-timezone'
+import _ from 'lodash'
+
 import {
   SETTINGS_PANEL_STEPS_VALUES,
   SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES,
 } from '@/constantes'
+
+export const getTimeValuesInNumber = (values, format = 'hh:mm:ss') => {
+  if (typeof values === 'object') {
+    const formattedValues = _.cloneDeep(values)
+    Object.keys(formattedValues).forEach((x) => {
+      if (typeof formattedValues[x] === 'string') {
+        formattedValues[x] = moment.duration(values).asMinutes()
+      }
+    })
+    return formattedValues
+  }
+  if (typeof values === 'string') {
+    return moment.duration(values).asMinutes()
+  }
+}
+
+export const convertNumberInDuration = (value, from = 'minutes') => {
+  switch (from) {
+    case 'minutes':
+      return moment.utc(value * 1000 * 60).format('HH:mm:ss')
+    case 'seconds':
+      return moment.utc(value * 1000 * 60 * 60).format('HH:mm:ss')
+    default:
+      return moment.utc(value * 1000).format('HH:mm:ss')
+  }
+}
 
 export const getSettingsPanelSteps = (i18n) => {
   return [

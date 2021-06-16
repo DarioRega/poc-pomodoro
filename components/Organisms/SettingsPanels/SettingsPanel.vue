@@ -28,19 +28,10 @@
       />
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
-        :values="{}"
-        :configuration-name="configurationName"
-        :is-default-configuration="isDefaultPomodoroSettingsConfiguration"
-        @change="configurationName = $event"
+        :values="getPomodoroSettingsValues"
+        :is-pomodoro-setting-name-editable="isPomodoroSettingNameEditable"
+        @onPomodoroConfigTabValueChange="onPomodoroConfigTabValueChange"
         @onCreateCustomSettings="createCustomSettings"
-        @onPomodoroDurationChange="handlePomodoroDurationChange"
-        @onSmallBreakDurationChange="handleSmallBreakDurationChange"
-        @onBigBreakDurationChange="handleBigBreakDurationChange"
-        @onPomodoroQuantityChange="handlePomodoroQuantityChange"
-        @onNoiseNotificationChange="handleNoiseNotificationChange"
-        @onStartPomodoroAutoChange="handleStartPomodoroAutoChange"
-        @onStartSmallBreakAutoChange="handleStartSmallBreakAutoCharge"
-        @onStartBigBreakAutoChange="handleStartBigBreakAutoChange"
       />
       <settings-panel-current-subscription-tab
         v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
@@ -48,12 +39,15 @@
       />
     </div>
 
-    <div v-show="canSave" class="mt-6 w-64 w-full mx-auto text-center">
+    <div
+      v-show="shouldShowSaveButton"
+      class="mt-6 w-64 w-full mx-auto text-center"
+    >
       <brand-button
         name="save changes"
         class="w-full"
         :is-loading="isLoading"
-        :is-disabled="isLoading"
+        :is-disabled="isLoading || isButtonSaveShouldBeDisabled"
         @click="handleSave"
       >
         {{ $t('Save changes') }}
@@ -76,10 +70,13 @@ import { SETTINGS_PANEL_STEPS_VALUES } from '@/constantes'
 import {
   DEFAULT_POMODORO_SETTINGS_OPTION,
   DEFAULT_POMODORO_SETTINGS_OPTION_ID,
+  POMODORO_DEFAULT_SETTINGS,
 } from '@/constantes/settings'
+import { getRandomNumber } from '@/helpers'
 
 export default {
   name: 'SettingsPanel',
+
   components: {
     SettingsPanelMainTabs,
     SettingsPanelGeneralTab,
@@ -88,28 +85,56 @@ export default {
     SettingsPanelCurrentSubscriptionTab,
     BrandButton,
   },
+
   data() {
     return {
       currentActiveTab: '',
-      configurationName: '',
+
       userSettingsValues: {},
+
       pomodoroSessionSettingsValues: {},
-      hasUserTriggeredCreationCustomSettings: false,
-      newSettingsPomodoroValues: {},
+      draftPomodoroSessionSettingsValues: {},
+
       isLoading: false,
-      shouldWatchChange: false,
+      hasUserTriggeredCreationCustomSettings: false,
     }
   },
+
   computed: {
     ...mapGetters({
-      getSpecificNotification: 'globalState/getSpecificNotification',
-      areUserSettingsEmpty: 'user/areUserSettingsEmpty',
-      arePomodoroSettingsEmpty: 'user/arePomodoroSettingsEmpty',
-      isPomodoroSettingsIdNull: 'user/isPomodoroSettingsIdNull',
+      // store property
       userSettings: 'user/getUserSettingsValues',
       pomodoroSettings: 'user/getUserPomodoroSettingsValues',
+
+      // specific getters
       getUserAllPomodoroSettingsValues: 'user/getUserAllPomodoroSettingsValues',
+      getUserNextConfigurationNumber: 'user/getUserNextConfigurationNumber',
+      getSpecificNotification: 'globalState/getSpecificNotification',
+
+      // specific getters only boolean
+      areUserSettingsEmpty: 'user/areUserSettingsEmpty',
+      isUserUsingPomodoroCustomSettings:
+        'user/isUserUsingPomodoroCustomSettings',
     }),
+
+    /*
+      Pomodoro session settings related
+    */
+    // When user create a config we must feed the pomodoro config tab with the draft object , else the settingsValues
+    getPomodoroSettingsValues() {
+      if (this.hasUserTriggeredCreationCustomSettings) {
+        return this.draftPomodoroSessionSettingsValues
+      } else {
+        return this.pomodoroSessionSettingsValues
+      }
+    },
+    hasUserSelectedLocalDefaultPomodoroConfigurationOption() {
+      return (
+        this.userSettingsValues.pomodoro_session_setting_id ===
+        DEFAULT_POMODORO_SETTINGS_OPTION_ID
+      )
+    },
+
     getSelectedPomodoroConfiguration() {
       if (this.userSettingsValues.pomodoro_session_setting_id) {
         const { id, name } = this.pomodoroSessionSettingsValues
@@ -117,10 +142,11 @@ export default {
       }
       return DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n)
     },
-    user() {
-      return this.$auth.user
-    },
-    canSave() {
+
+    /*
+      Template conditional render
+    */
+    shouldShowSaveButton() {
       switch (this.currentActiveTab) {
         case this.settingPanelStepsValues.GENERAL:
           return true
@@ -130,104 +156,207 @@ export default {
           return false
       }
     },
+
+    isButtonSaveShouldBeDisabled() {
+      if (this.currentActiveTab === SETTINGS_PANEL_STEPS_VALUES.GENERAL) {
+        return false
+      }
+      if (this.draftPomodoroSessionSettingsValues.id) {
+        return false
+      }
+      return this.hasUserSelectedLocalDefaultPomodoroConfigurationOption
+    },
+
+    isPomodoroSettingNameEditable() {
+      return (
+        !this.hasUserSelectedLocalDefaultPomodoroConfigurationOption ||
+        this.hasUserTriggeredCreationCustomSettings
+      )
+    },
+
+    /*
+      Modal tabs related
+    */
     settingPanelStepsValues() {
       return SETTINGS_PANEL_STEPS_VALUES
     },
-
-    isDefaultPomodoroSettingsConfiguration() {
-      return (
-        !this.userSettingsValues.pomodoro_session_setting_id ||
-        this.userSettingsValues.pomodoro_session_setting_id ===
-          DEFAULT_POMODORO_SETTINGS_OPTION_ID
-      )
-    },
   },
+
   watch: {
+    /*
+      Store user settings value
+      when it get updated, refresh the local userSettingsValues as did in mounted lifecycle (readonly)
+     */
+    'userSettings.pomodoro_session_setting_id'(newValue, oldValue) {
+      this.setLocalUserSettingsWithStoreValues()
+    },
+
+    /*
+      Local user settings value (editable)
+    */
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
-      if (newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
-        this.pomodoroSessionSettingsValues =
-          this.getUserAllPomodoroSettingsValues.find((x) => x.id === newValue)
+      // to avoid triggering on mounted lifecycle, we make sure was had a value before
+      if (newValue && newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
+        this.findCustomPomodoroSettingAndSetAsValue(newValue)
       } else {
-        this.pomodoroSessionSettingsValues = {
-          ...this.pomodoroSessionSettingsValues,
-          ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
-        }
+        this.setPomodoroSettingsWithDefaultValue()
+      }
+    },
+
+    // if user create a pomodoro setting and then switch without saving, we erase it
+    currentActiveTab() {
+      if (this.draftPomodoroSessionSettingsValues.id) {
+        this.resetCreationProcess()
       }
     },
   },
 
   mounted() {
     this.currentActiveTab = this.settingPanelStepsValues.GENERAL
+
     if (!this.areUserSettingsEmpty) {
-      this.userSettingsValues = _.cloneDeep(this.userSettings)
+      this.setLocalUserSettingsWithStoreValues()
     }
-    if (!this.arePomodoroSettingsEmpty) {
-      this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
-    } else {
-      this.pomodoroSessionSettingsValues = DEFAULT_POMODORO_SETTINGS_OPTION(
-        this.$i18n
-      )
-    }
-    setTimeout(() => {
-      this.shouldWatchChange = true
-    }, 1000)
+
+    this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()
+    this.initPomodoroSettingsValues()
   },
   methods: {
     ...mapActions({
       createNotification: 'globalState/createNotification',
       createPomodoroSettings: 'user/createPomodoroSettings',
       updateUserSettings: 'user/updateSettings',
+      updatePomodoroSettings: 'user/updatePomodoroSettings',
     }),
 
     /*
-      Global events
+      Global events related
     */
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
         this.handleUpdateUserSettings()
       }
+      if (
+        this.currentActiveTab === this.settingPanelStepsValues.POMODORO_CONFIG
+      ) {
+        if (this.hasUserTriggeredCreationCustomSettings) {
+          this.handleCreatePomodoroSettings()
+        } else {
+          this.handleUpdatePomodoroSettings()
+        }
+      }
     },
+
     /*
-      General tab events
+      Global methods related
+    */
+    verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault() {
+      if (!this.isUserUsingPomodoroCustomSettings) {
+        this.userSettingsValues.pomodoro_session_setting_id =
+          DEFAULT_POMODORO_SETTINGS_OPTION_ID
+      }
+    },
+
+    resetCreationProcess() {
+      this.hasUserTriggeredCreationCustomSettings = false
+      this.draftPomodoroSessionSettingsValues = {}
+    },
+
+    setLocalUserSettingsWithStoreValues() {
+      this.userSettingsValues = _.cloneDeep(this.userSettings)
+      this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()
+    },
+
+    initPomodoroSettingsValues() {
+      if (this.isUserUsingPomodoroCustomSettings) {
+        this.pomodoroSessionSettingsValues = _.cloneDeep(this.pomodoroSettings)
+      } else {
+        this.setPomodoroSettingsWithDefaultValue()
+      }
+    },
+
+    setPomodoroSettingsWithDefaultValue() {
+      this.pomodoroSessionSettingsValues = {
+        ...POMODORO_DEFAULT_SETTINGS,
+        ...DEFAULT_POMODORO_SETTINGS_OPTION(this.$i18n),
+      }
+    },
+
+    findCustomPomodoroSettingAndSetAsValue(id) {
+      this.pomodoroSessionSettingsValues = _.cloneDeep(
+        this.getUserAllPomodoroSettingsValues.find((x) => x.id === id)
+      )
+    },
+
+    /*
+      General tab related
     */
     onGeneralTabValueChange(value, property) {
       if (typeof value === 'object') {
         this.userSettingsValues[property] = value.id
       }
     },
+
     async handleUpdateUserSettings() {
       this.isLoading = true
       const payload = this.userSettingsValues
-      if (this.isDefaultPomodoroSettingsConfiguration) {
+      if (this.hasUserSelectedLocalDefaultPomodoroConfigurationOption) {
         payload.pomodoro_session_setting_id = null
       }
+
       await this.updateUserSettings(this.userSettingsValues)
+      await this.$auth.fetchUser()
+
       this.isLoading = false
     },
+
     /*
-      Pomodoro config events
+      Pomodoro config related
      */
-    handlePomodoroDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.pomodoro_duration = value
+    onPomodoroConfigTabValueChange(value, property) {
+      let settingsTarget = 'pomodoroSessionSettingsValues'
+      if (this.hasUserTriggeredCreationCustomSettings) {
+        settingsTarget = 'draftPomodoroSessionSettingsValues'
+      }
+      if (typeof value === 'object') {
+        this[settingsTarget][property] = value.id
+      } else {
+        this[settingsTarget][property] = value
+      }
     },
-    handleBigBreakDurationChange(value) {
-      this.settingsValues.pomodoroConfigTab.small_break_duration = value
+
+    async handleCreatePomodoroSettings() {
+      this.isLoading = true
+
+      await this.createPomodoroSettings(this.draftPomodoroSessionSettingsValues)
+      await this.$auth.fetchUser()
+
+      this.resetCreationProcess()
+      this.isLoading = false
     },
-    handlePomodoroQuantityChange(value) {
-      this.settingsValues.pomodoroConfigTab.pomodoro_quantity = value
+
+    async handleUpdatePomodoroSettings() {
+      this.isLoading = true
+
+      await this.updatePomodoroSettings(this.pomodoroSessionSettingsValues)
+      await this.$auth.fetchUser()
+
+      this.isLoading = false
     },
-    handleNoiseNotificationChange(value) {
-      this.settingsValues.pomodoroConfigTab.noise_notification_end_process =
-        value
-    },
-    handleStartPomodoroAutoChange(value) {
-      this.settingsValues.pomodoroConfigTab.start_pomodoro_auto = value
-    },
-    handleStartSmallBreakAutoCharge(value) {
-      this.settingsValues.pomodoroConfigTab.start_small_break_auto = value
-    },
-    handleStartBigBreakAutoChange(value) {
-      this.settingsValues.pomodoroConfigTab.start_big_break_auto = value
+
+    createCustomSettings() {
+      // TODO kill notificatin if exist
+      const customSettingDefaultName = `${this.$t(
+        'My custom configuration'
+      )} #${this.getUserNextConfigurationNumber}`
+
+      this.hasUserTriggeredCreationCustomSettings = true
+
+      this.draftPomodoroSessionSettingsValues = {
+        ...POMODORO_DEFAULT_SETTINGS,
+        id: getRandomNumber(),
+        name: customSettingDefaultName,
+      }
     },
   },
 }

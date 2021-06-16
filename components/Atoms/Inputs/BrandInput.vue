@@ -9,6 +9,7 @@
         :aria-label="name"
         :value="value"
         :name="name"
+        :disabled="isDisabled"
         class="brand-input__input"
         :placeholder="placeholder"
         :class="[
@@ -16,6 +17,7 @@
           `brand-input__input--${type}`,
           isSelected && 'selected',
           isCompleted && 'completed',
+          isDisabled && 'cursor-not-allowed',
         ]"
         @input="$emit('input', $event.target.value)"
       />
@@ -74,6 +76,10 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
     isSelected: {
       type: Boolean,

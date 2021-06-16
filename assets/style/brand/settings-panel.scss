@@ -22,7 +22,7 @@
         @apply mb-1;
       }
     }
-    &__configurations {
+    &__configurations, &__button-create {
       @apply w-48 flex-none justify-end;
       @screen xl {
         @apply w-72;

@@ -1,46 +1,65 @@
 import _ from 'lodash'
 
 export default {
+  /*
+    State mirroring
+   */
   getUser: (state, getters, rootState) => {
     return rootState.auth.user
   },
-  getIsUserSettings24hTimeFormatDisplay: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings.time_display_format === '24H'
+
+  getUserSettingsValues: (state, getters) => {
+    return getters.getUser.user_settings
   },
-  getUserSettingTimezone: (state) => {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  getUserPomodoroSettingsValues: (state, getters, rootState) => {
+    return getters.getUser.user_settings.pomodoro_session_setting
   },
-  getUserSettingsValues: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings
-  },
-  getUserAllPomodoroSettingsValues: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_settings.length > 0) {
-      return rootState.auth.user.pomodoro_session_settings
+
+  getUserAllPomodoroSettingsValues: (state, getters) => {
+    if (getters.getUser.pomodoro_session_settings.length > 0) {
+      return getters.getUser.pomodoro_session_settings
     }
     return []
   },
-  getUserPomodoroSettingsValues: (state, getters, rootState) => {
-    return rootState.auth.user.user_settings.pomodoro_session_setting
+
+  /*
+    Specific property getters
+   */
+  getUserSettingTimezone: (state) => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone
   },
-  areUserSettingsEmpty: (state, getters, rootState) => {
-    if (rootState.auth.user.user_settings) {
-      return _.isEmpty(rootState.auth.user.user_settings)
+
+  getUserNextConfigurationNumber(state, getters) {
+    if (getters.getUser.pomodoro_session_settings) {
+      return getters.getUser.pomodoro_session_settings.length + 1
+    }
+    return 1
+  },
+
+  /*
+    Boolean
+   */
+
+  areUserSettingsEmpty: (state, getters) => {
+    if (getters.getUser.user_settings) {
+      return _.isEmpty(getters.getUser.user_settings)
     }
     return true
   },
-  arePomodoroSettingsEmpty: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_setting) {
-      return false
+
+  isUserUsingPomodoroCustomSettings: (state, getters) => {
+    if (getters.getUser.user_settings.pomodoro_session_setting_id) {
+      return true
     }
-    return true
+    return false
   },
-  isPomodoroSettingsIdNull: (state, getters, rootState) => {
-    if (rootState.auth.user.pomodoro_session_setting_id) {
-      return false
-    }
-    return true
-  },
+
   isAppMuted(state, getters, rootState) {
     return false
+  },
+
+  isUserUsing24HTimeFormat: (state, getters) => {
+    return getters.getUser.user_settings.time_display_format === '24H'
   },
 }
