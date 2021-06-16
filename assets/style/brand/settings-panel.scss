@@ -23,7 +23,7 @@
       }
     }
     &__configurations, &__button-create {
-      @apply w-48 flex-none justify-end;
+      @apply w-64 flex-none justify-end;
       @screen xl {
         @apply w-72;
       }
