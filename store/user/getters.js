@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
 
 export default {
   /*
@@ -28,6 +29,15 @@ export default {
    */
   getUserSettingTimezone: (state) => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
+  },
+
+  getTimeFormat: (state, getters) => {
+    if (getters.getUser) {
+      return getters.isUserUsing24HTimeFormat
+        ? TIME_FORMAT_24h
+        : TIME_FORMAT_12H
+    }
+    return TIME_FORMAT_24h
   },
 
   getUserNextConfigurationNumber(state, getters) {

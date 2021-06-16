@@ -22,12 +22,13 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment-timezone'
 
 import LaunchSessionTimer from '@/components/Atoms/LaunchSessionTimer'
 import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
-import moment from 'moment-timezone'
+
 import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
@@ -62,6 +63,7 @@ export default {
       sessionEndTimeTimer: 'timers/getSessionTimer',
       currentStepTimer: 'timers/getCurrentStepTimer',
       userTheme: 'user/getUserTheme',
+      timeFormat: 'user/getTimeFormat',
     }),
 
     isLaunchTimerVisible() {
@@ -196,7 +198,7 @@ export default {
 
       const currentSessionTimer = moment()
         .add(restingTimeAsSeconds, 'seconds')
-        .format('hh:mm A')
+        .format(this.timeFormat)
       this.$store.commit(
         'timers/SET_CURRENT_SESSION_TIMER',
         currentSessionTimer

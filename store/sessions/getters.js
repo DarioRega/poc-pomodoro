@@ -35,14 +35,14 @@ export default {
     }
   },
 
-  getCurrentRunningSessionEndTime: (state, getters) => {
+  getCurrentRunningSessionEndTime: (state, getters, rootState, rootGetters) => {
     if (getters.hasCurrentSession) {
       const {
         current: { status, end_time },
       } = state
 
       if (status === STEPS_STATUS.IN_PROGRESS) {
-        return moment(end_time).format('hh:mm A')
+        return moment(end_time).format(rootGetters['user/getTimeFormat'])
       }
     }
   },
