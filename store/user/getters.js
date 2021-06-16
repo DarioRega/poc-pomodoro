@@ -54,6 +54,14 @@ export default {
     return ''
   },
 
+  getUserNameAndEmail: (state, getters) => {
+    if (getters.getUser) {
+      const { name, email } = getters.getUser
+      return { name, email }
+    }
+    return ''
+  },
+
   /*
     Boolean
    */
@@ -66,8 +74,10 @@ export default {
   },
 
   isUserUsingPomodoroCustomSettings: (state, getters) => {
-    if (getters.getUser.user_settings.pomodoro_session_setting_id) {
-      return true
+    if (getters.getUser) {
+      if (getters.getUser.user_settings.pomodoro_session_setting_id) {
+        return true
+      }
     }
     return false
   },
