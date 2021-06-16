@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dark">
     <Nuxt />
     <screen-loader v-if="isEnvLoading">
       <h5 class="font-body tracking-wider text-dark-blue dark:text-celeste">
