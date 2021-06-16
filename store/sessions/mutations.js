@@ -26,4 +26,8 @@ export default {
 
     Object.assign(state, { current: clone })
   },
+
+  MANUALLY_TRIGGER_ABORT_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE(state) {
+    Object.assign(state, { current: {} })
+  },
 }

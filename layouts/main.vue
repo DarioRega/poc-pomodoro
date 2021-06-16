@@ -102,13 +102,15 @@ export default {
 
     currentStepTimer(newValue, oldValue) {
       if (newValue === '00:00') {
-        clearInterval(this.intervalCurrentStepTimer)
-        this.finishCurrentStep()
-        if (!this.$store.getters['sessions/isNextStepLastStep']) {
-          this.$store.commit(
-            'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
-            formatDuration(this.getNextStep.duration)
-          )
+        if (!this.$store.state.globalState.isAbortAction) {
+          clearInterval(this.intervalCurrentStepTimer)
+          this.finishCurrentStep()
+          if (!this.$store.getters['sessions/isNextStepLastStep']) {
+            this.$store.commit(
+              'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
+              formatDuration(this.getNextStep.duration)
+            )
+          }
         }
       }
     },

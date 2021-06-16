@@ -100,7 +100,9 @@ export default {
   /*
     Abort
    */
-  async abortSession({ dispatch }) {
+  async abortSession({ dispatch, commit }) {
+    commit('globalState/SET_IS_ABORT', true, { root: true })
+    dispatch('triggerLocalAbortedSessionState')
     try {
       await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
     } catch (err) {
@@ -111,7 +113,11 @@ export default {
           root: true,
         }
       )
+      commit('globalState/SET_IS_ABORT', false, { root: true })
     }
+  },
+  triggerLocalAbortedSessionState({ commit }) {
+    commit('MANUALLY_TRIGGER_ABORT_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE')
   },
 
   /*

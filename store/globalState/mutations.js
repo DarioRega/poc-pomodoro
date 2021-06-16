@@ -31,4 +31,7 @@ export default {
   FORCE_RERENDER_TASK_TABLES(state) {
     state.taskTablesKey += 1
   },
+  SET_IS_ABORT(state, payload) {
+    state.isAbortAction = payload
+  },
 }
