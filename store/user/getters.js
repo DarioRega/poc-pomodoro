@@ -37,11 +37,9 @@ export default {
     return 1
   },
 
-  getUserTheme: (state, getters, rootState) => {
-    const userStorage = rootState.auth.$storage.getState('user')
-    if (userStorage) {
-      return userStorage.user_settings.theme.toLowerCase()
-      // return getters.getUser.user_settings.theme.toLowerCase()
+  getUserTheme: (state, getters) => {
+    if (getters.getUser) {
+      return getters.getUser.user_settings.theme.toLowerCase()
     }
     return ''
   },
