@@ -170,7 +170,6 @@ export default {
   },
   methods: {
     setTime() {
-      console.log('in settime')
       this.currentTime = moment().tz(this.getTimezone).format(this.format)
     },
   },

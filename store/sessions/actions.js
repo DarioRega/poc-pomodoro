@@ -250,21 +250,21 @@ export default {
     const currentStepRestingTime = rootState.timers.currentStepRestingTime
     const currentSessionRestingTime = getters.getSessionRestingTime
 
+    const sessionRestingTimeInSeconds = moment
+      .duration(currentSessionRestingTime)
+      .asSeconds()
+
+    // now + add resting time as seconds
+    const currentSessionEndTime = moment().add(
+      sessionRestingTimeInSeconds,
+      'seconds'
+    )
+
     const currentStepEndTime = moment().add(
       moment.duration(currentStepRestingTime).asMilliseconds(),
       'milliseconds'
     )
-    console.log('currentSessionEndTime', currentStepEndTime)
 
-    // TODO WHEN SETTINGS PANEL BRANCH MERGED, SET THE COMPUTED FORMAT FROM STORE
-    const currentSessionEndTime = moment()
-      .add(
-        moment.duration(currentSessionRestingTime).asMilliseconds(),
-        'milliseconds'
-      )
-      .format('hh:mm A')
-
-    console.log('currentSessionEndTime', currentSessionEndTime)
     // edit session,current step status, set resting time current step and session
     commit('MANUALLY_TRIGGER_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE', {
       currentStepEndTime,
