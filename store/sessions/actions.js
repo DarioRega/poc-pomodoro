@@ -299,6 +299,7 @@ export default {
       title: this.$i18n.t('Session started !'),
       type: 'success',
     }
+    dispatch('triggerLocalResumeSessionState')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.START,
