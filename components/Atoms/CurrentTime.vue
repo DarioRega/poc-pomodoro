@@ -108,11 +108,13 @@ export default {
       isUnStacked: true,
       isStacked: false,
       currentTime: '',
-      format: 'hh:mm A',
       intervalCurrentTime: null,
     }
   },
   computed: {
+    timeFormat() {
+      return this.$store.getters['user/getTimeFormat']
+    },
     isAM() {
       if (this.currentTime) {
         if (this.currentTime.includes('AM')) {
@@ -147,10 +149,11 @@ export default {
         }, SIDEBAR_TOGGLE_ANIMATION_TIMEOUT)
       }
     },
+    is24hFormat(newValue, oldValue) {
+      this.setTime()
+    },
   },
   mounted() {
-    this.format = this.is24hFormat ? 'HH:mm' : 'hh:mm A'
-
     const secondsRemainingToTheCurrentMinute = (60 - moment().seconds()) * 1000
     this.setTime()
 
@@ -168,7 +171,7 @@ export default {
   },
   methods: {
     setTime() {
-      this.currentTime = moment().tz(this.getTimezone).format(this.format)
+      this.currentTime = moment().tz(this.getTimezone).format(this.timeFormat)
     },
   },
 }

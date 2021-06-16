@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
 
 export default {
   /*
@@ -30,11 +31,27 @@ export default {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
   },
 
+  getTimeFormat: (state, getters) => {
+    if (getters.getUser) {
+      return getters.isUserUsing24HTimeFormat
+        ? TIME_FORMAT_24h
+        : TIME_FORMAT_12H
+    }
+    return TIME_FORMAT_24h
+  },
+
   getUserNextConfigurationNumber(state, getters) {
     if (getters.getUser.pomodoro_session_settings) {
       return getters.getUser.pomodoro_session_settings.length + 1
     }
     return 1
+  },
+
+  getUserTheme: (state, getters) => {
+    if (getters.getUser) {
+      return getters.getUser.user_settings.theme.toLowerCase()
+    }
+    return ''
   },
 
   /*
@@ -55,11 +72,10 @@ export default {
     return false
   },
 
-  isAppMuted(state, getters, rootState) {
-    return false
-  },
-
   isUserUsing24HTimeFormat: (state, getters) => {
-    return getters.getUser.user_settings.time_display_format === '24H'
+    if (getters.getUser) {
+      return getters.getUser.user_settings.time_display_format === '24H'
+    }
+    return true
   },
 }
