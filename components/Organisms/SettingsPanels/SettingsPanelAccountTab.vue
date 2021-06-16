@@ -98,6 +98,7 @@
 <script>
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import BrandButton from '@/components/Atoms/BrandButton'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'SettingsPanelAccountTab',
@@ -146,6 +147,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      updateUserProfileInformation: 'user/updateUserProfileInformation',
+    }),
     validateEmptyFields(fieldProperty) {
       if (!this.localValues.name) {
         this.errors[fieldProperty] = this.$t('Field is required')
