@@ -1,5 +1,5 @@
 <template>
-  <div class="dark">
+  <div :class="isDarkThemeInBrowser && 'dark'">
     <Nuxt />
     <screen-loader v-if="isEnvLoading">
       <h5 class="font-body tracking-wider text-dark-blue dark:text-celeste">
@@ -23,6 +23,12 @@ export default {
   computed: {
     isEnvLoading() {
       return this.$store.state.globalState.isEnvLoading
+    },
+    isDarkThemeInBrowser() {
+      if (typeof window !== 'undefined') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches
+      }
+      return false
     },
   },
 }
