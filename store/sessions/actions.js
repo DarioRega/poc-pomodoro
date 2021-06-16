@@ -1,3 +1,5 @@
+import moment from 'moment-timezone'
+
 import { ACTION_TYPES, STEPS_STATUS } from '@/constantes'
 import {
   ABORT_USER_CURRENT_SESSION_URL,
@@ -226,6 +228,8 @@ export default {
       title: this.$i18n.t('Session resumed !'),
       type: 'success',
     }
+    // Manually trigger resume
+    dispatch('triggerLocalResumeSessionState')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.RESUME,
@@ -241,6 +245,33 @@ export default {
       )
     }
   },
+
+  triggerLocalResumeSessionState({ commit, getters, rootState }) {
+    const currentStepRestingTime = rootState.timers.currentStepRestingTime
+    const currentSessionRestingTime = getters.getSessionRestingTime
+
+    const currentStepEndTime = moment().add(
+      moment.duration(currentStepRestingTime).asMilliseconds(),
+      'milliseconds'
+    )
+    console.log('currentSessionEndTime', currentStepEndTime)
+
+    // TODO WHEN SETTINGS PANEL BRANCH MERGED, SET THE COMPUTED FORMAT FROM STORE
+    const currentSessionEndTime = moment()
+      .add(
+        moment.duration(currentSessionRestingTime).asMilliseconds(),
+        'milliseconds'
+      )
+      .format('hh:mm A')
+
+    console.log('currentSessionEndTime', currentSessionEndTime)
+    // edit session,current step status, set resting time current step and session
+    commit('MANUALLY_TRIGGER_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE', {
+      currentStepEndTime,
+      currentSessionEndTime,
+    })
+  },
+
   /*
      Finish current step
   */

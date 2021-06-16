@@ -152,20 +152,23 @@ export default {
       Current step
     */
     setIntervalCurrentStep() {
+      this.setCurrentStepTimers()
       this.intervalCurrentStepTimer = setInterval(() => {
-        const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
-          moment.now(),
-          'seconds'
-        )
-        const currentStepTime = moment.utc(endTimeSecondsAmount * 1000)
-        const currentStepTimer = currentStepTime.format('mm:ss')
-        const currentStepRestingTime = currentStepTime.format('HH:mm:ss')
-
-        this.$store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
-          currentStepTimer,
-          currentStepRestingTime,
-        })
+        this.setCurrentStepTimers()
       }, aSecondInMilliseconds)
+    },
+    setCurrentStepTimers() {
+      const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
+        moment.now(),
+        'seconds'
+      )
+      const currentStepTime = moment.utc(endTimeSecondsAmount * 1000)
+      const currentStepTimer = currentStepTime.format('mm:ss')
+      const currentStepRestingTime = currentStepTime.format('HH:mm:ss')
+      this.$store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
+        currentStepTimer,
+        currentStepRestingTime,
+      })
     },
 
     /*
@@ -195,7 +198,7 @@ export default {
       const restingTimeAsSeconds = moment
         .duration(this.sessionRestingTime)
         .asSeconds()
-
+      // TODO WHEN SETTINGS PANEL BRANCH MERGED, SET THE COMPUTED FORMAT FROM STORE
       const currentSessionTimer = moment()
         .add(restingTimeAsSeconds, 'seconds')
         .format('hh:mm A')
