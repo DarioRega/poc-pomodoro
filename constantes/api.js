@@ -1,6 +1,10 @@
 export const API_USER_URL = `/api/user`
-
+/*
+  User profile & password
+ */
 export const USER_UPDATE_PROFILE_INFORMATION_URL = `user/profile-information`
+export const USER_UPDATE_PASSWORD_URL = `user/password`
+
 /*
   Settings
  */
