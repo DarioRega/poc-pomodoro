@@ -28,11 +28,7 @@ import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTrans
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
 import moment from 'moment-timezone'
-import {
-  aMinuteInMilliseconds,
-  aSecondInMilliseconds,
-  // SESSION_STATUS,
-} from '@/constantes'
+import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
 export default {
@@ -71,7 +67,6 @@ export default {
       const userStorage = this.$auth.$storage.getState('user')
       if (userStorage) {
         return userStorage.user_settings.theme.toLowerCase()
-        // return getters.getUser.user_settings.theme.toLowerCase()
       }
       return ''
     },
