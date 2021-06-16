@@ -88,6 +88,7 @@ export default {
       if (newValue) {
         clearInterval(this.intervalCurrentStepTimer)
         this.$store.commit('globalState/SET_HAS_SKIPPED_ACTION', false)
+        this.setCurrentSessionEndTimeWhenNotRunning()
       }
     },
     'sessionState.isRunning'(newValue, oldValue) {
