@@ -176,20 +176,21 @@ export default {
       this.onGoingActions.push(fieldProperty)
     },
     removeLoadingOnProperty(fieldProperty) {
-      // TODO remove setTimeout, used only for example
-      setTimeout(() => {
-        this.onGoingActions = this.onGoingActions.filter(
-          (x) => x !== fieldProperty
-        )
-      }, 3000)
+      this.onGoingActions = this.onGoingActions.filter(
+        (x) => x !== fieldProperty
+      )
     },
-    handleChangeName() {
-      const fieldProperty = 'name'
-      if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
-          this.updateUserProperty(fieldProperty, {
-            name: this.localValues.name,
-          })
+    async handleChangeName() {
+      const targetProperty = 'name'
+      if (this.validateEmptyFields(targetProperty)) {
+        if (this.validateChange(targetProperty)) {
+          const error = await this.handleUpdateUserProfileInformation(
+            targetProperty
+          )
+
+          if (error) {
+            this.errors.email = error.name[0]
+          }
         }
       }
     },
