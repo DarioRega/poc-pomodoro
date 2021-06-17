@@ -12,8 +12,9 @@
         "
       >
         <span
-          class="task-grid-header-actions w-4 xl:w-5"
           tabindex="0"
+          class="task-grid-header-actions w-4 xl:w-5"
+          :class="isArchiveBoxEnabled && 'enabled'"
           @click="$emit('onArchiveBoxClick')"
         >
           <icon icon-name="archiveBox" />
@@ -26,8 +27,9 @@
         "
       >
         <span
-          class="task-grid-header-actions w-4 xl:w-5"
           tabindex="0"
+          class="task-grid-header-actions w-4 xl:w-5"
+          :class="isDeleteEnabled && 'enabled'"
           @click="$emit('onTrashClick')"
         >
           <icon icon-name="trash" />
@@ -89,12 +91,25 @@ export default {
       type: Boolean,
       default: true,
     },
+    isArchiveBoxEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleteEnabled: {
+      type: Boolean,
+      default: true,
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
 .task-grid-header-actions {
   @apply flex items-center text-dark-gray mx-2 cursor-pointer transition-colors duration-200;
+
+  &.enabled {
+    @apply text-dark-indigo dark:text-light-indigo;
+  }
+
   &:hover {
     @apply text-dark-blue;
     @apply dark:text-celeste;

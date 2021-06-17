@@ -44,6 +44,7 @@
               :should-show-completed-task="shouldShowCompletedTask"
               :with-show-completed-functionality="false"
               :with-archive-functionality="false"
+              :is-delete-enabled="isDeleteEnabled"
               :label="
                 clientWidth < 1400
                   ? $t('Show completed')
@@ -79,6 +80,10 @@ export default {
     isLayoutStacked: {
       type: Boolean,
       default: false,
+    },
+    isDeleteEnabled: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

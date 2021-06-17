@@ -15,6 +15,8 @@
       :is-toggled="isToggled"
       :is-layout-stacked="isLayoutStacked"
       :should-show-completed-task="showCompletedTasks"
+      :is-delete-enabled="isDeleteEnabled"
+      :is-archive-box-enabled="isArchiveEnabled"
       class="mb-4"
       @onToggle="isToggled = !isToggled"
       @onArchiveBoxClick="handleEnableArchiveBox"

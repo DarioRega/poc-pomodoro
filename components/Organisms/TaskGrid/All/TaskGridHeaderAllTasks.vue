@@ -42,6 +42,8 @@
             <task-grid-header-actions
               class="w-full h-full ml-2 2xl:ml-4"
               :should-show-completed-task="shouldShowCompletedTask"
+              :is-delete-enabled="isDeleteEnabled"
+              :is-archive-box-enabled="isArchiveBoxEnabled"
               :label="
                 clientWidth < 1400
                   ? $t('Show completed')
@@ -75,6 +77,14 @@ export default {
       default: false,
     },
     isLayoutStacked: {
+      type: Boolean,
+      default: false,
+    },
+    isArchiveBoxEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleteEnabled: {
       type: Boolean,
       default: false,
     },
