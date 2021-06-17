@@ -15,7 +15,7 @@
       />
       <subscription-tab-invoice-informations
         v-show="currentActiveTab === steps.INVOICE_INFORMATIONS"
-        @onManageInvoicesInformations="handleManageInvoicesInformations"
+        @onManageInvoicesInformations="redirectToSubscription"
       />
       <subscription-tab-billing-history
         v-show="currentActiveTab === steps.BILLING_HISTORY"
@@ -23,7 +23,7 @@
       />
       <subscription-tab-current-subscription
         v-show="currentActiveTab === steps.CURRENT_SUBSCRIPTION"
-        @onManageSubscription="handleManageSubscription"
+        @onManageSubscription="redirectToSubscription"
       />
     </div>
   </section>
@@ -70,11 +70,9 @@ export default {
     this.currentActiveTab = this.steps.OVERVIEW
   },
   methods: {
-    handleManageInvoicesInformations() {
+    redirectToSubscription() {
       // TODO handle redirect
-    },
-    handleManageSubscription() {
-      // TODO handle redirect
+      window.open(`${process.env.API_URL}/billing`, '_blank')
     },
     handleRequestDownloadInvoice(invoiceId) {
       // TODO handle download call

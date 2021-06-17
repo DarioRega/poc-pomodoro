@@ -44,7 +44,6 @@ export default {
     }),
     handleStartSession() {
       this.$store.commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', true)
-      this.createAndStartSession()
     },
   },
 }

@@ -1,10 +1,11 @@
-import moment from 'moment-timezone'
 import _ from 'lodash'
 
 import { STEPS_STATUS, STEPS_TYPES } from '@/constantes'
-import { getDurationInMilliseconds } from '@/helpers/sessions'
 
 export default {
+  /*
+    Session
+   */
   getSessionState: (state, getters) => {
     if (getters.hasCurrentSession) {
       const {
@@ -36,58 +37,11 @@ export default {
     }
   },
 
-  getCurrentRunningSessionEndTime: (state, getters, rootState, rootGetters) => {
-    if (getters.hasCurrentSession) {
-      const {
-        current: { status, end_time },
-      } = state
-
-      if (status === STEPS_STATUS.IN_PROGRESS) {
-        return moment(end_time).format(rootGetters['user/getTimeFormat'])
-      }
-    }
-  },
-
-  /*
-    Resting times
-   */
   getSessionRestingTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       return state.current.resting_time
     }
     return '00:00:00'
-  },
-
-  getRestingTimeAllPendingStepsInMilliseconds: (state) => {
-    let restingTime = 0
-    state.current.steps.forEach((step) => {
-      if (step.status === STEPS_STATUS.PENDING) {
-        restingTime += getDurationInMilliseconds(step.duration)
-      }
-    })
-    return restingTime
-  },
-
-  getRestingTimeAllPendingSteps: (state, getters) => {
-    const restingTime = getters.getRestingTimeAllPendingStepsInMilliseconds
-    return moment.utc(restingTime).format('HH:mm:ss')
-  },
-
-  getTotalRestingTimeSessionWithCurrentPausedStep: (
-    state,
-    getters,
-    rootState
-  ) => {
-    const stepRestingTimesInMilliseconds =
-      getters.getRestingTimeAllPendingStepsInMilliseconds
-    const currentPausedStepRestingTimeInMilliseconds =
-      getDurationInMilliseconds(rootState.timers.currentStepRestingTime)
-
-    const totalRestingTimeInMilliseconds =
-      stepRestingTimesInMilliseconds +
-      currentPausedStepRestingTimeInMilliseconds
-
-    return moment.utc(totalRestingTimeInMilliseconds).format('HH:mm:ss')
   },
 
   getSessionStepsOnlyPomodoro: (state, getters) => {
@@ -105,11 +59,11 @@ export default {
   /*
     Current step
    */
-  getCurrentStepEndTime: (state, getters) => {
+  getCurrentStep: (state, getters) => {
     if (getters.hasCurrentSession) {
-      return state.current.current_step.end_time
+      return state.current.current_step
     }
-    return null
+    return {}
   },
 
   getCurrentStepStatus: (state, getters) => {
@@ -121,68 +75,5 @@ export default {
       } = state
       return status
     }
-  },
-  getCurrentStep: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return state.current.current_step
-    }
-    return {}
-  },
-
-  /*
-   Next step
-   */
-  getNextStep: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      const {
-        current: { current_step, steps },
-      } = state
-      const currentStepId = current_step.id
-      const currentStepIndex = steps.findIndex((x) => x.id === currentStepId)
-      return steps[currentStepIndex + 1]
-    }
-    return {}
-  },
-  isNextStepLastStep(state, getters) {
-    if (getters.hasCurrentSession) {
-      const indexCurrentStep = state.current.steps.findIndex(
-        (step) => step.id === state.current.current_step.id
-      )
-      return indexCurrentStep === state.current.steps.length - 1
-    }
-    return false
-  },
-
-  getFirstStep: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return state.current.steps[0]
-    }
-    return {}
-  },
-
-  /*
-    Action validations getters
-   */
-  canResume: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return getters.getCurrentStepStatus === STEPS_STATUS.PAUSED
-    }
-    return false
-  },
-
-  canPause: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS
-    }
-    return false
-  },
-  canSkip: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return (
-        getters.getCurrentStepStatus === STEPS_STATUS.PAUSED ||
-        getters.getCurrentStepStatus === STEPS_STATUS.PENDING
-      )
-    }
-    return false
   },
 }

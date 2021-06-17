@@ -1,5 +1,8 @@
 import _ from 'lodash'
+
 import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
+import { POMODORO_DEFAULT_DURATION } from '@/constantes/settings'
+import { convertNumberInDuration } from '@/helpers/settings'
 
 export default {
   /*
@@ -27,7 +30,7 @@ export default {
   /*
     Specific property getters
    */
-  getUserSettingTimezone: (state) => {
+  getUserSettingTimezone: () => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone
   },
 
@@ -60,6 +63,18 @@ export default {
       return { name, email }
     }
     return ''
+  },
+
+  getUserPomodoroDuration: (state, getters) => {
+    const user = getters.getUser
+    if (user) {
+      if (user.user_settings.pomodoro_session_setting) {
+        const pomodoroDurationAsIntegerMinute =
+          user.user_settings.pomodoro_session_setting.pomodoro_duration
+        return convertNumberInDuration(pomodoroDurationAsIntegerMinute)
+      }
+    }
+    return POMODORO_DEFAULT_DURATION
   },
 
   /*

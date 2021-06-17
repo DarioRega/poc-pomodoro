@@ -35,7 +35,11 @@
           >
             {{ $t('Manage subscription') }}
           </brand-button>
-          <brand-button v-else class="capitalize" @click="$emit('onUpgrade')">
+          <brand-button
+            v-else
+            class="capitalize"
+            @click="$emit('onManageSubscription')"
+          >
             {{ $t('Upgrade') }}
           </brand-button>
         </div>

@@ -4,7 +4,14 @@
     @click="$emit('click')"
   >
     <!--    SESSION NOT CREATED -->
-    <div v-if="!sessionState.isSessionCreated">
+    <div
+      v-if="!sessionState.isSessionCreated"
+      class="relative"
+      :class="
+        isCreateSessionLoading &&
+        `timer-sidebar__clock--creating ${isLayoutStacked && 'stacked'}`
+      "
+    >
       <p v-show="isLayoutStacked" class="text-base font-bold">
         {{ $t('Start') }}
       </p>
@@ -67,6 +74,25 @@ export default {
       sessionState: 'sessions/getSessionState',
       currentStepTimer: 'timers/getCurrentStepTimer',
     }),
+    isCreateSessionLoading() {
+      return this.$store.state.globalState.isCreateSessionLoading
+    },
   },
 }
 </script>
+<style lang="scss" scoped>
+.timer-sidebar__clock--creating {
+  @apply text-dark-indigo dark:text-light-indigo;
+
+  &::after {
+    @apply w-16 h-16 absolute inset-0 m-auto border-4 border-transparent rounded-[50%] text-current fill-current;
+
+    content: '';
+    border-top-color: white;
+    animation: small-loading-spinner 1s ease infinite;
+  }
+  &.stacked::after {
+    @apply w-8 h-8;
+  }
+}
+</style>

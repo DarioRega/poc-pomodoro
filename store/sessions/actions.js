@@ -1,4 +1,4 @@
-import { ACTION_TYPES, STEPS_STATUS } from '@/constantes'
+import { ACTION_TYPES } from '@/constantes'
 import {
   ABORT_USER_CURRENT_SESSION_URL,
   CURRENT_STEP_ACTION_URL,
@@ -6,13 +6,13 @@ import {
   START_SESSION_ID_URL,
   USER_SESSION_URL,
 } from '@/constantes/api'
-import { formatDuration } from '@/helpers/sessions'
+import { onCurrentSessionEvent } from '@/EchoEventsHandlers/sessions'
 
 export default {
   /*
   Global
    */
-  onTimerClick({ dispatch, getters, commit, rootState }) {
+  onTimerClick({ dispatch, getters, commit }) {
     const {
       isSessionCreated,
       isPaused,
@@ -20,13 +20,6 @@ export default {
       isSessionStartedButHasPendingProcess,
     } = getters.getSessionState
     if (!isSessionCreated) {
-      // in v2 we will let the user the possibility to select a task to be ran
-      // the SET_LAUNCH_TIMER_VISIBILITY will have to be removed and called after the user selected a task from the modal
-      // commit(
-      //   'globalState/SET_CURRENT_MODAL_OPEN',
-      //   rootState.globalState.modalsRefs.SELECT_RUNNING_TASK,
-      //   { root: true }
-      // )
       commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', true, { root: true })
     } else if (isSessionStartedButHasPendingProcess) {
       dispatch('startCurrentStep')
@@ -34,35 +27,17 @@ export default {
       dispatch('resumeCurrentStep')
     } else if (isRunning) {
       dispatch('pauseCurrentStep')
-    } else {
-      // TODO CUSTOM ERROR throw new CustomErrorTimer
-    }
-  },
-
-  beforeLeavingApplication({ dispatch, getters }) {
-    if (getters.getCurrentStepStatus === STEPS_STATUS.IN_PROGRESS) {
-      dispatch('pauseCurrentStep')
     }
   },
 
   /*
     Session
    */
-  async getAndSetCurrentSession({ commit }) {
+  async getAndSetCurrentSession(store) {
     const { data } = await this.$axios.get(`${CURRENT_USER_SESSION_URL}`)
-    if (data.id) {
-      commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
-      const { resting_time, status } = data.current_step
-      if (!status.includes(STEPS_STATUS.IN_PROGRESS)) {
-        const currentStepRestingTime = resting_time
-        const currentStepTimer = formatDuration(resting_time)
-        commit(
-          'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-          { currentStepRestingTime, currentStepTimer },
-          { root: true }
-        )
-      }
-    }
+
+    // trigger event as we received websocket to handle the app state
+    onCurrentSessionEvent(data, store)
   },
 
   async createAndStartSession({ dispatch, commit }) {
@@ -82,22 +57,6 @@ export default {
     }
   },
 
-  /*
-   Session actions
-   */
-  onAbortClick({ dispatch }) {
-    const notification = {
-      title: this.$i18n.t('Abort session ?'),
-      description: this.$i18n.t('Are you sure to abort the current session ?'),
-      actionRequired: true,
-      confirmCallback: () => dispatch('abortSession'),
-    }
-    dispatch('globalState/createNotification', notification, { root: true })
-  },
-
-  /*
-    Abort
-   */
   async abortSession({ dispatch }) {
     try {
       await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
@@ -113,8 +72,18 @@ export default {
   },
 
   /*
-   Skip
-  */
+   Session actions
+   */
+  onAbortClick({ dispatch }) {
+    const notification = {
+      title: this.$i18n.t('Abort session ?'),
+      description: this.$i18n.t('Are you sure to abort the current session ?'),
+      actionRequired: true,
+      confirmCallback: () => dispatch('abortSession'),
+    }
+    dispatch('globalState/createNotification', notification, { root: true })
+  },
+
   onSkipCurrentStepClick({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Skip process ?'),
@@ -126,30 +95,18 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  async skipCurrentStep({ dispatch, getters, commit }) {
+  /*
+   Skip current step
+ */
+  async skipCurrentStep({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Process skipped !'),
     }
-    const nextStepDuration = getters.isNextStepLastStep
-      ? getters.getFirstStep.duration
-      : getters.getNextStep.duration
 
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.SKIP,
       })
-      commit('globalState/SET_HAS_SKIPPED_ACTION', true, {
-        root: true,
-      })
-
-      commit(
-        'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-        {
-          currentStepTimer: formatDuration(nextStepDuration),
-          currentStepRestingTime: nextStepDuration,
-        },
-        { root: true }
-      )
 
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
@@ -164,21 +121,14 @@ export default {
   },
 
   /*
-    Pause
+    Pause current step
   */
-  async pauseCurrentStep({ dispatch, rootState, commit, getters }) {
+  async pauseCurrentStep({ dispatch, rootState }) {
     const notification = {
       title: this.$i18n.t('Session paused!'),
       type: 'success',
     }
-    const currentStepTimer = rootState.timers.currentStepTimer
     const currentStepRestingTime = rootState.timers.currentStepRestingTime
-
-    // Manually trigger pause
-    dispatch('triggerLocalPausedSessionState', {
-      currentStepTimer,
-      currentStepRestingTime,
-    })
 
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
@@ -197,30 +147,29 @@ export default {
       )
     }
   },
-  triggerLocalPausedSessionState({ commit, getters }, payload) {
-    const { currentStepTimer, currentStepRestingTime } = payload
 
-    // Calculated resting time session
-    const totalSessionRestingTime =
-      getters.getTotalRestingTimeSessionWithCurrentPausedStep
-
-    // set timer value
-    commit(
-      'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-      { currentStepTimer, currentStepRestingTime },
-      { root: true }
-    )
-
-    // edit session,current step status, set resting time current step and session
-    commit('MANUALLY_TRIGGER_PAUSE_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE', {
-      totalSessionRestingTime,
-      currentStepRestingTime,
-    })
+  /*
+     Finish current step
+  */
+  async finishCurrentStep({ dispatch }) {
+    try {
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.FINISH,
+      })
+    } catch (err) {
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
+    }
   },
 
   /*
-    Resume
-  */
+   Resume current step
+ */
   async resumeCurrentStep({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Session resumed !'),
@@ -241,29 +190,11 @@ export default {
       )
     }
   },
-  /*
-     Finish current step
-  */
-  async finishCurrentStep({ dispatch, rootState }) {
-    try {
-      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
-        type: ACTION_TYPES.FINISH,
-      })
-    } catch (err) {
-      dispatch(
-        'globalState/handleSessionActionsServerError',
-        err.response.data.message,
-        {
-          root: true,
-        }
-      )
-    }
-  },
 
   /*
-    Start current step
- */
-  async startCurrentStep({ dispatch, rootState, app, $i18n }) {
+   Start current step
+  */
+  async startCurrentStep({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Session started !'),
       type: 'success',
