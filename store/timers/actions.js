@@ -48,15 +48,24 @@ export default {
   /*
     Session end time related
    */
-  setIntervalCurrentSessionEndTimeWhenNotRunning({ dispatch, commit }) {
+  setIntervalCurrentSessionEndTimeWhenNotRunning({
+    dispatch,
+    commit,
+    rootGetters,
+  }) {
     setTimeout(() => {
-      dispatch('setCurrentSessionEndTimeWhenNotRunning')
-
-      const intervalSessionEndTime = setInterval(() => {
+      console.log('SHOULD FIRE NOW IN TIMEOUT')
+      // we check after the setTimeout if the session is still paused
+      if (!rootGetters['sessions/getSessionState'].isRunning) {
+        console.log('SHOULD NOT BE HERE')
         dispatch('setCurrentSessionEndTimeWhenNotRunning')
-      }, aMinuteInMilliseconds)
 
-      commit('SET_INTERVAL_SESSION_END_TIME', intervalSessionEndTime)
+        const intervalSessionEndTime = setInterval(() => {
+          dispatch('setCurrentSessionEndTimeWhenNotRunning')
+        }, aMinuteInMilliseconds)
+
+        commit('SET_INTERVAL_SESSION_END_TIME', intervalSessionEndTime)
+      }
     }, secondsRemainingToTheCurrentMinute())
   },
 
