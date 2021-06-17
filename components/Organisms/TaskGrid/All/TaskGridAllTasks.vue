@@ -37,7 +37,7 @@
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
           :is-running="currentTaskRunning.id === task.id"
-          :should-row-loading="currentTaskIdRowLoading === task.id"
+          :should-row-loading="taskRowsIdLoading.includes(task.id)"
           :current-task-selected="currentTaskSelected"
           :is-archive-enabled="isArchiveEnabled"
           :is-delete-enabled="isDeleteEnabled"
@@ -133,7 +133,7 @@ export default {
       amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
       addTaskError: '',
-      currentTaskIdRowLoading: '',
+      taskRowsIdLoading: [],
     }
   },
   computed: {
@@ -226,20 +226,25 @@ export default {
           selectedTask
         )
       }
-      // check if isArchiveEnabled or isDeleteEnabled to handle custom event
-      // if both of them are false, just fire the select task event
     },
     handleChangeRunningTask(taskId) {
       // TODO v2
     },
+    setRowLoading(id) {
+      this.taskRowsIdLoading.push(id)
+    },
+    removeRowLoading(id) {
+      this.taskRowsIdLoading.filter((x) => x !== id)
+    },
     async handleChangeTaskDescription(value) {
-      this.currentTaskIdRowLoading = this.currentTaskSelected.id
+      this.setRowLoading(this.currentTaskSelected.id)
 
       await this.updateTaskDescription({
         id: this.currentTaskSelected.id,
         description: value,
       })
-      this.currentTaskIdRowLoading = ''
+
+      this.removeRowLoading(this.currentTaskSelected.id)
     },
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
@@ -261,14 +266,18 @@ export default {
         (x) => x.name === TASK_STATUS_VALUES.ARCHIVED
       )
       const payload = { id: taskId, task_status_id: archivedStatus.id }
-      this.currentTaskIdRowLoading = taskId
+      this.setRowLoading(taskId)
+
       await this.archiveTask(payload)
-      this.currentTaskIdRowLoading = ''
+
+      this.removeRowLoading(taskId)
     },
     async handleDeleteTask(taskId) {
-      this.currentTaskIdRowLoading = taskId
+      this.setRowLoading(taskId)
+
       await this.deleteTask(taskId)
-      this.currentTaskIdRowLoading = ''
+
+      this.removeRowLoading(taskId)
     },
     findTask(taskId) {
       return this.tasks.find((x) => x.id === taskId)
