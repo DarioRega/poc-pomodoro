@@ -88,10 +88,10 @@
 <script>
 import { mapActions } from 'vuex'
 
+import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridBodyAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridBodyAllTasks'
 import TaskGridHeaderAllTasks from '@/components/Organisms/TaskGrid/All/TaskGridHeaderAllTasks'
 import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
-import { TASK_STATUS_VALUES } from '@/constantes'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 import AddTaskInput from '@/components/Atoms/Task/AddTaskInput'
@@ -99,6 +99,7 @@ import TaskGridEmptyList from '@/components/Atoms/Task/TaskGridEmptyList'
 
 export default {
   name: 'TaskGridAllTasks',
+
   components: {
     TaskGridHeaderAllTasks,
     TaskGridBodyAllTasks,
@@ -108,6 +109,7 @@ export default {
     TaskGridEmptyList,
     TransitionOpacity,
   },
+
   props: {
     currentTaskSelected: {
       type: Object,
@@ -126,6 +128,7 @@ export default {
       default: false,
     },
   },
+
   data() {
     return {
       isToggled: true,
@@ -138,6 +141,7 @@ export default {
       taskRowsIdLoading: [],
     }
   },
+
   computed: {
     isCompletedDescription() {
       if (this.currentTaskSelected.task_status) {
@@ -169,6 +173,7 @@ export default {
       return TASK_STATUS_VALUES
     },
   },
+
   mounted() {
     this.$store.commit(
       'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
@@ -184,6 +189,7 @@ export default {
       deleteTask: 'tasks/deleteTask',
       createNotification: 'globalState/createNotification',
     }),
+
     async handleAddTask(name) {
       this.isAddTaskLoading = true
       const errorRequest = await this.addTask({ name })
@@ -202,9 +208,11 @@ export default {
       }
       this.isAddTaskLoading = false
     },
+
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
+
     handleClickTaskTarget(taskId) {
       if (this.isArchiveEnabled) {
         this.handleArchiveTask(taskId)
@@ -229,40 +237,49 @@ export default {
         )
       }
     },
+
     handleChangeRunningTask(taskId) {
       // TODO v2
     },
+
     setRowLoading(id) {
       this.taskRowsIdLoading.push(id)
     },
+
     removeRowLoading(id) {
-      this.taskRowsIdLoading.filter((x) => x !== id)
+      this.taskRowsIdLoading = this.taskRowsIdLoading.filter((x) => x !== id)
     },
+
     async handleChangeTaskDescription(value) {
-      this.setRowLoading(this.currentTaskSelected.id)
+      const taskId = this.currentTaskSelected.id
+      this.setRowLoading(taskId)
 
       await this.updateTaskDescription({
-        id: this.currentTaskSelected.id,
+        id: taskId,
         description: value,
       })
 
-      this.removeRowLoading(this.currentTaskSelected.id)
+      this.removeRowLoading(taskId)
     },
+
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
     },
+
     handleEnableArchiveBox() {
       if (this.isDeleteEnabled) {
         this.isDeleteEnabled = false
       }
       this.isArchiveEnabled = !this.isArchiveEnabled
     },
+
     handleEnableTrash() {
       if (this.isArchiveEnabled) {
         this.isArchiveEnabled = false
       }
       this.isDeleteEnabled = !this.isDeleteEnabled
     },
+
     async handleArchiveTask(taskId) {
       const archivedStatus = this.$store.state.tasks.statuses.find(
         (x) => x.name === TASK_STATUS_VALUES.ARCHIVED
@@ -274,6 +291,7 @@ export default {
 
       this.removeRowLoading(taskId)
     },
+
     async handleDeleteTask(taskId) {
       this.setRowLoading(taskId)
 
@@ -281,6 +299,7 @@ export default {
 
       this.removeRowLoading(taskId)
     },
+
     findTask(taskId) {
       return this.tasks.find((x) => x.id === taskId)
     },
