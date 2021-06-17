@@ -5,11 +5,13 @@ export default {
     await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
+
     // by default is the isRefreshLoading to true, since we logged in, we need to use isEnvLoading instead
     commit('globalState/SET_ENV_LOADING', true, { root: true })
     dispatch('getEnvironment')
   },
-  async logout({ dispatch, rootState }) {
+
+  async logout() {
     await this.$auth.logout()
   },
 
@@ -21,11 +23,13 @@ export default {
         root: true,
       }).then(() => resolve())
     })
+
     const tasksPromise = new Promise((resolve, reject) => {
       dispatch('tasks/getAndSetAllSingleTasks', null, {
         root: true,
       }).then(() => resolve())
     })
+
     const taskStatusesPromise = new Promise((resolve, reject) => {
       dispatch('tasks/getAndSetAllTaskStatuses', null, {
         root: true,
@@ -95,6 +99,7 @@ export default {
 
     commit('CREATE_NOTIFICATION', notification)
   },
+
   removeNotification({ commit }, payload) {
     commit('REMOVE_NOTIFICATION', payload)
   },

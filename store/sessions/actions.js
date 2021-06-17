@@ -57,6 +57,20 @@ export default {
     }
   },
 
+  async abortSession({ dispatch }) {
+    try {
+      await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
+    } catch (err) {
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
+    }
+  },
+
   /*
    Session actions
    */
@@ -81,6 +95,9 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
+  /*
+   Skip current step
+ */
   async skipCurrentStep({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Process skipped !'),
@@ -104,7 +121,7 @@ export default {
   },
 
   /*
-    Pause
+    Pause current step
   */
   async pauseCurrentStep({ dispatch, rootState }) {
     const notification = {
@@ -120,23 +137,6 @@ export default {
       })
 
       dispatch('globalState/createNotification', notification, { root: true })
-    } catch (err) {
-      dispatch(
-        'globalState/handleSessionActionsServerError',
-        err.response.data.message,
-        {
-          root: true,
-        }
-      )
-    }
-  },
-
-  /*
-  Abort
- */
-  async abortSession({ dispatch }) {
-    try {
-      await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
     } catch (err) {
       dispatch(
         'globalState/handleSessionActionsServerError',
@@ -168,7 +168,7 @@ export default {
   },
 
   /*
-   Resume
+   Resume current step
  */
   async resumeCurrentStep({ dispatch }) {
     const notification = {

@@ -1,6 +1,6 @@
 export default () => ({
-  currentStepTimer: '25:00',
-  currentStepRestingTime: '00:25:00',
+  currentStepTimer: '',
+  currentStepRestingTime: '',
   currentSessionEndTime: '',
   intervalSessionEndTime: null,
   intervalCurrentStepTimer: null,
