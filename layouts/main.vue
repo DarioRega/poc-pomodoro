@@ -105,13 +105,20 @@ export default {
       if (newValue === '00:00') {
         if (!this.$store.state.globalState.isAbortAction) {
           clearInterval(this.intervalCurrentStepTimer)
-          this.finishCurrentStep()
           if (!this.$store.getters['sessions/isNextStepLastStep']) {
             this.$store.commit(
-              'timers/SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION',
-              formatDuration(this.getNextStep.duration)
+              'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+              {
+                currentStepTimer: formatDuration(this.getNextStep.duration),
+                currentStepRestingTime: this.getNextStep.duration,
+              }
+            )
+          } else {
+            this.$store.dispatch(
+              'sessions/triggerLocalAbortedOrFinishedSessionState'
             )
           }
+          this.finishCurrentStep()
         }
       }
     },
