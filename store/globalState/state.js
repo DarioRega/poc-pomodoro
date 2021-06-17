@@ -1,10 +1,8 @@
 export default () => ({
   isEnvLoading: false,
   isRefreshLoading: true,
-  hasSkippedAction: false,
   isLayoutStacked: false,
   isLaunchTimerVisible: false,
-  isAbortAction: false,
   isCreateSessionLoading: false,
   currentModalOpen: '',
   currentNotifications: [],
