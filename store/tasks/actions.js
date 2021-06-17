@@ -26,7 +26,7 @@ export default {
         type: 'success',
         description: this.$i18n.t('A new task was added to your list'),
       }
-      dispatch('globalState/createNotification', notification)
+      dispatch('globalState/createNotification', notification, { root: true })
       await this.$axios.post(TASK_URL, payload)
     } catch (err) {
       dispatch(

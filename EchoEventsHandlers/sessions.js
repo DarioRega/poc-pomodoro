@@ -29,12 +29,21 @@ export const onCurrentSessionEvent = (payload, store, i18n) => {
         store.dispatch('globalState/createNotification', notification)
         break
       }
+      case SESSION_STATUS.PAUSED: {
+        session = payload
+        store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
+          currentStepTimer: formatDuration(session.current_step.resting_time),
+          currentStepRestingTime: session.current_step.resting_time,
+        })
+        break
+      }
       default:
         session = payload
     }
   } else {
     session = defaultSessionState
   }
+
   store.commit('sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP', session)
 }
 

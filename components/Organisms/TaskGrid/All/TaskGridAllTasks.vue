@@ -166,7 +166,7 @@ export default {
   mounted() {
     this.$store.commit(
       'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
-      this.tasksList[0]
+      this.tasksList[0] || {}
     )
   },
 
