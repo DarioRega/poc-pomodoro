@@ -182,7 +182,17 @@ export default {
       this.isAddTaskLoading = true
       const errorRequest = await this.addTask({ name })
       if (errorRequest) {
-        this.addTaskError = errorRequest.errors.name[0] || errorRequest.message
+        if (errorRequest.errors) {
+          this.addTaskError =
+            errorRequest.errors.name[0] || errorRequest.message
+        }
+        if (errorRequest.message) {
+          this.createNotification({
+            title: this.$t('Oups...'),
+            description: errorRequest.message,
+            type: 'error',
+          })
+        }
       }
       this.isAddTaskLoading = false
     },
