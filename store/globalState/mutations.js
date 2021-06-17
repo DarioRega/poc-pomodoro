@@ -34,4 +34,7 @@ export default {
   SET_IS_ABORT(state, payload) {
     state.isAbortAction = payload
   },
+  SET_CREATE_SESSION_LOADER(state, payload) {
+    state.isCreateSessionLoading = payload
+  },
 }
