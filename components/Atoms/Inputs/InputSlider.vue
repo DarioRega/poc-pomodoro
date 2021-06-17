@@ -5,6 +5,7 @@
       :min="min"
       :max="max"
       :interval="interval"
+      :silent="true"
       :tooltip="hasTooltip ? 'active' : 'none'"
       @change="$emit('change', $event)"
     />
@@ -27,7 +28,7 @@ export default {
   props: {
     min: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     max: {
       type: Number,
@@ -48,12 +49,17 @@ export default {
   },
   data() {
     return {
-      localValue: 20,
+      localValue: 2,
     }
   },
   computed: {
     hasSlot() {
       return !!this.$slots.default
+    },
+  },
+  watch: {
+    value(newValue, oldValue) {
+      this.localValue = newValue
     },
   },
   mounted() {
