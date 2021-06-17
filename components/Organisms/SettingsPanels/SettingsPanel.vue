@@ -24,7 +24,7 @@
       />
       <settings-panel-account-tab
         v-if="currentActiveTab === settingPanelStepsValues.ACCOUNT"
-        :values="{ name: user.name, email: user.email }"
+        :values="getUserNameAndEmail"
       />
       <settings-panel-pomodoro-config-tab
         v-if="currentActiveTab === settingPanelStepsValues.POMODORO_CONFIG"
@@ -113,6 +113,7 @@ export default {
 
       // specific getters only boolean
       areUserSettingsEmpty: 'user/areUserSettingsEmpty',
+      getUserNameAndEmail: 'user/getUserNameAndEmail',
       isUserUsingPomodoroCustomSettings:
         'user/isUserUsingPomodoroCustomSettings',
     }),

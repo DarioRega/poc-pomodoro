@@ -1,4 +1,17 @@
 export const API_USER_URL = `/api/user`
+/*
+  User profile & password
+ */
+export const USER_UPDATE_PROFILE_INFORMATION_URL = `user/profile-information`
+export const USER_UPDATE_PASSWORD_URL = `user/password`
+
+/*
+  Settings
+ */
+export const USER_SETTINGS_URL = `${API_USER_URL}/settings`
+export const USER_CREATE_POMODORO_SETTINGS_URL = `${API_USER_URL}/pomodoro-settings`
+export const USER_UPDATE_POMODORO_SETTINGS_ID_URL = (id) =>
+  `${API_USER_URL}/pomodoro-settings/${id}/update`
 
 /*
   Sessions URL
@@ -23,12 +36,3 @@ export const TASK_UPDATE_ID_URL = (taskId) => `${TASK_URL}/${taskId}/update`
  */
 export const ECHO_BROADCAST_URL = `/api/broadcasting`
 export const ECHO_AUTH_BROADCAST_URL = `${ECHO_BROADCAST_URL}/auth`
-
-/*
-  Settings
- */
-
-export const USER_SETTINGS_URL = `${API_USER_URL}/settings`
-export const USER_CREATE_POMODORO_SETTINGS_URL = `${API_USER_URL}/pomodoro-settings`
-export const USER_UPDATE_POMODORO_SETTINGS_ID_URL = (id) =>
-  `${API_USER_URL}/pomodoro-settings/${id}/update`
