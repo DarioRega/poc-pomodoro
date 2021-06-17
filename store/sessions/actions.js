@@ -239,6 +239,13 @@ export default {
   },
 
   triggerLocalAbortedOrFinishedSessionState({ commit }) {
+    // TODO set user pomodoro duration instead of hard coded values
+    commit(
+      'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+      { currentStepTimer: '25:00', currentStepRestingTime: '00:25:00' },
+      { root: true }
+    )
+
     commit(
       'MANUALLY_TRIGGER_ABORT_OR_FINISH_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE'
     )
