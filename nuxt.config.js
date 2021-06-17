@@ -61,6 +61,7 @@ export default {
   env: {
     BASE_URL: process.env.BASE_URL,
     API_URL: process.env.API_URL,
+    pusherKey: process.env.pusherKey,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

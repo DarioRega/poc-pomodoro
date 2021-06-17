@@ -18,12 +18,14 @@
 
     <!--    MODAL SELECT RUNNING TASK -->
     <modal-panel-select-running-task
+      :key="modalsKeys.selectRunningTask"
       :is-open="currentModalOpen === modalsRefs.SELECT_RUNNING_TASK"
       @onClose="closeAnyModals"
     />
 
     <!--    MODAL SETTINGS -->
     <modal-settings-panel
+      :key="modalsKeys.setting"
       :is-open="currentModalOpen === modalsRefs.SETTINGS"
       @onClose="closeAnyModals"
     />
@@ -44,6 +46,7 @@ import TaskTables from '@/components/Templates/IndexPageComponentsGroup/TaskTabl
 import ModalPanelSelectRunningTask from '@/components/Organisms/PanelSelectRunningTask/ModalPanelSelectRunningTask'
 import ModalSettingsPanel from '@/components/Organisms/SettingsPanels/ModalSettingsPanel'
 import TimerScreenExpander from '@/components/Organisms/TimerScreenExpander'
+import { getRandomNumber } from '@/helpers'
 
 export default {
   name: 'Index',
@@ -61,6 +64,10 @@ export default {
   data() {
     return {
       isTimerScreenExpanderOpen: false,
+      modalsKeys: {
+        setting: getRandomNumber(),
+        selectRunningTask: getRandomNumber(),
+      },
     }
   },
   computed: {
@@ -75,6 +82,18 @@ export default {
     },
     modalsRefs() {
       return this.$store.state.globalState.modalsRefs
+    },
+  },
+  watch: {
+    currentModalOpen(newValue, oldValue) {
+      switch (oldValue) {
+        case this.modalsRefs.SETTINGS:
+          this.modalsKeys.setting += 1
+          break
+        case this.modalsRefs.SELECT_RUNNING_TASK:
+          this.modalsKeys.selectRunningTask += 1
+          break
+      }
     },
   },
   methods: {

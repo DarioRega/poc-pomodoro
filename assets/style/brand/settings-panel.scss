@@ -22,10 +22,20 @@
         @apply mb-1;
       }
     }
-    &__configurations {
+    &__configurations,&__button-create {
       @apply w-48 flex-none justify-end;
       @screen xl {
         @apply w-72;
+      }
+
+      &--account-tab {
+        @apply w-72;
+        @screen xl {
+          @apply w-80;
+        }
+        @screen 2xl {
+          @apply w-96;
+        }
       }
     }
 

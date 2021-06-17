@@ -16,6 +16,7 @@
 
 <script>
 import TabLink from '@/components/Atoms/TabLink'
+import { getSettingsPanelSteps } from '@/helpers/settings'
 
 export default {
   name: 'SettingsPanelMainTabs',
@@ -28,7 +29,7 @@ export default {
   },
   computed: {
     tabs() {
-      return this.$store.getters['settings/getSettingsPanelSteps'](this.$i18n)
+      return getSettingsPanelSteps(this.$i18n)
     },
   },
 }

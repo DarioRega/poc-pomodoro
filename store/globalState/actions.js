@@ -69,7 +69,11 @@ export default {
   },
 
   createNotification({ dispatch, getters, commit, rootState }, payload) {
-    const notificationKey = Math.floor(Math.random() * 9999)
+    let notificationKey = Math.floor(Math.random() * 9999)
+    if (payload.notificationId) {
+      notificationKey = payload.notificationId
+    }
+
     const confirmCallback =
       typeof payload.confirmCallback === 'function'
         ? payload.confirmCallback
@@ -83,6 +87,7 @@ export default {
       type: payload.type ? payload.type : 'info',
       notificationId: notificationKey,
       actionRequired: payload.actionRequired ? payload.actionRequired : false,
+      actionText: payload.actionText ? payload.actionText : '',
       closeCallback,
       confirmCallback,
       selfCloseDispatch,
