@@ -42,6 +42,7 @@
             <task-grid-header-actions
               class="w-full h-full ml-2 2xl:ml-4"
               :should-show-completed-task="shouldShowCompletedTask"
+              :with-show-completed-functionality="false"
               :with-archive-functionality="false"
               :label="
                 clientWidth < 1400
