@@ -21,11 +21,11 @@ export const onCurrentSessionEvent = (payload, store, i18n) => {
         break
       }
       case SESSION_STATUS.ABORTED: {
-        // TODO WITH USER VALUE
         store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
-          currentStepTimer: '25:00',
-          currentStepRestingTime: '00:25:00',
+          currentStepTimer: store.getters['user/getUserPomodoroDurationTimer'],
+          currentStepRestingTime: store.getters['user/getUserPomodoroDuration'],
         })
+
         store.dispatch('globalState/createNotification', notification)
         break
       }

@@ -240,11 +240,18 @@ export default {
     }
   },
 
-  triggerLocalAbortedOrFinishedSessionState({ commit }) {
-    // TODO set user pomodoro duration instead of hard coded values
+  triggerLocalAbortedOrFinishedSessionState({ commit, getters, rootGetters }) {
+    const userDefaultPomodoroTimer =
+      rootGetters['user/getUserPomodoroDurationTimer']
+    const userDefaultPomodoroDuration =
+      rootGetters['user/getUserPomodoroDuration']
+
     commit(
       'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-      { currentStepTimer: '25:00', currentStepRestingTime: '00:25:00' },
+      {
+        currentStepTimer: userDefaultPomodoroTimer,
+        currentStepRestingTime: userDefaultPomodoroDuration,
+      },
       { root: true }
     )
 
