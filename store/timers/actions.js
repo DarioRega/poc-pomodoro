@@ -54,10 +54,8 @@ export default {
     rootGetters,
   }) {
     setTimeout(() => {
-      console.log('SHOULD FIRE NOW IN TIMEOUT')
       // we check after the setTimeout if the session is still paused
       if (!rootGetters['sessions/getSessionState'].isRunning) {
-        console.log('SHOULD NOT BE HERE')
         dispatch('setCurrentSessionEndTimeWhenNotRunning')
 
         const intervalSessionEndTime = setInterval(() => {
