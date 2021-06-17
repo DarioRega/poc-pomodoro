@@ -44,15 +44,7 @@ export default {
   computed: {
     ...mapGetters({
       sessionState: 'sessions/getSessionState',
-      sessionRestingTime: 'sessions/getSessionRestingTime',
-      sessionRunningEndTime: 'sessions/getCurrentRunningSessionEndTime',
-      currentStepEndTime: 'sessions/getCurrentStepEndTime',
-      getNextStep: 'sessions/getNextStep',
-      hasCurrentSession: 'sessions/hasCurrentSession',
-      sessionEndTimeTimer: 'timers/getCurrentSessionEndTime',
-      currentStepTimer: 'timers/getCurrentStepTimer',
       userTheme: 'user/getUserTheme',
-      timeFormat: 'user/getTimeFormat',
     }),
 
     isLaunchTimerVisible() {
@@ -82,11 +74,7 @@ export default {
   */
   methods: {
     ...mapActions({
-      getAndSetCurrentSession: 'sessions/getAndSetCurrentSession',
-      finishCurrentStep: 'sessions/finishCurrentStep',
       getEnvironment: 'globalState/getEnvironment',
-      getAndSetAllTasks: 'tasks/getAndSetAllSingleTasks',
-      getAndSetAllTaskStatuses: 'tasks/getAndSetAllTaskStatuses',
     }),
   },
 }

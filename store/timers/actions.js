@@ -1,7 +1,7 @@
 import moment from 'moment-timezone'
-// import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
-import { secondsRemainingToTheCurrentMinute } from '@/helpers'
+
 import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+import { secondsRemainingToTheCurrentMinute } from '@/helpers'
 import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
 
 export default {

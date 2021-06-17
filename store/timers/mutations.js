@@ -32,8 +32,4 @@ export default {
     clearInterval(state.intervalCurrentStepTimer)
     state.intervalCurrentStepTimer = null
   },
-
-  SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION(state, payload) {
-    state.currentStepTimer = payload
-  },
 }
