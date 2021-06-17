@@ -1,29 +1,48 @@
 import moment from 'moment-timezone'
 // import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
 import { secondsRemainingToTheCurrentMinute } from '@/helpers'
+import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
 
 export default {
   /*
     Main events Session status
    */
-  onSessionPause({ dispatch }, payload) {
+  currentStepIsNotRunning({ dispatch }, payload) {
     // Session end time related
     dispatch('setCurrentSessionEndTimeWhenNotRunning', payload)
     dispatch('setIntervalCurrentSessionEndTimeWhenNotRunning', payload)
 
     // Current step related
     dispatch('removeIntervalCurrentStepTimer')
-    dispatch('setRestingTimeCurrentStepAsTimer', payload)
+    dispatch('setCurrentStepTimerNotRunning', payload)
   },
 
-  onSessionRunning({ dispatch }, payload) {
+  currentStepIsRunning({ dispatch }, payload) {
     // Session end time related
     dispatch('removeIntervalSessionEndTime', payload)
     dispatch('setCurrentSessionEndTimeWhenRunning', payload)
 
     // Current step related
-    dispatch('setRestingTimeCurrentStepAsTimer', payload)
+    dispatch('setCurrentStepTimerRunning', payload)
     dispatch('setIntervalCurrentStepTimer', payload)
+  },
+
+  sessionIsDoneOrAborted({ dispatch, commit, rootGetters }) {
+    const userPomodoroDuration = rootGetters['user/getUserPomodoroDuration']
+
+    // kills all intervals
+    dispatch('removeIntervalCurrentStepTimer')
+    dispatch('removeIntervalSessionEndTime')
+
+    // set default timer with user preference
+    commit('SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
+      currentStepTimer:
+        transformHoursDurationFormatToMinutesDurationFormat(
+          userPomodoroDuration
+        ),
+      currentStepRestingTime: userPomodoroDuration,
+    })
   },
 
   /*
@@ -32,9 +51,12 @@ export default {
   setIntervalCurrentSessionEndTimeWhenNotRunning({ dispatch, commit }) {
     setTimeout(() => {
       dispatch('setCurrentSessionEndTimeWhenNotRunning')
-      commit('SET_INTERVAL_SESSION_END_TIME', () =>
+
+      const intervalSessionEndTime = setInterval(() => {
         dispatch('setCurrentSessionEndTimeWhenNotRunning')
-      )
+      }, aMinuteInMilliseconds)
+
+      commit('SET_INTERVAL_SESSION_END_TIME', intervalSessionEndTime)
     }, secondsRemainingToTheCurrentMinute())
   },
 
@@ -51,7 +73,7 @@ export default {
     const currentSessionTimer = moment()
       .add(restingTimeAsSeconds, 'seconds')
       .format(userTimeFormat)
-    console.log('currentSessionTimer', currentSessionTimer)
+
     commit('SET_CURRENT_SESSION_END_TIME', currentSessionTimer)
   },
 
@@ -72,27 +94,52 @@ export default {
   },
 
   setIntervalCurrentStepTimer({ dispatch, commit }, payload) {
-    commit('SET_INTERVAL_CURRENT_STEP_TIMER', () =>
-      dispatch('setRestingTimeCurrentStepAsTimer', payload)
-    )
+    const intervalCurrentStepTimer = setInterval(() => {
+      dispatch('setCurrentStepTimerRunning', payload)
+    }, aSecondInMilliseconds)
+
+    commit('SET_INTERVAL_CURRENT_STEP_TIMER', intervalCurrentStepTimer)
   },
 
-  setRestingTimeCurrentStepAsTimer({ commit }, payload) {
+  setCurrentStepTimerRunning({ commit, dispatch }, payload) {
+    let currentStepTimer, currentStepRestingTime
     const { current_step } = payload
-    const endTimeSecondsAmount = moment(current_step.end_time).diff(
+
+    const endTimeSecondsAmountFromNow = moment(current_step.end_time).diff(
       moment.now(),
       'seconds'
     )
-    const currentStepTimeUtc = moment.utc(endTimeSecondsAmount * 1000)
 
-    const currentStepTimer = currentStepTimeUtc.format('mm:ss')
-    const currentStepRestingTime = currentStepTimeUtc.format('HH:mm:ss')
+    if (endTimeSecondsAmountFromNow > 0) {
+      const currentStepTimeUtc = moment.utc(endTimeSecondsAmountFromNow * 1000)
+      currentStepTimer = currentStepTimeUtc.format('mm:ss')
+      currentStepRestingTime = currentStepTimeUtc.format('HH:mm:ss')
+    } else {
+      // timer arrive at 00:00, we must remove interval,
+      // send api call to finish step and set timer 00:00
+      dispatch('removeIntervalCurrentStepTimer')
+      dispatch('sessions/finishCurrentStep', null, { root: true })
 
-    console.log(currentStepTimer, 'currentStepTimer')
-    console.log(currentStepRestingTime, 'currentStepRestingTime')
+      currentStepTimer = '00:00'
+      currentStepRestingTime = '00:00:00'
+    }
+
     commit('SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
       currentStepTimer,
       currentStepRestingTime,
+    })
+  },
+
+  setCurrentStepTimerNotRunning({ commit }, payload) {
+    const { current_step } = payload
+    const restingTimeFormatted =
+      transformHoursDurationFormatToMinutesDurationFormat(
+        current_step.resting_time
+      )
+
+    commit('SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
+      currentStepTimer: restingTimeFormatted,
+      currentStepRestingTime: current_step.resting_time,
     })
   },
 }

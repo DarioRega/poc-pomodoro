@@ -43,7 +43,7 @@ export default {
   computed: {
     ...mapGetters({
       sessionState: 'sessions/getSessionState',
-      currentSessionTimer: 'timers/getSessionTimer',
+      currentSessionTimer: 'timers/getCurrentSessionEndTime',
     }),
   },
 }

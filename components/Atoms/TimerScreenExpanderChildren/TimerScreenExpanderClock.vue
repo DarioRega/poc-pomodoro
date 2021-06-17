@@ -68,7 +68,7 @@ export default {
       sessionStepsOnlyPomodoro: 'sessions/getSessionStepsOnlyPomodoro',
       currentStep: 'sessions/getCurrentStep',
       currentStepTimer: 'timers/getCurrentStepTimer',
-      currentSessionTimer: 'timers/getSessionTimer',
+      currentSessionTimer: 'timers/getCurrentSessionEndTime',
     }),
   },
 }

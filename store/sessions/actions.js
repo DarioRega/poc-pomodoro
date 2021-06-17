@@ -145,14 +145,14 @@ export default {
       title: this.$i18n.t('Session paused!'),
       type: 'success',
     }
-    const currentStepTimer = rootState.timers.currentStepTimer
+    // const currentStepTimer = rootState.timers.currentStepTimer
     const currentStepRestingTime = rootState.timers.currentStepRestingTime
 
     // Manually trigger pause
-    dispatch('triggerLocalPausedSessionState', {
-      currentStepTimer,
-      currentStepRestingTime,
-    })
+    // dispatch('triggerLocalPausedSessionState', {
+    //   currentStepTimer,
+    //   currentStepRestingTime,
+    // })
 
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
@@ -197,7 +197,7 @@ export default {
  */
   async abortSession({ dispatch, commit }) {
     commit('globalState/SET_IS_ABORT', true, { root: true })
-    dispatch('triggerLocalAbortedOrFinishedSessionState')
+    // dispatch('triggerLocalAbortedOrFinishedSessionState')
     try {
       await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
     } catch (err) {
@@ -260,7 +260,7 @@ export default {
       type: 'success',
     }
     // Manually trigger resume
-    dispatch('triggerLocalStartOrResumeSessionState')
+    // dispatch('triggerLocalStartOrResumeSessionState')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.RESUME,
@@ -285,7 +285,7 @@ export default {
       title: this.$i18n.t('Session started !'),
       type: 'success',
     }
-    dispatch('triggerLocalStartOrResumeSessionState')
+    // dispatch('triggerLocalStartOrResumeSessionState')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.START,

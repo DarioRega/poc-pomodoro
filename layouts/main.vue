@@ -49,7 +49,7 @@ export default {
       currentStepEndTime: 'sessions/getCurrentStepEndTime',
       getNextStep: 'sessions/getNextStep',
       hasCurrentSession: 'sessions/hasCurrentSession',
-      sessionEndTimeTimer: 'timers/getSessionTimer',
+      sessionEndTimeTimer: 'timers/getCurrentSessionEndTime',
       currentStepTimer: 'timers/getCurrentStepTimer',
       userTheme: 'user/getUserTheme',
       timeFormat: 'user/getTimeFormat',
