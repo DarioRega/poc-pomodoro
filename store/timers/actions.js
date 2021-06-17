@@ -32,11 +32,6 @@ export default {
   setIntervalCurrentSessionEndTimeWhenNotRunning({ dispatch, commit }) {
     setTimeout(() => {
       dispatch('setCurrentSessionEndTimeWhenNotRunning')
-
-      // const intervalSessionEndTime = setInterval(() => {
-      //   dispatch('setCurrentSessionEndTimeWheNotRunning')
-      // }, aMinuteInMilliseconds)
-      // TODO  TEST IF INTERVAL IS KILLED
       commit('SET_INTERVAL_SESSION_END_TIME', () =>
         dispatch('setCurrentSessionEndTimeWhenNotRunning')
       )
@@ -56,7 +51,7 @@ export default {
     const currentSessionTimer = moment()
       .add(restingTimeAsSeconds, 'seconds')
       .format(userTimeFormat)
-
+    console.log('currentSessionTimer', currentSessionTimer)
     commit('SET_CURRENT_SESSION_END_TIME', currentSessionTimer)
   },
 
@@ -77,10 +72,6 @@ export default {
   },
 
   setIntervalCurrentStepTimer({ dispatch, commit }, payload) {
-    // const intervalCurrentStepTimer = setInterval(() => {
-    //   dispatch('setRestingTimeCurrentStepAsTimer', payload)
-    // }, aSecondInMilliseconds)
-
     commit('SET_INTERVAL_CURRENT_STEP_TIMER', () =>
       dispatch('setRestingTimeCurrentStepAsTimer', payload)
     )
@@ -88,16 +79,17 @@ export default {
 
   setRestingTimeCurrentStepAsTimer({ commit }, payload) {
     const { current_step } = payload
-    const endTimeSecondsAmount = moment(current_step.resting_time).diff(
+    const endTimeSecondsAmount = moment(current_step.end_time).diff(
       moment.now(),
       'seconds'
     )
-    console.log('dendtime second,', endTimeSecondsAmount)
     const currentStepTimeUtc = moment.utc(endTimeSecondsAmount * 1000)
 
     const currentStepTimer = currentStepTimeUtc.format('mm:ss')
     const currentStepRestingTime = currentStepTimeUtc.format('HH:mm:ss')
 
+    console.log(currentStepTimer, 'currentStepTimer')
+    console.log(currentStepRestingTime, 'currentStepRestingTime')
     commit('SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
       currentStepTimer,
       currentStepRestingTime,

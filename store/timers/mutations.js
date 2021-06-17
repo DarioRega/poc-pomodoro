@@ -29,16 +29,13 @@ export default {
   },
 
   SET_INTERVAL_CURRENT_STEP_TIMER(state, callback) {
-    state = {
-      ...state,
-      intervalCurrentStepTimer: setInterval(() => {
-        callback()
-      }, aSecondInMilliseconds),
-    }
+    state.intervalCurrentStepTimer = setInterval(() => {
+      callback()
+    }, aSecondInMilliseconds)
   },
   REMOVE_INTERVAL_CURRENT_STEP_TIMER(state) {
-    clearInterval(state.intervalCurrentStepTimer)
-    state = { ...state, intervalCurrentStepTimer: null }
+    window.clearInterval(state.intervalCurrentStepTimer)
+    state.intervalCurrentStepTimer = null
   },
 
   SET_CURRENT_STEP_TIMER_MATCH_NEXT_STEP_DURATION(state, payload) {
