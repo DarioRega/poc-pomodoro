@@ -13,7 +13,7 @@ export default {
     await this.$auth.logout()
   },
 
-  async getEnvironment({ dispatch, commit }, isFromLogin = true) {
+  async getEnvironment({ dispatch, commit, rootGetters }, isFromLogin = true) {
     this.$initWebSocketChannel('userPrivateChannel', this.$auth.user.id)
 
     const currentSessionPromise = new Promise((resolve, reject) => {
@@ -38,6 +38,20 @@ export default {
       taskStatusesPromise,
     ])
 
+    // Set default timer ready with user configuration
+    const userDefaultPomodoroTimer =
+      rootGetters['user/getUserPomodoroDurationTimer']
+    const userDefaultPomodoroDuration =
+      rootGetters['user/getUserPomodoroDuration']
+
+    commit(
+      'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+      {
+        currentStepTimer: userDefaultPomodoroTimer,
+        currentStepRestingTime: userDefaultPomodoroDuration,
+      },
+      { root: true }
+    )
     // to allow ui to sync correctly after gathering all data
     setTimeout(() => {
       if (isFromLogin) {
