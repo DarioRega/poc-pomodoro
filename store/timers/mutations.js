@@ -1,3 +1,5 @@
+import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+
 export default {
   /*
     Timers related
@@ -13,16 +15,26 @@ export default {
   /*
     Intervals related
  */
-  SET_INTERVAL_SESSION_END_TIME(state, payload) {
-    state = { ...state, intervalSessionEndTime: payload }
+  SET_INTERVAL_SESSION_END_TIME(state, callback) {
+    state = {
+      ...state,
+      intervalSessionEndTime: setInterval(() => {
+        callback()
+      }, aMinuteInMilliseconds),
+    }
   },
   REMOVE_INTERVAL_SESSION_END_TIME(state) {
     clearInterval(state.intervalSessionEndTime)
     state = { ...state, intervalSessionEndTime: null }
   },
 
-  SET_INTERVAL_CURRENT_STEP_TIMER(state, payload) {
-    state = { ...state, intervalCurrentStepTimer: payload }
+  SET_INTERVAL_CURRENT_STEP_TIMER(state, callback) {
+    state = {
+      ...state,
+      intervalCurrentStepTimer: setInterval(() => {
+        callback()
+      }, aSecondInMilliseconds),
+    }
   },
   REMOVE_INTERVAL_CURRENT_STEP_TIMER(state) {
     clearInterval(state.intervalCurrentStepTimer)

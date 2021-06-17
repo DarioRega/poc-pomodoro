@@ -1,7 +1,6 @@
 import moment from 'moment-timezone'
-import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
+// import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
 import { secondsRemainingToTheCurrentMinute } from '@/helpers'
-import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
 
 export default {
   /*
@@ -34,11 +33,13 @@ export default {
     setTimeout(() => {
       dispatch('setCurrentSessionEndTimeWhenNotRunning')
 
-      const intervalSessionEndTime = setInterval(() => {
+      // const intervalSessionEndTime = setInterval(() => {
+      //   dispatch('setCurrentSessionEndTimeWheNotRunning')
+      // }, aMinuteInMilliseconds)
+      // TODO  TEST IF INTERVAL IS KILLED
+      commit('SET_INTERVAL_SESSION_END_TIME', () =>
         dispatch('setCurrentSessionEndTimeWhenNotRunning')
-      }, aMinuteInMilliseconds)
-
-      commit('SET_INTERVAL_SESSION_END_TIME', intervalSessionEndTime)
+      )
     }, secondsRemainingToTheCurrentMinute())
   },
 
@@ -76,20 +77,26 @@ export default {
   },
 
   setIntervalCurrentStepTimer({ dispatch, commit }, payload) {
-    const intervalCurrentStepTimer = setInterval(() => {
-      dispatch('setRestingTimeCurrentStepAsTimer', payload)
-    }, aSecondInMilliseconds)
+    // const intervalCurrentStepTimer = setInterval(() => {
+    //   dispatch('setRestingTimeCurrentStepAsTimer', payload)
+    // }, aSecondInMilliseconds)
 
-    commit('SET_INTERVAL_CURRENT_STEP_TIMER', intervalCurrentStepTimer)
+    commit('SET_INTERVAL_CURRENT_STEP_TIMER', () =>
+      dispatch('setRestingTimeCurrentStepAsTimer', payload)
+    )
   },
 
   setRestingTimeCurrentStepAsTimer({ commit }, payload) {
     const { current_step } = payload
-    const currentStepTimer =
-      transformHoursDurationFormatToMinutesDurationFormat(
-        current_step.resting_time
-      )
-    const currentStepRestingTime = current_step.resting_time
+    const endTimeSecondsAmount = moment(current_step.resting_time).diff(
+      moment.now(),
+      'seconds'
+    )
+    console.log('dendtime second,', endTimeSecondsAmount)
+    const currentStepTimeUtc = moment.utc(endTimeSecondsAmount * 1000)
+
+    const currentStepTimer = currentStepTimeUtc.format('mm:ss')
+    const currentStepRestingTime = currentStepTimeUtc.format('HH:mm:ss')
 
     commit('SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
       currentStepTimer,
