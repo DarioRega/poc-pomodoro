@@ -50,6 +50,7 @@
           <div class="absolute w-full -mt-4 right-0 pl-4 mr-0">
             <brand-textarea
               v-show="index === 0"
+              :key="`${task.id}-singles-${taskDescriptionKey}`"
               :value="currentTaskSelected.description"
               :name="$t('Task description')"
               :is-selected="true"
@@ -131,6 +132,7 @@ export default {
 
   data() {
     return {
+      taskDescriptionKey: 0,
       isToggled: true,
       isDeleteEnabled: false,
       isArchiveEnabled: false,
@@ -174,11 +176,18 @@ export default {
     },
   },
 
+  watch: {
+    'currentTaskSelected.id'(newValue, oldValue) {
+      this.taskDescriptionKey += 1
+    },
+  },
   mounted() {
-    this.$store.commit(
-      'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
-      this.tasksList[0] || {}
-    )
+    if (this.tasksList.length > 0) {
+      this.$store.commit(
+        'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID',
+        this.tasksList[0].id
+      )
+    }
   },
 
   methods: {
@@ -229,11 +238,11 @@ export default {
         }
         this.createNotification(deleteNotification)
       }
+
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
-        const selectedTask = this.findTask(taskId)
         this.$store.commit(
-          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
-          selectedTask
+          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID',
+          taskId
         )
       }
     },
