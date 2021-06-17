@@ -38,6 +38,7 @@
           <div class="absolute w-full -mt-4 right-0 pl-4 mr-0">
             <brand-textarea
               v-show="index === 0"
+              :key="`${task.id}-archived-${taskDescriptionKey}`"
               :value="currentTaskSelected.description"
               :name="$t('Task description')"
               :is-selected="true"
@@ -100,6 +101,7 @@ export default {
   },
   data() {
     return {
+      taskDescriptionKey: 0,
       isToggled: false,
       isDeleteEnabled: false,
       showCompletedTasks: false,
@@ -137,6 +139,11 @@ export default {
     },
     TASK_STATUS_VALUES() {
       return TASK_STATUS_VALUES
+    },
+  },
+  watch: {
+    'currentTaskSelected.id'(newValue, oldValue) {
+      this.taskDescriptionKey += 1
     },
   },
   mounted() {
