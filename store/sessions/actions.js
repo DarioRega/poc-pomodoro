@@ -58,6 +58,7 @@ export default {
       if (!status.includes(STEPS_STATUS.IN_PROGRESS)) {
         const currentStepRestingTime = resting_time
         const currentStepTimer = formatDuration(resting_time)
+
         commit(
           'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
           { currentStepRestingTime, currentStepTimer },
@@ -115,6 +116,7 @@ export default {
     const nextStepDuration = getters.isNextStepLastStep
       ? getters.getFirstStep.duration
       : getters.getNextStep.duration
+
     commit(
       'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
       {

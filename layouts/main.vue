@@ -175,6 +175,7 @@ export default {
       const currentStepTime = moment.utc(endTimeSecondsAmount * 1000)
       const currentStepTimer = currentStepTime.format('mm:ss')
       const currentStepRestingTime = currentStepTime.format('HH:mm:ss')
+
       this.$store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
         currentStepTimer,
         currentStepRestingTime,
