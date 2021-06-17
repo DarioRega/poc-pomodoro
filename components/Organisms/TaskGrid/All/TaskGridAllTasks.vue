@@ -22,7 +22,11 @@
       @onToggleCompleteTasks="handleToggleShowCompleteTasks"
     />
     <transition-opacity duration-amount="200">
-      <div v-show="isToggled" class="min-h-[22rem] h-px relative">
+      <div
+        v-show="isToggled"
+        class="min-h-[22rem] relative"
+        :class="tasksList.length < 1 && 'h-px'"
+      >
         <task-grid-empty-list v-show="tasksList.length < 1" />
 
         <task-grid-body-all-tasks
