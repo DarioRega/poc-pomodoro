@@ -2,6 +2,7 @@ import moment from 'moment-timezone'
 import _ from 'lodash'
 
 import { STEPS_STATUS, STEPS_TYPES } from '@/constantes'
+import { getDurationInMilliseconds } from '@/helpers/sessions'
 
 export default {
   getSessionState: (state, getters) => {
@@ -35,7 +36,14 @@ export default {
     }
   },
 
-  getCurrentRunningSessionEndTime: (state, getters, rootState, rootGetters) => {
+  getSessionSteps: (state, getters) => {
+    if (getters.hasCurrentSession) {
+      return state.current.steps
+    }
+    return []
+  },
+
+  getCurrentRunningSessionEndTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       const {
         current: { status, end_time },
@@ -47,6 +55,9 @@ export default {
     }
   },
 
+  /*
+    Resting times
+   */
   getSessionRestingTime: (state, getters) => {
     if (getters.hasCurrentSession) {
       return state.current.resting_time
@@ -54,11 +65,36 @@ export default {
     return '00:00:00'
   },
 
-  getSessionSteps: (state, getters) => {
-    if (getters.hasCurrentSession) {
-      return state.current.steps
-    }
-    return []
+  getRestingTimeAllPendingStepsInMilliseconds: (state) => {
+    let restingTime = 0
+    state.current.steps.forEach((step) => {
+      if (step.status === STEPS_STATUS.PENDING) {
+        restingTime += getDurationInMilliseconds(step.duration)
+      }
+    })
+    return restingTime
+  },
+
+  getRestingTimeAllPendingSteps: (state, getters) => {
+    const restingTime = getters.getRestingTimeAllPendingStepsInMilliseconds
+    return moment.utc(restingTime).format('HH:mm:ss')
+  },
+
+  getTotalRestingTimeSessionWithCurrentPausedStep: (
+    state,
+    getters,
+    rootState
+  ) => {
+    const stepRestingTimesInMilliseconds =
+      getters.getRestingTimeAllPendingStepsInMilliseconds
+    const currentPausedStepRestingTimeInMilliseconds =
+      getDurationInMilliseconds(rootState.timers.currentStepRestingTime)
+
+    const totalRestingTimeInMilliseconds =
+      stepRestingTimesInMilliseconds +
+      currentPausedStepRestingTimeInMilliseconds
+
+    return moment.utc(totalRestingTimeInMilliseconds).format('HH:mm:ss')
   },
 
   getSessionStepsOnlyPomodoro: (state, getters) => {
@@ -72,6 +108,7 @@ export default {
   hasCurrentSession: (state) => {
     return !_.isEmpty(state.current)
   },
+
   /*
     Current step
    */

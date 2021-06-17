@@ -32,3 +32,6 @@ export const calculateTimeInSeconds = (stringNumber) => {
 export const formatDuration = (timeString, format = 'mm:ss') => {
   return moment.utc(moment.duration(timeString).asMilliseconds()).format(format)
 }
+
+export const getDurationInMilliseconds = (timeDurationString) =>
+  moment.duration(timeDurationString).asMilliseconds()
