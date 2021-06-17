@@ -97,32 +97,6 @@ export default {
     dispatch('globalState/createNotification', notification, { root: true })
   },
 
-  /*
-    Abort
-   */
-  async abortSession({ dispatch, commit }) {
-    commit('globalState/SET_IS_ABORT', true, { root: true })
-    dispatch('triggerLocalAbortedSessionState')
-    try {
-      await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
-    } catch (err) {
-      dispatch(
-        'globalState/handleSessionActionsServerError',
-        err.response.data.message,
-        {
-          root: true,
-        }
-      )
-      commit('globalState/SET_IS_ABORT', false, { root: true })
-    }
-  },
-  triggerLocalAbortedSessionState({ commit }) {
-    commit('MANUALLY_TRIGGER_ABORT_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE')
-  },
-
-  /*
-   Skip
-  */
   onSkipCurrentStepClick({ dispatch }) {
     const notification = {
       title: this.$i18n.t('Skip process ?'),
@@ -263,6 +237,12 @@ export default {
         }
       )
     }
+  },
+
+  triggerLocalAbortedOrFinishedSessionState({ commit }) {
+    commit(
+      'MANUALLY_TRIGGER_ABORT_OR_FINISH_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE'
+    )
   },
 
   /*
