@@ -227,20 +227,13 @@ export default {
   },
 
   /*
-    Resume
-  */
-  async resumeCurrentStep({ dispatch }) {
-    const notification = {
-      title: this.$i18n.t('Session resumed !'),
-      type: 'success',
-    }
-    // Manually trigger resume
-    dispatch('triggerLocalResumeSessionState')
+  Abort
+ */
+  async abortSession({ dispatch, commit }) {
+    commit('globalState/SET_IS_ABORT', true, { root: true })
+    dispatch('triggerLocalAbortedOrFinishedSessionState')
     try {
-      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
-        type: ACTION_TYPES.RESUME,
-      })
-      dispatch('globalState/createNotification', notification, { root: true })
+      await this.$axios.get(`${ABORT_USER_CURRENT_SESSION_URL}`)
     } catch (err) {
       dispatch(
         'globalState/handleSessionActionsServerError',
@@ -249,33 +242,8 @@ export default {
           root: true,
         }
       )
+      commit('globalState/SET_IS_ABORT', false, { root: true })
     }
-  },
-
-  triggerLocalResumeSessionState({ commit, getters, rootState }) {
-    const currentStepRestingTime = rootState.timers.currentStepRestingTime
-    const currentSessionRestingTime = getters.getSessionRestingTime
-
-    const sessionRestingTimeInSeconds = moment
-      .duration(currentSessionRestingTime)
-      .asSeconds()
-
-    // now + add resting time as seconds
-    const currentSessionEndTime = moment().add(
-      sessionRestingTimeInSeconds,
-      'seconds'
-    )
-
-    const currentStepEndTime = moment().add(
-      moment.duration(currentStepRestingTime).asMilliseconds(),
-      'milliseconds'
-    )
-
-    // edit session,current step status, set resting time current step and session
-    commit('MANUALLY_TRIGGER_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE', {
-      currentStepEndTime,
-      currentSessionEndTime,
-    })
   },
 
   /*
@@ -298,14 +266,40 @@ export default {
   },
 
   /*
-    Start current step
+   Resume
  */
+  async resumeCurrentStep({ dispatch }) {
+    const notification = {
+      title: this.$i18n.t('Session resumed !'),
+      type: 'success',
+    }
+    // Manually trigger resume
+    dispatch('triggerLocalStartOrResumeSessionState')
+    try {
+      await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
+        type: ACTION_TYPES.RESUME,
+      })
+      dispatch('globalState/createNotification', notification, { root: true })
+    } catch (err) {
+      dispatch(
+        'globalState/handleSessionActionsServerError',
+        err.response.data.message,
+        {
+          root: true,
+        }
+      )
+    }
+  },
+
+  /*
+   Start current step
+  */
   async startCurrentStep({ dispatch, rootState, app, $i18n }) {
     const notification = {
       title: this.$i18n.t('Session started !'),
       type: 'success',
     }
-    dispatch('triggerLocalResumeSessionState')
+    dispatch('triggerLocalStartOrResumeSessionState')
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
         type: ACTION_TYPES.START,
@@ -320,5 +314,34 @@ export default {
         }
       )
     }
+  },
+
+  triggerLocalStartOrResumeSessionState({ commit, getters, rootState }) {
+    const currentStepRestingTime = rootState.timers.currentStepRestingTime
+    const currentSessionRestingTime = getters.getSessionRestingTime
+
+    const sessionRestingTimeInSeconds = moment
+      .duration(currentSessionRestingTime)
+      .asSeconds()
+
+    // now + add resting time as seconds
+    const currentSessionEndTime = moment().add(
+      sessionRestingTimeInSeconds,
+      'seconds'
+    )
+
+    const currentStepEndTime = moment().add(
+      moment.duration(currentStepRestingTime).asMilliseconds(),
+      'milliseconds'
+    )
+
+    // edit session,current step status, set resting time current step and session
+    commit(
+      'MANUALLY_TRIGGER_START_OR_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE',
+      {
+        currentStepEndTime,
+        currentSessionEndTime,
+      }
+    )
   },
 }

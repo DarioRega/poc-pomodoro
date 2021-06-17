@@ -16,7 +16,10 @@ export default {
     Object.assign(state, { current: clone })
   },
 
-  MANUALLY_TRIGGER_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE(state, payload) {
+  MANUALLY_TRIGGER_START_OR_RESUME_ON_SESSION_UNTIL_WEB_SOCKET_RESPONSE(
+    state,
+    payload
+  ) {
     const clone = _.cloneDeep(state.current)
     clone.status = SESSION_STATUS.IN_PROGRESS
     clone.end_time = payload.currentSessionEndTime
