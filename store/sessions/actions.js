@@ -115,6 +115,14 @@ export default {
     const nextStepDuration = getters.isNextStepLastStep
       ? getters.getFirstStep.duration
       : getters.getNextStep.duration
+    commit(
+      'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
+      {
+        currentStepTimer: formatDuration(nextStepDuration),
+        currentStepRestingTime: nextStepDuration,
+      },
+      { root: true }
+    )
 
     try {
       await this.$axios.post(`${CURRENT_STEP_ACTION_URL}`, {
@@ -123,15 +131,6 @@ export default {
       commit('globalState/SET_HAS_SKIPPED_ACTION', true, {
         root: true,
       })
-
-      commit(
-        'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-        {
-          currentStepTimer: formatDuration(nextStepDuration),
-          currentStepRestingTime: nextStepDuration,
-        },
-        { root: true }
-      )
 
       dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
