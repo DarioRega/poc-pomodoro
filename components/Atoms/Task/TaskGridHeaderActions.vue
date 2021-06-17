@@ -77,7 +77,7 @@ export default {
   props: {
     shouldShowCompletedTask: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     label: {
       type: String,

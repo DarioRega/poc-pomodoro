@@ -131,7 +131,7 @@ export default {
       isToggled: true,
       isDeleteEnabled: false,
       isArchiveEnabled: false,
-      showCompletedTasks: false,
+      showCompletedTasks: true,
       amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
       addTaskError: '',

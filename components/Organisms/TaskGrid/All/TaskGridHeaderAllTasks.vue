@@ -74,7 +74,7 @@ export default {
     },
     shouldShowCompletedTask: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     isLayoutStacked: {
       type: Boolean,
