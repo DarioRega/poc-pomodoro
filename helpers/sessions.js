@@ -1,5 +1,5 @@
 import moment from 'moment-timezone'
-import { STEPS_STATUS } from '@/constantes'
+import { SESSION_STATUS, STEPS_STATUS } from '@/constantes'
 
 export const calculateSessionEndTime = (steps) => {
   let endTimeInSeconds = 0
@@ -29,9 +29,12 @@ export const calculateTimeInSeconds = (stringNumber) => {
   return seconds
 }
 
-export const formatDuration = (timeString, format = 'mm:ss') => {
-  return moment.utc(moment.duration(timeString).asMilliseconds()).format(format)
-}
+export const transformHoursDurationFormatToMinutesDurationFormat = (
+  timeString
+) => moment.utc(moment.duration(timeString).asMilliseconds()).format('mm:ss')
 
 export const getDurationInMilliseconds = (timeDurationString) =>
   moment.duration(timeDurationString).asMilliseconds()
+
+export const isSessionDoneOrAborted = (status) =>
+  status === SESSION_STATUS.DONE || status === SESSION_STATUS.ABORTED

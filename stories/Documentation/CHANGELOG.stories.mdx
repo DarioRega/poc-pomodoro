@@ -176,7 +176,7 @@
 * Fix: getSessionState to sessionState (76b13ab)
 * Fix: - All session actions works - Add the @ handler for the onSkip event forgot on TimerSidebar (0ed772c)
 * Fix: - Resolve $i18n errors in actions - Change isRunning value based from session to currentStep - Fix destructuring props errors in actions and getters - Bug when refresh app that didnt dispatch actions to set the current step timers when not running - Replace getSessionState getter to sessionState in TimerSidebarControls (d0bc3d9)
-* Fix: - Remove all $store.dispatch in main layout and replace by mapActions. - Add getter to get next step for currentStep timer when current step finish - Deep destructuring in getters for state constantes - Refactor helper getOnlyHoursAndMinutes to formatDuration using moment.js (1e37a20)
+* Fix: - Remove all $store.dispatch in main layout and replace by mapActions. - Add getter to get next step for currentStep timer when current step finish - Deep destructuring in getters for state constantes - Refactor helper getOnlyHoursAndMinutes to transformHoursDurationFormatToMinutesDurationFormat using moment.js (1e37a20)
 * Fix: Move all interval currentStep timer logic into the main layout, along the session end time timer logic (e0fde7d)
 * New: Create constantes urls for axios actions, add guest middleware to login page (ba2302b)
 * New: - Renamed mapGetters objects without the get prefix in components. - Create an interval to update current session timer end time on main layout - Add property session timer in timers state - Refactor current step timer calculation - Fix the isRunning in getSessionState to take from the current step status instead of session. (5ec8a86)

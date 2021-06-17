@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
 import { POMODORO_DEFAULT_DURATION } from '@/constantes/settings'
-import { formatDuration } from '@/helpers/sessions'
+import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
 import { convertNumberInDuration } from '@/helpers/settings'
 
 export default {
@@ -78,7 +78,9 @@ export default {
   },
 
   getUserPomodoroDurationTimer: (state, getters) => {
-    return formatDuration(getters.getUserPomodoroDuration)
+    return transformHoursDurationFormatToMinutesDurationFormat(
+      getters.getUserPomodoroDuration
+    )
   },
 
   /*

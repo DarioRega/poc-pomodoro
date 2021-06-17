@@ -8,7 +8,8 @@ import {
   START_SESSION_ID_URL,
   USER_SESSION_URL,
 } from '@/constantes/api'
-import { formatDuration } from '@/helpers/sessions'
+import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
+import { onCurrentSessionEvent } from '@/EchoEventsHandlers/sessions'
 
 export default {
   /*
@@ -50,22 +51,11 @@ export default {
   /*
     Session
    */
-  async getAndSetCurrentSession({ commit }) {
+  async getAndSetCurrentSession(store) {
     const { data } = await this.$axios.get(`${CURRENT_USER_SESSION_URL}`)
-    if (data.id) {
-      commit('SET_CURRENT_SESSION_AND_CURRENT_STEP', data)
-      const { resting_time, status } = data.current_step
-      if (!status.includes(STEPS_STATUS.IN_PROGRESS)) {
-        const currentStepRestingTime = resting_time
-        const currentStepTimer = formatDuration(resting_time)
-
-        commit(
-          'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-          { currentStepRestingTime, currentStepTimer },
-          { root: true }
-        )
-      }
-    }
+    console.log('get current session', data)
+    // trigger event as we received websocket to handle the app state
+    onCurrentSessionEvent(data, store)
   },
 
   async createAndStartSession({ dispatch, commit }) {
@@ -120,7 +110,8 @@ export default {
     commit(
       'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
       {
-        currentStepTimer: formatDuration(nextStepDuration),
+        currentStepTimer:
+          transformHoursDurationFormatToMinutesDurationFormat(nextStepDuration),
         currentStepRestingTime: nextStepDuration,
       },
       { root: true }

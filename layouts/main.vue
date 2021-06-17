@@ -22,15 +22,11 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import moment from 'moment-timezone'
 
 import LaunchSessionTimer from '@/components/Atoms/LaunchSessionTimer'
 import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
-
-import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
-import { formatDuration } from '@/helpers/sessions'
 
 export default {
   name: 'Main',
@@ -40,13 +36,6 @@ export default {
     ScreenLoader,
     LaunchSessionTimer,
     TransitionTranslateY,
-  },
-
-  data() {
-    return {
-      intervalSessionTimer: null,
-      intervalCurrentStepTimer: null,
-    }
   },
 
   /*
@@ -75,53 +64,6 @@ export default {
     isRefreshLoading() {
       return this.$store.state.globalState.isRefreshLoading
     },
-    hasSkippedAction() {
-      return this.$store.state.globalState.hasSkippedAction
-    },
-  },
-
-  /*
-    Watchers
-  */
-  watch: {
-    hasSkippedAction(newValue, oldValue) {
-      if (newValue) {
-        clearInterval(this.intervalCurrentStepTimer)
-        this.$store.commit('globalState/SET_HAS_SKIPPED_ACTION', false)
-        this.setCurrentSessionEndTimeWhenNotRunning()
-      }
-    },
-    'sessionState.isRunning'(newValue, oldValue) {
-      if (newValue) {
-        this.setCurrentSessionEndTimeWhenRunning()
-        this.setIntervalCurrentStep()
-      } else {
-        clearInterval(this.intervalCurrentStepTimer)
-        this.setIntervalSessionEndTimeWhenNotRunning()
-      }
-    },
-
-    currentStepTimer(newValue, oldValue) {
-      if (newValue === '00:00') {
-        if (!this.$store.state.globalState.isAbortAction) {
-          clearInterval(this.intervalCurrentStepTimer)
-          if (!this.$store.getters['sessions/isNextStepLastStep']) {
-            this.$store.commit(
-              'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-              {
-                currentStepTimer: formatDuration(this.getNextStep.duration),
-                currentStepRestingTime: this.getNextStep.duration,
-              }
-            )
-          } else {
-            this.$store.dispatch(
-              'sessions/triggerLocalAbortedOrFinishedSessionState'
-            )
-          }
-          this.finishCurrentStep()
-        }
-      }
-    },
   },
 
   /*
@@ -134,18 +76,7 @@ export default {
     if (!this.sessionState.isSessionCreated) {
       await this.getEnvironment(false)
     }
-
-    if (this.sessionState.isSessionCreated) {
-      if (!this.sessionState.isRunning) {
-        this.setIntervalSessionEndTimeWhenNotRunning()
-      }
-    }
   },
-  beforeDestroy() {
-    clearInterval(this.intervalSessionTimer)
-    clearInterval(this.intervalCurrentStepTimer)
-  },
-
   /*
     Methods
   */
@@ -157,67 +88,6 @@ export default {
       getAndSetAllTasks: 'tasks/getAndSetAllSingleTasks',
       getAndSetAllTaskStatuses: 'tasks/getAndSetAllTaskStatuses',
     }),
-
-    /*
-      Current step
-    */
-    setIntervalCurrentStep() {
-      this.setCurrentStepTimers()
-      this.intervalCurrentStepTimer = setInterval(() => {
-        this.setCurrentStepTimers()
-      }, aSecondInMilliseconds)
-    },
-    setCurrentStepTimers() {
-      const endTimeSecondsAmount = moment(this.currentStepEndTime).diff(
-        moment.now(),
-        'seconds'
-      )
-      const currentStepTime = moment.utc(endTimeSecondsAmount * 1000)
-      const currentStepTimer = currentStepTime.format('mm:ss')
-      const currentStepRestingTime = currentStepTime.format('HH:mm:ss')
-
-      this.$store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
-        currentStepTimer,
-        currentStepRestingTime,
-      })
-    },
-
-    /*
-      Session end time
-     */
-    setIntervalSessionEndTimeWhenNotRunning() {
-      this.setCurrentSessionEndTimeWhenNotRunning()
-      // to synchronize with the current clock
-      const secondsRemainingToTheCurrentMinute =
-        (60 - moment().seconds()) * 1000
-
-      setTimeout(() => {
-        this.setCurrentSessionEndTimeWhenNotRunning()
-
-        this.intervalSessionTimer = setInterval(() => {
-          this.setCurrentSessionEndTimeWhenNotRunning()
-        }, aMinuteInMilliseconds)
-      }, secondsRemainingToTheCurrentMinute)
-    },
-    setCurrentSessionEndTimeWhenRunning() {
-      this.$store.commit(
-        'timers/SET_CURRENT_SESSION_TIMER',
-        this.sessionRunningEndTime
-      )
-    },
-    setCurrentSessionEndTimeWhenNotRunning() {
-      const restingTimeAsSeconds = moment
-        .duration(this.sessionRestingTime)
-        .asSeconds()
-      // TODO WHEN SETTINGS PANEL BRANCH MERGED, SET THE COMPUTED FORMAT FROM STORE
-      const currentSessionTimer = moment()
-        .add(restingTimeAsSeconds, 'seconds')
-        .format(this.timeFormat)
-      this.$store.commit(
-        'timers/SET_CURRENT_SESSION_TIMER',
-        currentSessionTimer
-      )
-    },
   },
 }
 </script>

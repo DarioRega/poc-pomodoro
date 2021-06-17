@@ -1,3 +1,5 @@
+import moment from 'moment-timezone'
+
 export const getRandomNumber = () => Math.floor(Math.random() * 99999)
 
 export const extractErrorValues = (errors) => {
@@ -9,3 +11,6 @@ export const extractErrorValues = (errors) => {
   })
   return errorList
 }
+
+export const secondsRemainingToTheCurrentMinute = () =>
+  (60 - moment().seconds()) * 1000

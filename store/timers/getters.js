@@ -1,5 +1,5 @@
 import { STEPS_STATUS } from '@/constantes'
-import { formatDuration } from '@/helpers/sessions'
+import { transformHoursDurationFormatToMinutesDurationFormat } from '@/helpers/sessions'
 
 export default {
   getCurrentStepTimer: (state, getters, rootState, rootGetters) => {
@@ -12,7 +12,7 @@ export default {
         },
       } = rootState
       if (status.includes(STEPS_STATUS.PAUSED)) {
-        return formatDuration(resting_time)
+        return transformHoursDurationFormatToMinutesDurationFormat(resting_time)
       }
     }
     return state.currentStepTimer
