@@ -8,6 +8,9 @@ export const SIDEBAR_TOGGLE_ANIMATION_TIMEOUT = 500
 export const aMinuteInMilliseconds = 60000
 export const aSecondInMilliseconds = 1000
 
+export const TIME_FORMAT_24h = 'HH:mm'
+export const TIME_FORMAT_12H = 'hh:mm A'
+
 /*
   Status
 */

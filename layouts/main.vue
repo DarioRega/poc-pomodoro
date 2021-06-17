@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="userTheme">
     <Nuxt v-if="!isEnvLoading && !isRefreshLoading" />
     <!--  Notifications -->
     <notifications-container />
@@ -22,17 +22,14 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment-timezone'
 
 import LaunchSessionTimer from '@/components/Atoms/LaunchSessionTimer'
 import TransitionTranslateY from '@/components/Atoms/Transitions/TransitionTranslateY'
 import NotificationsContainer from '@/components/Templates/NotificationsContainer'
 import ScreenLoader from '@/components/Atoms/Loaders/ScreenLoader'
-import moment from 'moment-timezone'
-import {
-  aMinuteInMilliseconds,
-  aSecondInMilliseconds,
-  // SESSION_STATUS,
-} from '@/constantes'
+
+import { aMinuteInMilliseconds, aSecondInMilliseconds } from '@/constantes'
 import { formatDuration } from '@/helpers/sessions'
 
 export default {
@@ -65,7 +62,10 @@ export default {
       hasCurrentSession: 'sessions/hasCurrentSession',
       sessionEndTimeTimer: 'timers/getSessionTimer',
       currentStepTimer: 'timers/getCurrentStepTimer',
+      userTheme: 'user/getUserTheme',
+      timeFormat: 'user/getTimeFormat',
     }),
+
     isLaunchTimerVisible() {
       return this.$store.state.globalState.isLaunchTimerVisible
     },
@@ -212,7 +212,7 @@ export default {
       // TODO WHEN SETTINGS PANEL BRANCH MERGED, SET THE COMPUTED FORMAT FROM STORE
       const currentSessionTimer = moment()
         .add(restingTimeAsSeconds, 'seconds')
-        .format('hh:mm A')
+        .format(this.timeFormat)
       this.$store.commit(
         'timers/SET_CURRENT_SESSION_TIMER',
         currentSessionTimer

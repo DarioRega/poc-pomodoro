@@ -70,7 +70,7 @@ export default {
   components: { NotificationAction, Icon },
   props: {
     notificationId: {
-      type: Number,
+      type: [Number, String],
       required: true,
     },
     title: {

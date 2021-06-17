@@ -11,9 +11,9 @@ export default {
   CREATE_NOTIFICATION(state, payload) {
     state.currentNotifications.push(payload)
   },
-  REMOVE_NOTIFICATION(state, payload) {
+  REMOVE_NOTIFICATION(state, id) {
     state.currentNotifications = state.currentNotifications.filter(
-      (x) => x.notificationId !== payload
+      (x) => x.notificationId !== id
     )
   },
   SET_LAUNCH_TIMER_VISIBILITY(state, payload) {

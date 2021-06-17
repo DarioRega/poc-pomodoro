@@ -8,7 +8,7 @@
         <h6>{{ $t('Full name') }}</h6>
         <p>{{ $t('Current full name') }}</p>
       </div>
-      <div class="settings-panel__configurations">
+      <div class="settings-panel__configurations--account-tab">
         <brand-input
           name="full name"
           :error-text="errors.name"
@@ -35,7 +35,7 @@
         <h6>{{ $t('Email') }}</h6>
         <p>{{ $t('Current email for login') }}</p>
       </div>
-      <div class="settings-panel__configurations">
+      <div class="settings-panel__configurations--account-tab">
         <brand-input
           name="full name"
           :error-text="errors.email"
@@ -62,19 +62,28 @@
         <h6>{{ $t('Password') }}</h6>
         <p>{{ $t('Current password for login') }}</p>
       </div>
-      <div class="settings-panel__configurations">
+      <div class="settings-panel__configurations--account-tab">
         <brand-input
           name="password"
+          :error-text="errors.current_password"
+          input-type="password"
+          :value="localValues.current_password"
+          @change.native="localValues.current_password = $event.target.value"
+        />
+        <brand-input
+          class="my-14"
+          :value="localValues.password"
+          name="password"
+          :placeholder="$t('New password')"
           :error-text="errors.password"
           input-type="password"
-          :value="localValues.password"
           @change.native="localValues.password = $event.target.value"
         />
         <brand-input
-          class="mt-10"
+          class="my-14"
           :value="localValues.password_confirmation"
           name="password"
-          :placeholder="$t('Confirm password')"
+          :placeholder="$t('Confirm new password')"
           :error-text="errors.password_confirmation"
           input-type="password"
           @change.native="
@@ -83,8 +92,8 @@
         />
         <div class="settings-panel__actions">
           <brand-button
-            :is-loading="onGoingActions.includes('password')"
-            :is-disabled="onGoingActions.includes('password')"
+            :is-loading="onGoingActions.includes('current_password')"
+            :is-disabled="onGoingActions.includes('current_password')"
             @click="handleChangePassword"
           >
             {{ $t('Change password') }}
@@ -98,6 +107,7 @@
 <script>
 import BrandInput from '@/components/Atoms/Inputs/BrandInput'
 import BrandButton from '@/components/Atoms/BrandButton'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'SettingsPanelAccountTab',
@@ -114,131 +124,125 @@ export default {
       localValues: {
         name: '',
         email: '',
+        current_password: '',
         password: '',
-        password_confirmation: '',
       },
       errors: {
         name: '',
         email: '',
-        password: '',
+        current_password: '',
         password_confirmation: '',
+        password: '',
       },
     }
   },
-  computed: {
-    allowSave() {
-      return {
-        name: this.values.name !== this.localValues.name,
-        email: this.values.email !== this.localValues.email,
-        password:
-          this.localValues.password === this.localValues.password_confirmation,
-      }
-    },
-  },
   mounted() {
     const { name, email } = this.values
-    // security, we don't display password in input
+    // security, we don't display current_password in input
     this.localValues = {
       name,
       email,
-      password: '----------',
+      current_password: '----------',
+      password: '',
       password_confirmation: '',
     }
   },
   methods: {
-    validateEmptyFields(fieldProperty) {
-      if (!this.localValues.name) {
-        this.errors[fieldProperty] = this.$t('Field is required')
-        return false
-      } else if (this.errors[fieldProperty]) {
-        this.errors[fieldProperty] = ''
-      }
-      return true
-    },
-    validateChange(fieldProperty) {
-      if (
-        this.localValues[fieldProperty].trim() === this.values[fieldProperty]
-      ) {
-        this.errors[fieldProperty] = this.$t(
-          'A new value is required to update'
-        )
-        return false
-      } else if (this.errors[fieldProperty]) {
-        this.errors[fieldProperty] = ''
-      }
-      return true
-    },
+    ...mapActions({
+      updateUserProfileInformation: 'user/updateUserProfileInformation',
+      updateUserPassword: 'user/updateUserPassword',
+    }),
+    /*
+      Loading handlers
+    */
     setLoadingOnProperty(fieldProperty) {
       this.onGoingActions.push(fieldProperty)
     },
     removeLoadingOnProperty(fieldProperty) {
-      // TODO remove setTimeout, used only for example
-      setTimeout(() => {
-        this.onGoingActions = this.onGoingActions.filter(
-          (x) => x !== fieldProperty
-        )
-      }, 3000)
+      this.onGoingActions = this.onGoingActions.filter(
+        (x) => x !== fieldProperty
+      )
     },
-    handleChangeName() {
-      const fieldProperty = 'name'
-      if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
-          this.updateUserProperty(fieldProperty, {
-            name: this.localValues.name,
-          })
-        }
+
+    /*
+      Properties handlers
+    */
+    async handleChangeName() {
+      const error = await this.handleUpdateUserProfileInformation('name')
+
+      if (error) {
+        this.errors.email = error.name[0]
       }
     },
-    handleChangeEmail() {
-      const fieldProperty = 'email'
-      if (this.validateEmptyFields(fieldProperty)) {
-        if (this.validateChange(fieldProperty)) {
-          if (!this.$regexValidate('email', this.localValues.email)) {
-            this.errors.email = this.$t('Invalid email')
+
+    async handleChangeEmail() {
+      const error = await this.handleUpdateUserProfileInformation('email')
+
+      if (error) {
+        this.errors.email = error.email[0]
+      }
+    },
+
+    async handleChangePassword() {
+      const error = await this.handleUpdatePassword()
+      if (error) {
+        if (error.current_password) {
+          this.errors.current_password = error.current_password[0]
+        }
+        if (error.password) {
+          if (error.password[0].includes('confirmation')) {
+            this.errors.password = error.password[0]
+            this.errors.password_confirmation = error.password[0]
           } else {
-            this.updateUserProperty(fieldProperty, {
-              email: this.localValues.email,
-            })
+            this.errors.password = error.password[0]
           }
         }
       }
     },
-    handleChangePassword() {
-      const fieldProperty = 'password'
-      let hasError = false
-      if (this.validateEmptyFields(fieldProperty)) {
-        if (
-          this.localValues.password !== this.localValues.password_confirmation
-        ) {
-          this.errors.password_confirmation = this.$t('Passwords are different')
-          hasError = true
-        }
-        if (this.localValues.password.length < 8) {
-          this.errors.password = this.$t('Password too short')
-          hasError = true
-        }
-        if (!hasError) {
-          this.errors = {
-            ...this.errors,
-            password: '',
-            password_confirmation: '',
-          }
-          this.setLoadingOnProperty(fieldProperty)
-          this.updateUserProperty(fieldProperty, {
-            password: this.localValues.password,
-            password_confirmation: this.localValues.password_confirmation,
-          })
-        }
+
+    /*
+      Actions dispatch to update profile & password
+     */
+    async handleUpdateUserProfileInformation(targetProperty) {
+      this.errors = {
+        ...this.errors,
+        [targetProperty]: '',
+      }
+
+      this.setLoadingOnProperty(targetProperty)
+
+      const { name, email } = this.localValues
+      const response = await this.updateUserProfileInformation({
+        name,
+        email,
+      })
+
+      this.removeLoadingOnProperty(targetProperty)
+      if (response) {
+        if (response.data) return response.data.errors
       }
     },
-    async updateUserProperty(property, payload) {
-      this.setLoadingOnProperty(property)
-      try {
-        await this.$axios.post(`/api/user/${property}`, payload)
-      } catch (err) {
-        // TODO handle error
-      } finally {
-        this.removeLoadingOnProperty(property)
+
+    async handleUpdatePassword() {
+      this.errors = {
+        ...this.errors,
+        current_password: '',
+        password: '',
+        password_confirmation: '',
+      }
+      this.setLoadingOnProperty('current_password')
+
+      const { current_password, password, password_confirmation } =
+        this.localValues
+      const response = await this.updateUserPassword({
+        current_password,
+        password,
+        password_confirmation,
+      })
+
+      this.removeLoadingOnProperty('current_password')
+      if (response) {
+        if (response.data) return response.data.errors
       }
     },
   },
