@@ -164,10 +164,12 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit(
-      'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
-      this.tasksList[0] || {}
-    )
+    if (this.tasksList.length > 0) {
+      this.$store.commit(
+        'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID',
+        this.tasksList[0].id
+      )
+    }
   },
 
   methods: {
@@ -215,11 +217,11 @@ export default {
         }
         this.createNotification(deleteNotification)
       }
+
       if (!this.isArchiveEnabled && !this.isDeleteEnabled) {
-        const selectedTask = this.findTask(taskId)
         this.$store.commit(
-          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED',
-          selectedTask
+          'tasks/SET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID',
+          taskId
         )
       }
       // check if isArchiveEnabled or isDeleteEnabled to handle custom event

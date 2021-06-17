@@ -119,24 +119,16 @@ export default {
   },
 
   updateSingleTask({ dispatch, commit, getters }, payload) {
-    if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
-      commit('UPDATE_CURRENT_TASK_SELECTED', payload)
-    } else if (
-      getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
-    ) {
-      commit('UPDATE_CURRENT_ARCHIVED_TASK_SELECTED', payload)
-    }
-
     commit('UPDATE_SINGLE_TASK', payload)
   },
 
   deleteSingleTask({ dispatch, commit, getters }, payload) {
     if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
-      commit('RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED')
+      commit('RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID')
     } else if (
       getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
     ) {
-      commit('RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED')
+      commit('RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED_ID')
     }
 
     commit('DELETE_SINGLE_TASK', payload.id)
