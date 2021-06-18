@@ -12,16 +12,16 @@
             <p class="subtitle mb-0">{{ $t('Pomodoro premium') }}</p>
             <p>1 {{ $t('user') }}</p>
           </div>
-          <p>10.00 $USD</p>
+          <p>{{ currentInvoice.amount }}</p>
         </div>
         <div class="flex justify-between">
           <p>Tax</p>
-          <p>0.99 $USD</p>
+          <p>{{ currentInvoice.tax }}</p>
         </div>
       </div>
       <div class="flex justify-between mt-2">
         <p>Total</p>
-        <p>10.99 $USD</p>
+        <p>{{ totalInvoice }}</p>
       </div>
       <div class="mt-8">
         <p class="subtitle">
@@ -30,7 +30,8 @@
               'Given your current configuration, you will be automatically billed'
             )
           }}
-          10.99 $USD
+          {{ totalInvoice }}
+          {{ isMonthlySubscription ? $t('next month') : $t('next year') }}.
         </p>
       </div>
     </label-with-data>
@@ -43,6 +44,25 @@ import LabelWithData from '@/components/Atoms/LabelWithData'
 export default {
   name: 'SubscriptionTabEstimateOfInvoice',
   components: { LabelWithData },
+  props: {
+    isMonthlySubscription: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    currentInvoice() {
+      return this.$store.getters['user/getCurrentInvoice']
+    },
+    totalInvoice() {
+      let { amount, tax } = this.currentInvoice
+      const currency = amount.match(/.{1,3}/g)[0]
+      amount = amount.split(currency)[1]
+      tax = tax.split(currency)[1]
+
+      return `${currency} ${parseFloat(amount) + parseFloat(tax)}`
+    },
+  },
 }
 </script>
 <style scoped lang="scss">

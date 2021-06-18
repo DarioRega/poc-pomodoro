@@ -1,5 +1,9 @@
 import _ from 'lodash'
-import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
+import {
+  STRIPE_ID_MONTHLY_SUBSCRIPTION,
+  TIME_FORMAT_12H,
+  TIME_FORMAT_24h,
+} from '@/constantes'
 
 export default {
   /*
@@ -62,9 +66,25 @@ export default {
     return ''
   },
 
+  getCurrentInvoice: (state, getters) => {
+    return getters.getUserReceipts[0]
+  },
+
   getUserReceipts: (state, getters) => {
+    // year id = 2
+    // month id = 1
     if (getters.isUserPremium) {
       return [
+        {
+          id: 2,
+          user_id: '93b0a25a-12d8-4493-900a-04c2abf4b23f',
+          provider_id: 'in_1J3fLTJEbl1PKejzGFhWhLdl',
+          amount: 'CHF 44.27',
+          tax: 'CHF 0',
+          paid_at: '2021-06-18 10:54:43',
+          created_at: '2021-06-18T10:54:48.000000Z',
+          updated_at: '2021-06-18T10:54:48.000000Z',
+        },
         {
           id: 1,
           user_id: '93b0a25a-12d8-4493-900a-04c2abf4b23f',
@@ -92,7 +112,11 @@ export default {
     }
     return false
   },
-
+  isCurrentSubscriptionMonthly: (state, getters) => {
+    if (getters.getCurrentInvoice.id) {
+      return getters.getCurrentInvoice.id === STRIPE_ID_MONTHLY_SUBSCRIPTION
+    }
+  },
   areUserSettingsEmpty: (state, getters) => {
     if (getters.getUser.user_settings) {
       return _.isEmpty(getters.getUser.user_settings)

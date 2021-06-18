@@ -14,6 +14,7 @@
 
       <subscription-tab-estimate-of-invoice
         v-show="currentActiveTab === steps.ESTIMATE_OF_INVOICE && isPremium"
+        :is-monthly-subscription="isCurrentSubscriptionMonthly"
       />
 
       <subscription-tab-invoice-informations
@@ -65,6 +66,7 @@ export default {
     ...mapGetters({
       isPremium: 'user/isUserPremium',
       userReceipts: 'user/getUserReceipts',
+      isCurrentSubscriptionMonthly: 'user/isCurrentSubscriptionMonthly',
     }),
     steps() {
       return SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES
