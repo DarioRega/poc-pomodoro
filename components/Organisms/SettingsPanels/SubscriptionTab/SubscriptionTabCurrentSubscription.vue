@@ -1,11 +1,10 @@
 <template>
   <section class="w-full max-w-lg mx-auto h-full justify-center">
-    <!--  BILLING PERIOD -->
+    <!--  CURRENT SUBSCRIPTION -->
     <label-with-data
       class="w-full text-left mb-4"
-      :label="$t('Billing period')"
+      :label="$t('Current subscription')"
     >
-      <p class="subtitle">{{ $t('Active subscription') }}</p>
       <div class="border border-dark-gray rounded-md p-4 mt-4">
         <div class="flex justify-between items-center">
           <p class="subtitle font-bold text-dark-blue dark:text-celeste">
@@ -17,13 +16,14 @@
         </div>
         <div class="flex justify-between items-center mt-6">
           <div>
-            <p class="subtitle">{{ $t('users') }}</p>
+            <p class="subtitle capitalize">{{ $t('users') }}</p>
             <p class="text-dark-gray">1 {{ $t('out of') }} {{ $t('users') }}</p>
           </div>
           <div>
             <p class="subtitle capitalize">{{ $t('tasks') }}</p>
             <p class="text-dark-gray">
-              1 {{ $t('out of') }} 4 {{ $t('tasks') }}
+              {{ userTotalTasks }} {{ $t('out of') }}
+              {{ isPremium ? $t('unlimited') : 5 }} {{ $t('tasks') }}
             </p>
           </div>
         </div>
@@ -31,11 +31,15 @@
           <brand-button
             v-if="isPremium"
             class="capitalize"
-            @click="$emit('onUpgrade')"
+            @click="$emit('onManageSubscription')"
           >
             {{ $t('Manage subscription') }}
           </brand-button>
-          <brand-button v-else class="capitalize" @click="$emit('onUpgrade')">
+          <brand-button
+            v-else
+            class="capitalize"
+            @click="$emit('onManageSubscription')"
+          >
             {{ $t('Upgrade') }}
           </brand-button>
         </div>
@@ -45,17 +49,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LabelWithData from '@/components/Atoms/LabelWithData'
 import BrandButton from '@/components/Atoms/BrandButton'
 
 export default {
   name: 'SubscriptionTabCurrentSubscription',
   components: { LabelWithData, BrandButton },
-  props: {
-    isPremium: {
-      type: Boolean,
-      default: false,
-    },
+  computed: {
+    ...mapGetters({
+      isPremium: 'user/isUserPremium',
+      userTotalTasks: 'tasks/getUserTotalTasksAmount',
+    }),
   },
 }
 </script>
