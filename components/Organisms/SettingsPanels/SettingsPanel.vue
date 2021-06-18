@@ -228,6 +228,8 @@ export default {
       createPomodoroSettings: 'user/createPomodoroSettings',
       updateUserSettings: 'user/updateSettings',
       updatePomodoroSettings: 'user/updatePomodoroSettings',
+      onDeletePomodoroSettingClick: 'user/onDeletePomodoroSettingClick',
+      deleteCustomPomodoroSetting: 'user/deleteCustomPomodoroSetting',
     }),
 
     /*

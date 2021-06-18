@@ -9,9 +9,11 @@ export const USER_UPDATE_PASSWORD_URL = `user/password`
   Settings
  */
 export const USER_SETTINGS_URL = `${API_USER_URL}/settings`
-export const USER_CREATE_POMODORO_SETTINGS_URL = `${API_USER_URL}/pomodoro-settings`
+export const USER_POMODORO_SETTINGS_URL = `${API_USER_URL}/pomodoro-settings`
+export const USER_DELETE_POMODORO_SETTINGS_ID_URL = (id) =>
+  `${USER_POMODORO_SETTINGS_URL}/${id}`
 export const USER_UPDATE_POMODORO_SETTINGS_ID_URL = (id) =>
-  `${API_USER_URL}/pomodoro-settings/${id}/update`
+  `${USER_POMODORO_SETTINGS_URL}/${id}/update`
 
 /*
   Sessions URL
