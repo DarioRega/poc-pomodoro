@@ -17,7 +17,7 @@
           currentActiveTab === steps.ESTIMATE_OF_INVOICE &&
           isUserCurrentlyPremium
         "
-        :is-monthly-subscription="isCurrentSubscriptionMonthly"
+        :is-monthly-subscription="isAmountSubscriptionMonthly"
       />
 
       <subscription-tab-invoice-informations
@@ -25,7 +25,7 @@
           currentActiveTab === steps.INVOICE_INFORMATIONS &&
           wasUserPremiumAtLeastOnce
         "
-        @onManageInvoicesInformations="handleManageSubscription"
+        @onManageSubscriptionInformations="handleManageSubscription"
       />
 
       <subscription-tab-billing-history
@@ -75,7 +75,7 @@ export default {
       userReceipts: 'user/getUserReceipts',
       isUserCurrentlyPremium: 'user/isUserCurrentlyPremium',
       wasUserPremiumAtLeastOnce: 'user/wasUserPremiumAtLeastOnce',
-      isCurrentSubscriptionMonthly: 'user/isCurrentSubscriptionMonthly',
+      isAmountSubscriptionMonthly: 'user/isAmountSubscriptionMonthly',
     }),
     steps() {
       return SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES

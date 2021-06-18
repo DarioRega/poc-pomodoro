@@ -4,7 +4,7 @@
       <p>{{ receipt.paid_at | formatDate }}</p>
     </div>
     <div class="billing-history__body--column w-1/4">
-      <p>{{ isCurrentSubscriptionMonthly ? $t('monthly') : $t('yearly') }}</p>
+      <p>{{ isAmountSubscriptionMonthly ? $t('monthly') : $t('yearly') }}</p>
     </div>
     <div class="billing-history__body--column w-1/4">
       <p class="capitalize">{{ totalInvoice }}</p>
@@ -59,9 +59,7 @@ export default {
       return `${process.env.API_URL}/spark/user/${this.$auth.user.id}/receipts/${this.receipt.provider_id}/download`
     },
     isCurrentSubscriptionMonthly() {
-      return this.$store.getters['user/isCurrentSubscriptionMonthly'](
-        this.receipt.amount
-      )
+      return this.$store.getters['user/isAmountSubscriptionMonthly']
     },
   },
 }

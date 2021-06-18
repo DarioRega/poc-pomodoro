@@ -112,7 +112,20 @@ export default {
     return false
   },
 
-  isCurrentSubscriptionMonthly: (state, getters) => (amountString) => {
+  isCurrentSubscriptionMonthly: (state, getters) => {
+    if (getters.getUser) {
+      const currentSubscriptionAmount = getNumberInAmountString(
+        getters.getCurrentInvoice.amount
+      )
+      if (currentSubscriptionAmount > 5) {
+        return false
+      }
+      return true
+    }
+    return undefined
+  },
+
+  isAmountSubscriptionMonthly: (state, getters) => (amountString) => {
     if (getters.getCurrentInvoice.id) {
       const amountPaid = getNumberInAmountString(amountString)
       if (amountPaid > 5) {
