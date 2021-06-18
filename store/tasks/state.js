@@ -1,8 +1,8 @@
 export default () => ({
   all: [],
   singles: {
-    currentTaskSelected: {},
-    currentArchivedTaskSelected: {},
+    currentTaskSelectedId: '',
+    currentArchivedTaskSelectedId: '',
     all: [],
   },
   currentProjectSelected: {
