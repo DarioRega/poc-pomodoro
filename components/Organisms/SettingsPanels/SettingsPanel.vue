@@ -41,16 +41,29 @@
 
     <div
       v-show="shouldShowSaveButton"
-      class="mt-6 w-64 w-full mx-auto text-center"
+      class="mt-6 max-w-sm mx-auto text-center"
+      :class="shouldShowDeleteButton ? 'flex justify-between w-full' : 'w-64'"
     >
       <brand-button
         name="save changes"
         class="w-full"
+        :class="shouldShowDeleteButton && 'mr-2'"
         :is-loading="isLoading"
         :is-disabled="isLoading || isButtonSaveShouldBeDisabled"
         @click="handleSave"
       >
         {{ $t('Save changes') }}
+      </brand-button>
+      <brand-button
+        v-if="shouldShowDeleteButton"
+        name="delete configuration"
+        class="w-full ml-2"
+        type="secondary"
+        :is-loading="isDeleteLoading"
+        :is-disabled="isDeleteLoading"
+        @click="onDeletePomodoroSettingClick(userSettingsValues.id)"
+      >
+        {{ $t('Delete configuration') }}
       </brand-button>
     </div>
   </section>
@@ -96,6 +109,7 @@ export default {
       draftPomodoroSessionSettingsValues: {},
 
       isLoading: false,
+      isDeleteLoading: false,
       hasUserTriggeredCreationCustomSettings: false,
     }
   },
@@ -156,6 +170,14 @@ export default {
         default:
           return false
       }
+    },
+
+    shouldShowDeleteButton() {
+      return (
+        this.currentActiveTab ===
+          this.settingPanelStepsValues.POMODORO_CONFIG &&
+        !this.hasUserSelectedLocalDefaultPomodoroConfigurationOption
+      )
     },
 
     isButtonSaveShouldBeDisabled() {
@@ -235,6 +257,9 @@ export default {
     /*
       Global events related
     */
+    handleDelete() {
+      //
+    },
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
         this.handleUpdateUserSettings()
