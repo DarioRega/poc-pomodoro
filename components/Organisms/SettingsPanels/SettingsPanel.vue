@@ -35,7 +35,6 @@
       />
       <settings-panel-current-subscription-tab
         v-if="currentActiveTab === settingPanelStepsValues.SUBSCRIPTION"
-        :values="{}"
       />
     </div>
 
