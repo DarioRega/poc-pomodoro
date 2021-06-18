@@ -11,7 +11,9 @@
       class="w-full text-left mb-4"
       :label="$t('Billing period')"
     >
-      <p class="capitalize">{{ $t('annual') }}</p>
+      <p class="capitalize">
+        {{ isCurrentSubscriptionMonthly ? $t('monthly') : $t('annually') }}
+      </p>
     </label-with-data>
 
     <!--  PAYMENT METHOD -->
@@ -20,7 +22,11 @@
       class="w-full text-left mb-4"
       :label="$t('Payment method')"
     >
-      <p>Paypal logo</p>
+      <p class="capitalize">{{ userPaymentMethod }}</p>
+      <p v-if="userLastFourDigit">
+        {{ $t('Card number: ') }}**********{{ userLastFourDigit }},
+      </p>
+      <p v-if="userCardExp">{{ $t('Exp: ') }}{{ userCardExp }}</p>
     </label-with-data>
 
     <!--  BILLING CONTACT -->
@@ -52,9 +58,10 @@
           </div>
         </div>
         <div>
-          <p class="font-semibold">Dario Regazzoni</p>
-          <p class="font-semibold">dario.regazzoni@outlook.fr</p>
-          <p class="font-semibold">Chemin de Montelly 65, 1007 Lausanne</p>
+          <p class="font-semibold">{{ user.name }}</p>
+          <p class="font-semibold">{{ user.email }}</p>
+          <p class="font-semibold">{{ userBillingAddressLine1 }}</p>
+          <p class="font-semibold">{{ userBillingAddressLine2 }}</p>
         </div>
       </div>
     </label-with-data>
@@ -78,6 +85,37 @@ export default {
     receipts: {
       type: Array,
       default: () => [],
+    },
+  },
+  computed: {
+    isCurrentSubscriptionMonthly() {
+      return this.$store.getters['user/isCurrentSubscriptionMonthly']
+    },
+    user() {
+      return this.$store.getters['user/getUser']
+    },
+
+    userPaymentMethod() {
+      return `${this.user.card_brand ? this.user.card_brand : ''}`
+    },
+    userCardExp() {
+      return `${this.user.card_expiration ? this.user.card_expiration : ''}`
+    },
+    userLastFourDigit() {
+      return `${this.user.card_last_four ? this.user.card_last_four : ''}`
+    },
+
+    userBillingAddressLine1() {
+      const { billing_address, billing_city } = this.user
+      return `${billing_address ? `${billing_address}, ` : ''}  ${
+        billing_city ? `${billing_city}, ` : ''
+      }`
+    },
+    userBillingAddressLine2() {
+      const { billing_postal_code, billing_country } = this.user
+      return `${billing_postal_code ? `${billing_postal_code}, ` : ''} ${
+        billing_country ? `${billing_country}` : ''
+      }`
     },
   },
 }
