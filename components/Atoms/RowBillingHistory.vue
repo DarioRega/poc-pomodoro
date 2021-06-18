@@ -4,7 +4,9 @@
       <p>{{ receipt.paid_at | formatDate }}</p>
     </div>
     <div class="billing-history__body--column w-1/4">
-      <p>{{ isAmountSubscriptionMonthly ? $t('monthly') : $t('yearly') }}</p>
+      <p>
+        {{ isMonthlyAmount(receipt.amount) ? $t('monthly') : $t('yearly') }}
+      </p>
     </div>
     <div class="billing-history__body--column w-1/4">
       <p class="capitalize">{{ totalInvoice }}</p>
@@ -29,9 +31,12 @@
 </template>
 
 <script>
-import moment from 'moment-timezone'
+import {
+  formatReceiptDate,
+  getTotalAmountWithTaxFromString,
+  isAmountSubscriptionMonthly,
+} from '@/helpers/subscriptions'
 
-import { getTotalAmountWithTaxFromString } from '@/helpers/subscriptions'
 import Icon from '@/components/Atoms/Icon'
 
 export default {
@@ -39,7 +44,7 @@ export default {
   components: { Icon },
   filters: {
     formatDate: (value) => {
-      return moment(value).format('MMMM  DD, YYYY')
+      return formatReceiptDate(value)
     },
   },
   props: {
@@ -58,8 +63,10 @@ export default {
     downloadUrl() {
       return `${process.env.API_URL}/spark/user/${this.$auth.user.id}/receipts/${this.receipt.provider_id}/download`
     },
-    isCurrentSubscriptionMonthly() {
-      return this.$store.getters['user/isAmountSubscriptionMonthly']
+  },
+  methods: {
+    isMonthlyAmount(amount) {
+      return isAmountSubscriptionMonthly(amount)
     },
   },
 }

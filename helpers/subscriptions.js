@@ -14,3 +14,14 @@ export const getNumberInAmountString = (amountString) => {
   const currency = amountString.match(/.{1,3}/g)[1].trim()
   return parseInt(currency)
 }
+
+export const isAmountSubscriptionMonthly = (amountString) => {
+  const amountPaid = getNumberInAmountString(amountString)
+  if (amountPaid > 5) {
+    return false
+  }
+  return true
+}
+
+export const formatReceiptDate = (date) =>
+  moment(date).format(BILLING_DATE_FORMAT)

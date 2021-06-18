@@ -125,17 +125,6 @@ export default {
     return undefined
   },
 
-  isAmountSubscriptionMonthly: (state, getters) => (amountString) => {
-    if (getters.getCurrentInvoice.id) {
-      const amountPaid = getNumberInAmountString(amountString)
-      if (amountPaid > 5) {
-        return false
-      }
-      return true
-    }
-    return undefined
-  },
-
   wasUserPremiumAtLeastOnce: (state, getters) => {
     if (getters.getUser) {
       return getters.getUser.subscriptions.length > 0
