@@ -19,7 +19,11 @@
       </div>
     </div>
 
-    <div v-for="row in rows" :key="row" class="billing-history__body--row">
+    <div
+      v-for="receipt in receipts"
+      :key="receipt.paid_at"
+      class="billing-history__body--row"
+    >
       <div class="billing-history__body--column w-1/4">
         <p>Oct 18, 2020</p>
       </div>
@@ -60,9 +64,9 @@ export default {
   name: 'SubscriptionTabBillingHistory',
   components: { LabelWithData, Icon },
   props: {
-    rows: {
+    receipts: {
       type: Array,
-      default: () => [1, 2, 3, 4, 5],
+      default: () => [],
     },
   },
 }

@@ -62,9 +62,36 @@ export default {
     return ''
   },
 
+  getUserReceipts: (state, getters) => {
+    if (getters.isUserPremium) {
+      return [
+        {
+          id: 1,
+          user_id: '93b0a25a-12d8-4493-900a-04c2abf4b23f',
+          provider_id: 'in_1J363fJEbl1PKejzsxaU9gmI',
+          amount: 'CHF 4.99',
+          tax: 'CHF 0',
+          paid_at: '2021-06-16 21:13:59',
+          created_at: '2021-06-16T21:14:03.000000Z',
+          updated_at: '2021-06-16T21:14:03.000000Z',
+        },
+      ]
+    }
+    return []
+  },
   /*
     Boolean
    */
+
+  isUserPremium: (state, getters) => {
+    if (getters.getUser) {
+      if (getters.getUser.subscriptions.length > 0) {
+        return getters.getUser.subscriptions[0].stripe_status === 'active'
+      }
+      return false
+    }
+    return false
+  },
 
   areUserSettingsEmpty: (state, getters) => {
     if (getters.getUser.user_settings) {

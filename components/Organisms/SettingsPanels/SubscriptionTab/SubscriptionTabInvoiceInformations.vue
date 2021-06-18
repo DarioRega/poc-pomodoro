@@ -74,6 +74,12 @@ import BrandButton from '@/components/Atoms/BrandButton'
 export default {
   name: 'SubscriptionTabInvoiceInformations',
   components: { LabelWithData, Icon, BrandButton },
+  props: {
+    receipts: {
+      type: Array,
+      default: () => [],
+    },
+  },
 }
 </script>
 <style scoped lang="scss">
