@@ -2,27 +2,34 @@
   <section class="settings-panel w-full h-full">
     <settings-panel-subscription-tabs
       :current-active-tab="currentActiveTab"
+      :is-premium="isPremium"
       class="mb-10"
       @onTabChange="currentActiveTab = $event"
     />
     <div>
       <subscription-tab-overview
-        v-show="currentActiveTab === steps.OVERVIEW"
+        v-show="currentActiveTab === steps.OVERVIEW && isPremium"
         @onSeeAllHistory="currentActiveTab = steps.BILLING_HISTORY"
       />
+
       <subscription-tab-estimate-of-invoice
-        v-show="currentActiveTab === steps.ESTIMATE_OF_INVOICE"
+        v-show="currentActiveTab === steps.ESTIMATE_OF_INVOICE && isPremium"
       />
+
       <subscription-tab-invoice-informations
-        v-show="currentActiveTab === steps.INVOICE_INFORMATIONS"
-        @onManageInvoicesInformations="handleManageInvoicesInformations"
+        v-show="currentActiveTab === steps.INVOICE_INFORMATIONS && isPremium"
+        @onManageInvoicesInformations="handleManageSubscription"
       />
+
       <subscription-tab-billing-history
-        v-show="currentActiveTab === steps.BILLING_HISTORY"
+        v-show="currentActiveTab === steps.BILLING_HISTORY && isPremium"
+        :receipts="userReceipts"
         @onRequestDownloadInvoice="handleRequestDownloadInvoice"
       />
+
       <subscription-tab-current-subscription
         v-show="currentActiveTab === steps.CURRENT_SUBSCRIPTION"
+        :is-premium="isPremium"
         @onManageSubscription="handleManageSubscription"
       />
     </div>
@@ -37,6 +44,7 @@ import SubscriptionTabEstimateOfInvoice from '@/components/Organisms/SettingsPan
 import SubscriptionTabInvoiceInformations from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabInvoiceInformations'
 import SubscriptionTabBillingHistory from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabBillingHistory'
 import SubscriptionTabCurrentSubscription from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabCurrentSubscription'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SettingsPanelCurrentSubscriptionTab',
@@ -48,33 +56,30 @@ export default {
     SubscriptionTabBillingHistory,
     SubscriptionTabCurrentSubscription,
   },
-  props: {
-    values: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
-      localValues: {},
       currentActiveTab: '',
     }
   },
   computed: {
+    ...mapGetters({
+      isPremium: 'user/isUserPremium',
+      userReceipts: 'user/getUserReceipts',
+    }),
     steps() {
       return SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES
     },
   },
   mounted() {
-    this.localValues = this.values
-    this.currentActiveTab = this.steps.OVERVIEW
+    if (this.isPremium) {
+      this.currentActiveTab = this.steps.OVERVIEW
+    } else {
+      this.currentActiveTab = this.steps.CURRENT_SUBSCRIPTION
+    }
   },
   methods: {
-    handleManageInvoicesInformations() {
-      // TODO handle redirect
-    },
     handleManageSubscription() {
-      // TODO handle redirect
+      window.open(`${process.env.API_URL}/billing`, '_blank')
     },
     handleRequestDownloadInvoice(invoiceId) {
       // TODO handle download call
