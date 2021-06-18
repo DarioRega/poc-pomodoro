@@ -13,7 +13,10 @@
       />
 
       <subscription-tab-estimate-of-invoice
-        v-show="currentActiveTab === steps.ESTIMATE_OF_INVOICE && isPremium"
+        v-show="
+          currentActiveTab === steps.ESTIMATE_OF_INVOICE &&
+          isUserCurrentlyPremium
+        "
         :is-monthly-subscription="isCurrentSubscriptionMonthly"
       />
 

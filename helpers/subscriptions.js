@@ -12,6 +12,5 @@ export const getTotalAmountWithTaxFromString = (
 
 export const getNumberInAmountString = (amountString) => {
   const currency = amountString.match(/.{1,3}/g)[1].trim()
-  console.log('parseInt(currency)', parseInt(currency))
   return parseInt(currency)
 }

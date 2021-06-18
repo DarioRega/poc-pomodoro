@@ -40,6 +40,7 @@
 
 <script>
 import LabelWithData from '@/components/Atoms/LabelWithData'
+import { getTotalAmountWithTaxFromString } from '@/helpers/subscriptions'
 
 export default {
   name: 'SubscriptionTabEstimateOfInvoice',
@@ -55,12 +56,8 @@ export default {
       return this.$store.getters['user/getCurrentInvoice']
     },
     totalInvoice() {
-      let { amount, tax } = this.currentInvoice
-      const currency = amount.match(/.{1,3}/g)[0]
-      amount = amount.split(currency)[1]
-      tax = tax.split(currency)[1]
-
-      return `${currency} ${parseFloat(amount) + parseFloat(tax)}`
+      const { amount, tax } = this.currentInvoice
+      return getTotalAmountWithTaxFromString(amount, tax)
     },
   },
 }

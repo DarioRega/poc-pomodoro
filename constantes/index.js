@@ -11,9 +11,6 @@ export const aSecondInMilliseconds = 1000
 export const TIME_FORMAT_24h = 'HH:mm'
 export const TIME_FORMAT_12H = 'hh:mm A'
 
-export const STRIPE_ID_MONTHLY_SUBSCRIPTION = 1
-export const STRIPE_ID_YEARLY_SUBSCRIPTION = 2
-
 /*
   Status
 */
