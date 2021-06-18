@@ -58,7 +58,7 @@ export default {
   components: { LabelWithData, BrandButton },
   computed: {
     ...mapGetters({
-      isPremium: 'user/isUserPremium',
+      isPremium: 'user/isUserCurrentlyPremium',
       userTotalTasks: 'tasks/getUserTotalTasksAmount',
     }),
   },

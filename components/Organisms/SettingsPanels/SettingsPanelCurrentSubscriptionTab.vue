@@ -23,7 +23,10 @@
       />
 
       <subscription-tab-billing-history
-        v-show="currentActiveTab === steps.BILLING_HISTORY && isPremium"
+        v-show="
+          currentActiveTab === steps.BILLING_HISTORY &&
+          wasUserPremiumAtLeastOnce
+        "
         :receipts="userReceipts"
         @onRequestDownloadInvoice="handleRequestDownloadInvoice"
       />
@@ -66,6 +69,8 @@ export default {
     ...mapGetters({
       isPremium: 'user/isUserPremium',
       userReceipts: 'user/getUserReceipts',
+      isUserCurrentlyPremium: 'user/isUserCurrentlyPremium',
+      wasUserPremiumAtLeastOnce: 'user/wasUserPremiumAtLeastOnce',
       isCurrentSubscriptionMonthly: 'user/isCurrentSubscriptionMonthly',
     }),
     steps() {
@@ -82,9 +87,6 @@ export default {
   methods: {
     handleManageSubscription() {
       window.open(`${process.env.API_URL}/billing`, '_blank')
-    },
-    handleRequestDownloadInvoice(invoiceId) {
-      // TODO handle download call
     },
   },
 }
