@@ -2,18 +2,18 @@
   <section class="settings-panel w-full h-full">
     <settings-panel-subscription-tabs
       :current-active-tab="currentActiveTab"
-      :is-premium="isPremium"
+      :is-premium="isUserCurrentlyPremium"
       class="mb-10"
       @onTabChange="currentActiveTab = $event"
     />
     <div>
       <subscription-tab-overview
-        v-show="currentActiveTab === steps.OVERVIEW && isPremium"
+        v-if="currentActiveTab === steps.OVERVIEW && isUserCurrentlyPremium"
         @onSeeAllHistory="currentActiveTab = steps.BILLING_HISTORY"
       />
 
       <subscription-tab-estimate-of-invoice
-        v-show="
+        v-if="
           currentActiveTab === steps.ESTIMATE_OF_INVOICE &&
           isUserCurrentlyPremium
         "
@@ -21,22 +21,24 @@
       />
 
       <subscription-tab-invoice-informations
-        v-show="currentActiveTab === steps.INVOICE_INFORMATIONS && isPremium"
+        v-if="
+          currentActiveTab === steps.INVOICE_INFORMATIONS &&
+          wasUserPremiumAtLeastOnce
+        "
         @onManageInvoicesInformations="handleManageSubscription"
       />
 
       <subscription-tab-billing-history
-        v-show="
+        v-if="
           currentActiveTab === steps.BILLING_HISTORY &&
           wasUserPremiumAtLeastOnce
         "
         :receipts="userReceipts"
-        @onRequestDownloadInvoice="handleRequestDownloadInvoice"
       />
 
       <subscription-tab-current-subscription
-        v-show="currentActiveTab === steps.CURRENT_SUBSCRIPTION"
-        :is-premium="isPremium"
+        v-if="currentActiveTab === steps.CURRENT_SUBSCRIPTION"
+        :is-premium="isUserCurrentlyPremium"
         @onManageSubscription="handleManageSubscription"
       />
     </div>
@@ -70,7 +72,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isPremium: 'user/isUserPremium',
       userReceipts: 'user/getUserReceipts',
       isUserCurrentlyPremium: 'user/isUserCurrentlyPremium',
       wasUserPremiumAtLeastOnce: 'user/wasUserPremiumAtLeastOnce',
@@ -81,7 +82,7 @@ export default {
     },
   },
   mounted() {
-    if (this.isPremium) {
+    if (this.isUserCurrentlyPremium) {
       this.currentActiveTab = this.steps.OVERVIEW
     } else {
       this.currentActiveTab = this.steps.CURRENT_SUBSCRIPTION
