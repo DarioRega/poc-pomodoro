@@ -12,7 +12,8 @@
       <div class="cards__card">
         <label-with-data :label="$t('Estimate of the invoice')">
           <p>
-            {{ totalInvoice(getCurrentInvoice || {}) }} {{ $t('tax included') }}
+            {{ totalInvoice(getCurrentInvoice || {}) }}
+            {{ $t(' tax included') }}
           </p>
           <p>{{ $t('Next invoice') }} {{ nextInvoiceDate }}</p>
         </label-with-data>
@@ -24,13 +25,18 @@
             <div>
               <p class="subtitle">{{ $t('Billing period') }}</p>
               <!--              TODO conditional rendering for label depending the plan -->
-              <p class="capitalize">{{ $t('annual') }}</p>
+              <p class="capitalize">
+                {{
+                  isCurrentSubscriptionMonthly ? $t('monthly') : $t('annually')
+                }}
+              </p>
             </div>
             <div>
               <p class="subtitle">{{ $t('Payment method') }}</p>
-              <!--              TODO add paypal, or credits cards logo-->
-              <!--              TODO conditional rendering for logo depending the plan -->
-              <p>Paypal</p>
+              <p class="capitalize">
+                {{ user.card_brand || $t('unknown') }}
+                {{ ', ******' + user.card_last_four || '' }}
+              </p>
             </div>
           </div>
         </label-with-data>
@@ -96,8 +102,8 @@
               </div>
             </div>
             <div>
-              <p class="font-semibold">Dario Regazzoni</p>
-              <p class="font-semibold">dario.regazzoni@outlook.fr</p>
+              <p class="font-semibold">{{ user.name }}</p>
+              <p class="font-semibold">{{ user.email }}</p>
             </div>
           </div>
         </label-with-data>
@@ -135,6 +141,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      user: 'user/getUser',
       userReceipts: 'user/getUserReceipts',
       isCurrentSubscriptionMonthly: 'user/isCurrentSubscriptionMonthly',
       getCurrentInvoice: 'user/getCurrentInvoice',
