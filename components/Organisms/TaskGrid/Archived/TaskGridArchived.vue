@@ -15,6 +15,7 @@
       :is-toggled="isToggled"
       :is-layout-stacked="isLayoutStacked"
       :should-show-completed-task="showCompletedTasks"
+      :is-delete-enabled="isDeleteEnabled"
       class="mb-4"
       @onToggle="isToggled = !isToggled"
       @onTrashClick="isDeleteEnabled = !isDeleteEnabled"
@@ -29,7 +30,7 @@
           :is-layout-stacked="isLayoutStacked"
           :is-selected="currentTaskSelected.id === task.id"
           :is-completed="task.task_status.name === TASK_STATUS_VALUES.DONE"
-          :should-row-loading="currentTaskIdRowLoading === task.id"
+          :should-row-loading="taskRowsIdLoading.includes(task.id)"
           :current-task-selected="currentTaskSelected"
           :is-delete-enabled="isDeleteEnabled"
           class="mb-3"
@@ -69,8 +70,8 @@
 <script>
 import { mapActions } from 'vuex'
 
-import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import { TASK_STATUS_VALUES } from '@/constantes'
+import BrandTextarea from '@/components/Atoms/Inputs/BrandTextarea'
 import TaskGridPagination from '@/components/Atoms/Task/TaskGridPagination'
 import TransitionOpacity from '@/components/Atoms/Transitions/TransitionOpacity'
 import TaskGridHeaderArchived from '@/components/Organisms/TaskGrid/Archived/TaskGridHeaderArchived'
@@ -78,6 +79,7 @@ import TaskGridBodyArchived from '@/components/Organisms/TaskGrid/Archived/TaskG
 
 export default {
   name: 'TaskGridAllTasks',
+
   components: {
     TaskGridHeaderArchived,
     TaskGridBodyArchived,
@@ -85,6 +87,7 @@ export default {
     BrandTextarea,
     TransitionOpacity,
   },
+
   props: {
     currentTaskSelected: {
       type: Object,
@@ -99,6 +102,7 @@ export default {
       default: false,
     },
   },
+
   data() {
     return {
       taskDescriptionKey: 0,
@@ -107,7 +111,7 @@ export default {
       showCompletedTasks: false,
       amountOfTasksToDisplays: 10,
       isAddTaskLoading: false,
-      currentTaskIdRowLoading: '',
+      taskRowsIdLoading: [],
     }
   },
   computed: {
@@ -119,6 +123,7 @@ export default {
       }
       return false
     },
+
     tasksList() {
       let tasksArray = this.tasks
       if (!this.showCompletedTasks) {
@@ -130,6 +135,7 @@ export default {
         return this.taskListOnlyAmountToDisplay(tasksArray)
       }
     },
+
     tasksListNoComplete() {
       return this.tasks.length > 0
         ? this.tasks.filter(
@@ -137,6 +143,7 @@ export default {
           )
         : []
     },
+
     TASK_STATUS_VALUES() {
       return TASK_STATUS_VALUES
     },
@@ -146,6 +153,7 @@ export default {
       this.taskDescriptionKey += 1
     },
   },
+
   mounted() {
     if (this.tasksList.length > 0) {
       this.$store.commit(
@@ -154,6 +162,7 @@ export default {
       )
     }
   },
+
   methods: {
     ...mapActions({
       updateTaskDescription: 'tasks/updateTaskDescription',
@@ -161,9 +170,11 @@ export default {
       deleteTask: 'tasks/deleteTask',
       createNotification: 'globalState/createNotification',
     }),
+
     taskListOnlyAmountToDisplay(list) {
       return list.filter((x, i) => i <= this.amountOfTasksToDisplays - 1)
     },
+
     handleClickTaskTarget(taskId) {
       if (this.isDeleteEnabled) {
         const deleteNotification = {
@@ -184,26 +195,42 @@ export default {
         )
       }
     },
+
+    setRowLoading(id) {
+      this.taskRowsIdLoading.push(id)
+    },
+
+    removeRowLoading(id) {
+      this.taskRowsIdLoading = this.taskRowsIdLoading.filter((x) => x !== id)
+    },
+
     async handleChangeTaskDescription(value) {
-      this.currentTaskIdRowLoading = this.currentTaskSelected.id
+      const taskId = this.currentTaskSelected.id
+      this.setRowLoading(taskId)
 
       await this.updateTaskDescription({
-        id: this.currentTaskSelected.id,
+        id: taskId,
         description: value,
       })
-      this.currentTaskIdRowLoading = ''
+
+      this.removeRowLoading(taskId)
     },
+
     handleToggleShowCompleteTasks() {
       this.showCompletedTasks = !this.showCompletedTasks
     },
+
     handleEnableTrash() {
       this.isDeleteEnabled = !this.isDeleteEnabled
     },
     async handleDeleteTask(taskId) {
-      this.currentTaskIdRowLoading = taskId
+      this.setRowLoading(taskId)
+
       await this.deleteTask(taskId)
-      this.currentTaskIdRowLoading = ''
+
+      this.removeRowLoading(taskId)
     },
+
     findTask(taskId) {
       return this.tasks.find((x) => x.id === taskId)
     },
