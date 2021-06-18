@@ -9,6 +9,7 @@
     <div>
       <subscription-tab-overview
         v-if="currentActiveTab === steps.OVERVIEW && isUserCurrentlyPremium"
+        :receipts="userReceipts"
         @onSeeAllHistory="currentActiveTab = steps.BILLING_HISTORY"
       />
 

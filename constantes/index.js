@@ -11,6 +11,8 @@ export const aSecondInMilliseconds = 1000
 export const TIME_FORMAT_24h = 'HH:mm'
 export const TIME_FORMAT_12H = 'hh:mm A'
 
+export const BILLING_DATE_FORMAT = 'MMMM DD, YYYY'
+
 /*
   Status
 */
