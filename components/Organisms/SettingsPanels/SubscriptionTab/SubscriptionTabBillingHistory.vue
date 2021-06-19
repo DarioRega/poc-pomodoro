@@ -71,10 +71,10 @@ export default {
       }
     }
   }
-}
-p {
-  &:not(.subtitle) {
-    @apply mb-0 text-sm;
+  p {
+    &:not(.subtitle) {
+      @apply mb-0 text-sm;
+    }
   }
 }
 </style>
