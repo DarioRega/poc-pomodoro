@@ -7,15 +7,15 @@ export default {
     })
 
     // by default is the isRefreshLoading to true, since we logged in, we need to use isEnvLoading instead
-    commit('globalState/SET_ENV_LOADING', true, { root: true })
-    dispatch('getEnvironment')
   },
 
   async logout() {
+    sessionStorage.removeItem('is_reloaded')
     await this.$auth.logout()
   },
 
-  async getEnvironment({ dispatch, commit, rootGetters }, isFromLogin = true) {
+  async getEnvironment({ dispatch, commit, rootGetters }) {
+    await this.$auth.fetchUser()
     this.$initWebSocketChannel('userPrivateChannel', this.$auth.user.id)
 
     const currentSessionPromise = new Promise((resolve, reject) => {
@@ -42,14 +42,8 @@ export default {
       taskStatusesPromise,
     ])
 
-    // to allow ui to sync correctly after gathering all data
-    setTimeout(() => {
-      if (isFromLogin) {
-        commit('globalState/SET_ENV_LOADING', false, { root: true })
-      } else {
-        commit('globalState/SET_REFRESH_LOADING', false, { root: true })
-      }
-    }, 1000)
+    commit('globalState/SET_ENV_LOADING', false, { root: true })
+    commit('globalState/SET_REFRESH_LOADING', false, { root: true })
   },
 
   handleSessionActionsServerError({ dispatch }) {

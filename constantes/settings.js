@@ -1,3 +1,5 @@
+import { getRandomNumber } from '@/helpers'
+
 export const TIME_DISPLAY_FORMATS_OPTIONS = [
   {
     id: '12H',
@@ -25,6 +27,13 @@ export const POMODORO_DEFAULT_SETTINGS = {
   small_break_duration: 5,
   big_break_duration: 15,
   pomodoro_quantity: 5,
+}
+export const USER_DEFAULT_SETTINGS = {
+  id: getRandomNumber(),
+  theme: THEME_OPTIONS[0].name,
+  time_display_format: TIME_DISPLAY_FORMATS_OPTIONS[0].name,
+  pomodoro_session_setting_id: null,
+  pomodoro_session_setting: null,
 }
 
 export const POMODORO_DEFAULT_DURATION = '00:25:00'

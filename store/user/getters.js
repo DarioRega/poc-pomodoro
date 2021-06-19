@@ -1,7 +1,10 @@
 import _ from 'lodash'
 
 import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
-import { POMODORO_DEFAULT_DURATION } from '@/constantes/settings'
+import {
+  POMODORO_DEFAULT_DURATION,
+  USER_DEFAULT_SETTINGS,
+} from '@/constantes/settings'
 import { convertNumberInDuration } from '@/helpers/settings'
 import { getNumberInAmountString } from '@/helpers/subscriptions'
 
@@ -10,15 +13,17 @@ export default {
     State mirroring
    */
   getUser: (state, getters, rootState) => {
-    return rootState.auth.user
+    return rootState.auth.user || undefined
   },
 
   getUserSettingsValues: (state, getters) => {
-    return getters.getUser.user_settings
+    if (getters.getUser) {
+      return getters.getUser.user_settings || USER_DEFAULT_SETTINGS
+    }
   },
 
-  getUserPomodoroSettingsValues: (state, getters, rootState) => {
-    return getters.getUser.user_settings.pomodoro_session_setting
+  getUserPomodoroSettingsValues: (state, getters) => {
+    return getters.getUserSettingsValues.user_settings.pomodoro_session_setting
   },
 
   getUserAllPomodoroSettingsValues: (state, getters) => {
@@ -60,7 +65,7 @@ export default {
 
   getUserTheme: (state, getters) => {
     if (getters.getUser) {
-      return getters.getUser.user_settings.theme.toLowerCase()
+      return getters.getUserSettingsValues.theme.toLowerCase()
     }
     return ''
   },
@@ -76,9 +81,10 @@ export default {
   getUserPomodoroDuration: (state, getters) => {
     const user = getters.getUser
     if (user) {
-      if (user.user_settings.pomodoro_session_setting) {
+      if (getters.getUserSettingsValues.pomodoro_session_setting) {
         const pomodoroDurationAsIntegerMinute =
-          user.user_settings.pomodoro_session_setting.pomodoro_duration
+          getters.getUserSettingsValues.pomodoro_session_setting
+            .pomodoro_duration
         return convertNumberInDuration(pomodoroDurationAsIntegerMinute)
       }
     }
@@ -130,15 +136,15 @@ export default {
   Settings
  */
   areUserSettingsEmpty: (state, getters) => {
-    if (getters.getUser.user_settings) {
-      return _.isEmpty(getters.getUser.user_settings)
+    if (getters.getUserSettingsValues) {
+      return _.isEmpty(getters.getUserSettingsValues)
     }
     return true
   },
 
   isUserUsingPomodoroCustomSettings: (state, getters) => {
     if (getters.getUser) {
-      if (getters.getUser.user_settings.pomodoro_session_setting_id) {
+      if (getters.getUserSettingsValues.pomodoro_session_setting_id) {
         return true
       }
     }
@@ -147,7 +153,7 @@ export default {
 
   isUserUsing24HTimeFormat: (state, getters) => {
     if (getters.getUser) {
-      return getters.getUser.user_settings.time_display_format === '24H'
+      return getters.getUserSettingsValues.time_display_format === '24H'
     }
     return true
   },

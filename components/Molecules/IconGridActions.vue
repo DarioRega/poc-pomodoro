@@ -47,16 +47,17 @@ const ACTIONS = [
     icon: 'cog',
     emitter: 'onSettingsClick',
   },
-  {
-    name: 'sound',
-    hasToggle: true,
-    emitter: 'onSoundClick',
-  },
-  {
-    name: 'help',
-    icon: 'questionMarkRounded',
-    emitter: 'onHelpClick',
-  },
+  // v2
+  // {
+  //   name: 'sound',
+  //   hasToggle: true,
+  //   emitter: 'onSoundClick',
+  // },
+  // {
+  //   name: 'help',
+  //   icon: 'questionMarkRounded',
+  //   emitter: 'onHelpClick',
+  // },
   {
     name: 'logout',
     icon: 'arrowRightRounded',
