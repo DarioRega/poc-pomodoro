@@ -9,7 +9,7 @@
           {{
             isEnvLoading
               ? $t('Loading your environment...')
-              : $t('Synchronizing channels...')
+              : $t('Synchronizing with channels...')
           }}
         </h5>
       </screen-loader>
@@ -80,7 +80,7 @@ export default {
     /*
       Verify if user refresh page, we get the env data
      */
-    if (sessionStorage.getItem('is_reloaded')) {
+    if (sessionStorage.getItem('is_page_reload')) {
       this.$store.commit('globalState/SET_REFRESH_LOADING', true, {
         root: true,
       })
@@ -88,7 +88,7 @@ export default {
       this.$store.commit('globalState/SET_ENV_LOADING', true, { root: true })
     }
     await this.getEnvironment()
-    sessionStorage.setItem('is_reloaded', 'true')
+    sessionStorage.setItem('is_page_reload', 'true')
   },
   /*
     Methods
