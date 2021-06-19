@@ -75,15 +75,20 @@ export default {
   },
 
   /*
-    Lifecycles
+    Lifecyclesfault
   */
   async mounted() {
     /*
       Verify if user refresh page, we get the env data
      */
-    if (!this.sessionState.isSessionCreated) {
+    if (sessionStorage.getItem('is_reloaded')) {
       await this.getEnvironment(false)
+    } else {
+      this.$store.commit('globalState/SET_REFRESH_LOADING', false, {
+        root: true,
+      })
     }
+    sessionStorage.setItem('is_reloaded', 'true')
   },
   /*
     Methods
