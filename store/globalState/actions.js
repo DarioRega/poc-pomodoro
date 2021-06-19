@@ -12,6 +12,7 @@ export default {
   },
 
   async logout() {
+    sessionStorage.removeItem('is_reloaded')
     await this.$auth.logout()
   },
 
