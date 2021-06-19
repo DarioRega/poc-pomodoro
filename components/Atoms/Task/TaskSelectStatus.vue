@@ -12,7 +12,7 @@
             aria-labelledby="listbox-label"
             :current-status="status.name"
             :is-loading="isLoading"
-            @click="toggleVisibility($event, true)"
+            @click="handleClickSelect"
             @keydown="toggleVisibility"
           />
         </div>
@@ -137,6 +137,13 @@ export default {
     isHighlighted(itemId) {
       return this.highlightedItemId === itemId
     },
+    handleClickSelect() {
+      if (this.isOpen) {
+        this.isOpen = false
+      } else {
+        this.isOpen = true
+      }
+    },
     toggleVisibility(evt) {
       const openDropDown =
         SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
@@ -146,7 +153,7 @@ export default {
         this.isOpen = false
       }
 
-      if (evt.type === 'click' || openDropDown) {
+      if (openDropDown) {
         this.isOpen = true
       }
       if (evt.keyCode === DOWN_ARROW_KEY_CODE) {
