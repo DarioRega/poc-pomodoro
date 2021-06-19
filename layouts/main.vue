@@ -1,7 +1,7 @@
 <template>
   <div :class="userTheme">
     <div class="hidden lg:block">
-      <Nuxt v-if="!isEnvLoading && !isRefreshLoading" />
+      <Nuxt v-if="!isEnvLoading && !isRefreshLoading && $auth.user" />
       <!--  Notifications -->
       <notifications-container />
       <screen-loader v-if="isEnvLoading || isRefreshLoading">
@@ -59,7 +59,6 @@ export default {
   */
   computed: {
     ...mapGetters({
-      sessionState: 'sessions/getSessionState',
       userTheme: 'user/getUserTheme',
     }),
 
@@ -82,12 +81,13 @@ export default {
       Verify if user refresh page, we get the env data
      */
     if (sessionStorage.getItem('is_reloaded')) {
-      await this.getEnvironment(false)
-    } else {
-      this.$store.commit('globalState/SET_REFRESH_LOADING', false, {
+      this.$store.commit('globalState/SET_REFRESH_LOADING', true, {
         root: true,
       })
+    } else {
+      this.$store.commit('globalState/SET_ENV_LOADING', true, { root: true })
     }
+    await this.getEnvironment()
     sessionStorage.setItem('is_reloaded', 'true')
   },
   /*
