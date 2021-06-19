@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full h-full">
+  <section :key="panelKey" class="w-full h-full">
     <settings-panel-main-tabs
       :current-active-tab="currentActiveTab"
       class="my-6"
@@ -40,16 +40,29 @@
 
     <div
       v-show="shouldShowSaveButton"
-      class="mt-6 w-64 w-full mx-auto text-center"
+      class="mt-6 max-w-sm mx-auto text-center"
+      :class="shouldShowDeleteButton ? 'flex justify-between w-full' : 'w-64'"
     >
       <brand-button
         name="save changes"
         class="w-full"
+        :class="shouldShowDeleteButton && 'mr-2'"
         :is-loading="isLoading"
         :is-disabled="isLoading || isButtonSaveShouldBeDisabled"
         @click="handleSave"
       >
         {{ $t('Save changes') }}
+      </brand-button>
+      <brand-button
+        v-if="shouldShowDeleteButton"
+        name="delete configuration"
+        class="w-full ml-2"
+        type="secondary"
+        :is-loading="isDeleteLoading"
+        :is-disabled="isDeleteLoading"
+        @click="handleDelete"
+      >
+        {{ $t('Delete configuration') }}
       </brand-button>
     </div>
   </section>
@@ -87,6 +100,7 @@ export default {
 
   data() {
     return {
+      panelKey: 0,
       currentActiveTab: '',
 
       userSettingsValues: {},
@@ -95,6 +109,7 @@ export default {
       draftPomodoroSessionSettingsValues: {},
 
       isLoading: false,
+      isDeleteLoading: false,
       hasUserTriggeredCreationCustomSettings: false,
     }
   },
@@ -128,6 +143,7 @@ export default {
         return this.pomodoroSessionSettingsValues
       }
     },
+
     hasUserSelectedLocalDefaultPomodoroConfigurationOption() {
       return (
         this.userSettingsValues.pomodoro_session_setting_id ===
@@ -157,6 +173,14 @@ export default {
       }
     },
 
+    shouldShowDeleteButton() {
+      return (
+        this.currentActiveTab ===
+          this.settingPanelStepsValues.POMODORO_CONFIG &&
+        !this.hasUserSelectedLocalDefaultPomodoroConfigurationOption
+      )
+    },
+
     isButtonSaveShouldBeDisabled() {
       if (this.currentActiveTab === SETTINGS_PANEL_STEPS_VALUES.GENERAL) {
         return false
@@ -171,6 +195,13 @@ export default {
       return (
         !this.hasUserSelectedLocalDefaultPomodoroConfigurationOption ||
         this.hasUserTriggeredCreationCustomSettings
+      )
+    },
+
+    isStoreSettingDifferentThanLocalSettingsChosen() {
+      return (
+        this.userSettingsValues.pomodoro_session_setting_id !==
+        this.userSettings.pomodoro_session_setting_id
       )
     },
 
@@ -196,6 +227,7 @@ export default {
     */
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
       // to avoid triggering on mounted lifecycle, we make sure was had a value before
+
       if (newValue && newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
         this.findCustomPomodoroSettingAndSetAsValue(newValue)
       } else {
@@ -227,11 +259,33 @@ export default {
       createPomodoroSettings: 'user/createPomodoroSettings',
       updateUserSettings: 'user/updateSettings',
       updatePomodoroSettings: 'user/updatePomodoroSettings',
+      onDeletePomodoroSettingClick: 'user/onDeletePomodoroSettingClick',
+      deleteCustomPomodoroSetting: 'user/deleteCustomPomodoroSetting',
     }),
 
     /*
       Global events related
     */
+    handleDelete() {
+      const payload = {
+        id: this.userSettingsValues.pomodoro_session_setting_id,
+        callback: undefined,
+      }
+      if (this.isStoreSettingDifferentThanLocalSettingsChosen) {
+        payload.callback = this.handleDeleteConfigNotSelectedServerSide
+      }
+
+      this.onDeletePomodoroSettingClick(payload)
+    },
+
+    async handleDeleteConfigNotSelectedServerSide() {
+      await this.$store.dispatch(
+        'user/deleteCustomPomodoroSetting',
+        this.userSettingsValues.pomodoro_session_setting_id
+      )
+      this.userSettingsValues.pomodoro_session_setting_id =
+        DEFAULT_POMODORO_SETTINGS_OPTION_ID
+    },
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
         this.handleUpdateUserSettings()
@@ -330,7 +384,6 @@ export default {
 
       await this.createPomodoroSettings(this.draftPomodoroSessionSettingsValues)
       await this.$auth.fetchUser()
-
       this.resetCreationProcess()
       this.isLoading = false
     },
@@ -345,7 +398,6 @@ export default {
     },
 
     createCustomSettings() {
-      // TODO kill notificatin if exist
       const customSettingDefaultName = `${this.$t(
         'My custom configuration'
       )} #${this.getUserNextConfigurationNumber}`

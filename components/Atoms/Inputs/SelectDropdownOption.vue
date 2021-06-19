@@ -54,7 +54,7 @@ export default {
     },
     shouldCapitalize: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
 }

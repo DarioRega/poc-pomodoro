@@ -1,5 +1,6 @@
 import {
-  USER_CREATE_POMODORO_SETTINGS_URL,
+  USER_DELETE_POMODORO_SETTINGS_ID_URL,
+  USER_POMODORO_SETTINGS_URL,
   USER_SETTINGS_URL,
   USER_UPDATE_PASSWORD_URL,
   USER_UPDATE_POMODORO_SETTINGS_ID_URL,
@@ -53,7 +54,43 @@ export default {
     }
     delete payload.id
     try {
-      await this.$axios.post(USER_CREATE_POMODORO_SETTINGS_URL, payload)
+      await this.$axios.post(USER_POMODORO_SETTINGS_URL, payload)
+    } catch (err) {
+      notification.title = this.$i18n.t('Oups...')
+      notification.type = 'error'
+      notification.description = err.response.data.message
+    } finally {
+      dispatch('globalState/createNotification', notification, {
+        root: true,
+      })
+    }
+  },
+
+  onDeletePomodoroSettingClick({ dispatch }, payload) {
+    const callback =
+      typeof payload.callback === 'function'
+        ? payload.callback
+        : () => dispatch('deleteCustomPomodoroSetting', payload.id)
+
+    const notification = {
+      title: this.$i18n.t('Delete configuration ?'),
+      description: this.$i18n.t(
+        "Are you sure to delete it  You can't reverse it afterward ?"
+      ),
+      actionRequired: true,
+      confirmCallback: callback,
+    }
+    dispatch('globalState/createNotification', notification, { root: true })
+  },
+
+  async deleteCustomPomodoroSetting({ dispatch }, id) {
+    const notification = {
+      title: this.$i18n.t('Pomodoro configuration deleted !'),
+      type: 'success',
+    }
+    try {
+      await this.$axios.delete(USER_DELETE_POMODORO_SETTINGS_ID_URL(id))
+      await this.$auth.fetchUser()
     } catch (err) {
       notification.title = this.$i18n.t('Oups...')
       notification.type = 'error'
