@@ -66,7 +66,7 @@
       </div>
     </label-with-data>
     <div class="mt-10 text-center">
-      <brand-button @click="$emit('onManageSubscriptionInformations')">
+      <brand-button @click="$emit('onManageInvoicesInformations')">
         {{ $t('Manage invoices information') }}
       </brand-button>
     </div>

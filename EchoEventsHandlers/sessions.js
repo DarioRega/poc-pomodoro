@@ -1,56 +1,44 @@
-import { SESSION_STATUS } from '@/constantes'
-import { formatDuration } from '@/helpers/sessions'
+import { STEPS_STATUS } from '@/constantes'
+import { isSessionDoneOrAborted } from '@/helpers/sessions'
 
-export const onCurrentSessionEvent = (payload, store, i18n) => {
-  const defaultSessionState = {}
-  let session = defaultSessionState
-
-  const notification = {
-    title: i18n.t('Session aborted!'),
-    type: 'success',
-    description: i18n.t('The current session was successfully aborted'),
-  }
+export const onCurrentSessionEvent = (payload, store) => {
   if (payload) {
-    switch (payload.status) {
-      case SESSION_STATUS.DONE: {
-        notification.title = i18n.t('Session done')
-        notification.description = i18n.t(
-          "Well done ! You've finished the whole session"
-        )
-        store.dispatch('globalState/createNotification', notification)
-        break
+    if (!isSessionDoneOrAborted(payload.status)) {
+      store.commit('sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP', payload, {
+        root: true,
+      })
+
+      const { current_step } = payload
+      switch (current_step.status) {
+        case STEPS_STATUS.PAUSED:
+          store.dispatch('timers/currentStepIsNotRunning', payload, {
+            root: true,
+          })
+          break
+        case STEPS_STATUS.PENDING:
+          store.dispatch('timers/currentStepIsNotRunning', payload, {
+            root: true,
+          })
+          break
+        case STEPS_STATUS.IN_PROGRESS:
+          store.dispatch('timers/currentStepIsRunning', payload, { root: true })
+          break
       }
-      case SESSION_STATUS.ABORTED: {
-        const timerPayload = getFirstStepDurations(store)
-        store.commit(
-          'timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER',
-          timerPayload
-        )
-        store.dispatch('globalState/createNotification', notification)
-        break
-      }
-      case SESSION_STATUS.PAUSED: {
-        session = payload
-        store.commit('timers/SET_CURRENT_STEP_RESTING_TIME_AND_TIMER', {
-          currentStepTimer: formatDuration(session.current_step.resting_time),
-          currentStepRestingTime: session.current_step.resting_time,
-        })
-        break
-      }
-      default:
-        session = payload
+    } else {
+      setEmptySessionState(store)
     }
   } else {
-    session = defaultSessionState
+    setEmptySessionState(store)
   }
-
-  store.commit('sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP', session)
 }
 
-export const getFirstStepDurations = (store) => {
-  const firstStep = store.getters['sessions/getFirstStep']
-  return {
-    currentStepTimer: formatDuration(firstStep.duration),
-    currentStepRestingTime: firstStep.duration,
-  }
+const setEmptySessionState = (store) => {
+  store.commit(
+    'sessions/SET_CURRENT_SESSION_AND_CURRENT_STEP',
+    {},
+    { root: true }
+  )
+  store.dispatch('timers/sessionIsDoneOrAborted', null, {
+    root: true,
+  })
 }

@@ -47,14 +47,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import { SETTINGS_PANEL_SUBSCRIPTION_CHILDREN_STEPS_VALUES } from '@/constantes'
+
 import SettingsPanelSubscriptionTabs from '@/components/Organisms/SettingsPanels/SubscriptionTab/SettingsPanelSubscriptionTabs'
 import SubscriptionTabOverview from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabOverview'
 import SubscriptionTabEstimateOfInvoice from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabEstimateOfInvoice'
 import SubscriptionTabInvoiceInformations from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabInvoiceInformations'
 import SubscriptionTabBillingHistory from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabBillingHistory'
 import SubscriptionTabCurrentSubscription from '@/components/Organisms/SettingsPanels/SubscriptionTab/SubscriptionTabCurrentSubscription'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'SettingsPanelCurrentSubscriptionTab',

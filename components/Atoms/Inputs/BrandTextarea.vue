@@ -38,6 +38,7 @@ export default {
   components: {
     TransitionTranslateY,
   },
+
   props: {
     value: {
       type: String,
@@ -72,9 +73,6 @@ export default {
     hasErrors() {
       return this.errorText.length > 0
     },
-  },
-  mounted() {
-    this.localValue = this.value
   },
   methods: {
     onChange(evt) {

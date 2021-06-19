@@ -3,26 +3,42 @@
     <ul class="flex flex-row justify-end items-center">
       <li
         v-show="withArchiveFunctionality"
-        class="flex h-full justify-center items-center"
+        class="
+          flex
+          h-full
+          justify-center
+          items-center
+          border-r-[2.5px] border-dark-gray
+        "
       >
         <span
-          class="task-grid-header-actions w-4 xl:w-5"
           tabindex="0"
+          class="task-grid-header-actions w-4 xl:w-5"
+          :class="isArchiveBoxEnabled && 'enabled'"
           @click="$emit('onArchiveBoxClick')"
         >
           <icon icon-name="archiveBox" />
         </span>
       </li>
-      <li class="flex h-full justify-center items-center">
+      <li
+        class="flex h-full justify-center items-center"
+        :class="
+          withShowCompletedFunctionality && 'border-r-[2.5px] border-dark-gray'
+        "
+      >
         <span
-          class="task-grid-header-actions w-4 xl:w-5"
           tabindex="0"
+          class="task-grid-header-actions w-4 xl:w-5"
+          :class="isDeleteEnabled && 'enabled'"
           @click="$emit('onTrashClick')"
         >
           <icon icon-name="trash" />
         </span>
       </li>
-      <li class="toggler flex justify-start items-center pl-2">
+      <li
+        v-show="withShowCompletedFunctionality"
+        class="toggler flex justify-start items-center pl-2"
+      >
         <toggle
           :toggled="shouldShowCompletedTask"
           size="small"
@@ -61,7 +77,7 @@ export default {
   props: {
     shouldShowCompletedTask: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     label: {
       type: String,
@@ -71,16 +87,29 @@ export default {
       type: Boolean,
       default: true,
     },
+    withShowCompletedFunctionality: {
+      type: Boolean,
+      default: true,
+    },
+    isArchiveBoxEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleteEnabled: {
+      type: Boolean,
+      default: true,
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
-li:not(.toggler) {
-  @apply border-r-[2.5px] border-dark-gray;
-}
-
 .task-grid-header-actions {
   @apply flex items-center text-dark-gray mx-2 cursor-pointer transition-colors duration-200;
+
+  &.enabled {
+    @apply text-dark-indigo dark:text-light-indigo;
+  }
+
   &:hover {
     @apply text-dark-blue;
     @apply dark:text-celeste;

@@ -4,32 +4,18 @@ export default {
   /*
     Singles current task selected
    */
-  SET_SINGLES_TASKS_CURRENT_TASK_SELECTED(state, task) {
-    state.singles.currentTaskSelected = task
+  SET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID(state, id) {
+    state.singles.currentTaskSelectedId = id
   },
-  SET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED(state, task) {
-    state.singles.currentArchivedTaskSelected = task
+  SET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED_ID(state, id) {
+    state.singles.currentArchivedTaskSelectedId = id
   },
-  RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED(state) {
-    state.singles.currentTaskSelected = {}
+  RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID(state) {
+    state.singles.currentTaskSelectedId = ''
   },
-  RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED(state) {
-    state.singles.currentArchivedTaskSelected = {}
+  RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED_ID(state) {
+    state.singles.currentArchivedTaskSelectedId = ''
   },
-
-  UPDATE_CURRENT_TASK_SELECTED(state, task) {
-    state.singles.currentTaskSelected = {
-      ...state.singles.currentTaskSelected,
-      task,
-    }
-  },
-  UPDATE_CURRENT_ARCHIVED_TASK_SELECTED(state, task) {
-    state.singles.currentArchivedTaskSelected = {
-      ...state.singles.currentArchivedTaskSelected,
-      task,
-    }
-  },
-
   /*
   Singles Tasks CRUD
    */

@@ -26,14 +26,9 @@ export default {
         type: 'success',
         description: this.$i18n.t('A new task was added to your list'),
       }
-      dispatch('globalState/createNotification', notification, { root: true })
       await this.$axios.post(TASK_URL, payload)
+      dispatch('globalState/createNotification', notification, { root: true })
     } catch (err) {
-      dispatch(
-        'globalState/handleTaskActionServerError',
-        err.response.data.message,
-        { root: true }
-      )
       return err.response.data
     }
   },
@@ -125,24 +120,16 @@ export default {
   },
 
   updateSingleTask({ dispatch, commit, getters }, payload) {
-    if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
-      commit('UPDATE_CURRENT_TASK_SELECTED', payload)
-    } else if (
-      getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
-    ) {
-      commit('UPDATE_CURRENT_ARCHIVED_TASK_SELECTED', payload)
-    }
-
     commit('UPDATE_SINGLE_TASK', payload)
   },
 
   deleteSingleTask({ dispatch, commit, getters }, payload) {
     if (getters.getSinglesCurrentTaskSelected.id === payload.id) {
-      commit('RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED')
+      commit('RESET_SINGLES_TASKS_CURRENT_TASK_SELECTED_ID')
     } else if (
       getters.getSinglesCurrentArchivedTaskSelected.id === payload.id
     ) {
-      commit('RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED')
+      commit('RESET_SINGLES_TASKS_CURRENT_ARCHIVED_TASK_SELECTED_ID')
     }
 
     commit('DELETE_SINGLE_TASK', payload.id)

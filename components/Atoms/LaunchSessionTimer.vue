@@ -59,9 +59,14 @@ export default {
     }
   },
   methods: {
-    handleStart() {
+    async handleStart() {
       if (!this.hasSentProcess) {
-        this.$store.dispatch('sessions/createAndStartSession')
+        this.$store.commit('globalState/SET_CREATE_SESSION_LOADER', true)
+        this.$store.commit('globalState/SET_LAUNCH_TIMER_VISIBILITY', false)
+
+        await this.$store.dispatch('sessions/createAndStartSession')
+
+        this.$store.commit('globalState/SET_CREATE_SESSION_LOADER', false)
         this.hasSentProcess = true
       }
     },
