@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full h-full">
+  <section :key="panelKey" class="w-full h-full">
     <settings-panel-main-tabs
       :current-active-tab="currentActiveTab"
       class="my-6"
@@ -61,11 +61,7 @@
         type="secondary"
         :is-loading="isDeleteLoading"
         :is-disabled="isDeleteLoading"
-        @click="
-          onDeletePomodoroSettingClick(
-            userSettingsValues.pomodoro_session_setting_id
-          )
-        "
+        @click="handleDelete"
       >
         {{ $t('Delete configuration') }}
       </brand-button>
@@ -105,6 +101,7 @@ export default {
 
   data() {
     return {
+      panelKey: 0,
       currentActiveTab: '',
 
       userSettingsValues: {},
@@ -147,6 +144,7 @@ export default {
         return this.pomodoroSessionSettingsValues
       }
     },
+
     hasUserSelectedLocalDefaultPomodoroConfigurationOption() {
       return (
         this.userSettingsValues.pomodoro_session_setting_id ===
@@ -201,6 +199,13 @@ export default {
       )
     },
 
+    isStoreSettingDifferentThanLocalSettingsChosen() {
+      return (
+        this.userSettingsValues.pomodoro_session_setting_id !==
+        this.userSettings.pomodoro_session_setting_id
+      )
+    },
+
     /*
       Modal tabs related
     */
@@ -223,6 +228,7 @@ export default {
     */
     'userSettingsValues.pomodoro_session_setting_id'(newValue, oldValue) {
       // to avoid triggering on mounted lifecycle, we make sure was had a value before
+
       if (newValue && newValue !== DEFAULT_POMODORO_SETTINGS_OPTION_ID) {
         this.findCustomPomodoroSettingAndSetAsValue(newValue)
       } else {
@@ -262,7 +268,24 @@ export default {
       Global events related
     */
     handleDelete() {
-      //
+      const payload = {
+        id: this.userSettingsValues.pomodoro_session_setting_id,
+        callback: undefined,
+      }
+      if (this.isStoreSettingDifferentThanLocalSettingsChosen) {
+        payload.callback = this.handleDeleteConfigNotSelectedServerSide
+      }
+
+      this.onDeletePomodoroSettingClick(payload)
+    },
+
+    async handleDeleteConfigNotSelectedServerSide() {
+      await this.$store.dispatch(
+        'user/deleteCustomPomodoroSetting',
+        this.userSettingsValues.pomodoro_session_setting_id
+      )
+      this.userSettingsValues.pomodoro_session_setting_id =
+        DEFAULT_POMODORO_SETTINGS_OPTION_ID
     },
     handleSave() {
       if (this.currentActiveTab === this.settingPanelStepsValues.GENERAL) {
@@ -362,8 +385,6 @@ export default {
 
       await this.createPomodoroSettings(this.draftPomodoroSessionSettingsValues)
       await this.$auth.fetchUser()
-      console.log('user', this.$store.getters['user/getUser'])
-      console.log('this.userSettingsValues', this.userSettingsValues)
       this.resetCreationProcess()
       this.isLoading = false
     },

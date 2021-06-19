@@ -66,14 +66,19 @@ export default {
     }
   },
 
-  onDeletePomodoroSettingClick({ dispatch }, id) {
+  onDeletePomodoroSettingClick({ dispatch }, payload) {
+    const callback =
+      typeof payload.callback === 'function'
+        ? payload.callback
+        : () => dispatch('deleteCustomPomodoroSetting', payload.id)
+
     const notification = {
       title: this.$i18n.t('Delete configuration ?'),
       description: this.$i18n.t(
         "Are you sure to delete it  You can't reverse it afterward ?"
       ),
       actionRequired: true,
-      confirmCallback: () => dispatch('deleteCustomPomodoroSetting', id),
+      confirmCallback: callback,
     }
     dispatch('globalState/createNotification', notification, { root: true })
   },
