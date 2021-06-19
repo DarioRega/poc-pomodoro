@@ -29,28 +29,7 @@ export default {
     Subscriptions
    */
   getUserReceipts: (state, getters) => {
-    return [
-      {
-        id: 2,
-        user_id: '93b0a25a-12d8-4493-900a-04c2abf4b23f',
-        provider_id: 'in_1J3fLTJEbl1PKejzGFhWhLdl',
-        amount: 'CHF 44.27',
-        tax: 'CHF 0',
-        paid_at: '2021-06-18 10:54:43',
-        created_at: '2021-06-18T10:54:48.000000Z',
-        updated_at: '2021-06-18T10:54:48.000000Z',
-      },
-      {
-        id: 1,
-        user_id: '93b0a25a-12d8-4493-900a-04c2abf4b23f',
-        provider_id: 'in_1J363fJEbl1PKejzsxaU9gmI',
-        amount: 'CHF 4.99',
-        tax: 'CHF 0',
-        paid_at: '2021-06-16 21:13:59',
-        created_at: '2021-06-16T21:14:03.000000Z',
-        updated_at: '2021-06-16T21:14:03.000000Z',
-      },
-    ]
+    return getters.getUser.local_receipts || []
   },
 
   /*
