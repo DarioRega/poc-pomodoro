@@ -13,7 +13,7 @@ export default {
     State mirroring
    */
   getUser: (state, getters, rootState) => {
-    return rootState.auth.user
+    return rootState.auth.user || undefined
   },
 
   getUserSettingsValues: (state, getters) => {

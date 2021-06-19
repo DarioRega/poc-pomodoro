@@ -1,3 +1,5 @@
+import { getRandomNumber } from '@/helpers'
+
 export const TIME_DISPLAY_FORMATS_OPTIONS = [
   {
     id: '12H',
