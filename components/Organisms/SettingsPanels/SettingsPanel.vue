@@ -61,7 +61,11 @@
         type="secondary"
         :is-loading="isDeleteLoading"
         :is-disabled="isDeleteLoading"
-        @click="onDeletePomodoroSettingClick(userSettingsValues.id)"
+        @click="
+          onDeletePomodoroSettingClick(
+            userSettingsValues.pomodoro_session_setting_id
+          )
+        "
       >
         {{ $t('Delete configuration') }}
       </brand-button>
@@ -358,7 +362,8 @@ export default {
 
       await this.createPomodoroSettings(this.draftPomodoroSessionSettingsValues)
       await this.$auth.fetchUser()
-
+      console.log('user', this.$store.getters['user/getUser'])
+      console.log('this.userSettingsValues', this.userSettingsValues)
       this.resetCreationProcess()
       this.isLoading = false
     },
@@ -373,7 +378,6 @@ export default {
     },
 
     createCustomSettings() {
-      // TODO kill notificatin if exist
       const customSettingDefaultName = `${this.$t(
         'My custom configuration'
       )} #${this.getUserNextConfigurationNumber}`

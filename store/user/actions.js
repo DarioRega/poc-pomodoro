@@ -85,6 +85,7 @@ export default {
     }
     try {
       await this.$axios.delete(USER_DELETE_POMODORO_SETTINGS_ID_URL(id))
+      await this.$auth.fetchUser()
     } catch (err) {
       notification.title = this.$i18n.t('Oups...')
       notification.type = 'error'
