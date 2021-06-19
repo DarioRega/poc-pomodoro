@@ -5,8 +5,6 @@ export default {
     await this.$auth.loginWith('laravelSanctum', {
       data: payload,
     })
-
-    // by default is the isRefreshLoading to true, since we logged in, we need to use isEnvLoading instead
   },
 
   async logout() {
