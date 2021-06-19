@@ -112,6 +112,7 @@ export default {
     try {
       const { data } = await this.$axios.get(TASK_URL)
       commit('SET_ALL_SINGLES_TASKS', data)
+      commit('SET_ALL_TASKS', data)
       return data
     } catch (err) {
       return err.response.data

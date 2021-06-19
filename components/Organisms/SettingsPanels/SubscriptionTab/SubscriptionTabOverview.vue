@@ -11,8 +11,11 @@
     >
       <div class="cards__card">
         <label-with-data :label="$t('Estimate of the invoice')">
-          <p>10.77 USD {{ $t('tax included') }}</p>
-          <p>{{ $t('Next invoice') }} Nov 18, 2021</p>
+          <p>
+            {{ totalInvoice(getCurrentInvoice || {}) }}
+            {{ $t(' tax included') }}
+          </p>
+          <p>{{ $t('Next invoice') }} {{ nextInvoiceDate }}</p>
         </label-with-data>
       </div>
 
@@ -22,13 +25,18 @@
             <div>
               <p class="subtitle">{{ $t('Billing period') }}</p>
               <!--              TODO conditional rendering for label depending the plan -->
-              <p class="capitalize">{{ $t('annual') }}</p>
+              <p class="capitalize">
+                {{
+                  isCurrentSubscriptionMonthly ? $t('monthly') : $t('annually')
+                }}
+              </p>
             </div>
             <div>
               <p class="subtitle">{{ $t('Payment method') }}</p>
-              <!--              TODO add paypal, or credits cards logo-->
-              <!--              TODO conditional rendering for logo depending the plan -->
-              <p>Paypal</p>
+              <p class="capitalize">
+                {{ user.card_brand || $t('unknown') }}
+                {{ ', ******' + user.card_last_four || '' }}
+              </p>
             </div>
           </div>
         </label-with-data>
@@ -38,18 +46,15 @@
         <label-with-data :label="$t('Billing history')">
           <!--          TODO v-for on billing history max 5 entry, it's just a preview here-->
           <div class="flex flex-col">
-            <div class="flex flex-row justify-between">
-              <p>Oct 19, 2020</p>
-              <p>10.77 $USD</p>
+            <div
+              v-for="receipt in receipts"
+              :key="receipt.provider_id"
+              class="flex flex-row justify-between"
+            >
+              <p>{{ receipt.paid_at | formatDate }}</p>
+              <p>{{ totalInvoice(receipt) }}</p>
             </div>
-            <div class="flex flex-row justify-between">
-              <p>Oct 19, 2020</p>
-              <p>10.77 $USD</p>
-            </div>
-            <div class="flex flex-row justify-between">
-              <p>Oct 19, 2020</p>
-              <p>10.77 $USD</p>
-            </div>
+
             <div class="text-center mt-2">
               <p v-show="isShortHistory">{{ $t("That's all") }}</p>
               <a
@@ -97,8 +102,8 @@
               </div>
             </div>
             <div>
-              <p class="font-semibold">Dario Regazzoni</p>
-              <p class="font-semibold">dario.regazzoni@outlook.fr</p>
+              <p class="font-semibold">{{ user.name }}</p>
+              <p class="font-semibold">{{ user.email }}</p>
             </div>
           </div>
         </label-with-data>
@@ -108,17 +113,53 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import moment from 'moment-timezone'
+
+import {
+  formatReceiptDate,
+  getTotalAmountWithTaxFromString,
+} from '@/helpers/subscriptions'
+
 import LabelWithData from '@/components/Atoms/LabelWithData'
 import Icon from '@/components/Atoms/Icon'
+import { BILLING_DATE_FORMAT } from '@/constantes'
 
 export default {
   name: 'SubscriptionTabOverview',
   components: { LabelWithData, Icon },
+  filters: {
+    formatDate: (value) => {
+      return formatReceiptDate(value)
+    },
+  },
+  props: {
+    receipts: {
+      type: Array,
+      default: () => [],
+    },
+  },
   computed: {
+    ...mapGetters({
+      user: 'user/getUser',
+      userReceipts: 'user/getUserReceipts',
+      isCurrentSubscriptionMonthly: 'user/isCurrentSubscriptionMonthly',
+      getCurrentInvoice: 'user/getCurrentInvoice',
+    }),
     isShortHistory() {
-      return false
-      // TODO once we have the value
-      // return this.values.billingHistory.length <= 5
+      return this.userReceipts.length <= 5
+    },
+    nextInvoiceDate() {
+      const paymentDate = this.getCurrentInvoice.paid_at
+      if (this.isCurrentSubscriptionMonthly) {
+        return moment(paymentDate).add(1, 'month').format(BILLING_DATE_FORMAT)
+      }
+      return moment(paymentDate).add(1, 'year').format(BILLING_DATE_FORMAT)
+    },
+  },
+  methods: {
+    totalInvoice(receipt) {
+      return getTotalAmountWithTaxFromString(receipt.amount, receipt.tax)
     },
   },
 }

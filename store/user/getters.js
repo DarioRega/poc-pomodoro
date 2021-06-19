@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { TIME_FORMAT_12H, TIME_FORMAT_24h } from '@/constantes'
 import { POMODORO_DEFAULT_DURATION } from '@/constantes/settings'
 import { convertNumberInDuration } from '@/helpers/settings'
+import { getNumberInAmountString } from '@/helpers/subscriptions'
 
 export default {
   /*
@@ -25,6 +26,13 @@ export default {
       return getters.getUser.pomodoro_session_settings
     }
     return []
+  },
+
+  /*
+    Subscriptions
+   */
+  getUserReceipts: (state, getters) => {
+    return getters.getUser.local_receipts || []
   },
 
   /*
@@ -77,10 +85,50 @@ export default {
     return POMODORO_DEFAULT_DURATION
   },
 
+  getCurrentInvoice: (state, getters) => {
+    return getters.getUserReceipts[0]
+  },
+
   /*
     Boolean
    */
 
+  /*
+    Subscription
+   */
+  isUserCurrentlyPremium: (state, getters) => {
+    if (getters.getUser) {
+      if (getters.getUser.subscriptions.length > 0) {
+        return getters.getUser.subscriptions[0].stripe_status === 'active'
+      }
+      return false
+    }
+    return false
+  },
+
+  isCurrentSubscriptionMonthly: (state, getters) => {
+    if (getters.getUser) {
+      const currentSubscriptionAmount = getNumberInAmountString(
+        getters.getCurrentInvoice.amount
+      )
+      if (currentSubscriptionAmount > 5) {
+        return false
+      }
+      return true
+    }
+    return undefined
+  },
+
+  wasUserPremiumAtLeastOnce: (state, getters) => {
+    if (getters.getUser) {
+      return getters.getUser.subscriptions.length > 0
+    }
+    return false
+  },
+
+  /*
+  Settings
+ */
   areUserSettingsEmpty: (state, getters) => {
     if (getters.getUser.user_settings) {
       return _.isEmpty(getters.getUser.user_settings)

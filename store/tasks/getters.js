@@ -1,6 +1,10 @@
 import { TASK_STATUS_VALUES } from '@/constantes'
 
 export default {
+  getUserTotalTasksAmount: (state) => {
+    return state.all.length
+  },
+
   /*
     Singles tasks only
    */

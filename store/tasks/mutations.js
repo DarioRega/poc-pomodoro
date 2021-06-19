@@ -38,6 +38,10 @@ export default {
   /*
     Global
    */
+  SET_ALL_TASKS(state, payload) {
+    state.all = payload
+  },
+
   SET_ALL_SINGLES_TASKS(state, payload) {
     state.singles.all = payload
   },
