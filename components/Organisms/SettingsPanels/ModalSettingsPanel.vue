@@ -4,7 +4,7 @@
       <h5 class="text-dark-blue dark:text-celeste">{{ $t('Settings') }}</h5>
     </template>
     <template #body>
-      <settings-panel />
+      <settings-panel v-if="isOpen" />
     </template>
     <template #footer>
       <div class="flex justify-end">

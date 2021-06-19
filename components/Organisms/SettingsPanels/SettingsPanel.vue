@@ -361,6 +361,7 @@ export default {
       await this.updateUserSettings(this.userSettingsValues)
       await this.$auth.fetchUser()
 
+      this.verifyIfUserHasNoPomodoroSettingsAndSetUserSettingPomodoroIdToDefault()
       this.isLoading = false
     },
 

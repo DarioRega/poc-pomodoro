@@ -7,6 +7,7 @@
     </template>
     <template #body>
       <panel-select-running-task
+        v-if="isOpen"
         :is-loading="isLoading"
         @onSelectTask="handleRunWithTask"
       />
