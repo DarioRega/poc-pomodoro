@@ -8,9 +8,9 @@
   >
     <div class="flex flex-col-reverse">
       <div class="relative">
-        <button
+        <div
           ref="triggerDropdown"
-          type="button"
+          tabindex="0"
           class="
             relative
             w-full
@@ -28,7 +28,7 @@
             shouldCapitalize && 'capitalize',
           ]"
           aria-labelledby="listbox-label"
-          @click="toggleVisibility"
+          @click="handleClickSelect"
           @keydown="toggleVisibility"
         >
           <span class="block text-current truncate">
@@ -58,7 +58,7 @@
               aria-hidden="true"
             ></icon>
           </span>
-        </button>
+        </div>
 
         <transition
           enter-active-class=""
@@ -232,6 +232,13 @@ export default {
     isHighlighted(itemId) {
       return this.highlightedItemId === itemId
     },
+    handleClickSelect(evt) {
+      if (this.isOpen) {
+        this.isOpen = false
+      } else {
+        this.isOpen = true
+      }
+    },
     toggleVisibility(evt) {
       const openDropDown =
         SPACEBAR_KEY_CODE.includes(evt.keyCode) ||
@@ -241,8 +248,12 @@ export default {
         this.isOpen = false
       }
 
-      if (evt.type === 'click' || openDropDown) {
-        this.isOpen = true
+      if (openDropDown) {
+        if (!this.isOpen) {
+          this.isOpen = true
+        } else {
+          this.isOpen = false
+        }
       }
       if (evt.keyCode === DOWN_ARROW_KEY_CODE) {
         this.findNextElementToFocusAndFocus(DOWN_ARROW_KEY_CODE)
